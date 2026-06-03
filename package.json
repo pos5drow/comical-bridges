@@ -1,0 +1,12 @@
+{
+  "name": "comical-bridge-atsumaru",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A Comical bridge for atsu.moe — built locally against the sibling ../comical and published as a registry Comical can source.",
+  "scripts": {
+    "build": "bun run build.ts",
+    "evaluate": "bun run evaluate.ts",
+    "publish:registry": "bun run publish.ts"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "registryVersion": "1",
+  "updated": "2026-06-03T22:40:26.385Z",
+  "bridges": [
+    {
+      "id": "atsumaru",
+      "name": "Atsumaru",
+      "version": "0.1.0",
+      "contractVersion": "1.0.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "settings",
+        "favorites"
+      ],
+      "url": "https://raw.githubusercontent.com/OWNER/comical-bridge-atsumaru/main/bridges/atsumaru/0.1.0/bridge.js",
+      "sha256": "8a66bffa4e9a38d27e3da4291c44c2e4c6787e524fa456f9f1966435fb5624e6"
+    }
+  ]
+}

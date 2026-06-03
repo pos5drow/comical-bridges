@@ -1,0 +1,5 @@
+node_modules/
+.build/
+*.tsbuildinfo
+# Keep registry.key.json PRIVATE — never commit signing keys.
+registry.key.json

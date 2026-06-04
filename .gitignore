@@ -3,3 +3,5 @@ node_modules/
 *.tsbuildinfo
 # Keep registry.key.json PRIVATE — never commit signing keys.
 registry.key.json
+# Local atsu.moe credentials for the favorites round-trip test — NEVER commit.
+.creds.json

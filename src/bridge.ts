@@ -423,13 +423,13 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     await this.syncBookmark(seriesId, null);
   }
 
-  /** POST a single bookmark delta; `status: null` removes it. */
+  /** POST a single bookmark delta; `status: null` removes it. `ts` (set time, ms) is required. */
   private async syncBookmark(mangaId: string, status: string | null): Promise<void> {
     const res = await this.authed({
       url: `${this.base()}/api/user/syncBookmarks`,
       method: "POST",
       headers: { ...this.apiHeaders(), "Content-Type": "application/json" },
-      body: JSON.stringify([{ mangaId, status }]),
+      body: JSON.stringify([{ mangaId, status, ts: Date.now() }]),
     });
     if (res.status >= 400) throw new Error(`syncBookmarks failed: ${res.status} ${res.statusText}`);
   }

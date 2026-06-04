@@ -17953,7 +17953,7 @@ class AtsumaruBridge extends BridgeBase {
       url: `${this.base()}/api/user/syncBookmarks`,
       method: "POST",
       headers: { ...this.apiHeaders(), "Content-Type": "application/json" },
-      body: JSON.stringify([{ mangaId, status }])
+      body: JSON.stringify([{ mangaId, status, ts: Date.now() }])
     });
     if (res.status >= 400)
       throw new Error(`syncBookmarks failed: ${res.status} ${res.statusText}`);
@@ -18009,4 +18009,4 @@ function parseDate(value) {
 }
 var bridge_default = defineBridge((host) => new AtsumaruBridge(host));
 
-//# debugId=6DFD03B4D497C08D64756E2164756E21
+//# debugId=6DC0630AD249853164756E2164756E21

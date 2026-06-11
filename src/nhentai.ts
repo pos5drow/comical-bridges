@@ -125,6 +125,15 @@ function cdnUrl(relativePath: string, server: string): string {
   return `${server}/${relativePath}`;
 }
 
+/**
+ * Derive nhentai's small thumbnail path from a full-page path by inserting the `t` suffix before the
+ * extension: "galleries/123/1.webp" → "galleries/123/1t.webp". Served off the thumb CDN, this is a
+ * ~250px preview — no extra request to discover it, just a filename transform on data we already have.
+ */
+function thumbPath(pagePath: string): string {
+  return pagePath.replace(/\.(\w+)$/, "t.$1");
+}
+
 function listItemTitle(item: GalleryListItem): string {
   return item.english_title ?? item.japanese_title ?? String(item.id);
 }
@@ -438,11 +447,16 @@ class NhentaiBridge extends BridgeBase<Settings> {
   // ── Direct pages ──────────────────────────────────────────────────────────
 
   async getSeriesPages(seriesId: string): Promise<Page[]> {
-    const [g, imgSrv] = await Promise.all([this.fetchDetail(seriesId), this.imageServer()]);
+    const [g, imgSrv, thumbSrv] = await Promise.all([
+      this.fetchDetail(seriesId),
+      this.imageServer(),
+      this.thumbServer(),
+    ]);
     const referer = `https://nhentai.net/g/${seriesId}/`;
     return (g.pages ?? []).map((p): Page => ({
       index: p.number - 1,
       imageUrl: cdnUrl(p.path, imgSrv),
+      thumbnailUrl: cdnUrl(thumbPath(p.path), thumbSrv),
       headers: { Referer: referer },
     }));
   }

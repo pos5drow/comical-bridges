@@ -66,6 +66,12 @@ interface BrowseMangaDto {
   items: MangaDto[];
 }
 
+/** Response from /api/explore/availableFilters — public endpoint for browse filter data. */
+interface AvailableFiltersDto {
+  genres?: Array<{ id: string | number; name: string }>;
+  tags?: Array<{ id: string | number; name: string }>;
+}
+
 /** Typesense search response (from /collections/manga/documents/search). */
 interface SearchResultsDto {
   page: number;
@@ -136,11 +142,35 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     contractVersion: "1.0.0",
     languages: ["en"],
     nsfw: false,
-    capabilities: ["lists", "search", "filters", "settings", "favorites"],
+    capabilities: ["lists", "search", "filters", "sort", "settings", "favorites"],
     // atsu.moe tolerates ~2 req/s; serialize and space requests to stay polite. Every host
     // (server, web, native) inherits this — no per-host configuration needed.
     rateLimit: { maxConcurrent: 1, minIntervalMs: 550 },
   };
+
+  private tagCache = new Map<string, string>(); // tagId → tagName
+  private tagPrewarmed = false;
+
+  private async prewarmTagCache(): Promise<void> {
+    if (this.tagPrewarmed) return;
+    this.tagPrewarmed = true;
+    try {
+      const data = await this.getJson<AvailableFiltersDto>(`${this.base()}/api/explore/availableFilters`);
+      for (const tag of data.tags ?? []) {
+        const id = String(tag.id);
+        if (id && tag.name) this.tagCache.set(id, tag.name);
+      }
+    } catch { /* prewarm failure is non-fatal */ }
+  }
+
+  async getTags(query = ""): Promise<import("@comical/contract").Tag[]> {
+    if (this.tagCache.size === 0) await this.prewarmTagCache();
+    const q = query.toLowerCase();
+    const results: import("@comical/contract").Tag[] = [];
+    for (const [id, label] of this.tagCache)
+      if (!q || label.toLowerCase().includes(q)) results.push({ id, label });
+    return results.sort((a, b) => a.label.localeCompare(b.label)).slice(0, 50);
+  }
 
   getSettings(): SettingDescriptor[] {
     return [...SETTINGS];
@@ -255,9 +285,12 @@ class AtsumaruBridge extends BridgeBase<Settings> {
    * infinite-scroll list endpoints). Tri-state genre/tag filters are a further extension.
    */
   getFilters(): Promise<Filter[]> {
+    // Kick off tag cache pre-warm in the background so it's ready when the user types.
+    void this.prewarmTagCache();
     return Promise.resolve([
       { type: "multiselect", key: "genre", label: "Genres", options: GENRES.map((g) => ({ value: g.id, label: g.name })) },
       { type: "multiselect", key: "status", label: "Status", options: STATUSES.map((s) => ({ value: s, label: s })) },
+      { type: "tag-multiselect", key: "tag", label: "Tag" },
       { type: "number", key: "year", label: "Release year", min: 1900, max: 2100 },
       { type: "number", key: "minChapters", label: "Minimum chapters", min: 0 },
     ]);
@@ -284,6 +317,9 @@ class AtsumaruBridge extends BridgeBase<Settings> {
       const arr = Array.isArray(f.value) ? f.value : [];
       if (f.key === "genre" && arr.length) clauses.push(arr.map((id) => `genreIds:=\`${id}\``).join(" && "));
       else if (f.key === "status" && arr.length) clauses.push(`status:=[${arr.map((s) => `\`${s}\``).join(",")}]`);
+      else if (f.key === "tag" && Array.isArray(f.value) && f.value.length) {
+        for (const id of f.value) if (String(id).trim()) clauses.push(`tagIds:=\`${String(id).trim()}\``);
+      }
       else if (f.key === "year" && typeof f.value === "number") clauses.push(`releaseYear:=[${f.value}]`);
       else if (f.key === "minChapters" && typeof f.value === "number") clauses.push(`chapterCount:>=${f.value}`);
     }
@@ -339,9 +375,27 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     ];
     if (genres.length > 0) info.genres = genres;
 
-    // Atsumaru exposes `tags` separately from `genres` — surface them as a labeled tag group.
-    const tagNames = AtsumaruBridge.names(dto.tags);
-    if (tagNames.length > 0) info.tagGroups = [{ label: "Tags", kind: "theme", tags: tagNames }];
+    // Atsumaru exposes `tags` separately from `genres`; each item is {id, name, weight} so carry the ID.
+    const rawTags = Array.isArray(dto.tags) ? dto.tags : [];
+    if (rawTags.length > 0) {
+      const tags: string[] = [];
+      const tagIds: string[] = [];
+      for (const item of rawTags) {
+        const name = typeof item === "string" ? item
+          : typeof (item as { name?: unknown }).name === "string" ? (item as { name: string }).name : null;
+        const rawId = item && typeof item === "object" ? (item as { id?: unknown }).id : undefined;
+        const id = rawId !== undefined && rawId !== null ? String(rawId) : "";
+        if (name) {
+          tags.push(name); tagIds.push(id);
+          if (id) this.tagCache.set(id, name);
+        }
+      }
+      if (tags.length > 0) {
+        const group: import("@comical/contract").TagGroup = { label: "Tags", kind: "theme", tags };
+        if (tagIds.every(Boolean)) group.tagIds = tagIds;
+        info.tagGroups = [group];
+      }
+    }
 
     info.status = STATUS_MAP[dto.status?.toLowerCase().trim() ?? ""] ?? "unknown";
     return info;

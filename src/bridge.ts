@@ -14,11 +14,14 @@ import {
   type BridgeInfo,
   type Chapter,
   type Filter,
+  type GenreExclusions,
   type HttpRequest,
   type HttpResponse,
   type InferSettings,
   type Page,
   type PagedResults,
+  type RelatedKind,
+  type RelatedSeriesGroup,
   type SearchOptions,
   type SeriesEntry,
   type SeriesInfo,
@@ -60,6 +63,11 @@ interface MangaDto {
   type?: string;
   /** Scanlation teams aggregated for this series; Atsumaru labels them Alpha/Beta/Gamma/… */
   scanlators?: Array<{ id: string; name: string }>;
+  /** Editorial related series, each typed (SpinOff/Sequel/Prequel/…). Only on the detail payload. */
+  relations?: Array<{ type?: string; manga?: MangaDto }>;
+  /** Algorithmic "you might also like" rails on the detail payload. */
+  recommendations?: MangaDto[];
+  similarManga?: MangaDto[];
 }
 
 interface BrowseMangaDto {
@@ -70,6 +78,23 @@ interface BrowseMangaDto {
 interface AvailableFiltersDto {
   genres?: Array<{ id: string | number; name: string }>;
   tags?: Array<{ id: string | number; name: string }>;
+}
+
+/**
+ * The user's home-page preferences (account-bound). `global.excludedGenreIds` is the account-wide
+ * genre hide-list atsu.moe applies to every surface — search, lists, pages. We treat the rest of the
+ * object (`sections`, `contentRatings`, `adult`) as opaque and round-trip it untouched on write.
+ *
+ * GET /api/user/homePagePreferences returns `{ preferences, availableFilters }`; the PUT body is the
+ * bare `preferences` object.
+ */
+interface HomePagePrefs {
+  global?: { excludedGenreIds?: string[]; [k: string]: unknown };
+  [k: string]: unknown;
+}
+interface HomePagePrefsResponse {
+  preferences?: HomePagePrefs;
+  availableFilters?: { genres?: Array<{ id: string | number; name: string }> };
 }
 
 /** Typesense search response (from /collections/manga/documents/search). */
@@ -126,6 +151,24 @@ const SORTS: ReadonlyArray<{ value: string; label: string }> = [
   { value: "mbRating", label: "Top Rated" }, { value: "chapterCount", label: "Chapter Count" },
 ];
 
+// Atsumaru tags each editorial relation with a PascalCase `type` (AniList-style). Map the known
+// ones to a display label + semantic `kind`; unknown types fall back to a humanized label + "other".
+const RELATION_LABELS: Record<string, { label: string; kind: RelatedKind }> = {
+  Sequel: { label: "Sequels", kind: "sequel" },
+  Prequel: { label: "Prequels", kind: "prequel" },
+  SpinOff: { label: "Spin-offs", kind: "spin-off" },
+  SideStory: { label: "Side Stories", kind: "side-story" },
+  Alternative: { label: "Alternative Versions", kind: "alternative" },
+  AlternativeVersion: { label: "Alternative Versions", kind: "alternative" },
+  SharedUniverse: { label: "Same Universe", kind: "same-universe" },
+  Character: { label: "Shared Characters", kind: "same-universe" },
+  Adaptation: { label: "Adaptations", kind: "adaptation" },
+  MainStory: { label: "Main Story", kind: "other" },
+  Parent: { label: "Parent Story", kind: "other" },
+  Summary: { label: "Summaries", kind: "other" },
+  Other: { label: "Related", kind: "other" },
+};
+
 const STATUS_MAP: Record<string, SeriesStatus> = {
   ongoing: "ongoing",
   completed: "completed",
@@ -142,7 +185,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     contractVersion: "1.0.0",
     languages: ["en"],
     nsfw: false,
-    capabilities: ["lists", "search", "filters", "sort", "settings", "favorites"],
+    capabilities: ["lists", "search", "filters", "sort", "settings", "favorites", "exclude-tags", "exclude-genres"],
     // atsu.moe tolerates ~2 req/s; serialize and space requests to stay polite. Every host
     // (server, web, native) inherits this — no per-host configuration needed.
     rateLimit: { maxConcurrent: 1, minIntervalMs: 550 },
@@ -255,6 +298,50 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     return entry;
   }
 
+  /** "SpinOff" → "Spin Off"; fallback label for relation types not in RELATION_LABELS. */
+  private static humanizeRelation(type: string): string {
+    return type.replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/_/g, " ").trim() || "Related";
+  }
+
+  /**
+   * Build the detail page's related-series rails from the three sources atsu.moe exposes on
+   * `mangaPage`: typed editorial `relations` (grouped by type), then algorithmic `similarManga`
+   * and `recommendations`. Empty sources are omitted; entries missing an id/title are dropped.
+   */
+  private relatedGroups(dto: MangaDto): RelatedSeriesGroup[] {
+    const groups: RelatedSeriesGroup[] = [];
+
+    // Editorial relations come typed — group by type, preserving first-seen order.
+    const byType = new Map<string, SeriesEntry[]>();
+    for (const rel of dto.relations ?? []) {
+      const manga = rel?.manga;
+      if (!manga?.id || !manga.title) continue;
+      const key = typeof rel.type === "string" && rel.type ? rel.type : "Other";
+      const list = byType.get(key) ?? [];
+      list.push(this.toEntry(manga));
+      byType.set(key, list);
+    }
+    for (const [type, series] of byType) {
+      if (series.length === 0) continue;
+      const mapped = RELATION_LABELS[type];
+      groups.push({
+        label: mapped?.label ?? AtsumaruBridge.humanizeRelation(type),
+        kind: mapped?.kind ?? "other",
+        series,
+      });
+    }
+
+    const mapEntries = (list: MangaDto[] | undefined): SeriesEntry[] =>
+      (list ?? []).filter((m) => m?.id && m.title).map((m) => this.toEntry(m));
+
+    const similar = mapEntries(dto.similarManga);
+    if (similar.length > 0) groups.push({ label: "Similar", kind: "similar", series: similar });
+    const recommended = mapEntries(dto.recommendations);
+    if (recommended.length > 0) groups.push({ label: "Recommended", kind: "recommended", series: recommended });
+
+    return groups;
+  }
+
   // ── Required + capability methods ────────────────────────────────────────────
 
   /** Atsumaru's browsable lists. Each maps to an `/api/infinite/{endpoint}` route. */
@@ -322,6 +409,12 @@ class AtsumaruBridge extends BridgeBase<Settings> {
       }
       else if (f.key === "year" && typeof f.value === "number") clauses.push(`releaseYear:=[${f.value}]`);
       else if (f.key === "minChapters" && typeof f.value === "number") clauses.push(`chapterCount:>=${f.value}`);
+    }
+
+    // Persistent per-bridge exclusions (capability "exclude-tags"): negate each tag id so the
+    // excluded tags never appear in any search result. Typesense `!=` mirrors the `:=` inclusion above.
+    for (const id of options?.excludedTags ?? []) {
+      if (String(id).trim()) clauses.push(`tagIds:!=\`${String(id).trim()}\``);
     }
 
     // Sort is its own concern → Typesense sort_by (mirrors the backend's filter_by/sort_by split).
@@ -398,6 +491,10 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     }
 
     info.status = STATUS_MAP[dto.status?.toLowerCase().trim() ?? ""] ?? "unknown";
+
+    const related = this.relatedGroups(dto);
+    if (related.length > 0) info.relatedSeriesGroups = related;
+
     return info;
   }
 
@@ -453,6 +550,50 @@ class AtsumaruBridge extends BridgeBase<Settings> {
         return imageUrl ? { index, imageUrl, headers: { Referer: referer } } : undefined;
       })
       .filter((p): p is Page => p !== undefined);
+  }
+
+  // ── Genre exclusions (capability "exclude-genres") — account-wide, via homePagePreferences ────────
+  // atsu.moe enforces `global.excludedGenreIds` server-side across search, lists and pages, so we
+  // simply read/write it on the account (auth via the same cookie session as favorites). This is the
+  // genre counterpart to the per-query tag push-down (`excludedTags` → `tagIds:!=`).
+
+  private prefsUrl(): string {
+    return `${this.base()}/api/user/homePagePreferences`;
+  }
+
+  /** Fetch the account's home-page prefs (the source of truth for excluded genres + the genre list). */
+  private async fetchPrefs(): Promise<HomePagePrefsResponse> {
+    const res = await this.authed({ url: this.prefsUrl(), headers: this.apiHeaders() });
+    return JSON.parse(res.body) as HomePagePrefsResponse;
+  }
+
+  /** Map the response into the contract shape: available genres + the currently-excluded ids. */
+  private static toGenreExclusions(data: HomePagePrefsResponse): GenreExclusions {
+    const available = (data.availableFilters?.genres ?? []).map((g) => ({ id: String(g.id), label: g.name }));
+    const excluded = (data.preferences?.global?.excludedGenreIds ?? []).map((id) => String(id));
+    return { available, excluded };
+  }
+
+  async getGenreExclusions(): Promise<GenreExclusions> {
+    return AtsumaruBridge.toGenreExclusions(await this.fetchPrefs());
+  }
+
+  async setExcludedGenres(genreIds: string[]): Promise<GenreExclusions> {
+    // Read-merge-write: keep every other preference (contentRatings, sections, adult) intact and only
+    // replace excludedGenreIds. The PUT body is the bare `preferences` object (not the GET wrapper).
+    const data = await this.fetchPrefs();
+    const ids = [...new Set(genreIds.map((id) => String(id).trim()).filter(Boolean))];
+    const preferences: HomePagePrefs = {
+      ...(data.preferences ?? {}),
+      global: { ...(data.preferences?.global ?? {}), excludedGenreIds: ids },
+    };
+    await this.authed({
+      url: this.prefsUrl(),
+      method: "PUT",
+      headers: { ...this.apiHeaders(), "Content-Type": "application/json" },
+      body: JSON.stringify(preferences),
+    });
+    return AtsumaruBridge.toGenreExclusions({ preferences, availableFilters: data.availableFilters });
   }
 
   // ── Favorites (capability "favorites") — atsu.moe "bookmarks", account-bound ──────────────────

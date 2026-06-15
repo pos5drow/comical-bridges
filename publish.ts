@@ -3,7 +3,7 @@
  * (commit them; Comical reads `<repo>/main/index.json` via raw.githubusercontent). Uses the local
  * comical CLI (../comical) for now — once `comical` ships to npm this becomes `bunx comical …`.
  *
- *   COMICAL_BASE_URL=https://raw.githubusercontent.com/OWNER/comical-bridge-atsumaru/main \
+ *   COMICAL_BASE_URL=https://raw.githubusercontent.com/OWNER/comical-bridges/main \
  *     [COMICAL_KEY=registry.key.json] bun run publish:registry
  */
 import { join } from "node:path";
@@ -12,7 +12,7 @@ const ROOT = import.meta.dir;
 const cli = join(ROOT, "..", "comical", "packages", "cli", "src", "index.ts");
 const baseUrl =
   process.env.COMICAL_BASE_URL ??
-  "https://raw.githubusercontent.com/OWNER/comical-bridge-atsumaru/main";
+  "https://raw.githubusercontent.com/OWNER/comical-bridges/main";
 
 const args = [
   "run", cli, "registry", "publish",

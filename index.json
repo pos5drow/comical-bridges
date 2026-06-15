@@ -18,7 +18,7 @@
         "settings",
         "favorites"
       ],
-      "url": "https://raw.githubusercontent.com/OWNER/comical-bridge-atsumaru/main/bridges/atsumaru/0.1.0/bridge.js",
+      "url": "https://raw.githubusercontent.com/OWNER/comical-bridges/main/bridges/atsumaru/0.1.0/bridge.js",
       "sha256": "616480544e7c44b118c8f008752d41507ec9f5d325cfddd74c479bb067af3700"
     }
   ]

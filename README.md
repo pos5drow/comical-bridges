@@ -1,4 +1,4 @@
-# comical-bridge-atsumaru
+# comical-bridges
 
 A [Comical](https://github.com/comical) bridge for **atsu.moe** (atsumaru). Lives in its own repo.
 Comical *sources* this repo as a registry; it ships nothing
@@ -13,7 +13,7 @@ This builds against a **sibling checkout of the Comical monorepo** (`../comical`
 ```
 ../
 ├── comical/                  # the runtime monorepo (provides @comical/sdk, CLI, testkit)
-└── comical-bridge-atsumaru/  # this repo
+└── comical-bridges/  # this repo
 ```
 
 ## Develop
@@ -27,13 +27,13 @@ ATSU_USER=you ATSU_PASS=… bun run evaluate   # also exercise favorites
 ## Publish a registry
 
 Emits `index.json` + the served bundle at the repo root; commit them. Comical users then run
-`comical registry add github.com/OWNER/comical-bridge-atsumaru`.
+`comical registry add github.com/OWNER/comical-bridges`.
 
 ```sh
 # optional: sign it
 bun --cwd ../comical run cli registry keygen --out registry.key.json   # keep private
 
-COMICAL_BASE_URL=https://raw.githubusercontent.com/OWNER/comical-bridge-atsumaru/main \
+COMICAL_BASE_URL=https://raw.githubusercontent.com/OWNER/comical-bridges/main \
   COMICAL_KEY=registry.key.json \
   bun run publish:registry
 ```

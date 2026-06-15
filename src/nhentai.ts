@@ -19,6 +19,7 @@ import {
   BridgeBase,
   type BridgeInfo,
   type Filter,
+  type ListOptions,
   type Page,
   type PagedResults,
   type SearchOptions,
@@ -39,6 +40,13 @@ const IMG_FALLBACK = "https://i1.nhentai.net";
 const THUMB_FALLBACK = "https://t1.nhentai.net";
 
 const PER_PAGE = 25;
+
+/**
+ * Placeholder title for an entry redacted by the user's tag exclusions. Carries no real name; the
+ * host renders its own blank placeholder for `excluded` entries, and an unaware host degrades to a
+ * coverless "Hidden" card. Never the actual gallery title.
+ */
+const REDACTED_TITLE = "Hidden";
 
 const SETTINGS = defineSettings([
   {
@@ -160,7 +168,7 @@ class NhentaiBridge extends BridgeBase<Settings> {
     contractVersion: "1.0.0",
     languages: ["multi"],
     nsfw: true,
-    capabilities: ["lists", "search", "filters", "sort", "tags", "settings", "favorites", "direct"],
+    capabilities: ["lists", "search", "filters", "sort", "settings", "favorites", "direct", "exclude-tags", "resolve-tags"],
     rateLimit: { maxConcurrent: 1, minIntervalMs: 1200 },
   };
 
@@ -237,7 +245,13 @@ class NhentaiBridge extends BridgeBase<Settings> {
 
   // ── Convert list item → SeriesEntry ──────────────────────────────────────
 
-  private toEntry(item: GalleryListItem, thumb: string): SeriesEntry {
+  private toEntry(item: GalleryListItem, thumb: string, excluded?: Set<string>): SeriesEntry {
+    // Redact items carrying an excluded tag (capability "exclude-tags"). The inline `tag_ids` ride
+    // along in every list/search payload, so this match costs no extra request. We keep the slot
+    // but strip the title and thumbnail: the host shows a blank placeholder and never fetches a cover.
+    if (excluded?.size && (item.tag_ids ?? []).some((t) => excluded.has(String(t)))) {
+      return { id: String(item.id), title: REDACTED_TITLE, excluded: true };
+    }
     const entry: SeriesEntry = {
       id: String(item.id),
       title: listItemTitle(item),
@@ -246,9 +260,17 @@ class NhentaiBridge extends BridgeBase<Settings> {
     return entry;
   }
 
-  private async listToEntries(items: GalleryListItem[]): Promise<SeriesEntry[]> {
+  private async listToEntries(items: GalleryListItem[], excluded?: Set<string>): Promise<SeriesEntry[]> {
     const thumb = await this.thumbServer();
-    return items.map((item) => this.toEntry(item, thumb));
+    return items.map((item) => this.toEntry(item, thumb, excluded));
+  }
+
+  /** Build the excluded-tag-id set from injected options (numeric tag ids, as `getTags()` returns). */
+  private excludedSet(options?: { excludedTags?: string[] }): Set<string> | undefined {
+    const ids = options?.excludedTags;
+    if (!ids?.length) return undefined;
+    const set = new Set(ids.map((s) => String(s).trim()).filter(Boolean));
+    return set.size ? set : undefined;
   }
 
   // ── Tags ─────────────────────────────────────────────────────────────────
@@ -260,6 +282,29 @@ class NhentaiBridge extends BridgeBase<Settings> {
         type: "tag",
       });
       return (results ?? []).slice(0, 50).map((r) => {
+        this.tagNames.set(String(r.id), r.name);
+        return { id: String(r.id), label: r.name };
+      });
+    } catch {
+      return [];
+    }
+  }
+
+  /**
+   * Reverse lookup, the inverse of `getTags`'s name search: resolve bare tag ids back to names via
+   * nhentai's `tags/ids` batch endpoint (the host uses it to put names on persisted exclusions). Only
+   * numeric ids are queryable; unresolved ids are silently omitted, and any failure yields nothing
+   * (the host then shows the id). Resolved names seed `tagNames` for redaction reuse.
+   */
+  async resolveTags(ids: string[]): Promise<Tag[]> {
+    const numeric = ids
+      .map((id) => id.trim())
+      .filter((s) => s.length > 0 && Number.isInteger(Number(s)));
+    if (numeric.length === 0) return [];
+    try {
+      // GET /api/v2/tags/ids?ids=19440,32341 → bare TagDto[] (id/type/name/…).
+      const results = await this.getJson<TagDto[]>(`${BASE}/tags/ids?ids=${numeric.join(",")}`);
+      return (results ?? []).map((r) => {
         this.tagNames.set(String(r.id), r.name);
         return { id: String(r.id), label: r.name };
       });
@@ -317,21 +362,22 @@ class NhentaiBridge extends BridgeBase<Settings> {
     return Promise.resolve(LISTS.map(({ path: _p, paginated: _q, ...list }) => list));
   }
 
-  async getListItems(listId: string, page: number): Promise<PagedResults<SeriesEntry>> {
+  async getListItems(listId: string, page: number, options?: ListOptions): Promise<PagedResults<SeriesEntry>> {
     const list = LISTS.find((l) => l.id === listId);
     if (!list) throw new Error(`unknown list: ${listId}`);
+    const excluded = this.excludedSet(options);
 
     if (!list.paginated) {
       const raw = await this.getJson<GalleryListItem[] | PaginatedGalleries>(`${BASE}/${list.path}`);
       const rawItems = Array.isArray(raw) ? raw : (raw.result ?? []);
-      return { items: await this.listToEntries(rawItems), page: 1, hasNextPage: false };
+      return { items: await this.listToEntries(rawItems, excluded), page: 1, hasNextPage: false };
     }
 
     const data = await this.getJson<PaginatedGalleries>(
       `${BASE}/${list.path}?page=${page}&per_page=${PER_PAGE}`,
     );
     return {
-      items: await this.listToEntries(data.result ?? []),
+      items: await this.listToEntries(data.result ?? [], excluded),
       page,
       hasNextPage: page < (data.num_pages ?? 0),
     };
@@ -345,6 +391,7 @@ class NhentaiBridge extends BridgeBase<Settings> {
     options?: SearchOptions,
   ): Promise<PagedResults<SeriesEntry>> {
     const sort = options?.sort?.key ?? "date";
+    const excluded = this.excludedSet(options);
     const parts: string[] = [];
     if (query.trim()) parts.push(query.trim());
 
@@ -370,7 +417,7 @@ class NhentaiBridge extends BridgeBase<Settings> {
         `${BASE}/galleries?page=${page}&per_page=${PER_PAGE}`,
       );
       return {
-        items: await this.listToEntries(data.result ?? []),
+        items: await this.listToEntries(data.result ?? [], excluded),
         page,
         hasNextPage: page < (data.num_pages ?? 0),
       };
@@ -381,7 +428,7 @@ class NhentaiBridge extends BridgeBase<Settings> {
       `${BASE}/search?query=${q}&sort=${encodeURIComponent(sort)}&page=${page}`,
     );
     return {
-      items: await this.listToEntries(data.result ?? []),
+      items: await this.listToEntries(data.result ?? [], excluded),
       page,
       hasNextPage: page < (data.num_pages ?? 0),
     };

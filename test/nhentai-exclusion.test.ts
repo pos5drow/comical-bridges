@@ -3,7 +3,7 @@
  * the Typesense query), nhentai's list/search payloads carry an inline `tag_ids` array on every item,
  * so the bridge filters in-memory at zero added network cost: any item whose `tag_ids` intersect the
  * user's `excludedTags` becomes a redacted placeholder (`excluded: true`, no real title, no thumbnail)
- * rather than being dropped, on all three surfaces — Popular Today (non-paginated), New Arrivals
+ * rather than being dropped, on all three surfaces — Popular Now (non-paginated), New Arrivals
  * (paginated), and search.
  *
  * Instantiates the bridge directly with a mock host that answers each endpoint with canned galleries —
@@ -35,7 +35,7 @@ function cannedHost(): HostCapabilities {
         if (path.endsWith("/cdn")) {
           body = JSON.stringify({ image_servers: ["https://i.example"], thumb_servers: ["https://t.example"] });
         } else if (path.endsWith("/galleries/popular")) {
-          // Popular Today returns a bare array.
+          // Popular Now returns a bare array.
           body = JSON.stringify([G_EXCLUDED, G_CLEAN]);
         } else {
           // New Arrivals (/galleries) and /search return the paginated shape.
@@ -72,9 +72,9 @@ describe("nhentai exclude-tags in-bridge filtering", () => {
     expect(bridge.info.capabilities).toContain("exclude-tags");
   });
 
-  test("Popular Today (non-paginated) redacts items whose tag_ids match", async () => {
+  test("Popular Now (non-paginated) redacts items whose tag_ids match", async () => {
     const bridge = factory(cannedHost());
-    const { items } = await bridge.getListItems("popular-today", 1, { excludedTags: ["100"] });
+    const { items } = await bridge.getListItems("popular-now", 1, { excludedTags: ["100"] });
     expect(items).toHaveLength(2);
     expectRedacted(items[0]!, "1");
     expectVisible(items[1]!, "2", "Clean Two");
@@ -107,21 +107,21 @@ describe("nhentai exclude-tags in-bridge filtering", () => {
 
   test("no excluded tags → every item renders normally", async () => {
     const bridge = factory(cannedHost());
-    const { items } = await bridge.getListItems("popular-today", 1, {});
+    const { items } = await bridge.getListItems("popular-now", 1, {});
     expectVisible(items[0]!, "1", "Tagged One");
     expectVisible(items[1]!, "2", "Clean Two");
   });
 
   test("blank / whitespace-only excluded ids are ignored", async () => {
     const bridge = factory(cannedHost());
-    const { items } = await bridge.getListItems("popular-today", 1, { excludedTags: ["  ", ""] });
+    const { items } = await bridge.getListItems("popular-now", 1, { excludedTags: ["  ", ""] });
     expectVisible(items[0]!, "1", "Tagged One");
     expectVisible(items[1]!, "2", "Clean Two");
   });
 
   test("a non-matching exclusion leaves all items visible", async () => {
     const bridge = factory(cannedHost());
-    const { items } = await bridge.getListItems("popular-today", 1, { excludedTags: ["999"] });
+    const { items } = await bridge.getListItems("popular-now", 1, { excludedTags: ["999"] });
     expectVisible(items[0]!, "1", "Tagged One");
     expectVisible(items[1]!, "2", "Clean Two");
   });

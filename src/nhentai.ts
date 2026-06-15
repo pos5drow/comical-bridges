@@ -22,6 +22,7 @@ import {
   type ListOptions,
   type Page,
   type PagedResults,
+  type RelatedSeriesGroup,
   type SearchOptions,
   type SeriesEntry,
   type SeriesInfo,
@@ -154,7 +155,10 @@ interface ListDef extends SeriesList {
 }
 
 const LISTS: ReadonlyArray<ListDef> = [
-  { id: "popular-today", name: "Popular Today", layout: "grid", featured: true, path: "galleries/popular", paginated: false },
+  // nhentai's homepage "Popular Now" feed. NOTE: distinct from the `popular-today` *sort* option
+  // below (search?sort=popular-today) — `galleries/popular` is the live homepage rail and matches
+  // the site's "Popular Now" section exactly.
+  { id: "popular-now", name: "Popular Now", layout: "grid", featured: true, path: "galleries/popular", paginated: false },
   { id: "new", name: "New Arrivals", layout: "grid", featured: true, path: "galleries", paginated: true },
 ];
 
@@ -241,6 +245,23 @@ class NhentaiBridge extends BridgeBase<Settings> {
     const data = await this.getJson<GalleryDetail>(`${BASE}/galleries/${encodeURIComponent(seriesId)}`);
     this.lastDetail = { id: seriesId, data };
     return data;
+  }
+
+  /**
+   * nhentai's algorithmic "More Like This" rail: `GET /galleries/{id}/related` returns the same
+   * `{ result: GalleryListItem[] }` shape as the list endpoints (typically 5 galleries), so the
+   * items reuse the standard `toEntry` pipeline. Best-effort — any failure yields an empty rail
+   * rather than breaking the detail page.
+   */
+  private async fetchRelated(seriesId: string): Promise<GalleryListItem[]> {
+    try {
+      const data = await this.getJson<PaginatedGalleries>(
+        `${BASE}/galleries/${encodeURIComponent(seriesId)}/related`,
+      );
+      return data.result ?? [];
+    } catch {
+      return [];
+    }
   }
 
   // ── Convert list item → SeriesEntry ──────────────────────────────────────
@@ -437,7 +458,11 @@ class NhentaiBridge extends BridgeBase<Settings> {
   // ── Series detail ─────────────────────────────────────────────────────────
 
   async getSeriesDetails(seriesId: string): Promise<SeriesInfo> {
-    const [g, thumb] = await Promise.all([this.fetchDetail(seriesId), this.thumbServer()]);
+    const [g, thumb, related] = await Promise.all([
+      this.fetchDetail(seriesId),
+      this.thumbServer(),
+      this.fetchRelated(seriesId),
+    ]);
 
     const info: SeriesInfo = {
       id: seriesId,
@@ -487,6 +512,12 @@ class NhentaiBridge extends BridgeBase<Settings> {
     if (languages?.length) tagGroups.push({ label: "Languages", tags: languages });
 
     if (tagGroups.length) info.tagGroups = tagGroups;
+
+    if (related.length) {
+      const series = await this.listToEntries(related);
+      const group: RelatedSeriesGroup = { label: "More Like This", kind: "similar", series };
+      info.relatedSeriesGroups = [group];
+    }
 
     return info;
   }

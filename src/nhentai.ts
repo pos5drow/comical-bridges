@@ -519,6 +519,8 @@ class NhentaiBridge extends BridgeBase<Settings> {
       info.relatedSeriesGroups = [group];
     }
 
+    if (g.num_pages) info.pageCount = g.num_pages;
+
     return info;
   }
 

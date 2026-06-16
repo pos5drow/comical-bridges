@@ -479,6 +479,9 @@ class EHentaiBridge extends BridgeBase<Settings> {
       if (tagGroups.length) info.tagGroups = tagGroups;
     }
 
+    const pageCount = meta?.filecount ? parseInt(meta.filecount, 10) : NaN;
+    if (pageCount > 0) info.pageCount = pageCount;
+
     return info;
   }
 

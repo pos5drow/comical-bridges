@@ -13,6 +13,7 @@ const bridges: Array<{ id: string; src: string }> = [
   { id: "mangadex", src: "mangadex.ts" },
   { id: "nhentai", src: "nhentai.ts" },
   { id: "e-hentai", src: "ehentai.ts" },
+  
 ];
 
 for (const { id, src } of bridges) {

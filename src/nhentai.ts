@@ -536,7 +536,7 @@ class NhentaiBridge extends BridgeBase<Settings> {
     return (g.pages ?? []).map((p): Page => ({
       index: p.number - 1,
       imageUrl: cdnUrl(p.path, imgSrv),
-      thumbnailUrl: cdnUrl(thumbPath(p.path), thumbSrv),
+      thumbnail: { kind: "image", url: cdnUrl(thumbPath(p.path), thumbSrv) },
       headers: { Referer: referer },
     }));
   }

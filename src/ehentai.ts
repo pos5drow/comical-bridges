@@ -21,6 +21,7 @@ import {
   type InferSettings,
   type ListOptions,
   type Page,
+  type PageThumbnail,
   type PagedResults,
   type SearchOptions,
   type SeriesEntry,
@@ -167,6 +168,7 @@ function extractPageHashes(html: string): Array<{ hash: string; pageNum: number 
   return results;
 }
 
+
 /** Parse total image count from "Showing 1 - 40 of 185 images" banner. */
 function extractFilecount(html: string): number {
   // E-hentai formats counts ≥1000 with commas ("1,110"), so strip them before parsing.
@@ -209,9 +211,93 @@ const NS_LABELS: Record<string, string> = {
   misc: "Misc",
 };
 
+// ── Thumbnail helpers ─────────────────────────────────────────────────────────
+
+/** s.exhentai.org thumbnails require the igneous cookie; ehgt.org is the same CDN without auth. */
+function normalizeThumbUrl(url: string): string {
+  return url.replace(/^https?:\/\/s\.exhentai\.org\/t\//, "https://ehgt.org/");
+}
+
+/** Strip the _250 size suffix for a full-resolution cover (used on the detail page only). */
+function fullSizeThumbUrl(url: string): string {
+  return normalizeThumbUrl(url).replace(/_250\.(\w+)$/, ".$1");
+}
+
+/** One sprite tile's geometry: its rect `{x,y,w,h}` inside the sheet at `src`, plus the sheet's own
+ *  pixel size `{sheetWidth,sheetHeight}`. The sheet size is what scales the crop, so it must be the
+ *  whole sheet — not the tile — or mixed-size galleries crop the wrong region. */
+export interface SpriteTile {
+  src: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  sheetWidth: number;
+  sheetHeight: number;
+}
+
+/**
+ * Parse per-page sprite thumbnails from the gallery viewer HTML.
+ * Structure: <a href=".../{gid}-{pageNum}"><div style="width:{w}px;height:{h}px;background:... url({src}) -{x}px [-{y}px] ...">
+ * A viewer page can span multiple montage sheets and the tiles can have varying sizes (mixed-aspect
+ * galleries) and even sit on a second row, so each sheet is sized from its own tiles' extents.
+ */
+export function extractViewerThumbnails(html: string): Map<number, SpriteTile> {
+  const re = /href="https?:\/\/(?:e-hentai|exhentai)\.org\/s\/[a-f0-9]+\/\d+-(\d+)"><div[^>]+style="width:(\d+)px;height:(\d+)px;background:(?:[a-z]+ )?url\(([^)]+)\)\s*(-?\d+)px(?:\s+(-?\d+)px)?/g;
+  const entries: Array<{ pageNum: number; src: string; x: number; y: number; w: number; h: number }> = [];
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html)) !== null) {
+    entries.push({
+      pageNum: parseInt(m[1]!, 10),
+      w: parseInt(m[2]!, 10),
+      h: parseInt(m[3]!, 10),
+      src: m[4]!.trim(),
+      x: Math.abs(parseInt(m[5]!, 10)),
+      y: m[6] != null ? Math.abs(parseInt(m[6], 10)) : 0,
+    });
+  }
+  // Size each montage sheet from the extents of the tiles that reference it (the bottom-right corner
+  // of its furthest tile), keyed by src — never mix dimensions across sheets.
+  const sheetW = new Map<string, number>();
+  const sheetH = new Map<string, number>();
+  for (const e of entries) {
+    sheetW.set(e.src, Math.max(sheetW.get(e.src) ?? 0, e.x + e.w));
+    sheetH.set(e.src, Math.max(sheetH.get(e.src) ?? 0, e.y + e.h));
+  }
+  const map = new Map<number, SpriteTile>();
+  for (const e of entries) {
+    map.set(e.pageNum, {
+      src: e.src,
+      x: e.x,
+      y: e.y,
+      w: e.w,
+      h: e.h,
+      sheetWidth: sheetW.get(e.src)!,
+      sheetHeight: sheetH.get(e.src)!,
+    });
+  }
+  return map;
+}
+
+/** Describe a sprite tile as slice metadata; the client (web SVG / native region-decode) crops it
+ *  from the shared sheet, so the original pixels are preserved (no server-side recompression). */
+function spriteThumb(t: SpriteTile): PageThumbnail {
+  return {
+    kind: "sprite",
+    sheetUrl: `/img-proxy?url=${encodeURIComponent(t.src)}`,
+    x: t.x,
+    y: t.y,
+    w: t.w,
+    h: t.h,
+    sheetWidth: t.sheetWidth,
+    sheetHeight: t.sheetHeight,
+  };
+}
+
+
 // ── Bridge ────────────────────────────────────────────────────────────────────
 
-const VIEWER_PAGE_SIZE = 40;
+const VIEWER_PAGE_SIZE = 20;
 
 class EHentaiBridge extends BridgeBase<Settings> {
   // Next-page cursor URLs keyed by context ("home" or "search:{params}").
@@ -221,6 +307,8 @@ class EHentaiBridge extends BridgeBase<Settings> {
   // Avoids re-fetching the same viewer page when multiple resolvePage calls land simultaneously.
   private readonly hashCache = new Map<string, Map<number, string>>();
   private readonly hashCachePending = new Map<string, Promise<Map<number, string>>>();
+  // Cache for viewer-page sprite thumbnails: same key as hashCache.
+  private readonly thumbCache = new Map<string, Map<number, SpriteTile>>();
 
   readonly info: BridgeInfo = {
     id: "e-hentai",
@@ -280,7 +368,7 @@ class EHentaiBridge extends BridgeBase<Settings> {
 
   getLists(): Promise<SeriesList[]> {
     return Promise.resolve([
-      { id: "home", name: "Home", layout: "grid", featured: true },
+      { id: "home", name: "Home", layout: "grid", featured: true, page: true },
       { id: "popular", name: "Popular", layout: "grid", featured: true, page: true },
     ]);
   }
@@ -378,7 +466,7 @@ class EHentaiBridge extends BridgeBase<Settings> {
       const meta = metaById.get(id);
       if (!meta || meta.error || meta.expunged) return { id, title: id };
       const entry: SeriesEntry = { id, title: meta.title ?? id };
-      if (meta.thumb) entry.thumbnailUrl = meta.thumb;
+      if (meta.thumb) entry.thumbnailUrl = normalizeThumbUrl(meta.thumb);
       return entry;
     });
 
@@ -450,7 +538,7 @@ class EHentaiBridge extends BridgeBase<Settings> {
       status: "completed",
     };
 
-    if (meta?.thumb) info.thumbnailUrl = meta.thumb;
+    if (meta?.thumb) info.thumbnailUrl = fullSizeThumbUrl(meta.thumb);
     if (meta?.category) info.genres = [meta.category];
     if (meta?.title_jpn) info.description = meta.title_jpn;
 
@@ -506,21 +594,25 @@ class EHentaiBridge extends BridgeBase<Settings> {
       // dotAll flag handles imagelist JSON that may span multiple lines
       const match = mpvHtml.match(/var imagelist\s*=\s*(\[[\s\S]+?\]);/);
       if (match) {
-        const imagelist = JSON.parse(match[1]) as Array<{ k: string }>;
+        const imagelist = JSON.parse(match[1]) as Array<{ k: string; t?: string }>;
         if (imagelist.length > 0) {
           console.log(`[e-hentai] getSeriesPages ${seriesId}: MPV OK, ${imagelist.length} pages`);
-          return imagelist.map((entry, i) => ({
-            index: i,
-            imageUrl: `/bridges/e-hentai/series/${encSeriesId}/page-image/${entry.k}/${gid}-${i + 1}`,
-          }));
+          return imagelist.map((entry, i) => {
+            const page: Page = {
+              index: i,
+              imageUrl: `/bridges/e-hentai/series/${encSeriesId}/page-image/${entry.k}/${gid}-${i + 1}`,
+            };
+            if (typeof entry.t === "string" && entry.t.startsWith("http")) {
+              page.thumbnail = { kind: "image", url: normalizeThumbUrl(entry.t) };
+            }
+            return page;
+          });
         }
       }
     }
 
-    // Fallback: fetch only the first viewer page to get total count, then return
-    // proxy URLs with "_" as a hash placeholder. Hashes are resolved lazily in
-    // resolvePage as the reader scrolls, with viewer pages cached to avoid
-    // redundant fetches (all 40 images on viewer page 0 share one fetch).
+    // Fallback: fetch only the first viewer page to get total count + first batch of thumbnails.
+    // Hashes for later pages are resolved lazily in resolvePage as the reader scrolls.
     console.log(`[e-hentai] getSeriesPages ${seriesId}: MPV unavailable, falling back to viewer scraping`);
     const firstHtml = await this.getHtml(`${this.base()}/g/${gid}/${token}/?p=0`);
     const filecount = extractFilecount(firstHtml);
@@ -529,18 +621,26 @@ class EHentaiBridge extends BridgeBase<Settings> {
       throw new Error("Gallery not found or expunged.");
     }
 
-    // Pre-populate cache for the first viewer page so pages 1–40 resolve instantly.
+    // Pre-populate cache for the first viewer page and extract sprite thumbnails for pages 1–N.
     const firstEntries = extractPageHashes(firstHtml);
+    const firstThumbs = extractViewerThumbnails(firstHtml);
     this.hashCache.set(`${gid}:0`, new Map(firstEntries.map((e) => [e.pageNum, e.hash])));
-    console.log(`[e-hentai] getSeriesPages ${seriesId}: viewer fallback OK, ${filecount} pages (${firstEntries.length} hashes cached)`);
+    this.thumbCache.set(`${gid}:0`, firstThumbs);
+    console.log(`[e-hentai] getSeriesPages ${seriesId}: viewer fallback OK, ${filecount} pages (${firstEntries.length} hashes, ${firstThumbs.size} thumbs for first viewer page)`);
 
-    return Array.from({ length: filecount }, (_, i) => ({
-      index: i,
-      imageUrl: `/bridges/e-hentai/series/${encSeriesId}/page-image/_/${gid}-${i + 1}`,
-    }));
+    return Array.from({ length: filecount }, (_, i) => {
+      const thumb = firstThumbs.get(i + 1);
+      const page: Page = {
+        index: i,
+        imageUrl: `/bridges/e-hentai/series/${encSeriesId}/page-image/_/${gid}-${i + 1}`,
+      };
+      if (thumb) page.thumbnail = spriteThumb(thumb);
+      return page;
+    });
   }
 
-  /** Fetch and cache the hash map for a single viewer page (deduplicates concurrent calls). */
+  /** Fetch and cache the hash map for a single viewer page (deduplicates concurrent calls).
+   *  Also populates thumbCache as a side-effect so getPageThumbnail avoids a second fetch. */
   private getViewerPageHashes(gid: number, token: string, viewerPage: number): Promise<Map<number, string>> {
     const key = `${gid}:${viewerPage}`;
     const cached = this.hashCache.get(key);
@@ -550,11 +650,27 @@ class EHentaiBridge extends BridgeBase<Settings> {
     const promise = this.getHtml(`${this.base()}/g/${gid}/${token}/?p=${viewerPage}`).then((html) => {
       const map = new Map(extractPageHashes(html).map((e) => [e.pageNum, e.hash]));
       this.hashCache.set(key, map);
+      this.thumbCache.set(key, extractViewerThumbnails(html));
       this.hashCachePending.delete(key);
       return map;
     });
     this.hashCachePending.set(key, promise);
     return promise;
+  }
+
+  /** Return the thumbnail descriptor for a single page by 0-based index. */
+  async getPageThumbnail(seriesId: string, pageIndex: number): Promise<PageThumbnail> {
+    const [gid, token] = parseId(seriesId);
+    const viewerPage = Math.floor(pageIndex / VIEWER_PAGE_SIZE);
+    const key = `${gid}:${viewerPage}`;
+    let thumbs = this.thumbCache.get(key);
+    if (!thumbs) {
+      await this.getViewerPageHashes(gid, token, viewerPage);
+      thumbs = this.thumbCache.get(key) ?? new Map();
+    }
+    const thumb = thumbs.get(pageIndex + 1); // pageNum is 1-based
+    if (!thumb) throw new Error(`No thumbnail data for page ${pageIndex + 1}`);
+    return spriteThumb(thumb);
   }
 
   /** Resolve the CDN URL for a single page on demand (called by the host-server proxy route). */

@@ -207,7 +207,7 @@ class NhentaiBridge extends BridgeBase<Settings> {
     contractVersion: "1.0.0",
     languages: ["multi"],
     nsfw: true,
-    capabilities: ["lists", "search", "filters", "sort", "settings", "favorites", "direct", "exclude-tags", "resolve-tags"],
+    capabilities: ["lists", "search", "filters", "sort", "settings", "favorites", "direct", "exclude-tags", "resolve-tags", "related-series"],
     rateLimit: { maxConcurrent: 1, minIntervalMs: 1200 },
   };
 
@@ -495,11 +495,11 @@ class NhentaiBridge extends BridgeBase<Settings> {
   // ── Series detail ─────────────────────────────────────────────────────────
 
   async getSeriesDetails(seriesId: string): Promise<SeriesInfo> {
-    const [g, thumb, related] = await Promise.all([
-      this.fetchDetail(seriesId),
-      this.thumbServer(),
-      this.fetchRelated(seriesId),
-    ]);
+    // Only fetch the gallery detail on the critical path. CDN config is already warm from list/search
+    // calls (thumbServer() is called in listToEntries), so we can read the cached value directly
+    // without acquiring a rate-limiter slot. Related series are loaded lazily via getRelatedSeries.
+    const g = await this.fetchDetail(seriesId);
+    const thumb = this.cdnThumbServer ?? THUMB_FALLBACK;
 
     const info: SeriesInfo = {
       id: seriesId,
@@ -557,15 +557,18 @@ class NhentaiBridge extends BridgeBase<Settings> {
 
     if (tagGroups.length) info.tagGroups = tagGroups;
 
-    if (related.length) {
-      const series = await this.listToEntries(related);
-      const group: RelatedSeriesGroup = { label: "More Like This", kind: "similar", series };
-      info.relatedSeriesGroups = [group];
-    }
-
     if (g.num_pages) info.pageCount = g.num_pages;
 
     return info;
+  }
+
+  // ── Related series (lazy, separate from getSeriesDetails) ─────────────────
+
+  async getRelatedSeries(seriesId: string): Promise<RelatedSeriesGroup[]> {
+    const related = await this.fetchRelated(seriesId);
+    if (!related.length) return [];
+    const series = await this.listToEntries(related);
+    return [{ label: "More Like This", kind: "similar", series }];
   }
 
   // ── Direct pages ──────────────────────────────────────────────────────────

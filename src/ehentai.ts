@@ -17,6 +17,7 @@
 import {
   BridgeBase,
   type BridgeInfo,
+  type CardBadge,
   type Filter,
   type InferSettings,
   type ListOptions,
@@ -65,16 +66,28 @@ const SETTINGS = defineSettings([
     key: "cookies",
     label: "Cookies",
     description:
-      "Paste your e-hentai.org session cookies (ipb_member_id, ipb_pass_hash). " +
-      "Required for age-restricted content. Add igneous cookie for ExHentai access.",
+      "Your e-hentai session cookies (needed for favorites and ExHentai). On a browser where you're " +
+      "logged in, open DevTools → Application → Cookies and copy ipb_member_id and ipb_pass_hash " +
+      "(add igneous for ExHentai). You can paste the whole cookie string — only those are used.",
     secret: true,
   },
   {
     type: "boolean",
     key: "exhentai",
     label: "Use ExHentai (Sadpanda)",
-    description: "Browse exhentai.org instead of e-hentai.org. Requires a valid igneous cookie.",
+    description:
+      "Browse exhentai.org instead of e-hentai.org. Requires an account that has ExHentai access.",
     default: false,
+  },
+  {
+    type: "enum",
+    key: "favcat",
+    label: "Default favorites category",
+    description:
+      "Which of your 10 favorite categories (0–9) new favorites are added to. " +
+      "Browsing always shows all categories merged.",
+    options: Array.from({ length: 10 }, (_, i) => ({ value: String(i), label: String(i) })),
+    default: "0",
   },
 ]);
 type Settings = InferSettings<typeof SETTINGS>;
@@ -169,6 +182,46 @@ function extractPageHashes(html: string): Array<{ hash: string; pageNum: number 
 }
 
 
+// ── Auth helpers ──────────────────────────────────────────────────────────────
+
+/**
+ * Parse a pasted cookie blob into a name→value map. Accepts both a tidy
+ * "ipb_member_id=…; ipb_pass_hash=…" string and a full `document.cookie` dump (many cookies,
+ * possibly newline-separated); only the names the bridge cares about are read by the caller.
+ */
+export function parseCookieString(raw: string): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const part of raw.split(/[;\n]+/)) {
+    const s = part.trim();
+    if (!s) continue;
+    const eq = s.indexOf("=");
+    if (eq <= 0) continue;
+    const name = s.slice(0, eq).trim();
+    const value = s.slice(eq + 1).trim();
+    if (value) out[name] = value;
+  }
+  return out;
+}
+
+/** True when a page was served logged-out (e-hentai gates favorites behind a login). */
+export function isLoggedOut(html: string): boolean {
+  // The explicit gate message, or the IPB login form's username field (only present when signed out).
+  return /This page requires you to log on/i.test(html) || /name="UserName"/.test(html);
+}
+
+/**
+ * Detect whether a gallery is currently favorited from the addfav popup HTML.
+ * The popup renders a `favcat` radio per category; the gallery's current slot (0–9) is pre-checked
+ * when favorited, otherwise the "favdel" radio is checked. Order-independent within each <input> tag.
+ */
+export function isFavoritedFromPopup(html: string): boolean {
+  for (const m of html.matchAll(/<input[^>]*name="favcat"[^>]*>/gi)) {
+    const tag = m[0];
+    if (/checked/i.test(tag) && /value="[0-9]"/.test(tag)) return true;
+  }
+  return false;
+}
+
 /** Parse total image count from "Showing 1 - 40 of 185 images" banner. */
 function extractFilecount(html: string): number {
   // E-hentai formats counts ≥1000 with commas ("1,110"), so strip them before parsing.
@@ -176,6 +229,33 @@ function extractFilecount(html: string): number {
 }
 
 // ── Tag helpers ───────────────────────────────────────────────────────────────
+
+/**
+ * Language-namespace values that aren't actual languages but translation states; excluded so a card's
+ * language badge shows the real language (e.g. "english", not "translated").
+ */
+const LANG_MODIFIERS: ReadonlySet<string> = new Set([
+  "translated", "rewrite", "speechless", "textless", "text cleaned",
+]);
+
+/** Title-case a lowercase tag value for display ("english" → "English"). */
+function titleCaseValue(s: string): string {
+  return s.replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+/**
+ * Card badges for an e-hentai gallery, from its gdata: the category (gallery type, e.g. "Doujinshi")
+ * top-left, and the primary language top-right. Both come from metadata already fetched for the card,
+ * so there's no extra request.
+ */
+export function cardBadges(meta: GMetadata): CardBadge[] {
+  const badges: CardBadge[] = [];
+  if (meta.category) badges.push({ text: meta.category, position: "top-left", tone: "neutral" });
+  const langs = groupTagsByNs(meta.tags ?? []).get("language") ?? [];
+  const lang = langs.find((l) => !LANG_MODIFIERS.has(l.toLowerCase()));
+  if (lang) badges.push({ text: titleCaseValue(lang), position: "top-right", tone: "info" });
+  return badges;
+}
 
 /** Group gdata tags (format "namespace:value") by namespace. */
 function groupTagsByNs(tags: string[]): Map<string, string[]> {
@@ -189,6 +269,16 @@ function groupTagsByNs(tags: string[]): Map<string, string[]> {
     arr.push(val);
   }
   return map;
+}
+
+/**
+ * Build the e-hentai search token for a single tag, so a host can drop it straight into the search
+ * box. The trailing `$` pins an exact tag match (the site's own tag links do the same). The "misc"
+ * namespace is the bridge's bucket for colon-less tags, which have no real e-hentai namespace, so
+ * those search unscoped.
+ */
+function tagSearchToken(ns: string, value: string): string {
+  return ns === "misc" ? `"${value}$"` : `${ns}:"${value}$"`;
 }
 
 // Namespaces that map to a semantic TagKind; others get no kind.
@@ -313,11 +403,11 @@ class EHentaiBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "e-hentai",
     name: "E-Hentai",
-    version: "0.1.0",
+    version: "0.2.0",
     contractVersion: "1.0.0",
     languages: ["multi"],
     nsfw: true,
-    capabilities: ["lists", "search", "filters", "sort", "settings", "direct"],
+    capabilities: ["lists", "search", "filters", "sort", "settings", "direct", "favorites"],
     rateLimit: { maxConcurrent: 3, minIntervalMs: 500 },
   };
 
@@ -330,17 +420,14 @@ class EHentaiBridge extends BridgeBase<Settings> {
   }
 
   private headers(forHtml = false): Record<string, string> {
-    const h: Record<string, string> = {
+    return {
       "User-Agent": UA,
       Accept: forHtml
         ? "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
         : "application/json, */*",
       "Accept-Language": "en-US,en;q=0.9",
+      Cookie: this.cookieHeader(),
     };
-    const userCookies = this.setting("cookies")?.trim() ?? "";
-    // nw=1 bypasses the "Offensive For Everyone" content warning site-wide
-    h["Cookie"] = userCookies ? `${userCookies}; nw=1` : "nw=1";
-    return h;
   }
 
   private resolveUrl(href: string): string {
@@ -362,6 +449,39 @@ class EHentaiBridge extends BridgeBase<Settings> {
     });
     if (res.status >= 400) throw new Error(`HTTP ${res.status} from API`);
     return JSON.parse(res.body) as T;
+  }
+
+  // ── Auth / session ──────────────────────────────────────────────────────────
+  // e-hentai's login is gated by Cloudflare + an adaptive reCAPTCHA that always challenges a headless
+  // browser, so there's no way to sign in programmatically. Instead the user pastes the durable session
+  // cookies (ipb_member_id / ipb_pass_hash, + igneous for ExHentai) from a browser that's already logged
+  // in; we extract and inject them on every request. These are long-lived ("stay logged in") cookies.
+
+  /** The user's pasted cookie blob, parsed to a name→value map. */
+  private parsedCookies(): Record<string, string> {
+    return parseCookieString(this.setting("cookies") ?? "");
+  }
+
+  /** Cookie header for a request: the user's ipb_* (+ igneous) cookies plus the nw=1 warning bypass. */
+  private cookieHeader(): string {
+    const c = this.parsedCookies();
+    const parts: string[] = [];
+    for (const name of ["ipb_member_id", "ipb_pass_hash", "igneous"]) {
+      if (c[name]) parts.push(`${name}=${c[name]}`);
+    }
+    parts.push("nw=1"); // bypasses the "Offensive For Everyone" content warning site-wide
+    return parts.join("; ");
+  }
+
+  /** Throw a clear error when the cookies needed for account features (favorites) aren't set. */
+  private requireAuth(): void {
+    const c = this.parsedCookies();
+    if (!c.ipb_member_id || !c.ipb_pass_hash) {
+      throw new Error(
+        "favorites require your e-hentai session cookies — on a logged-in browser open DevTools → " +
+          "Application → Cookies and paste ipb_member_id and ipb_pass_hash into this bridge's settings",
+      );
+    }
   }
 
   // ── Lists ─────────────────────────────────────────────────────────────────
@@ -439,7 +559,15 @@ class EHentaiBridge extends BridgeBase<Settings> {
     page: number,
     paginated = true,
   ): Promise<{ result: PagedResults<SeriesEntry>; nextUrl?: string }> {
-    const html = await this.getHtml(url);
+    return this.listingFromHtml(await this.getHtml(url), page, paginated);
+  }
+
+  /** Turn a gallery-listing page's HTML into enriched results + the next-page cursor. */
+  private async listingFromHtml(
+    html: string,
+    page: number,
+    paginated = true,
+  ): Promise<{ result: PagedResults<SeriesEntry>; nextUrl?: string }> {
     const pairs = extractGalleryPairs(html);
     const hasNext = paginated && listingHasNextPage(html, pairs.length);
     const nextUrl = paginated ? extractNextUrl(html) : undefined;
@@ -464,9 +592,13 @@ class EHentaiBridge extends BridgeBase<Settings> {
     const items: SeriesEntry[] = pairs.map(({ gid, token }): SeriesEntry => {
       const id = `${gid}:${token}`;
       const meta = metaById.get(id);
-      if (!meta || meta.error || meta.expunged) return { id, title: id };
+      // Expunged/superseded galleries (struck-through date in favorites) still carry a valid title and
+      // thumbnail and remain viewable — only a genuine API error means there's no data to show.
+      if (!meta || meta.error) return { id, title: id };
       const entry: SeriesEntry = { id, title: meta.title ?? id };
       if (meta.thumb) entry.thumbnailUrl = normalizeThumbUrl(meta.thumb);
+      const badges = cardBadges(meta);
+      if (badges.length) entry.badges = badges;
       return entry;
     });
 
@@ -520,6 +652,67 @@ class EHentaiBridge extends BridgeBase<Settings> {
     ]);
   }
 
+  // ── Favorites ───────────────────────────────────────────────────────────────
+  // Backed by the e-hentai account's own favorites, so these require the user's session cookies:
+  // requireAuth() throws a clear error if they're unset — plain e-hentai browsing stays anonymous. All
+  // categories are merged into one bucket (favcat=all); new favorites land in the user's chosen default
+  // slot. URLs derive from base(), so ExHentai works automatically.
+
+  async getFavorites(page: number): Promise<PagedResults<SeriesEntry>> {
+    this.requireAuth();
+    const first = `${this.base()}/favorites.php?favcat=all`;
+    const url = page === 1 ? first : (this.nextUrls.get("favorites") ?? first);
+    if (page === 1) this.nextUrls.delete("favorites");
+
+    const html = await this.getHtml(url);
+    if (isLoggedOut(html)) {
+      throw new Error(
+        "your e-hentai session has expired or is invalid — paste fresh cookies in this bridge's settings",
+      );
+    }
+
+    const { result, nextUrl } = await this.listingFromHtml(html, page);
+    if (nextUrl) this.nextUrls.set("favorites", this.resolveUrl(nextUrl));
+    else this.nextUrls.delete("favorites");
+    // Favorites pages don't follow the 25-per-page assumption; trust the cursor link instead.
+    return { ...result, hasNextPage: !!nextUrl };
+  }
+
+  async addFavorite(seriesId: string): Promise<void> {
+    await this.modifyFavorite(seriesId, this.setting("favcat") ?? "0");
+  }
+
+  async removeFavorite(seriesId: string): Promise<void> {
+    await this.modifyFavorite(seriesId, "favdel");
+  }
+
+  async isFavorite(seriesId: string): Promise<boolean> {
+    this.requireAuth();
+    const [gid, token] = parseId(seriesId);
+    return isFavoritedFromPopup(await this.getHtml(this.favPopupUrl(gid, token)));
+  }
+
+  /** POST a favcat change to the addfav popup. `favcat` is "0".."9" to set a slot, "favdel" to remove. */
+  private async modifyFavorite(seriesId: string, favcat: string): Promise<void> {
+    this.requireAuth();
+    const [gid, token] = parseId(seriesId);
+    const res = await this.request({
+      url: this.favPopupUrl(gid, token),
+      method: "POST",
+      headers: {
+        ...this.headers(true),
+        "Content-Type": "application/x-www-form-urlencoded",
+        Referer: `${this.base()}/g/${gid}/${token}/`,
+      },
+      body: new URLSearchParams({ favcat, favnote: "", apply: "Apply Changes", update: "1" }).toString(),
+    });
+    if (res.status >= 400) throw new Error(`favorite update failed: HTTP ${res.status}`);
+  }
+
+  private favPopupUrl(gid: number, token: string): string {
+    return `${this.base()}/gallerypopups.php?gid=${gid}&t=${token}&act=addfav`;
+  }
+
   // ── Series detail ─────────────────────────────────────────────────────────
 
   async getSeriesDetails(seriesId: string): Promise<SeriesInfo> {
@@ -548,7 +741,11 @@ class EHentaiBridge extends BridgeBase<Settings> {
 
       // Author: prefer artist namespace, fall back to group
       const credits = byNs.get("artist") ?? byNs.get("group");
-      if (credits?.length) info.author = credits.join(", ");
+      if (credits?.length) {
+        info.author = credits.join(", ");
+        // Per-credit chips; names (not ids) are what the author filter matches on this site.
+        info.authors = credits.map((name) => ({ name }));
+      }
 
       // Languages via the dedicated field
       const langs = byNs.get("language");
@@ -559,7 +756,7 @@ class EHentaiBridge extends BridgeBase<Settings> {
         if (ns === "language") continue; // surfaced via info.languages already
         const label = NS_LABELS[ns] ?? (ns[0]!.toUpperCase() + ns.slice(1));
         const kind = TAG_KINDS[ns];
-        const group: TagGroup = { label, tags };
+        const group: TagGroup = { label, tags, tagQueries: tags.map((v) => tagSearchToken(ns, v)) };
         if (kind) group.kind = kind;
         tagGroups.push(group);
       }

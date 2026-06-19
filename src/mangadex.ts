@@ -9,6 +9,7 @@ import {
   BridgeBase,
   type BridgeInfo,
   type Chapter,
+  type Credit,
   type Filter,
   type Page,
   type PagedResults,
@@ -114,18 +115,19 @@ function coverUrl(mangaId: string, rels: Relationship[]): string | undefined {
   return `${COVER_BASE}/${mangaId}/${fileName}.512.jpg`;
 }
 
-function creditNames(rels: Relationship[], type: "author" | "artist"): string[] {
+/**
+ * Named credits (name + MangaDex author/artist UUID) for one relationship type, built in a single
+ * pass so each name stays paired with its own id. The id is the precise filter value — the `author`
+ * filter sends it as `authors[]` (a UUID, not a name).
+ */
+function creditList(rels: Relationship[], type: "author" | "artist"): Credit[] {
   return rels
     .filter((r) => r.type === type)
     .map((r) => {
       const name = r.attributes?.["name"];
-      return typeof name === "string" ? name : undefined;
+      return typeof name === "string" && name ? { name, id: r.id } : undefined;
     })
-    .filter((n): n is string => !!n);
-}
-
-function creditIds(rels: Relationship[], type: "author" | "artist"): string[] {
-  return rels.filter((r) => r.type === type).map((r) => r.id);
+    .filter((c): c is Credit => !!c);
 }
 
 function toEntry(d: MangaData): SeriesEntry {
@@ -280,14 +282,18 @@ class MangaDexBridge extends BridgeBase {
     const desc = attrs.description?.["en"] ?? Object.values(attrs.description ?? {})[0];
     if (desc?.trim()) info.description = desc.trim();
 
-    const authors = creditNames(d.relationships, "author");
-    const artists = creditNames(d.relationships, "artist");
-    if (authors.length) info.author = authors.join(", ");
-    if (artists.length) info.artist = artists.join(", ");
-    const authorIds = creditIds(d.relationships, "author");
-    const artistIds = creditIds(d.relationships, "artist");
-    if (authorIds[0]) info.authorId = authorIds[0];
-    if (artistIds[0]) info.artistId = artistIds[0];
+    const authors = creditList(d.relationships, "author");
+    const artists = creditList(d.relationships, "artist");
+    if (authors.length) {
+      info.author = authors.map((c) => c.name).join(", ");
+      info.authors = authors;
+      if (authors[0]!.id) info.authorId = authors[0]!.id;
+    }
+    if (artists.length) {
+      info.artist = artists.map((c) => c.name).join(", ");
+      info.artists = artists;
+      if (artists[0]!.id) info.artistId = artists[0]!.id;
+    }
 
     if (attrs.status) info.status = STATUS_MAP[attrs.status] ?? "unknown";
 

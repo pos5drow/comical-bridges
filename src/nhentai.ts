@@ -24,6 +24,7 @@ import {
   type PagedResults,
   type RelatedSeriesGroup,
   type SearchOptions,
+  type CardBadge,
   type SeriesEntry,
   type SeriesInfo,
   type SeriesList,
@@ -128,6 +129,27 @@ interface TagDto {
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
+
+/**
+ * nhentai's permanent tag ids for the three languages it carries, used to put a language badge on a
+ * card. List/search payloads only ship a flat `tag_ids` array (no tag names), so this tiny constant
+ * map reads the language straight from data already in hand — no name lookup, no extra request. The
+ * "translated" modifier tag is intentionally excluded so the badge shows the actual language.
+ */
+const LANGUAGE_TAG_IDS: Record<number, string> = {
+  12227: "English",
+  6346: "Japanese",
+  29963: "Chinese",
+};
+
+/** Language badge for a card from its inline tag ids (top-right), or none when no language is tagged. */
+function languageBadges(tagIds: number[] | undefined): CardBadge[] {
+  for (const id of tagIds ?? []) {
+    const lang = LANGUAGE_TAG_IDS[id];
+    if (lang) return [{ text: lang, position: "top-right", tone: "info" }];
+  }
+  return [];
+}
 
 /** Prefix a relative CDN path with its server origin. */
 function cdnUrl(relativePath: string, server: string): string {
@@ -278,6 +300,8 @@ class NhentaiBridge extends BridgeBase<Settings> {
       title: listItemTitle(item),
     };
     if (item.thumbnail) entry.thumbnailUrl = cdnUrl(item.thumbnail, thumb);
+    const badges = languageBadges(item.tag_ids);
+    if (badges.length) entry.badges = badges;
     return entry;
   }
 
@@ -485,7 +509,12 @@ class NhentaiBridge extends BridgeBase<Settings> {
     const artists = byType.get("artist") ?? [];
     const groups = byType.get("group") ?? [];
     const credits = artists.length ? artists : groups;
-    if (credits.length) info.author = credits.join(", ");
+    if (credits.length) {
+      info.author = credits.join(", ");
+      // Per-credit chips for the host. No id: the "author" filter matches artist *names*
+      // (see getSearchResults → `artist:"…"`), so a name is the precise, filterable value here.
+      info.authors = credits.map((name) => ({ name }));
+    }
 
     const categories = byType.get("category");
     if (categories?.length) info.genres = categories;

@@ -1,5 +1,6 @@
 /**
- * Card badges (contract: seriesEntry.badges) the bridges paint onto list/search cards:
+ * Card badges (contract: seriesEntry.badges) the bridges paint onto the bottom of list/search cards,
+ * with languages shown as terse abbreviations ("EN", "JP"):
  *  - nhentai: the gallery language only, read from the inline `tag_ids` already on every list item.
  *  - e-hentai: the gallery type (category) plus the primary language, from gdata metadata.
  * nhentai is exercised end-to-end through getListItems; e-hentai's pure `cardBadges` helper is tested
@@ -36,8 +37,8 @@ describe("nhentai card language badge", () => {
   test("tags each card with its language only, from inline tag_ids", async () => {
     const bridge = nhentaiFactory(nhentaiHost());
     const { items } = await bridge.getListItems("popular-now", 1);
-    expect(items[0]!.badges).toEqual([{ text: "English", position: "top-right", tone: "info" }]);
-    expect(items[1]!.badges).toEqual([{ text: "Japanese", position: "top-right", tone: "info" }]);
+    expect(items[0]!.badges).toEqual([{ text: "EN", position: "bottom-right", tone: "info" }]);
+    expect(items[1]!.badges).toEqual([{ text: "JP", position: "bottom-right", tone: "info" }]);
     // No language tag → no badge at all.
     expect(items[2]!.badges).toBeUndefined();
   });
@@ -53,20 +54,27 @@ describe("e-hentai card type + language badges", () => {
       tags: ["language:english", "language:translated", "artist:someone"],
     });
     expect(badges).toEqual([
-      { text: "Doujinshi", position: "top-left", tone: "neutral" },
-      { text: "English", position: "top-right", tone: "info" },
+      { text: "Doujinshi", position: "bottom-left", tone: "neutral" },
+      { text: "EN", position: "bottom-right", tone: "info" },
     ]);
   });
 
   test("category alone when no language is tagged", () => {
     expect(cardBadges({ gid: 1, token: "t", title: "X", category: "Manga", tags: [] })).toEqual([
-      { text: "Manga", position: "top-left", tone: "neutral" },
+      { text: "Manga", position: "bottom-left", tone: "neutral" },
     ]);
   });
 
   test("language alone when only modifier languages are present is skipped (no language badge)", () => {
     expect(cardBadges({ gid: 1, token: "t", title: "X", category: "Manga", tags: ["language:translated"] })).toEqual([
-      { text: "Manga", position: "top-left", tone: "neutral" },
+      { text: "Manga", position: "bottom-left", tone: "neutral" },
+    ]);
+  });
+
+  test("an unknown language falls back to its first two letters uppercased", () => {
+    expect(cardBadges({ gid: 1, token: "t", title: "X", category: "Manga", tags: ["language:swahili"] })).toEqual([
+      { text: "Manga", position: "bottom-left", tone: "neutral" },
+      { text: "SW", position: "bottom-right", tone: "info" },
     ]);
   });
 });

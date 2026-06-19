@@ -35,6 +35,7 @@ import {
   defineBridge,
   defineSettings,
 } from "@comical/sdk";
+import { abbreviateLanguage } from "./lang.ts";
 
 const EH_BASE = "https://e-hentai.org";
 const EX_BASE = "https://exhentai.org";
@@ -238,22 +239,17 @@ const LANG_MODIFIERS: ReadonlySet<string> = new Set([
   "translated", "rewrite", "speechless", "textless", "text cleaned",
 ]);
 
-/** Title-case a lowercase tag value for display ("english" → "English"). */
-function titleCaseValue(s: string): string {
-  return s.replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
 /**
  * Card badges for an e-hentai gallery, from its gdata: the category (gallery type, e.g. "Doujinshi")
- * top-left, and the primary language top-right. Both come from metadata already fetched for the card,
- * so there's no extra request.
+ * bottom-left, and the primary language as a terse abbreviation ("EN") bottom-right. Both come from
+ * metadata already fetched for the card, so there's no extra request.
  */
 export function cardBadges(meta: GMetadata): CardBadge[] {
   const badges: CardBadge[] = [];
-  if (meta.category) badges.push({ text: meta.category, position: "top-left", tone: "neutral" });
+  if (meta.category) badges.push({ text: meta.category, position: "bottom-left", tone: "neutral" });
   const langs = groupTagsByNs(meta.tags ?? []).get("language") ?? [];
   const lang = langs.find((l) => !LANG_MODIFIERS.has(l.toLowerCase()));
-  if (lang) badges.push({ text: titleCaseValue(lang), position: "top-right", tone: "info" });
+  if (lang) badges.push({ text: abbreviateLanguage(lang), position: "bottom-right", tone: "info" });
   return badges;
 }
 

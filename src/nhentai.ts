@@ -36,6 +36,7 @@ import {
   defineBridge,
   defineSettings,
 } from "@comical/sdk";
+import { abbreviateLanguage } from "./lang.ts";
 
 const BASE = "https://nhentai.net/api/v2";
 const IMG_FALLBACK = "https://i1.nhentai.net";
@@ -150,11 +151,14 @@ const LANGUAGE_TAG_IDS: Record<number, string> = {
   29963: "Chinese",
 };
 
-/** Language badge for a card from its inline tag ids (top-right), or none when no language is tagged. */
+/**
+ * Language badge for a card from its inline tag ids, anchored bottom-right and shown as a terse
+ * abbreviation ("EN", "JP"); none when no language is tagged.
+ */
 function languageBadges(tagIds: number[] | undefined): CardBadge[] {
   for (const id of tagIds ?? []) {
     const lang = LANGUAGE_TAG_IDS[id];
-    if (lang) return [{ text: lang, position: "top-right", tone: "info" }];
+    if (lang) return [{ text: abbreviateLanguage(lang), position: "bottom-right", tone: "info" }];
   }
   return [];
 }

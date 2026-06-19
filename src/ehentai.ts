@@ -523,10 +523,6 @@ class EHentaiBridge extends BridgeBase<Settings> {
       params.set("f_cats", String(ALL_CATS_MASK ^ included));
     }
 
-    // Free-form tag search string passed straight to e-hentai's search syntax
-    const tagStr = options?.filters?.find((f) => f.key === "tags")?.value as string | undefined;
-    if (tagStr?.trim()) parts.push(tagStr.trim());
-
     if (parts.length) params.set("f_search", parts.join(" "));
 
     // Sort: "date" is the default and needs no param; others use ?o=KEY
@@ -636,7 +632,6 @@ class EHentaiBridge extends BridgeBase<Settings> {
           { value: "german", label: "German" },
         ],
       },
-      { type: "text", key: "tags", label: "Tags" },
     ]);
   }
 

@@ -95,6 +95,14 @@ interface PageItem {
   path: string;
   width?: number;
   height?: number;
+  /**
+   * Relative thumbnail path, prefixed with the thumb server. The API spells this out because
+   * nhentai's thumbnails inconsistently carry a double extension (e.g. `2t.webp.webp`), so it can't
+   * be reliably derived from `path`. ~400px `…t.webp` preview.
+   */
+  thumbnail?: string;
+  thumbnail_width?: number;
+  thumbnail_height?: number;
 }
 interface GalleryTag {
   id: number;
@@ -157,9 +165,10 @@ function cdnUrl(relativePath: string, server: string): string {
 }
 
 /**
- * Derive nhentai's small thumbnail path from a full-page path by inserting the `t` suffix before the
- * extension: "galleries/123/1.webp" → "galleries/123/1t.webp". Served off the thumb CDN, this is a
- * ~250px preview — no extra request to discover it, just a filename transform on data we already have.
+ * Fallback derivation of a page's thumbnail path from its full-page path — insert the `t` suffix
+ * before the extension ("galleries/123/1.webp" → "galleries/123/1t.webp"). Only used when the API
+ * omits the explicit `thumbnail` field; the API value is preferred because nhentai inconsistently
+ * adds a double extension (`2t.webp.webp`) that this transform can't reproduce.
  */
 function thumbPath(pagePath: string): string {
   return pagePath.replace(/\.(\w+)$/, "t.$1");
@@ -516,8 +525,10 @@ class NhentaiBridge extends BridgeBase<Settings> {
       info.authors = credits.map((name) => ({ name }));
     }
 
+    // nhentai's "category" (Doujinshi / Manga / Artist CG / …) is the gallery's type, not a genre —
+    // surface it as the Type cell so it doesn't render as a lone genre chip.
     const categories = byType.get("category");
-    if (categories?.length) info.genres = categories;
+    if (categories?.length) info.type = categories[0];
 
     const tagGroups: TagGroup[] = [];
 
@@ -565,7 +576,11 @@ class NhentaiBridge extends BridgeBase<Settings> {
     return (g.pages ?? []).map((p): Page => ({
       index: p.number - 1,
       imageUrl: cdnUrl(p.path, imgSrv),
-      thumbnail: { kind: "image", url: cdnUrl(thumbPath(p.path), thumbSrv) },
+      // The page grid uses the API's `…t.webp` thumbnail (a crisp ~400px preview, ~24KB — the same one
+      // the site's gallery grid loads), NOT the full image. Use the API-given filename: nhentai's
+      // thumbnails inconsistently carry a double extension (`2t.webp.webp`), so deriving it from `path`
+      // 404s ~half the pages, which is what made the grid look low-res.
+      thumbnail: { kind: "image", url: cdnUrl(p.thumbnail ?? thumbPath(p.path), thumbSrv) },
       headers: { Referer: referer },
     }));
   }

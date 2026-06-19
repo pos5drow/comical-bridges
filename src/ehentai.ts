@@ -732,7 +732,9 @@ class EHentaiBridge extends BridgeBase<Settings> {
     };
 
     if (meta?.thumb) info.thumbnailUrl = fullSizeThumbUrl(meta.thumb);
-    if (meta?.category) info.genres = [meta.category];
+    // The gallery category (Doujinshi / Manga / …) is its type, shown as the Type cell rather than a
+    // lone genre chip (it's also painted as a card badge in list/search views).
+    if (meta?.category) info.type = meta.category;
     if (meta?.title_jpn) info.description = meta.title_jpn;
 
     if (meta?.tags?.length) {

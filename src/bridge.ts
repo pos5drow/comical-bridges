@@ -462,10 +462,10 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     if (authors.length > 0) info.author = authors.join(", ");
     if (artists.length > 0) info.artist = artists.join(", ");
 
-    const genres = [
-      ...(dto.type ? [dto.type] : []),
-      ...AtsumaruBridge.names(dto.genres),
-    ];
+    // `type` (Manga / Manhwa / Manhua / …) is the series' format, surfaced as its own Type cell rather
+    // than mixed into the genre chips; `genres` carries only the actual genres.
+    if (dto.type) info.type = dto.type;
+    const genres = AtsumaruBridge.names(dto.genres);
     if (genres.length > 0) info.genres = genres;
 
     // Atsumaru exposes `tags` separately from `genres`; each item is {id, name, weight} so carry the ID.

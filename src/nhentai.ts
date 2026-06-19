@@ -208,7 +208,7 @@ class NhentaiBridge extends BridgeBase<Settings> {
     languages: ["multi"],
     nsfw: true,
     capabilities: ["lists", "search", "filters", "sort", "settings", "favorites", "direct", "exclude-tags", "resolve-tags", "related-series"],
-    rateLimit: { maxConcurrent: 1, minIntervalMs: 1200 },
+    rateLimit: { maxConcurrent: 1, minIntervalMs: 700 },
   };
 
   private cdnImageServer: string | undefined;

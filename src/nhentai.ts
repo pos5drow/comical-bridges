@@ -388,7 +388,7 @@ class NhentaiBridge extends BridgeBase<Settings> {
         ],
       },
       {
-        type: "multiselect",
+        type: "select",
         key: "category",
         label: "Category",
         options: [
@@ -457,8 +457,8 @@ class NhentaiBridge extends BridgeBase<Settings> {
       const arr = Array.isArray(f.value) ? (f.value as string[]) : [];
       if (f.key === "language" && arr.length) {
         for (const lang of arr) parts.push(`language:${lang}`);
-      } else if (f.key === "category" && arr.length) {
-        for (const cat of arr) parts.push(`category:${cat}`);
+      } else if (f.key === "category" && typeof f.value === "string" && f.value) {
+        parts.push(`category:${f.value}`);
       } else if (f.key === "tag" && arr.length) {
         for (const id of arr) {
           const name = this.tagNames.get(id);

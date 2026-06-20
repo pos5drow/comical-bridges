@@ -605,6 +605,7 @@ class EHentaiBridge extends BridgeBase<Settings> {
         type: "multiselect",
         key: "category",
         label: "Category",
+        defaultAll: true,
         options: [
           { value: "doujinshi", label: "Doujinshi" },
           { value: "manga", label: "Manga" },

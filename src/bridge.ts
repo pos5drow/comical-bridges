@@ -31,6 +31,7 @@ import {
   type SortOption,
   defineBridge,
   defineSettings,
+  parseFilterIncludeExclude,
 } from "@comical/sdk";
 
 /**
@@ -375,9 +376,9 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     // Kick off tag cache pre-warm in the background so it's ready when the user types.
     void this.prewarmTagCache();
     return Promise.resolve([
-      { type: "multiselect", key: "genre", label: "Genres", options: GENRES.map((g) => ({ value: g.id, label: g.name })) },
+      { type: "multiselect", key: "genre", label: "Genres", excludable: true, options: GENRES.map((g) => ({ value: g.id, label: g.name })) },
       { type: "multiselect", key: "status", label: "Status", options: STATUSES.map((s) => ({ value: s, label: s })) },
-      { type: "tag-multiselect", key: "tag", label: "Tag" },
+      { type: "tag-multiselect", key: "tag", label: "Tag", excludable: true },
       { type: "number", key: "year", label: "Release year", min: 1900, max: 2100 },
       { type: "number", key: "minChapters", label: "Minimum chapters", min: 0 },
     ]);
@@ -402,10 +403,15 @@ class AtsumaruBridge extends BridgeBase<Settings> {
 
     for (const f of options?.filters ?? []) {
       const arr = Array.isArray(f.value) ? f.value : [];
-      if (f.key === "genre" && arr.length) clauses.push(arr.map((id) => `genreIds:=\`${id}\``).join(" && "));
-      else if (f.key === "status" && arr.length) clauses.push(`status:=[${arr.map((s) => `\`${s}\``).join(",")}]`);
-      else if (f.key === "tag" && Array.isArray(f.value) && f.value.length) {
-        for (const id of f.value) if (String(id).trim()) clauses.push(`tagIds:=\`${String(id).trim()}\``);
+      if (f.key === "genre") {
+        const { include, exclude } = parseFilterIncludeExclude(f.value);
+        if (include.length) clauses.push(include.map((id) => `genreIds:=\`${id}\``).join(" && "));
+        for (const id of exclude) clauses.push(`genreIds:!=\`${id}\``);
+      } else if (f.key === "status" && arr.length) clauses.push(`status:=[${arr.map((s) => `\`${s}\``).join(",")}]`);
+      else if (f.key === "tag") {
+        const { include, exclude } = parseFilterIncludeExclude(f.value);
+        for (const id of include) if (String(id).trim()) clauses.push(`tagIds:=\`${String(id).trim()}\``);
+        for (const id of exclude) if (String(id).trim()) clauses.push(`tagIds:!=\`${String(id).trim()}\``);
       }
       else if (f.key === "year" && typeof f.value === "number") clauses.push(`releaseYear:=[${f.value}]`);
       else if (f.key === "minChapters" && typeof f.value === "number") clauses.push(`chapterCount:>=${f.value}`);

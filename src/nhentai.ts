@@ -35,6 +35,7 @@ import {
   type TagGroup,
   defineBridge,
   defineSettings,
+  parseFilterIncludeExclude,
 } from "@comical/sdk";
 import { abbreviateLanguage } from "./lang.ts";
 
@@ -379,6 +380,7 @@ class NhentaiBridge extends BridgeBase<Settings> {
         type: "multiselect",
         key: "language",
         label: "Language",
+        excludable: true,
         options: [
           { value: "english", label: "English" },
           { value: "japanese", label: "Japanese" },
@@ -388,9 +390,10 @@ class NhentaiBridge extends BridgeBase<Settings> {
         ],
       },
       {
-        type: "select",
+        type: "multiselect",
         key: "category",
         label: "Category",
+        excludable: true,
         options: [
           { value: "doujinshi", label: "Doujinshi" },
           { value: "manga", label: "Manga" },
@@ -399,7 +402,7 @@ class NhentaiBridge extends BridgeBase<Settings> {
           { value: "western", label: "Western" },
         ],
       },
-      { type: "tag-multiselect", key: "tag", label: "Tag" },
+      { type: "tag-multiselect", key: "tag", label: "Tag", excludable: true },
       { type: "text", key: "author", label: "Artist" },
     ]);
   }
@@ -454,15 +457,23 @@ class NhentaiBridge extends BridgeBase<Settings> {
     if (query.trim()) parts.push(query.trim());
 
     for (const f of options?.filters ?? []) {
-      const arr = Array.isArray(f.value) ? (f.value as string[]) : [];
-      if (f.key === "language" && arr.length) {
-        for (const lang of arr) parts.push(`language:${lang}`);
-      } else if (f.key === "category" && typeof f.value === "string" && f.value) {
-        parts.push(`category:${f.value}`);
-      } else if (f.key === "tag" && arr.length) {
-        for (const id of arr) {
+      if (f.key === "language") {
+        const { include, exclude } = parseFilterIncludeExclude(f.value);
+        for (const lang of include) parts.push(`language:${lang}`);
+        for (const lang of exclude) parts.push(`-language:${lang}`);
+      } else if (f.key === "category") {
+        const { include, exclude } = parseFilterIncludeExclude(f.value);
+        for (const cat of include) parts.push(`category:${cat}`);
+        for (const cat of exclude) parts.push(`-category:${cat}`);
+      } else if (f.key === "tag") {
+        const { include, exclude } = parseFilterIncludeExclude(f.value);
+        for (const id of include) {
           const name = this.tagNames.get(id);
           if (name) parts.push(`tag:"${name}"`);
+        }
+        for (const id of exclude) {
+          const name = this.tagNames.get(id);
+          if (name) parts.push(`-tag:"${name}"`);
         }
       } else if (f.key === "author" && typeof f.value === "string" && f.value.trim()) {
         parts.push(`artist:"${f.value.trim()}"`);

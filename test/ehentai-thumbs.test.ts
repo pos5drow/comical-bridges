@@ -6,7 +6,7 @@
  * sheets, crops the wrong region and renders neighbouring tiles.
  */
 import { describe, expect, test } from "bun:test";
-import { extractViewerThumbnails } from "../src/ehentai.ts";
+import { extractViewerThumbnails, normalizeThumbUrl, proxiedThumbUrl } from "../src/ehentai.ts";
 
 /** Build one viewer-thumbnail anchor in the shape the parser scrapes. `y` omitted → single row. */
 function tile(page: number, src: string, x: number, w: number, h: number, y?: number): string {
@@ -54,5 +54,24 @@ describe("extractViewerThumbnails", () => {
     const map = extractViewerThumbnails(html);
     expect(map.get(1)).toMatchObject({ src: SRC, sheetWidth: 400, sheetHeight: 289 });
     expect(map.get(3)).toMatchObject({ src: SRC2, sheetWidth: 300, sheetHeight: 400 });
+  });
+});
+
+describe("thumbnail proxying", () => {
+  // Covers/thumbnails must be served via the host's same-origin /img-proxy, never fetched from the
+  // adult CDN (ehgt.org) directly — direct fetches get blocked by content filters / DNS on remote
+  // clients, which is why e-hentai covers were blank when accessed through the reverse proxy.
+  test("proxiedThumbUrl wraps and url-encodes the CDN url", () => {
+    expect(proxiedThumbUrl("https://ehgt.org/ab/cd.jpg")).toBe(
+      "/img-proxy?url=https%3A%2F%2Fehgt.org%2Fab%2Fcd.jpg",
+    );
+  });
+
+  test("the cover path is same-origin and points at an allowlisted CDN host", () => {
+    // s.exhentai.org thumbs normalize to ehgt.org (on the proxy allowlist), then get proxied.
+    const url = proxiedThumbUrl(normalizeThumbUrl("https://s.exhentai.org/t/ab/cd_250.jpg"));
+    expect(url).toBe("/img-proxy?url=https%3A%2F%2Fehgt.org%2Fab%2Fcd_250.jpg");
+    expect(url.startsWith("/img-proxy?url=")).toBe(true);
+    expect(decodeURIComponent(url.split("url=")[1]!)).toMatch(/^https:\/\/ehgt\.org\//);
   });
 });

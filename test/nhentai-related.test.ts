@@ -1,10 +1,10 @@
 /**
- * Unit test for the nhentai related-series rail. The detail page surfaces nhentai's algorithmic
- * "More Like This" galleries (`GET /galleries/{id}/related`, which returns the same
- * `{ result: GalleryListItem[] }` shape as the list endpoints) as a single
- * `SeriesInfo.relatedSeriesGroups` entry labeled "More Like This" with kind "similar".
+ * Unit test for the nhentai related-series rail. The rail is loaded lazily via the dedicated
+ * `getRelatedSeries` method (separate from `getSeriesDetails`, off the detail critical path):
+ * `GET /galleries/{id}/related` returns the same `{ result: GalleryListItem[] }` shape as the list
+ * endpoints, surfaced as a single `RelatedSeriesGroup` labeled "More Like This" with kind "similar".
  *
- * Instantiates the bridge directly with a mock host that answers the detail + related endpoints with
+ * Instantiates the bridge directly with a mock host that answers the related + cdn endpoints with
  * canned JSON — no network, no build step. `@comical/*` resolve to the sibling monorepo source.
  */
 import { describe, expect, test } from "bun:test";
@@ -58,8 +58,7 @@ function detailHost(related: RelatedGallery[]): HostCapabilities {
 describe("nhentai related-series rail", () => {
   test('maps /related galleries into one "More Like This" (kind: similar) group', async () => {
     const bridge = factory(detailHost([R1, R2]));
-    const info = await bridge.getSeriesDetails("1");
-    const groups = info.relatedSeriesGroups ?? [];
+    const groups = await bridge.getRelatedSeries("1");
 
     expect(groups).toHaveLength(1);
     expect(groups[0]!.label).toBe("More Like This");
@@ -70,9 +69,8 @@ describe("nhentai related-series rail", () => {
     expect(groups[0]!.series[0]!.thumbnailUrl).toContain("galleries/11/thumb.webp");
   });
 
-  test("omits relatedSeriesGroups when the gallery has no related items", async () => {
+  test("returns no groups when the gallery has no related items", async () => {
     const bridge = factory(detailHost([]));
-    const info = await bridge.getSeriesDetails("1");
-    expect(info.relatedSeriesGroups).toBeUndefined();
+    expect(await bridge.getRelatedSeries("1")).toEqual([]);
   });
 });

@@ -28,7 +28,6 @@ import {
   type SeriesEntry,
   type SeriesInfo,
   type SeriesList,
-  type SortOption,
   type SettingDescriptor,
   type TagGroup,
   type TagKind,
@@ -158,9 +157,18 @@ function listingHasNextPage(_html: string, resultCount: number): boolean {
  * Extract the next-page cursor URL from a listing page.
  * E-hentai uses `?next=GID` cursor pagination; the next-page link is the
  * only anchor on the page whose href contains `?next=` or `&next=`.
+ *
+ * The href is HTML-encoded, so a search's next link looks like
+ * `?f_search=q&amp;next=GID`. Decode it — otherwise the literal `&amp;`
+ * turns `next` into a bogus `amp;next` param the site ignores, and every
+ * "next page" silently re-serves page 1. (The home/popular next link has no
+ * extra params, hence no `&amp;`, which is why only searches broke.)
  */
 function extractNextUrl(html: string): string | undefined {
-  return html.match(/href=["']([^"']*[?&]next=\d+[^"']*)["']/)?.[1];
+  // The `&` separating params is HTML-encoded, so a search cursor reads `...&amp;next=GID`;
+  // allow the optional `amp;` so the match succeeds, then decode `&amp;` → `&` for a usable URL.
+  const href = html.match(/href=["']([^"']*[?&](?:amp;)?next=\d+[^"']*)["']/)?.[1];
+  return href ? decodeEntities(href) : undefined;
 }
 
 /** Pull the full image URL from a showpage HTML page. */
@@ -403,7 +411,7 @@ class EHentaiBridge extends BridgeBase<Settings> {
     contractVersion: "1.0.0",
     languages: ["multi"],
     nsfw: true,
-    capabilities: ["lists", "search", "filters", "sort", "settings", "direct", "favorites"],
+    capabilities: ["lists", "search", "filters", "settings", "direct", "favorites"],
     rateLimit: { maxConcurrent: 3, minIntervalMs: 500 },
   };
 
@@ -525,9 +533,14 @@ class EHentaiBridge extends BridgeBase<Settings> {
 
     if (parts.length) params.set("f_search", parts.join(" "));
 
-    // Sort: "date" is the default and needs no param; others use ?o=KEY
-    const sortKey = options?.sort?.key;
-    if (sortKey && sortKey !== "date") params.set("o", sortKey);
+    // Minimum rating → advanced-search star floor (f_srdd takes 2–5; "0"/absent = any).
+    // E-hentai gallery search has no rating/favorite *sort* (that's Toplists-only), so this
+    // star floor is how the site surfaces higher-quality results for a query.
+    const minRating = (options?.filters?.find((f) => f.key === "minRating")?.value ?? "") as string;
+    if (minRating && minRating !== "0") {
+      params.set("advsearch", "1");
+      params.set("f_srdd", minRating);
+    }
 
     // Use cursor pagination: page 1 always fetches the first page; subsequent pages
     // use the ?next=GID cursor extracted from the previous page's HTML.
@@ -633,14 +646,21 @@ class EHentaiBridge extends BridgeBase<Settings> {
           { value: "german", label: "German" },
         ],
       },
-    ]);
-  }
-
-  getSortOptions(): Promise<SortOption[]> {
-    return Promise.resolve([
-      { key: "date", label: "Newest", directionless: true },
-      { key: "r", label: "Top Rated", directionless: true },
-      { key: "f", label: "Most Favorited", directionless: true },
+      {
+        // E-hentai's gallery search can only order by posted date, so "Top Rated" can't be a sort.
+        // Its advanced search does expose a minimum-rating floor (f_srdd), which is the closest
+        // working equivalent — surface that as a filter instead.
+        type: "select",
+        key: "minRating",
+        label: "Minimum Rating",
+        options: [
+          { value: "0", label: "Any" },
+          { value: "2", label: "2+ Stars" },
+          { value: "3", label: "3+ Stars" },
+          { value: "4", label: "4+ Stars" },
+          { value: "5", label: "5 Stars" },
+        ],
+      },
     ]);
   }
 

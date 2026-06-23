@@ -300,22 +300,13 @@ const NS_LABELS: Record<string, string> = {
 // ── Thumbnail helpers ─────────────────────────────────────────────────────────
 
 /** s.exhentai.org thumbnails require the igneous cookie; ehgt.org is the same CDN without auth. */
-export function normalizeThumbUrl(url: string): string {
+function normalizeThumbUrl(url: string): string {
   return url.replace(/^https?:\/\/s\.exhentai\.org\/t\//, "https://ehgt.org/");
 }
 
 /** Strip the _250 size suffix for a full-resolution cover (used on the detail page only). */
 function fullSizeThumbUrl(url: string): string {
   return normalizeThumbUrl(url).replace(/_250\.(\w+)$/, ".$1");
-}
-
-/** Route a CDN thumbnail through the host's same-origin `/img-proxy` instead of letting the browser
- *  fetch the adult CDN (ehgt.org) directly. Direct fetches are frequently blocked by content
- *  filters / DNS / carrier policies on remote clients (the same reason sprite sheets are proxied);
- *  going through the host makes every e-hentai thumbnail same-origin and served via the host's
- *  network. The proxy allowlist already covers ehgt.org, so normalize before wrapping. */
-export function proxiedThumbUrl(url: string): string {
-  return `/img-proxy?url=${encodeURIComponent(url)}`;
 }
 
 /** One sprite tile's geometry: its rect `{x,y,w,h}` inside the sheet at `src`, plus the sheet's own
@@ -379,7 +370,7 @@ export function extractViewerThumbnails(html: string): Map<number, SpriteTile> {
 function spriteThumb(t: SpriteTile): PageThumbnail {
   return {
     kind: "sprite",
-    sheetUrl: proxiedThumbUrl(t.src),
+    sheetUrl: `/img-proxy?url=${encodeURIComponent(t.src)}`,
     x: t.x,
     y: t.y,
     w: t.w,
@@ -597,7 +588,7 @@ class EHentaiBridge extends BridgeBase<Settings> {
       // thumbnail and remain viewable — only a genuine API error means there's no data to show.
       if (!meta || meta.error) return { id, title: id };
       const entry: SeriesEntry = { id, title: meta.title ?? id };
-      if (meta.thumb) entry.thumbnailUrl = proxiedThumbUrl(normalizeThumbUrl(meta.thumb));
+      if (meta.thumb) entry.thumbnailUrl = normalizeThumbUrl(meta.thumb);
       const badges = cardBadges(meta);
       if (badges.length) entry.badges = badges;
       return entry;
@@ -732,7 +723,7 @@ class EHentaiBridge extends BridgeBase<Settings> {
       status: "completed",
     };
 
-    if (meta?.thumb) info.thumbnailUrl = proxiedThumbUrl(fullSizeThumbUrl(meta.thumb));
+    if (meta?.thumb) info.thumbnailUrl = fullSizeThumbUrl(meta.thumb);
     // The gallery category (Doujinshi / Manga / …) is its type, shown as the Type cell rather than a
     // lone genre chip (it's also painted as a card badge in list/search views).
     if (meta?.category) info.type = meta.category;
@@ -803,7 +794,7 @@ class EHentaiBridge extends BridgeBase<Settings> {
               imageUrl: `/bridges/e-hentai/series/${encSeriesId}/page-image/${entry.k}/${gid}-${i + 1}`,
             };
             if (typeof entry.t === "string" && entry.t.startsWith("http")) {
-              page.thumbnail = { kind: "image", url: proxiedThumbUrl(normalizeThumbUrl(entry.t)) };
+              page.thumbnail = { kind: "image", url: normalizeThumbUrl(entry.t) };
             }
             return page;
           });

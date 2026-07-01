@@ -412,6 +412,7 @@ class EHentaiBridge extends BridgeBase<Settings> {
     languages: ["multi"],
     nsfw: true,
     capabilities: ["lists", "search", "filters", "settings", "direct", "favorites"],
+    iconUrl: `${EH_BASE}/favicon.ico`,
     rateLimit: { maxConcurrent: 3, minIntervalMs: 500 },
   };
 

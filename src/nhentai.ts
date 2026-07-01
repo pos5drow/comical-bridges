@@ -209,6 +209,7 @@ class NhentaiBridge extends BridgeBase<Settings> {
     languages: ["multi"],
     nsfw: true,
     capabilities: ["lists", "search", "filters", "sort", "settings", "favorites", "direct", "exclude-tags", "resolve-tags", "related-series"],
+    iconUrl: "https://nhentai.net/favicon.ico",
     rateLimit: { maxConcurrent: 1, minIntervalMs: 700 },
   };
 

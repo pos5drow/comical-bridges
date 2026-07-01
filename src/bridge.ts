@@ -187,6 +187,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "settings", "favorites", "exclude-tags", "exclude-genres"],
+    iconUrl: `${BASE_URL}/favicon.ico`,
     // atsu.moe tolerates ~2 req/s; serialize and space requests to stay polite. Every host
     // (server, web, native) inherits this — no per-host configuration needed.
     rateLimit: { maxConcurrent: 1, minIntervalMs: 550 },

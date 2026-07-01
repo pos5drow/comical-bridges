@@ -376,6 +376,7 @@ class NhentaiBridge extends BridgeBase<Settings> {
 
   getFilters(): Promise<Filter[]> {
     return Promise.resolve([
+      { type: "tag-multiselect", key: "tag", label: "Tag", excludable: true },
       {
         type: "multiselect",
         key: "language",
@@ -402,7 +403,6 @@ class NhentaiBridge extends BridgeBase<Settings> {
           { value: "western", label: "Western" },
         ],
       },
-      { type: "tag-multiselect", key: "tag", label: "Tag", excludable: true },
       { type: "text", key: "author", label: "Artist" },
     ]);
   }

@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-06-04T00:59:17.833Z",
+  "updated": "2026-07-03T08:45:32.913Z",
   "bridges": [
     {
       "id": "atsumaru",
@@ -15,11 +15,79 @@
         "lists",
         "search",
         "filters",
+        "sort",
         "settings",
-        "favorites"
+        "favorites",
+        "exclude-tags",
+        "exclude-genres"
       ],
       "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/master/bridges/atsumaru/0.1.0/bridge.js",
-      "sha256": "616480544e7c44b118c8f008752d41507ec9f5d325cfddd74c479bb067af3700"
+      "sha256": "5f77386bee4289bb0d5fa2d4b283dc8568a4b958962c1c333cf4754ed1b6aa3b",
+      "iconUrl": "https://atsu.moe/favicon.ico"
+    },
+    {
+      "id": "e-hentai",
+      "name": "E-Hentai",
+      "version": "0.2.0",
+      "contractVersion": "1.0.0",
+      "languages": [
+        "multi"
+      ],
+      "nsfw": true,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "settings",
+        "direct",
+        "favorites"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/master/bridges/e-hentai/0.2.0/bridge.js",
+      "sha256": "cee04c37dc22cf0692e6045c986526943daf0bd8737159b2dfcfebc04ab4aa77",
+      "iconUrl": "https://e-hentai.org/favicon.ico"
+    },
+    {
+      "id": "mangadex",
+      "name": "MangaDex",
+      "version": "0.1.0",
+      "contractVersion": "1.0.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/master/bridges/mangadex/0.1.0/bridge.js",
+      "sha256": "3ecd2ada838ac513b0b45516069fa579a1546bb97cd1bec44700cd9b219927a4",
+      "iconUrl": "https://mangadex.org/favicon.ico"
+    },
+    {
+      "id": "nhentai",
+      "name": "nhentai",
+      "version": "0.1.0",
+      "contractVersion": "1.0.0",
+      "languages": [
+        "multi"
+      ],
+      "nsfw": true,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort",
+        "settings",
+        "favorites",
+        "direct",
+        "exclude-tags",
+        "resolve-tags",
+        "related-series"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/master/bridges/nhentai/0.1.0/bridge.js",
+      "sha256": "4f6d9e851fea104432ba3866c66c0a51c11702e1e0cde0b2c4b32031310033a0",
+      "iconUrl": "https://nhentai.net/favicon.png"
     }
   ]
 }

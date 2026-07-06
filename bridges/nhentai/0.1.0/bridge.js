@@ -1,3 +1,4 @@
+if(typeof console==='undefined'){var __noop=function(){};globalThis.console={log:__noop,info:__noop,warn:__noop,error:__noop,debug:__noop,trace:__noop};}
 var __create = Object.create;
 var __getProtoOf = Object.getPrototypeOf;
 var __defProp = Object.defineProperty;
@@ -18264,4 +18265,4 @@ class NhentaiBridge extends BridgeBase {
 }
 var nhentai_default = defineBridge((host) => new NhentaiBridge(host));
 
-//# debugId=E6C83B17987F957A64756E2164756E21
+//# debugId=18A1CFB4C090F54564756E2164756E21

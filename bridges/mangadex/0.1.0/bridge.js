@@ -1,3 +1,4 @@
+if(typeof console==='undefined'){var __noop=function(){};globalThis.console={log:__noop,info:__noop,warn:__noop,error:__noop,debug:__noop,trace:__noop};}
 var __create = Object.create;
 var __getProtoOf = Object.getPrototypeOf;
 var __defProp = Object.defineProperty;
@@ -18073,4 +18074,4 @@ class MangaDexBridge extends BridgeBase {
 }
 var mangadex_default = defineBridge((host) => new MangaDexBridge(host));
 
-//# debugId=67056483626D8D8E64756E2164756E21
+//# debugId=9CD0C2394C68412264756E2164756E21

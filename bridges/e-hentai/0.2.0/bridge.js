@@ -1,3 +1,4 @@
+if(typeof console==='undefined'){var __noop=function(){};globalThis.console={log:__noop,info:__noop,warn:__noop,error:__noop,debug:__noop,trace:__noop};}
 var __create = Object.create;
 var __getProtoOf = Object.getPrototypeOf;
 var __defProp = Object.defineProperty;
@@ -18495,4 +18496,4 @@ function parseId(seriesId) {
 }
 var ehentai_default = defineBridge((host) => new EHentaiBridge(host));
 
-//# debugId=82D7EED37B465E9864756E2164756E21
+//# debugId=F247B5E60F0E7A8964756E2164756E21

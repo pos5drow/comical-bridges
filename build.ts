@@ -8,6 +8,15 @@ import { join } from "node:path";
 
 const ROOT = import.meta.dir;
 
+// Some on-device bridge engines (JSC on iOS, QuickJS on Android) don't define a global `console`,
+// so a bridge's diagnostic `console.log`/`console.error` throws a ReferenceError there — e.g.
+// e-hentai's `getSeriesPages` failed on-device with `"console" is not defined`. Prepend a no-op
+// console shim that only installs when one is missing, so those logs become harmless no-ops on
+// device while real consoles (Node/Bun on the server, Hermes in dev) are left untouched.
+const CONSOLE_SHIM =
+  "if(typeof console==='undefined'){var __noop=function(){};" +
+  "globalThis.console={log:__noop,info:__noop,warn:__noop,error:__noop,debug:__noop,trace:__noop};}";
+
 const bridges: Array<{ id: string; src: string }> = [
   { id: "atsumaru", src: "bridge.ts" },
   { id: "mangadex", src: "mangadex.ts" },
@@ -24,6 +33,7 @@ for (const { id, src } of bridges) {
     naming: "bridge.js",
     minify: false,
     sourcemap: "external",
+    banner: CONSOLE_SHIM,
   });
 
   if (!result.success) {

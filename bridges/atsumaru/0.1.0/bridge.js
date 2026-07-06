@@ -1,3 +1,4 @@
+if(typeof console==='undefined'){var __noop=function(){};globalThis.console={log:__noop,info:__noop,warn:__noop,error:__noop,debug:__noop,trace:__noop};}
 var __create = Object.create;
 var __getProtoOf = Object.getPrototypeOf;
 var __defProp = Object.defineProperty;
@@ -18325,4 +18326,4 @@ function parseDate(value) {
 }
 var bridge_default = defineBridge((host) => new AtsumaruBridge(host));
 
-//# debugId=A900A93C733B0B5064756E2164756E21
+//# debugId=C39B1FC7A067229664756E2164756E21

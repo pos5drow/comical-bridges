@@ -414,6 +414,14 @@ class EHentaiBridge extends BridgeBase<Settings> {
     capabilities: ["lists", "search", "filters", "settings", "direct", "favorites"],
     iconUrl: `${EH_BASE}/favicon.ico`,
     rateLimit: { maxConcurrent: 3, minIntervalMs: 500 },
+    // Hosts whose assets this bridge serves via the host's `/img-proxy` (montage sprite sheets on
+    // the H@H network; the CDN thumbnail hosts are covered too though covers load direct today).
+    // The host derives its proxy allowlist from this — it hardcodes no source hostnames. The Referer
+    // some of these backends expect is sent by the host on our behalf.
+    assetProxy: {
+      hosts: ["ehgt.org", "exhentai.org", "hath.network"],
+      referer: `${EH_BASE}/`,
+    },
   };
 
   getSettings(): SettingDescriptor[] {

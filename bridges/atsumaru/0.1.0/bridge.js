@@ -4311,6 +4311,10 @@ var bridgeInfoSchema = exports_external.object({
   rateLimit: exports_external.object({
     maxConcurrent: exports_external.number().int().positive().optional(),
     minIntervalMs: exports_external.number().int().nonnegative().optional()
+  }).optional(),
+  assetProxy: exports_external.object({
+    hosts: exports_external.array(exports_external.string().min(1)).min(1),
+    referer: exports_external.string().url().optional()
   }).optional()
 });
 // ../comical/packages/contract/src/tracker.ts
@@ -18321,4 +18325,4 @@ function parseDate(value) {
 }
 var bridge_default = defineBridge((host) => new AtsumaruBridge(host));
 
-//# debugId=DE3332C9A0E71B3F64756E2164756E21
+//# debugId=A900A93C733B0B5064756E2164756E21

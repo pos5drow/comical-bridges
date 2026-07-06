@@ -4307,6 +4307,10 @@ var bridgeInfoSchema = exports_external.object({
   rateLimit: exports_external.object({
     maxConcurrent: exports_external.number().int().positive().optional(),
     minIntervalMs: exports_external.number().int().nonnegative().optional()
+  }).optional(),
+  assetProxy: exports_external.object({
+    hosts: exports_external.array(exports_external.string().min(1)).min(1),
+    referer: exports_external.string().url().optional()
   }).optional()
 });
 // ../comical/packages/contract/src/tracker.ts
@@ -18078,7 +18082,11 @@ class EHentaiBridge extends BridgeBase {
     nsfw: true,
     capabilities: ["lists", "search", "filters", "settings", "direct", "favorites"],
     iconUrl: `${EH_BASE}/favicon.ico`,
-    rateLimit: { maxConcurrent: 3, minIntervalMs: 500 }
+    rateLimit: { maxConcurrent: 3, minIntervalMs: 500 },
+    assetProxy: {
+      hosts: ["ehgt.org", "exhentai.org", "hath.network"],
+      referer: `${EH_BASE}/`
+    }
   };
   getSettings() {
     return [...SETTINGS];
@@ -18487,4 +18495,4 @@ function parseId(seriesId) {
 }
 var ehentai_default = defineBridge((host) => new EHentaiBridge(host));
 
-//# debugId=3F2C5932429C715564756E2164756E21
+//# debugId=82D7EED37B465E9864756E2164756E21

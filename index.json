@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-07-03T08:45:32.913Z",
+  "updated": "2026-07-06T02:50:43.044Z",
   "bridges": [
     {
       "id": "atsumaru",
@@ -22,7 +22,7 @@
         "exclude-genres"
       ],
       "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/master/bridges/atsumaru/0.1.0/bridge.js",
-      "sha256": "5f77386bee4289bb0d5fa2d4b283dc8568a4b958962c1c333cf4754ed1b6aa3b",
+      "sha256": "e967a1b270df997aa67ca52cfa0d7cee2693102a0c594146e7b1bb43fe209267",
       "iconUrl": "https://atsu.moe/favicon.ico"
     },
     {
@@ -43,8 +43,16 @@
         "favorites"
       ],
       "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/master/bridges/e-hentai/0.2.0/bridge.js",
-      "sha256": "cee04c37dc22cf0692e6045c986526943daf0bd8737159b2dfcfebc04ab4aa77",
-      "iconUrl": "https://e-hentai.org/favicon.ico"
+      "sha256": "b110954b02c5262add9507146ef68571e8fa9d22946a06d5faea8d6c18eee86e",
+      "iconUrl": "https://e-hentai.org/favicon.ico",
+      "assetProxy": {
+        "hosts": [
+          "ehgt.org",
+          "exhentai.org",
+          "hath.network"
+        ],
+        "referer": "https://e-hentai.org/"
+      }
     },
     {
       "id": "mangadex",
@@ -61,7 +69,7 @@
         "filters"
       ],
       "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/master/bridges/mangadex/0.1.0/bridge.js",
-      "sha256": "3ecd2ada838ac513b0b45516069fa579a1546bb97cd1bec44700cd9b219927a4",
+      "sha256": "1b5a0bc50a81b7ebef867b920eadb81fc397245190f009b68f291138d3223522",
       "iconUrl": "https://mangadex.org/favicon.ico"
     },
     {
@@ -86,7 +94,7 @@
         "related-series"
       ],
       "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/master/bridges/nhentai/0.1.0/bridge.js",
-      "sha256": "4f6d9e851fea104432ba3866c66c0a51c11702e1e0cde0b2c4b32031310033a0",
+      "sha256": "5edd8adcb1d0504639055d84a6e6374b71a265560c50e2e3ac83ddf7d53e5c1d",
       "iconUrl": "https://nhentai.net/favicon.png"
     }
   ]

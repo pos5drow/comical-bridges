@@ -4302,6 +4302,10 @@ var bridgeInfoSchema = exports_external.object({
   rateLimit: exports_external.object({
     maxConcurrent: exports_external.number().int().positive().optional(),
     minIntervalMs: exports_external.number().int().nonnegative().optional()
+  }).optional(),
+  assetProxy: exports_external.object({
+    hosts: exports_external.array(exports_external.string().min(1)).min(1),
+    referer: exports_external.string().url().optional()
   }).optional()
 });
 // ../comical/packages/contract/src/tracker.ts
@@ -18069,4 +18073,4 @@ class MangaDexBridge extends BridgeBase {
 }
 var mangadex_default = defineBridge((host) => new MangaDexBridge(host));
 
-//# debugId=B3A6DD133628126F64756E2164756E21
+//# debugId=67056483626D8D8E64756E2164756E21

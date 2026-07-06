@@ -1,8 +1,29 @@
 # comical-bridges
 
-A [Comical](https://github.com/comical) bridge for **atsu.moe** (atsumaru). Lives in its own repo.
-Comical *sources* this repo as a registry; it ships nothing
-site-specific itself.
+[Comical](https://github.com/comical) bridges, published as a registry. Lives in its own repo;
+Comical *sources* it — the runtime ships nothing site-specific itself.
+
+## Use this registry in the app
+
+Point the app at this registry's `index.json`:
+
+```
+https://raw.githubusercontent.com/pos5drow/comical-bridges/master/index.json
+```
+
+Set it as `EXPO_PUBLIC_COMICAL_REGISTRY` in the app's gitignored
+`apps/mobile/.env.local` (its value is run through `resolveRegistryUrl`, which passes a full
+`…/index.json` URL through unchanged):
+
+```sh
+# comical-app/apps/mobile/.env.local
+EXPO_PUBLIC_COMICAL_REGISTRY=https://raw.githubusercontent.com/pos5drow/comical-bridges/master/index.json
+```
+
+> Use the full `…/master/index.json` URL above — the `github.com/OWNER/REPO` shorthand resolves to
+> the **`main`** branch, but this registry publishes on **`master`**.
+
+For the desktop CLI instead: `comical registry add https://raw.githubusercontent.com/pos5drow/comical-bridges/master/index.json`.
 
 ## Status: local-link
 
@@ -33,7 +54,8 @@ Emits `index.json` + the served bundle at the repo root; commit them. Comical us
 # optional: sign it
 bun --cwd ../comical run cli registry keygen --out registry.key.json   # keep private
 
-COMICAL_BASE_URL=https://raw.githubusercontent.com/OWNER/comical-bridges/main \
+# base URL defaults to this repo's raw master; override only to publish elsewhere
+COMICAL_BASE_URL=https://raw.githubusercontent.com/pos5drow/comical-bridges/master \
   COMICAL_KEY=registry.key.json \
   bun run publish:registry
 ```

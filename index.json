@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-07-07T15:53:46.483Z",
+  "updated": "2026-07-07T16:09:19.177Z",
   "bridges": [
     {
       "id": "atsumaru",
@@ -75,7 +75,7 @@
     {
       "id": "nhentai",
       "name": "nhentai",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "contractVersion": "1.0.0",
       "languages": [
         "multi"
@@ -93,8 +93,8 @@
         "resolve-tags",
         "related-series"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/nhentai/0.1.0/bridge.js",
-      "sha256": "d824f7a58d95bef25917c791921f0b3dc9fe610ce09c8cfa939dc165ccde096d",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/nhentai/0.1.1/bridge.js",
+      "sha256": "21bc3bc0dc9cfcbdb140e0c1a9836f4606e12eb18b2250136dd0a2c9bce8e8ff",
       "iconUrl": "https://nhentai.net/favicon.png"
     }
   ]

@@ -204,7 +204,7 @@ class NhentaiBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "nhentai",
     name: "nhentai",
-    version: "0.1.0",
+    version: "0.1.1",
     contractVersion: "1.0.0",
     languages: ["multi"],
     nsfw: true,

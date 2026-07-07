@@ -277,6 +277,14 @@ class NhentaiBridge extends BridgeBase<Settings> {
 
   // ── Gallery detail (single-slot cache) ───────────────────────────────────
 
+  // TODO(explore): the detail endpoint takes a composite `?include=` param —
+  // `GET /galleries/{id}?include=comments,related,favorite,suggestions` — that folds the related
+  // rail, favorite status, comments and suggestions into this one response (it populates the
+  // detail's `related` / `is_favorited` fields). We currently fetch those as separate calls
+  // (`getRelatedSeries` → /related, `isFavorite` → /favorite). Consolidating could cut those extra
+  // round-trips, but mind what's on the detail critical path: related/favorite are intentionally
+  // deferred off the initial detail fetch (see getSeriesDetails / the app's lazy queries), so only
+  // add includes that are worth paying for up front, or gate them behind a param.
   private async fetchDetail(seriesId: string): Promise<GalleryDetail> {
     if (this.lastDetail?.id === seriesId) return this.lastDetail.data;
     const data = await this.getJson<GalleryDetail>(`${BASE}/galleries/${encodeURIComponent(seriesId)}`);

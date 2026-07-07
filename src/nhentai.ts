@@ -630,11 +630,17 @@ class NhentaiBridge extends BridgeBase<Settings> {
 
   async getFavorites(page: number): Promise<PagedResults<SeriesEntry>> {
     this.requireKey();
-    const data = await this.getJson<PaginatedGalleries>(`${BASE}/favorites?page=${page}`);
+    const data = await this.getJson<PaginatedGalleries>(`${BASE}/favorites?page=${page}&per_page=${PER_PAGE}`);
+    const items = await this.listToEntries(data.result ?? []);
     return {
-      items: await this.listToEntries(data.result ?? []),
+      items,
       page,
-      hasNextPage: page < (data.num_pages ?? 0),
+      // Prefer the server's page count when it's present; the favorites endpoint doesn't
+      // reliably return `num_pages` (unlike galleries/search), and `page < (num_pages ?? 0)`
+      // silently collapses to always-false when it's absent — stranding favorites on page 1.
+      // Fall back to "a full page implies more" so pagination still advances (an over-count
+      // self-corrects: the next page comes back empty with hasNextPage false).
+      hasNextPage: data.num_pages != null ? page < data.num_pages : items.length >= PER_PAGE,
     };
   }
 

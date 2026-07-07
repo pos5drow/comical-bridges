@@ -146,14 +146,6 @@ function extractGalleryPairs(html: string): Array<{ gid: number; token: string }
 }
 
 /**
- * True when the listing page likely has more results.
- * E-hentai always serves 25 items per page; a full page means there are more.
- */
-function listingHasNextPage(_html: string, resultCount: number): boolean {
-  return resultCount >= 25;
-}
-
-/**
  * Extract the next-page cursor URL from a listing page.
  * E-hentai uses `?next=GID` cursor pagination; the next-page link is the
  * only anchor on the page whose href contains `?next=` or `&next=`.
@@ -583,8 +575,12 @@ class EHentaiBridge extends BridgeBase<Settings> {
     paginated = true,
   ): Promise<{ result: PagedResults<SeriesEntry>; nextUrl?: string }> {
     const pairs = extractGalleryPairs(html);
-    const hasNext = paginated && listingHasNextPage(html, pairs.length);
+    // Trust the `?next=GID` seek cursor, not a 25-per-page count: the last page routinely
+    // has a full 25 items but no "Next" link, so a count heuristic would report hasNextPage
+    // while the cursor is empty — the caller then re-requests and the empty cursor falls back
+    // to page 1, re-serving it. `getFavorites` already derives hasNextPage this way.
     const nextUrl = paginated ? extractNextUrl(html) : undefined;
+    const hasNext = !!nextUrl;
 
     if (pairs.length === 0) return { result: { items: [], page, hasNextPage: false } };
 

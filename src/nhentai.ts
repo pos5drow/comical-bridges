@@ -204,7 +204,7 @@ class NhentaiBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "nhentai",
     name: "nhentai",
-    version: "0.1.2",
+    version: "0.1.3",
     contractVersion: "1.0.0",
     languages: ["multi"],
     nsfw: true,
@@ -541,12 +541,15 @@ class NhentaiBridge extends BridgeBase<Settings> {
 
     const artists = byType.get("artist") ?? [];
     const groups = byType.get("group") ?? [];
-    const credits = artists.length ? artists : groups;
-    if (credits.length) {
-      info.author = credits.join(", ");
+    // Authors are artists ONLY. A group is a distinct credit type on nhentai, so never fall back
+    // to it here — otherwise a group-only gallery shows the group as its "author", and tapping that
+    // author searches `artist:"<group>"` (see getSearchResults), which is the wrong axis and matches
+    // nothing. Groups get their own searchable chip group below instead.
+    if (artists.length) {
+      info.author = artists.join(", ");
       // Per-credit chips for the host. No id: the "author" filter matches artist *names*
       // (see getSearchResults → `artist:"…"`), so a name is the precise, filterable value here.
-      info.authors = credits.map((name) => ({ name }));
+      info.authors = artists.map((name) => ({ name }));
     }
 
     // nhentai's "category" (Doujinshi / Manga / Artist CG / …) is the gallery's type, not a genre —
@@ -570,7 +573,12 @@ class NhentaiBridge extends BridgeBase<Settings> {
     const parodies = byType.get("parody");
     if (parodies?.length) tagGroups.push({ label: "Parodies", tags: parodies });
 
-    if (groups.length) tagGroups.push({ label: "Groups", tags: groups });
+    // Groups are searchable as groups: nhentai's search box understands `group:"…"`, and
+    // getSearchResults passes a free-text query straight through — so a `tagQueries` entry makes a
+    // group chip run the right query (not a bare name that would match artists/tags/free text).
+    if (groups.length) {
+      tagGroups.push({ label: "Groups", tags: groups, tagQueries: groups.map((name) => `group:"${name}"`) });
+    }
 
     const languages = byType.get("language");
     if (languages?.length) tagGroups.push({ label: "Languages", tags: languages });

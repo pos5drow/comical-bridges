@@ -21,7 +21,7 @@
         "exclude-tags",
         "exclude-genres"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/master/bridges/atsumaru/0.1.0/bridge.js",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/atsumaru/0.1.0/bridge.js",
       "sha256": "dff0e0b7e2898d25294a545de15282371a6a695670a1e92a43c8e0454b9cb043",
       "iconUrl": "https://atsu.moe/favicon.ico"
     },
@@ -42,7 +42,7 @@
         "direct",
         "favorites"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/master/bridges/e-hentai/0.2.0/bridge.js",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/e-hentai/0.2.0/bridge.js",
       "sha256": "7ebf76aad61a127f08c6125d70a1398e66ea1442901ee95183bc8c45590e8e84",
       "iconUrl": "https://e-hentai.org/favicon.ico",
       "assetProxy": {
@@ -68,7 +68,7 @@
         "search",
         "filters"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/master/bridges/mangadex/0.1.0/bridge.js",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/mangadex/0.1.0/bridge.js",
       "sha256": "705e6d176389ca5735f2aa71060b9830e2693811d6a75809efa786019729ccfc",
       "iconUrl": "https://mangadex.org/favicon.ico"
     },
@@ -93,7 +93,7 @@
         "resolve-tags",
         "related-series"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/master/bridges/nhentai/0.1.0/bridge.js",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/nhentai/0.1.0/bridge.js",
       "sha256": "2e50cb81e63ce7dc6391486d6be47a8853e3af8ba9026e7e8d0988928b544e08",
       "iconUrl": "https://nhentai.net/favicon.png"
     }

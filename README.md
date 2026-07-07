@@ -1,8 +1,6 @@
 # comical-bridges
 
-[Comical](https://github.com/comical) bridges, published as a registry. Lives in its own repo;
-Comical *sources* it — the runtime ships nothing site-specific itself. The bridges live in `src/`
-and build to CJS bundles under `.build/`.
+Various comical bridges.
 
 ## Use this registry in the app
 

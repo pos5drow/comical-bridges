@@ -18234,11 +18234,12 @@ class NhentaiBridge extends BridgeBase {
   }
   async getFavorites(page) {
     this.requireKey();
-    const data2 = await this.getJson(`${BASE}/favorites?page=${page}`);
+    const data2 = await this.getJson(`${BASE}/favorites?page=${page}&per_page=${PER_PAGE}`);
+    const items = await this.listToEntries(data2.result ?? []);
     return {
-      items: await this.listToEntries(data2.result ?? []),
+      items,
       page,
-      hasNextPage: page < (data2.num_pages ?? 0)
+      hasNextPage: data2.num_pages != null ? page < data2.num_pages : items.length >= PER_PAGE
     };
   }
   async addFavorite(seriesId) {
@@ -18264,4 +18265,4 @@ class NhentaiBridge extends BridgeBase {
 }
 var nhentai_default = defineBridge((host) => new NhentaiBridge(host));
 
-//# debugId=38728352522721A464756E2164756E21
+//# debugId=FD514DC549A0C24764756E2164756E21

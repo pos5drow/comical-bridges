@@ -17915,9 +17915,6 @@ function extractGalleryPairs(html3) {
   }
   return pairs;
 }
-function listingHasNextPage(_html, resultCount) {
-  return resultCount >= 25;
-}
 function extractNextUrl(html3) {
   const href = html3.match(/href=["']([^"']*[?&](?:amp;)?next=\d+[^"']*)["']/)?.[1];
   return href ? decodeEntities(href) : undefined;
@@ -18203,8 +18200,8 @@ class EHentaiBridge extends BridgeBase {
   }
   async listingFromHtml(html3, page, paginated = true) {
     const pairs = extractGalleryPairs(html3);
-    const hasNext = paginated && listingHasNextPage(html3, pairs.length);
     const nextUrl = paginated ? extractNextUrl(html3) : undefined;
+    const hasNext = !!nextUrl;
     if (pairs.length === 0)
       return { result: { items: [], page, hasNextPage: false } };
     const GDATA_BATCH = 25;
@@ -18496,4 +18493,4 @@ function parseId(seriesId) {
 }
 var ehentai_default = defineBridge((host) => new EHentaiBridge(host));
 
-//# debugId=F247B5E60F0E7A8964756E2164756E21
+//# debugId=70E26CA1B5F8BA7C64756E2164756E21

@@ -204,7 +204,7 @@ class NhentaiBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "nhentai",
     name: "nhentai",
-    version: "0.1.1",
+    version: "0.1.2",
     contractVersion: "1.0.0",
     languages: ["multi"],
     nsfw: true,
@@ -644,14 +644,13 @@ class NhentaiBridge extends BridgeBase<Settings> {
 
   async isFavorite(seriesId: string): Promise<boolean> {
     this.requireKey();
-    const data = await this.getJson<PaginatedGalleries>(`${BASE}/favorites?page=1`);
-    const totalPages = data.num_pages ?? 1;
-    if ((data.result ?? []).some((item) => String(item.id) === seriesId)) return true;
-    for (let page = 2; page <= totalPages; page++) {
-      const p = await this.getJson<PaginatedGalleries>(`${BASE}/favorites?page=${page}`);
-      if ((p.result ?? []).some((item) => String(item.id) === seriesId)) return true;
-    }
-    return false;
+    // Single O(1) status check — the API exposes it directly. (Previously this scanned every
+    // favorites page sequentially, which was slow for large accounts and flipped to "not
+    // favorited" if any page request errored mid-scan.)
+    const data = await this.getJson<{ favorited: boolean }>(
+      `${BASE}/galleries/${encodeURIComponent(seriesId)}/favorite`,
+    );
+    return data.favorited === true;
   }
 }
 

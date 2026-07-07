@@ -1,32 +1,7 @@
 {
   "registryVersion": "1",
-  "updated": "2026-07-07T16:09:54.695Z",
+  "updated": "2026-07-07T16:45:15.018Z",
   "bridges": [
-    {
-      "id": "nhentai",
-      "name": "nhentai",
-      "version": "0.1.1",
-      "contractVersion": "1.0.0",
-      "languages": [
-        "multi"
-      ],
-      "nsfw": true,
-      "capabilities": [
-        "lists",
-        "search",
-        "filters",
-        "sort",
-        "settings",
-        "favorites",
-        "direct",
-        "exclude-tags",
-        "resolve-tags",
-        "related-series"
-      ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/nhentai/0.1.1/bridge.js",
-      "sha256": "21bc3bc0dc9cfcbdb140e0c1a9836f4606e12eb18b2250136dd0a2c9bce8e8ff",
-      "iconUrl": "https://nhentai.net/favicon.png"
-    },
     {
       "id": "atsumaru",
       "name": "Atsumaru",
@@ -96,6 +71,31 @@
       "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/mangadex/0.1.0/bridge.js",
       "sha256": "705e6d176389ca5735f2aa71060b9830e2693811d6a75809efa786019729ccfc",
       "iconUrl": "https://mangadex.org/favicon.ico"
+    },
+    {
+      "id": "nhentai",
+      "name": "nhentai",
+      "version": "0.1.2",
+      "contractVersion": "1.0.0",
+      "languages": [
+        "multi"
+      ],
+      "nsfw": true,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort",
+        "settings",
+        "favorites",
+        "direct",
+        "exclude-tags",
+        "resolve-tags",
+        "related-series"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/nhentai/0.1.2/bridge.js",
+      "sha256": "da03c8dab70522ee383ee14522095282ec71be81825bbcdc4bc5f4319b81afa1",
+      "iconUrl": "https://nhentai.net/favicon.png"
     }
   ]
 }

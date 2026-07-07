@@ -68,17 +68,18 @@ describe("nhentai removeFavorite", () => {
 });
 
 describe("nhentai isFavorite", () => {
-  const favPage = (ids: number[], numPages = 1) =>
-    JSON.stringify({ result: ids.map((id) => ({ id, media_id: `m${id}`, title: { english: `G${id}` } })), num_pages: numPages });
-
-  test("true when the id is present in the favorites list", async () => {
-    const { host } = favHost((req) => ok(req.url, favPage([1, 42, 7])));
+  test("uses the single-gallery status endpoint and returns its `favorited`", async () => {
+    const { host, seen } = favHost((req) => ok(req.url, JSON.stringify({ favorited: true, num_favorites: 5 })));
     const bridge = factory(host);
     expect(await bridge.isFavorite!("42")).toBe(true);
+    // O(1) — one GET to /galleries/{id}/favorite, not a scan of /favorites pages.
+    expect(seen).toHaveLength(1);
+    expect(seen[0]!.url).toContain("/galleries/42/favorite");
+    expect(seen[0]!.method ?? "GET").toBe("GET");
   });
 
-  test("false when the id is absent", async () => {
-    const { host } = favHost((req) => ok(req.url, favPage([1, 7])));
+  test("false when the endpoint reports not favorited", async () => {
+    const { host } = favHost((req) => ok(req.url, JSON.stringify({ favorited: false })));
     const bridge = factory(host);
     expect(await bridge.isFavorite!("42")).toBe(false);
   });

@@ -1,0 +1,77 @@
+# Rebuild + republish the bridge registry whenever the bridge sources change on main.
+#
+# This repo is "local-link" (see README): it builds against a sibling checkout of the Comical
+# monorepo (`../comical`, public) resolved via tsconfig paths — so CI checks out both repos side by
+# side, installs, builds, tests, then runs `publish:registry` and commits the regenerated
+# `index.json` + `bridges/**` back to main.
+#
+# The commit is authored/committed as pos5drow (this repo's identity). The push uses the default
+# GITHUB_TOKEN; pushes made with GITHUB_TOKEN don't retrigger workflows, so there's no loop — the
+# `[skip ci]` marker and the head-commit guard below are just belt-and-suspenders.
+name: Publish registry
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'build.ts'
+      - 'publish.ts'
+      - 'package.json'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-registry
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, '[skip ci]') }}
+    steps:
+      - name: Check out comical-bridges
+        uses: actions/checkout@v4
+        with:
+          path: comical-bridges
+
+      - name: Check out comical (build/publish dependency)
+        uses: actions/checkout@v4
+        with:
+          repository: porksphere/comical
+          path: comical
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install comical deps
+        working-directory: comical
+        run: bun install --frozen-lockfile
+
+      - name: Install comical-bridges deps
+        working-directory: comical-bridges
+        run: bun install
+
+      - name: Build + test
+        working-directory: comical-bridges
+        run: |
+          bun run build
+          bun test
+
+      - name: Publish registry
+        working-directory: comical-bridges
+        run: bun run publish:registry
+
+      - name: Commit regenerated artifacts
+        working-directory: comical-bridges
+        run: |
+          git config user.name pos5drow
+          git config user.email pos5drow@gmail.com
+          if git diff --quiet -- index.json bridges; then
+            echo "Registry unchanged — nothing to publish."
+            exit 0
+          fi
+          git add index.json bridges
+          git commit -m "ci: republish registry [skip ci]"
+          git push

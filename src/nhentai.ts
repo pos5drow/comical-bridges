@@ -624,7 +624,17 @@ class NhentaiBridge extends BridgeBase<Settings> {
 
   async addFavorite(seriesId: string): Promise<void> {
     this.requireKey();
-    await this.postJson(`${BASE}/galleries/${encodeURIComponent(seriesId)}/favorite`, {});
+    // The favorite endpoint's response body isn't reliably JSON (often empty), so a status
+    // check is all we can rely on — parsing it (as postJson does) throws on an otherwise
+    // successful POST, which makes the caller's optimistic star revert even though the
+    // favorite was recorded. Mirror removeFavorite/deleteReq: send, then check status only.
+    const res = await this.request({
+      url: `${BASE}/galleries/${encodeURIComponent(seriesId)}/favorite`,
+      method: "POST",
+      headers: { ...this.headers(), "Content-Type": "application/json" },
+      body: JSON.stringify({}),
+    });
+    if (res.status >= 400) throw new Error(`${res.status} ${res.statusText}`);
   }
 
   async removeFavorite(seriesId: string): Promise<void> {

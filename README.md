@@ -4,7 +4,10 @@ Various comical bridges.
 
 ## Use this registry in the app
 
-Point the app at this registry's `index.json`:
+**One-click (if you already have the Comical app installed):**
+[Add this registry to Comical](comical://add-registry?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpos5drow%2Fcomical-bridges%2Fmain%2Findex.json)
+
+Or point the app at this registry's `index.json` manually:
 
 ```
 https://raw.githubusercontent.com/pos5drow/comical-bridges/main/index.json

@@ -2,20 +2,25 @@
 
 Various comical bridges.
 
-## Use this registry in the app
+## Use these registries in the app
+
+This repo publishes **two separate registries** — one SFW, one NSFW — so you can add only what you
+want. Adding just the SFW registry means the NSFW bridges are never even listed.
 
 **One-click (if you already have the Comical app installed):**
-[Add this registry to Comical](https://porksphere.github.io/comical-app/add-registry?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpos5drow%2Fcomical-bridges%2Fmain%2Findex.json)
+- [Add the SFW registry](https://porksphere.github.io/comical-app/add-registry?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpos5drow%2Fcomical-bridges%2Fmain%2Fsfw%2Findex.json)
+- [Add the NSFW registry](https://porksphere.github.io/comical-app/add-registry?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpos5drow%2Fcomical-bridges%2Fmain%2Fnsfw%2Findex.json)
 
-Or point the app at this registry's `index.json` manually:
+Or point the app at a registry's `index.json` manually:
 
 ```
-https://raw.githubusercontent.com/pos5drow/comical-bridges/main/index.json
+SFW:  https://raw.githubusercontent.com/pos5drow/comical-bridges/main/sfw/index.json
+NSFW: https://raw.githubusercontent.com/pos5drow/comical-bridges/main/nsfw/index.json
 ```
 
-Set it as `EXPO_PUBLIC_COMICAL_REGISTRY` in the app's gitignored `apps/mobile/.env.local`. For the
-desktop CLI: `comical registry add github.com/pos5drow/comical-bridges` (the shorthand resolves to
-the default `main` branch).
+Set one as `EXPO_PUBLIC_COMICAL_REGISTRY` in the app's gitignored `apps/mobile/.env.local` (dev
+pre-adds a single registry). For the desktop CLI, add either URL:
+`comical registry add https://raw.githubusercontent.com/pos5drow/comical-bridges/main/sfw/index.json`.
 
 ## Develop
 

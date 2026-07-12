@@ -56,10 +56,11 @@ interface MangaDto {
   title: string;
   poster?: unknown;
   image?: unknown;
-  /** The list/browse endpoints return the cover as `image` (full-size original .jpg) PLUS
-   *  pre-generated `smallImage`/`mediumImage`/`largeImage` variants (`…-small.webp` etc.). Cards use
-   *  the small one; the detail hero uses large — see `resolveCover`. (Other endpoints may instead ship
-   *  a `poster` string or `{ smallUrl, mediumUrl, largeUrl }` object, which resolveCover also handles.) */
+  /** The list/browse endpoints return the cover as `image` (full-size original .jpg) PLUS pre-generated
+   *  webp variants `smallImage` (180x180 SQUARE crop), `mediumImage` (360x540, 2:3) and `largeImage`
+   *  (400x600, 2:3). Cards use `mediumImage` (smallest 2:3 — `smallImage`'s square crop would make 2:3
+   *  cards square); the detail hero uses `largeImage`. See `resolveCover`. (Detail nests the same keys
+   *  under a `poster` object, which resolveCover also handles.) */
   smallImage?: unknown;
   mediumImage?: unknown;
   largeImage?: unknown;
@@ -189,7 +190,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "atsumaru",
     name: "Atsumaru",
-    version: "0.1.2",
+    version: "0.1.3",
     contractVersion: "1.0.0",
     languages: ["en"],
     nsfw: false,
@@ -286,17 +287,19 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     },
     size: "small" | "large",
   ): string | undefined {
-    // Atsumaru exposes the cover as `image` (full-size original .jpg) plus pre-generated
-    // `smallImage`/`mediumImage`/`largeImage` variants (`…-small.webp` etc.). Cards take the smallest
-    // available; the detail hero takes the largest. Serving the full `image` per card was a needless
-    // big download + decode (a scroll cost). The keys are the same whether they sit flat on the item
-    // (list `/api/infinite`, related series) or nested under a `poster` OBJECT (detail
-    // `/api/manga/page`), so pick from the flat fields first, then from the poster object.
+    // Atsumaru exposes the cover as `image` (full-size original .jpg, ~460 KB) plus pre-generated
+    // webp variants: `smallImage` (a 180x180 SQUARE center-crop — for compact list UIs, NOT a 2:3
+    // cover), `mediumImage` (360x540, 2:3, ~80 KB) and `largeImage` (400x600, 2:3). Cards want the
+    // smallest 2:3 image, so they use `mediumImage` and deliberately SKIP `smallImage` (its square crop
+    // would render our 2:3 cards as squares). The detail hero uses `largeImage`. Serving the full
+    // `image` per card was a needless ~460 KB download + decode. Keys are identical whether they sit
+    // flat on the item (list `/api/infinite`, related series) or nested under a `poster` OBJECT (detail
+    // `/api/manga/page`), so pick from the flat fields first, then the poster object.
     const pick = (o: Record<string, unknown> | undefined): string | undefined =>
       o &&
       (size === "small"
-        ? [o.smallImage, o.mediumImage, o.largeImage, o.image]
-        : [o.largeImage, o.mediumImage, o.smallImage, o.image]
+        ? [o.mediumImage, o.largeImage, o.image] // medium = smallest 2:3; skip the square smallImage
+        : [o.largeImage, o.mediumImage, o.image]
       ).find((v): v is string => typeof v === "string" && v.length > 0);
 
     const flat = pick(dto as Record<string, unknown>);

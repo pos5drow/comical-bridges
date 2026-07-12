@@ -55,13 +55,14 @@ interface MangaDto {
   id: string;
   title: string;
   poster?: unknown;
-  /** Pre-generated smaller cover variants the site itself serves for grid cards (the full `poster`
-   *  is the detail-hero size). Flat sibling paths, resolved the same `/static` way; absent on some
-   *  payloads. Some endpoints instead ship `poster` as an object with `smallUrl`/`mediumUrl`/
-   *  `largeUrl` — `resolveCover` handles both. */
-  posterSmall?: unknown;
-  posterMedium?: unknown;
   image?: unknown;
+  /** The list/browse endpoints return the cover as `image` (full-size original .jpg) PLUS
+   *  pre-generated `smallImage`/`mediumImage`/`largeImage` variants (`…-small.webp` etc.). Cards use
+   *  the small one; the detail hero uses large — see `resolveCover`. (Other endpoints may instead ship
+   *  a `poster` string or `{ smallUrl, mediumUrl, largeUrl }` object, which resolveCover also handles.) */
+  smallImage?: unknown;
+  mediumImage?: unknown;
+  largeImage?: unknown;
   authors?: unknown;
   synopsis?: string;
   genres?: unknown;
@@ -188,7 +189,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "atsumaru",
     name: "Atsumaru",
-    version: "0.1.1",
+    version: "0.1.2",
     contractVersion: "1.0.0",
     languages: ["en"],
     nsfw: false,
@@ -276,28 +277,38 @@ class AtsumaruBridge extends BridgeBase<Settings> {
    * `posterMedium` sibling paths. Falls back through larger sizes, then the base poster, then `image`.
    */
   private resolveCover(
-    dto: { poster?: unknown; posterSmall?: unknown; posterMedium?: unknown; image?: unknown },
+    dto: {
+      image?: unknown;
+      smallImage?: unknown;
+      mediumImage?: unknown;
+      largeImage?: unknown;
+      poster?: unknown;
+    },
     size: "small" | "large",
   ): string | undefined {
+    // Atsumaru exposes the cover as `image` (full-size original .jpg) plus pre-generated
+    // `smallImage`/`mediumImage`/`largeImage` variants (`…-small.webp` etc.). Cards take the smallest
+    // available; the detail hero takes the largest. Serving the full `image` per card was a needless
+    // big download + decode (a scroll cost). The keys are the same whether they sit flat on the item
+    // (list `/api/infinite`, related series) or nested under a `poster` OBJECT (detail
+    // `/api/manga/page`), so pick from the flat fields first, then from the poster object.
+    const pick = (o: Record<string, unknown> | undefined): string | undefined =>
+      o &&
+      (size === "small"
+        ? [o.smallImage, o.mediumImage, o.largeImage, o.image]
+        : [o.largeImage, o.mediumImage, o.smallImage, o.image]
+      ).find((v): v is string => typeof v === "string" && v.length > 0);
+
+    const flat = pick(dto as Record<string, unknown>);
+    if (flat) return this.resolveImage(flat);
+
     const poster = dto.poster;
-
-    // Object shape: poster: { smallUrl, mediumUrl, largeUrl, image } — ready URLs.
     if (poster && typeof poster === "object" && !Array.isArray(poster)) {
-      const o = poster as Record<string, unknown>;
-      const order =
-        size === "small"
-          ? [o.smallUrl, o.mediumUrl, o.largeUrl, o.image]
-          : [o.largeUrl, o.mediumUrl, o.smallUrl, o.image];
-      const url = order.find((v): v is string => typeof v === "string" && v.length > 0);
-      if (url) return this.resolveImage(url);
+      const fromObject = pick(poster as Record<string, unknown>);
+      if (fromObject) return this.resolveImage(fromObject);
     }
-
-    // Flat shape: posterSmall / posterMedium / poster (paths). Cards take the smallest available.
-    const flat =
-      size === "small"
-        ? (dto.posterSmall ?? dto.posterMedium ?? poster ?? dto.image)
-        : (poster ?? dto.posterMedium ?? dto.posterSmall ?? dto.image);
-    return this.resolveImage(flat);
+    // Last resort: a bare `poster` string, else the full `image`.
+    return this.resolveImage(typeof poster === "string" ? poster : dto.image);
   }
 
   /** Flatten authors/genres which may be string[] or {name}[]. */
@@ -726,9 +737,10 @@ interface BookmarkDto {
   title?: string;
   englishTitle?: string;
   poster?: unknown;
-  posterSmall?: unknown;
-  posterMedium?: unknown;
   image?: unknown;
+  smallImage?: unknown;
+  mediumImage?: unknown;
+  largeImage?: unknown;
   bookmarkStatus?: string;
 }
 

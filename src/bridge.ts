@@ -55,6 +55,12 @@ interface MangaDto {
   id: string;
   title: string;
   poster?: unknown;
+  /** Pre-generated smaller cover variants the site itself serves for grid cards (the full `poster`
+   *  is the detail-hero size). Flat sibling paths, resolved the same `/static` way; absent on some
+   *  payloads. Some endpoints instead ship `poster` as an object with `smallUrl`/`mediumUrl`/
+   *  `largeUrl` — `resolveCover` handles both. */
+  posterSmall?: unknown;
+  posterMedium?: unknown;
   image?: unknown;
   authors?: unknown;
   synopsis?: string;
@@ -259,6 +265,41 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     return url.replace(PROTOCOL_REGEX, "https://");
   }
 
+  /**
+   * Best cover URL for a display size. Atsumaru ships pre-generated smaller poster variants — its own
+   * site loads `small`/`medium` for grid cards and only the full poster for the detail hero — so cards
+   * must NOT pull the full-res poster (a needless multi-hundred-KB download + decode per card, a real
+   * scroll cost). Cards pass `"small"` (smallest available), the detail hero passes `"large"` (full).
+   *
+   * Handles both response shapes: a `poster` OBJECT with ready `smallUrl`/`mediumUrl`/`largeUrl`
+   * (also covers the `{ image }` shape via the `image` fallback), and the flat `posterSmall`/
+   * `posterMedium` sibling paths. Falls back through larger sizes, then the base poster, then `image`.
+   */
+  private resolveCover(
+    dto: { poster?: unknown; posterSmall?: unknown; posterMedium?: unknown; image?: unknown },
+    size: "small" | "large",
+  ): string | undefined {
+    const poster = dto.poster;
+
+    // Object shape: poster: { smallUrl, mediumUrl, largeUrl, image } — ready URLs.
+    if (poster && typeof poster === "object" && !Array.isArray(poster)) {
+      const o = poster as Record<string, unknown>;
+      const order =
+        size === "small"
+          ? [o.smallUrl, o.mediumUrl, o.largeUrl, o.image]
+          : [o.largeUrl, o.mediumUrl, o.smallUrl, o.image];
+      const url = order.find((v): v is string => typeof v === "string" && v.length > 0);
+      if (url) return this.resolveImage(url);
+    }
+
+    // Flat shape: posterSmall / posterMedium / poster (paths). Cards take the smallest available.
+    const flat =
+      size === "small"
+        ? (dto.posterSmall ?? dto.posterMedium ?? poster ?? dto.image)
+        : (poster ?? dto.posterMedium ?? dto.posterSmall ?? dto.image);
+    return this.resolveImage(flat);
+  }
+
   /** Flatten authors/genres which may be string[] or {name}[]. */
   private static names(element: unknown): string[] {
     if (!Array.isArray(element)) return [];
@@ -295,7 +336,8 @@ class AtsumaruBridge extends BridgeBase<Settings> {
 
   private toEntry(dto: MangaDto): SeriesEntry {
     const entry: SeriesEntry = { id: dto.id, title: dto.title };
-    const thumb = this.resolveImage(dto.poster ?? dto.image);
+    // Cards use the SMALL pre-generated variant (what the site's own grid loads) — not the full poster.
+    const thumb = this.resolveCover(dto, "small");
     if (thumb) entry.thumbnailUrl = thumb;
     return entry;
   }
@@ -461,7 +503,8 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     const dto = (await this.getJson<MangaObjectDto>(url)).mangaPage;
 
     const info: SeriesInfo = { id: seriesId, title: dto.title };
-    const thumb = this.resolveImage(dto.poster ?? dto.image);
+    // The detail hero keeps the full/large poster (that's what the site's detail page loads too).
+    const thumb = this.resolveCover(dto, "large");
     if (thumb) info.thumbnailUrl = thumb;
     if (dto.synopsis?.trim()) info.description = dto.synopsis.trim();
 
@@ -669,7 +712,8 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   private bookmarkToEntry(b: BookmarkDto): SeriesEntry {
     const id = b.id ?? b.mangaId ?? "";
     const entry: SeriesEntry = { id, title: b.title ?? b.englishTitle ?? id };
-    const thumb = this.resolveImage(b.poster ?? b.image);
+    // Bookmarks render as cards too — take the small variant when the payload carries one.
+    const thumb = this.resolveCover(b, "small");
     if (thumb) entry.thumbnailUrl = thumb;
     return entry;
   }
@@ -682,6 +726,8 @@ interface BookmarkDto {
   title?: string;
   englishTitle?: string;
   poster?: unknown;
+  posterSmall?: unknown;
+  posterMedium?: unknown;
   image?: unknown;
   bookmarkStatus?: string;
 }

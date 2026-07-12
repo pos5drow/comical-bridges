@@ -108,11 +108,14 @@ function firstTitle(attrs: MangaAttributes): string {
   return attrs.title["en"] ?? Object.values(attrs.title)[0] ?? "Unknown";
 }
 
-function coverUrl(mangaId: string, rels: Relationship[]): string | undefined {
+// MangaDex serves three cover sizes: original (no suffix), `.512.jpg`, and `.256.jpg`. Cards default
+// to 256 — what MangaDex's own grid loads — so the app doesn't download + decode a 512px cover per
+// card (a real scroll cost); the detail hero asks for 512.
+function coverUrl(mangaId: string, rels: Relationship[], size: 256 | 512 = 256): string | undefined {
   const cover = rels.find((r) => r.type === "cover_art");
   const fileName = cover?.attributes?.["fileName"];
   if (typeof fileName !== "string") return undefined;
-  return `${COVER_BASE}/${mangaId}/${fileName}.512.jpg`;
+  return `${COVER_BASE}/${mangaId}/${fileName}.${size}.jpg`;
 }
 
 /**
@@ -277,7 +280,8 @@ class MangaDexBridge extends BridgeBase {
 
     const info: SeriesInfo = { id: d.id, title: firstTitle(attrs) };
 
-    const thumb = coverUrl(d.id, d.relationships);
+    // Detail hero: the larger 512px cover (cards default to 256 via coverUrl).
+    const thumb = coverUrl(d.id, d.relationships, 512);
     if (thumb) info.thumbnailUrl = thumb;
 
     const desc = attrs.description?.["en"] ?? Object.values(attrs.description ?? {})[0];

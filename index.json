@@ -1,11 +1,11 @@
 {
   "registryVersion": "1",
-  "updated": "2026-07-07T17:31:22.466Z",
+  "updated": "2026-07-12T10:31:53.555Z",
   "bridges": [
     {
       "id": "atsumaru",
       "name": "Atsumaru",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "contractVersion": "1.0.0",
       "languages": [
         "en"
@@ -21,8 +21,8 @@
         "exclude-tags",
         "exclude-genres"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/atsumaru/0.1.0/bridge.js",
-      "sha256": "dff0e0b7e2898d25294a545de15282371a6a695670a1e92a43c8e0454b9cb043",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/atsumaru/0.1.1/bridge.js",
+      "sha256": "90b76dbb45477f4eb9204c296ca300597fdcb860300916ecf246b049a08180f9",
       "iconUrl": "https://atsu.moe/favicon.ico"
     },
     {
@@ -57,7 +57,7 @@
     {
       "id": "mangadex",
       "name": "MangaDex",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "contractVersion": "1.0.0",
       "languages": [
         "en"
@@ -68,8 +68,8 @@
         "search",
         "filters"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/mangadex/0.1.0/bridge.js",
-      "sha256": "705e6d176389ca5735f2aa71060b9830e2693811d6a75809efa786019729ccfc",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/mangadex/0.1.1/bridge.js",
+      "sha256": "563b8e3d6a92244888f330195bfb279eb4c4c4c835e5d2b44fe60da5175d91e0",
       "iconUrl": "https://mangadex.org/favicon.ico"
     },
     {

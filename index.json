@@ -1,11 +1,11 @@
 {
   "registryVersion": "1",
-  "updated": "2026-07-12T20:08:32.001Z",
+  "updated": "2026-07-12T20:19:20.846Z",
   "bridges": [
     {
       "id": "atsumaru",
       "name": "Atsumaru",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "contractVersion": "1.0.0",
       "languages": [
         "en"
@@ -21,8 +21,8 @@
         "exclude-tags",
         "exclude-genres"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/atsumaru/0.1.2/bridge.js",
-      "sha256": "9fe36e0d3245ac5e3322d9c5205addabbcf3c7f2ffbd1ce79918a536e41e42f5",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/atsumaru/0.1.3/bridge.js",
+      "sha256": "dc8c8d81d46aec0bd6e64cb3d9443188e9e015b251aa0854a4a35cb6354ab5e1",
       "iconUrl": "https://atsu.moe/favicon.ico"
     },
     {

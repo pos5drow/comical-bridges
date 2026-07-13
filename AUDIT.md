@@ -46,7 +46,7 @@ See [`README.md`](README.md#status) for the summary.
 
 ## `nhentai` — ⚠ (11✓ 4⚠ 0✗)
 
-**7/10 capabilities** · cover 30 KB (500×646) · sampled 8 · failed 0 · bytes min 13 KB / avg 30 KB / median 28 KB / max 50 KB · dims avg 500×646 (max 500×710) · aspect avg 0.81
+**7/10 capabilities** · cover 25 KB (500×662) · sampled 8 · failed 0 · bytes min 13 KB / avg 25 KB / median 27 KB / max 32 KB · dims avg 500×662 (max 500×750) · aspect avg 0.79
 
 > Cloudflare / IP-gated from datacenters
 
@@ -68,25 +68,27 @@ See [`README.md`](README.md#status) for the summary.
 | ✓ | `direct.pages` | direct | getSeriesPages returned 41 page(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-## `e-hentai` — ⚠ (8✓ 4⚠ 0✗)
+## `e-hentai` — ⚠ (7✓ 6⚠ 1✗)
 
-**6/6 capabilities** · cover 20 KB (247×323) · sampled 8 · failed 0 · bytes min 8 KB / avg 20 KB / median 17 KB / max 42 KB · dims avg 247×323 (max 250×375) · aspect avg 0.86
+**6/6 capabilities** · cover 15 KB (242×265) · sampled 8 · failed 0 · bytes min 9 KB / avg 15 KB / median 13 KB / max 33 KB · dims avg 242×265 (max 250×375) · aspect avg 1.11
 
-> sad-panda / IP + cookie gated from datacenters
+> flaky (tolerated): sad-panda / IP + cookie gated from datacenters
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
+| ✗ | `lists.idStability` | lists | list "home" item ids are not stable across identical calls |
 | ⚠ | `search.items` | search | search for "the" returned no items (try --query) |
 | ⚠ | `filters.effect` | filters | applying filter "category=doujinshi" did not change results |
 | ⚠ | `favorites.read` | favorites | getFavorites could not be read (authentication required?): getFavorites threw: Error: favorites require your e-hentai session cookies — on a logged-in browser open DevTools → Application → Cookies and paste ipb_member_id and ipb_pass_hash into this bridge's settings |
+| ⚠ | `read.details.author` | core | series details have no author |
+| ⚠ | `read.details.description` | core | series details have no description |
 | ⚠ | `read.details.genres` | core | series details have no genres |
 | ✓ | `info.capabilities` | core | declares 6 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 2 list(s) |
 | ✓ | `lists.items` | lists | list "home" returned 25 item(s) |
-| ✓ | `lists.idStability` | lists | list item ids are stable across calls |
 | ✓ | `filters.descriptors` | filters | getFilters returned 3 filter(s) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 3 descriptor(s) |
-| ✓ | `direct.pages` | direct | getSeriesPages returned 127 page(s) |
+| ✓ | `direct.pages` | direct | getSeriesPages returned 74 page(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
 _Updated 2026-07-13 by the nightly live audit ([`audit.ts`](audit.ts))._

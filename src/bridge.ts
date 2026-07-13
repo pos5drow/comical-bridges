@@ -64,6 +64,12 @@ interface MangaDto {
   smallImage?: unknown;
   mediumImage?: unknown;
   largeImage?: unknown;
+  /** The Typesense search documents name the SAME variants differently: `poster` is the full-size
+   *  original (a .png here, and it can be huge — 1656x2618 / 6.4 MB is a real example), with
+   *  `posterMedium` (360x540, 2:3) and `posterSmall` (180x180 SQUARE crop) beside it. There is no
+   *  `posterLarge`. Cards use `posterMedium` for the same reason they use `mediumImage`. */
+  posterSmall?: unknown;
+  posterMedium?: unknown;
   authors?: unknown;
   synopsis?: string;
   genres?: unknown;
@@ -273,9 +279,11 @@ class AtsumaruBridge extends BridgeBase<Settings> {
    * must NOT pull the full-res poster (a needless multi-hundred-KB download + decode per card, a real
    * scroll cost). Cards pass `"small"` (smallest available), the detail hero passes `"large"` (full).
    *
-   * Handles both response shapes: a `poster` OBJECT with ready `smallUrl`/`mediumUrl`/`largeUrl`
-   * (also covers the `{ image }` shape via the `image` fallback), and the flat `posterSmall`/
-   * `posterMedium` sibling paths. Falls back through larger sizes, then the base poster, then `image`.
+   * Handles all three response shapes Atsumaru serves (see the DTO comments): the flat
+   * `image`/`smallImage`/`mediumImage`/`largeImage` family (browse lists, related series, bookmarks),
+   * the same keys nested under a `poster` OBJECT (detail), and the Typesense search family, which
+   * renames them `poster` (full-size original) / `posterMedium` / `posterSmall`. Falls back through
+   * larger sizes, then the base poster, then `image`.
    */
   private resolveCover(
     dto: {
@@ -283,23 +291,27 @@ class AtsumaruBridge extends BridgeBase<Settings> {
       smallImage?: unknown;
       mediumImage?: unknown;
       largeImage?: unknown;
+      posterSmall?: unknown;
+      posterMedium?: unknown;
       poster?: unknown;
     },
     size: "small" | "large",
   ): string | undefined {
-    // Atsumaru exposes the cover as `image` (full-size original .jpg, ~460 KB) plus pre-generated
-    // webp variants: `smallImage` (a 180x180 SQUARE center-crop — for compact list UIs, NOT a 2:3
-    // cover), `mediumImage` (360x540, 2:3, ~80 KB) and `largeImage` (400x600, 2:3). Cards want the
-    // smallest 2:3 image, so they use `mediumImage` and deliberately SKIP `smallImage` (its square crop
-    // would render our 2:3 cards as squares). The detail hero uses `largeImage`. Serving the full
-    // `image` per card was a needless ~460 KB download + decode. Keys are identical whether they sit
-    // flat on the item (list `/api/infinite`, related series) or nested under a `poster` OBJECT (detail
-    // `/api/manga/page`), so pick from the flat fields first, then the poster object.
+    // Atsumaru exposes the cover as a full-size original (`image` on the list/detail shapes, `poster`
+    // on the search shape — a multi-MB download either way) plus pre-generated webp variants: a
+    // 180x180 SQUARE center-crop (`smallImage`/`posterSmall` — for compact list UIs, NOT a 2:3 cover),
+    // a 360x540 2:3 (`mediumImage`/`posterMedium`, ~70-80 KB) and, on the non-search shapes only, a
+    // 400x600 2:3 `largeImage`. Cards want the smallest 2:3 image, so they take the medium variant and
+    // deliberately SKIP the small one (its square crop would render our 2:3 cards as squares). The
+    // detail hero takes `largeImage`. Serving the full original per card is a needless multi-hundred-KB
+    // (search: multi-MB) download + decode, so every size falls back to the original only as a last
+    // resort. Both naming families are checked, since a shape carries one or the other, never both.
     const pick = (o: Record<string, unknown> | undefined): string | undefined =>
       o &&
       (size === "small"
-        ? [o.mediumImage, o.largeImage, o.image] // medium = smallest 2:3; skip the square smallImage
-        : [o.largeImage, o.mediumImage, o.image]
+        ? // medium = smallest 2:3; skip the square smallImage/posterSmall
+          [o.mediumImage, o.posterMedium, o.largeImage, o.image]
+        : [o.largeImage, o.mediumImage, o.posterMedium, o.image]
       ).find((v): v is string => typeof v === "string" && v.length > 0);
 
     const flat = pick(dto as Record<string, unknown>);

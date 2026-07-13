@@ -1,11 +1,12 @@
 /**
  * Nightly LIVE bridge audit. For every built bridge it runs the shared conformance evaluator
  * (`@comical/testkit`) against the real backend AND measures thumbnail sizes, then prints a status
- * table. With `--write` it rewrites the README's BRIDGE-STATUS block. Exits non-zero ONLY if a
- * NON-flaky bridge has a real (non-transient) failure — flaky/blocked bridges show ⚠, never fail the run.
+ * table. With `--write` it rewrites the README's BRIDGE-STATUS block (the summary) AND regenerates
+ * `AUDIT.md` (the per-check detail). Exits non-zero ONLY if a NON-flaky bridge has a real
+ * (non-transient) failure — flaky/blocked bridges show ⚠, never fail the run.
  *
- *   bun run audit            # print the table
- *   bun run audit --write    # + update README.md
+ *   bun run audit            # print the summary table
+ *   bun run audit --write    # + update README.md and AUDIT.md
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -16,8 +17,10 @@ import { AUDIT, type BridgeAuditConfig } from "./audit.config.ts";
 
 const ROOT = import.meta.dir;
 const README = join(ROOT, "README.md");
+const DETAILS = join(ROOT, "AUDIT.md");
 const START = "<!-- BRIDGE-STATUS:START -->";
 const END = "<!-- BRIDGE-STATUS:END -->";
+const STAMP = (): string => `_Updated ${new Date().toISOString().slice(0, 10)} by the nightly live audit ([\`audit.ts\`](audit.ts))._`;
 
 interface Row {
   id: string;
@@ -31,15 +34,23 @@ interface Row {
   hardFail: boolean; // a real fail on a NON-flaky bridge → the whole run fails
 }
 
+/** A row plus the raw report (for the detailed doc). `loadError` set when the bundle wouldn't load. */
+interface Entry {
+  row: Row;
+  report?: EvaluationReport;
+  loadError?: string;
+}
+
+const kb = (bytes: number): string => `${Math.round(bytes / 1024)} KB`;
+
 const coverCell = (report: EvaluationReport): string => {
   const m = report.metrics;
   if (!m || m.sampled === 0) return "—";
-  const kb = Math.round(m.bytes.avg / 1024);
   const dim = m.dimensions ? ` (${m.dimensions.avgWidth}×${m.dimensions.avgHeight})` : "";
-  return `${kb} KB${dim}`;
+  return `${kb(m.bytes.avg)}${dim}`;
 };
 
-async function auditOne(id: string, cfg: BridgeAuditConfig): Promise<Row> {
+async function auditOne(id: string, cfg: BridgeAuditConfig): Promise<Entry> {
   let report: EvaluationReport;
   try {
     const code = readFileSync(join(ROOT, ".build", id, "dist", "bridge.js"), "utf8");
@@ -52,15 +63,18 @@ async function auditOne(id: string, cfg: BridgeAuditConfig): Promise<Row> {
     // A load/setup failure (missing build, bad bundle) — real unless the bridge is tagged flaky.
     const message = e instanceof Error ? e.message : String(e);
     return {
-      id,
-      icon: cfg.flaky ? "⚠" : "✗",
-      pass: 0,
-      warn: 0,
-      fail: cfg.flaky ? 0 : 1,
-      caps: "0/0",
-      cover: "—",
-      note: `load failed: ${message}`,
-      hardFail: !cfg.flaky,
+      row: {
+        id,
+        icon: cfg.flaky ? "⚠" : "✗",
+        pass: 0,
+        warn: 0,
+        fail: cfg.flaky ? 0 : 1,
+        caps: "0/0",
+        cover: "—",
+        note: `load failed: ${message}`,
+        hardFail: !cfg.flaky,
+      },
+      loadError: message,
     };
   }
 
@@ -68,25 +82,80 @@ async function auditOne(id: string, cfg: BridgeAuditConfig): Promise<Row> {
   const realFailUntolerated = fail > 0 && !cfg.flaky;
   const icon: Row["icon"] = realFailUntolerated ? "✗" : fail > 0 || warn > 0 ? "⚠" : "✓";
   return {
-    id,
-    icon,
-    pass,
-    warn,
-    fail,
-    caps: `${report.summary.capabilitiesExercised.length}/${report.summary.capabilitiesDeclared.length}`,
-    cover: coverCell(report),
-    note: cfg.flaky && fail > 0 ? `flaky (tolerated): ${cfg.flaky}` : (cfg.flaky ?? ""),
-    hardFail: realFailUntolerated,
+    row: {
+      id,
+      icon,
+      pass,
+      warn,
+      fail,
+      caps: `${report.summary.capabilitiesExercised.length}/${report.summary.capabilitiesDeclared.length}`,
+      cover: coverCell(report),
+      note: cfg.flaky && fail > 0 ? `flaky (tolerated): ${cfg.flaky}` : (cfg.flaky ?? ""),
+      hardFail: realFailUntolerated,
+    },
+    report,
   };
 }
 
+/** README summary block (inside the BRIDGE-STATUS markers). */
 function renderTable(rows: Row[]): string {
-  const date = new Date().toISOString().slice(0, 10);
   const head = "| Bridge | Status | Capabilities | Avg cover | Notes |\n|---|---|---|---|---|";
   const body = rows
     .map((r) => `| \`${r.id}\` | ${r.icon} (${r.pass}✓ ${r.warn}⚠ ${r.fail}✗) | ${r.caps} | ${r.cover} | ${r.note || "—"} |`)
     .join("\n");
-  return `${head}\n${body}\n\n_Updated ${date} by the nightly live audit ([\`audit.ts\`](audit.ts))._`;
+  return `${head}\n${body}\n\n${STAMP()}`;
+}
+
+const SEV_ICON = { pass: "✓", warn: "⚠", fail: "✗" } as const;
+const SEV_RANK = { fail: 0, warn: 1, pass: 2 } as const;
+const cell = (s: string): string => s.replace(/\|/g, "\\|").replace(/\s*\n\s*/g, " ").trim();
+
+/** Per-bridge metrics detail line (byte spread + dimensions + aspect). */
+function metricsLine(report: EvaluationReport): string {
+  const m = report.metrics;
+  if (!m) return "";
+  const parts = [
+    `sampled ${m.sampled}`,
+    `failed ${m.failed}`,
+    `bytes min ${kb(m.bytes.min)} / avg ${kb(m.bytes.avg)} / median ${kb(m.bytes.median)} / max ${kb(m.bytes.max)}`,
+  ];
+  if (m.dimensions) parts.push(`dims avg ${m.dimensions.avgWidth}×${m.dimensions.avgHeight} (max ${m.dimensions.maxWidth}×${m.dimensions.maxHeight})`);
+  if (m.aspect) parts.push(`aspect avg ${m.aspect.avg.toFixed(2)}`);
+  return parts.join(" · ");
+}
+
+/** The standalone AUDIT.md — every check for every bridge, failures/warnings first. */
+function renderDetails(entries: Entry[]): string {
+  const lines: string[] = [
+    "# Bridge audit — detailed results",
+    "",
+    "Per-check results from the nightly live audit ([`audit.ts`](audit.ts)) — every conformance probe run",
+    "against the real backend. ✓ pass · ⚠ warn · ✗ fail. Warnings never fail the run; a tolerated",
+    "flaky/blocked bridge (see [`audit.config.ts`](audit.config.ts)) shows ⚠ even for a hard failure.",
+    "See [`README.md`](README.md#status) for the summary.",
+    "",
+  ];
+  for (const { row, report, loadError } of entries) {
+    lines.push(`## \`${row.id}\` — ${row.icon} (${row.pass}✓ ${row.warn}⚠ ${row.fail}✗)`, "");
+    if (loadError) {
+      lines.push(`**Bridge failed to load:** ${cell(loadError)}`, "");
+      continue;
+    }
+    if (!report) continue;
+    const meta = [`**${row.caps} capabilities**`, `cover ${row.cover}`];
+    const ml = metricsLine(report);
+    if (ml) meta.push(ml);
+    lines.push(meta.join(" · "), "");
+    if (row.note) lines.push(`> ${cell(row.note)}`, "");
+    const sorted = [...report.results].sort((a, b) => SEV_RANK[a.severity] - SEV_RANK[b.severity]);
+    lines.push("| Result | Check | Capability | Detail |", "|:--:|---|---|---|");
+    for (const c of sorted) {
+      lines.push(`| ${SEV_ICON[c.severity]} | \`${cell(c.id)}\` | ${c.capability} | ${cell(c.message)} |`);
+    }
+    lines.push("");
+  }
+  lines.push(STAMP());
+  return `${lines.join("\n")}\n`;
 }
 
 function writeReadme(md: string): void {
@@ -97,18 +166,20 @@ function writeReadme(md: string): void {
   writeFileSync(README, `${src.slice(0, s + START.length)}\n${md}\n${src.slice(e)}`);
 }
 
-const rows: Row[] = [];
+const entries: Entry[] = [];
 for (const [id, cfg] of Object.entries(AUDIT)) {
   process.stderr.write(`auditing ${id}…\n`);
-  rows.push(await auditOne(id, cfg));
+  entries.push(await auditOne(id, cfg));
 }
 
+const rows = entries.map((en) => en.row);
 const md = renderTable(rows);
 console.log(md);
 
 if (process.argv.includes("--write")) {
   writeReadme(md);
-  process.stderr.write("README BRIDGE-STATUS block updated.\n");
+  writeFileSync(DETAILS, renderDetails(entries));
+  process.stderr.write("README BRIDGE-STATUS block + AUDIT.md updated.\n");
 }
 
 const hard = rows.filter((r) => r.hardFail);

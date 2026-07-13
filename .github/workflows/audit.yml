@@ -59,12 +59,12 @@ jobs:
         run: |
           git config user.name pos5drow
           git config user.email pos5drow@gmail.com
-          # The audit stamps a fresh "_Updated <date>…_" line every run; ignore that (-I) so we only
-          # commit when the actual status table changed, not just the timestamp.
-          if git diff --quiet -I '_Updated .* by the nightly live audit' -- README.md; then
+          # The audit stamps a fresh "_Updated <date>…_" line into both files every run; ignore that
+          # (-I) so we only commit when the actual status/checks changed, not just the timestamp.
+          if git diff --quiet -I '_Updated .* by the nightly live audit' -- README.md AUDIT.md; then
             echo "Status unchanged (timestamp-only) — nothing to commit."
             exit 0
           fi
-          git add README.md
+          git add README.md AUDIT.md
           git commit -m "docs: bridge status [skip ci]"
           git push

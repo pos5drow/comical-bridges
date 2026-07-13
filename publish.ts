@@ -24,19 +24,21 @@ const baseUrl =
   process.env.COMICAL_BASE_URL ??
   "https://raw.githubusercontent.com/pos5drow/comical-bridges/main";
 
-/** The two rating-specific registries emitted from the shared `.build` output. */
+/** The two rating-specific registries emitted from the shared `.build` output. `label` is the
+ *  operator display name Comical shows next to the derived repo name (e.g. "SFW — pos5drow/comical-bridges"). */
 const registries = [
-  { dir: "sfw", nsfw: "false" },
-  { dir: "nsfw", nsfw: "true" },
+  { dir: "sfw", nsfw: "false", label: "SFW" },
+  { dir: "nsfw", nsfw: "true", label: "NSFW" },
 ] as const;
 
-for (const { dir, nsfw } of registries) {
+for (const { dir, nsfw, label } of registries) {
   const args = [
     "run", cli, "registry", "publish",
     "--bridges-dir", join(ROOT, ".build"),
     "--nsfw", nsfw,
     "--base-url", `${baseUrl}/${dir}`,
     "--out", join(ROOT, dir),
+    "--display-name", label,
   ];
   if (process.env.COMICAL_KEY) args.push("--key", process.env.COMICAL_KEY);
 

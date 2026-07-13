@@ -399,7 +399,7 @@ class EHentaiBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "pos5drow.e-hentai",
     name: "E-Hentai",
-    version: "0.2.0",
+    version: "0.2.1",
     contractVersion: "1.0.0",
     languages: ["multi"],
     nsfw: true,
@@ -802,6 +802,10 @@ class EHentaiBridge extends BridgeBase<Settings> {
   async getSeriesPages(seriesId: string): Promise<Page[]> {
     const [gid, token] = parseId(seriesId);
     const encSeriesId = encodeURIComponent(seriesId);
+    // Self-referential proxy path must use this bridge's *actual* id (publisher-scoped, e.g.
+    // "pos5drow.e-hentai") — the host resolves the page-image route by the exact id segment, so a
+    // hardcoded "e-hentai" 404s. Derive it from info.id so a future rename can't silently break it.
+    const encId = encodeURIComponent(this.info.id);
 
     // Try MPV first — 1 request, but requires a logged-in session.
     console.log(`[e-hentai] getSeriesPages ${seriesId}: trying MPV`);
@@ -816,7 +820,7 @@ class EHentaiBridge extends BridgeBase<Settings> {
           return imagelist.map((entry, i) => {
             const page: Page = {
               index: i,
-              imageUrl: `/bridges/e-hentai/series/${encSeriesId}/page-image/${entry.k}/${gid}-${i + 1}`,
+              imageUrl: `/bridges/${encId}/series/${encSeriesId}/page-image/${entry.k}/${gid}-${i + 1}`,
             };
             if (typeof entry.t === "string" && entry.t.startsWith("http")) {
               page.thumbnail = { kind: "image", url: normalizeThumbUrl(entry.t) };
@@ -848,7 +852,7 @@ class EHentaiBridge extends BridgeBase<Settings> {
       const thumb = firstThumbs.get(i + 1);
       const page: Page = {
         index: i,
-        imageUrl: `/bridges/e-hentai/series/${encSeriesId}/page-image/_/${gid}-${i + 1}`,
+        imageUrl: `/bridges/${encId}/series/${encSeriesId}/page-image/_/${gid}-${i + 1}`,
       };
       if (thumb) page.thumbnail = spriteThumb(thumb);
       return page;

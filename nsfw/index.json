@@ -1,12 +1,12 @@
 {
   "registryVersion": "1",
-  "updated": "2026-07-13T04:35:00.007Z",
+  "updated": "2026-07-13T09:10:58.345Z",
   "displayName": "NSFW",
   "bridges": [
     {
       "id": "pos5drow.e-hentai",
       "name": "E-Hentai",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "contractVersion": "1.0.0",
       "languages": [
         "multi"
@@ -20,8 +20,8 @@
         "direct",
         "favorites"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/nsfw/bridges/pos5drow.e-hentai/0.2.0/bridge.js",
-      "sha256": "f83c5ad6be93d7c71b945aebdaef07bcf95ba6ae7874ed377bc366ab391c244c",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/nsfw/bridges/pos5drow.e-hentai/0.2.1/bridge.js",
+      "sha256": "462c36b3ac9d40bd02301ae08b4db4d039dbdfd43cbf295bba87401598f5aea8",
       "iconUrl": "https://e-hentai.org/favicon.ico",
       "assetProxy": {
         "hosts": [

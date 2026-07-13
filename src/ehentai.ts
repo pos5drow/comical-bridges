@@ -397,7 +397,7 @@ class EHentaiBridge extends BridgeBase<Settings> {
   private readonly thumbCache = new Map<string, Map<number, SpriteTile>>();
 
   readonly info: BridgeInfo = {
-    id: "e-hentai",
+    id: "pos5drow.e-hentai",
     name: "E-Hentai",
     version: "0.2.0",
     contractVersion: "1.0.0",

@@ -1,9 +1,9 @@
 {
   "registryVersion": "1",
-  "updated": "2026-07-12T20:58:29.368Z",
+  "updated": "2026-07-13T02:08:14.074Z",
   "bridges": [
     {
-      "id": "e-hentai",
+      "id": "pos5drow.e-hentai",
       "name": "E-Hentai",
       "version": "0.2.0",
       "contractVersion": "1.0.0",
@@ -19,8 +19,8 @@
         "direct",
         "favorites"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/nsfw/bridges/e-hentai/0.2.0/bridge.js",
-      "sha256": "a359d57960f09f0916c630125de89dd06c4c3609f19904fa5f78278d458ed1c5",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/nsfw/bridges/pos5drow.e-hentai/0.2.0/bridge.js",
+      "sha256": "f83c5ad6be93d7c71b945aebdaef07bcf95ba6ae7874ed377bc366ab391c244c",
       "iconUrl": "https://e-hentai.org/favicon.ico",
       "assetProxy": {
         "hosts": [
@@ -32,7 +32,7 @@
       }
     },
     {
-      "id": "nhentai",
+      "id": "pos5drow.nhentai",
       "name": "nhentai",
       "version": "0.1.3",
       "contractVersion": "1.0.0",
@@ -52,8 +52,8 @@
         "resolve-tags",
         "related-series"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/nsfw/bridges/nhentai/0.1.3/bridge.js",
-      "sha256": "4a94f0f4312aaf188217ec9d51ee00ebd733e88f26993c96d8f924b0ab51c0ab",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/nsfw/bridges/pos5drow.nhentai/0.1.3/bridge.js",
+      "sha256": "59be9887e138e743a5db693ef75b289009c94f5128d8131fa790c09a074e1e8a",
       "iconUrl": "https://nhentai.net/favicon.png"
     }
   ]

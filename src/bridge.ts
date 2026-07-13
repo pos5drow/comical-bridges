@@ -188,7 +188,7 @@ const STATUS_MAP: Record<string, SeriesStatus> = {
 
 class AtsumaruBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
-    id: "atsumaru",
+    id: "pos5drow.atsumaru",
     name: "Atsumaru",
     version: "0.1.3",
     contractVersion: "1.0.0",

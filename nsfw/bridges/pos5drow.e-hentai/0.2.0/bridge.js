@@ -4296,8 +4296,9 @@ var bridgeSeriesStatusSchema = exports_external.enum([
   "planning",
   "rereading"
 ]);
+var BRIDGE_ID_PATTERN = /^[a-z0-9][a-z0-9-]*(\.[a-z0-9][a-z0-9-]*)*$/;
 var bridgeInfoSchema = exports_external.object({
-  id: exports_external.string().regex(/^[a-z0-9][a-z0-9-]*$/, "id must be lowercase kebab-case"),
+  id: exports_external.string().regex(BRIDGE_ID_PATTERN, "id must be lowercase kebab-case, optionally scoped as scope.name"),
   name: exports_external.string().min(1),
   version: exports_external.string(),
   contractVersion: exports_external.string(),
@@ -18072,7 +18073,7 @@ class EHentaiBridge extends BridgeBase {
   hashCachePending = new Map;
   thumbCache = new Map;
   info = {
-    id: "e-hentai",
+    id: "pos5drow.e-hentai",
     name: "E-Hentai",
     version: "0.2.0",
     contractVersion: "1.0.0",
@@ -18493,4 +18494,4 @@ function parseId(seriesId) {
 }
 var ehentai_default = defineBridge((host) => new EHentaiBridge(host));
 
-//# debugId=70E26CA1B5F8BA7C64756E2164756E21
+//# debugId=5825696F46DBBE5964756E2164756E21

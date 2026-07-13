@@ -160,7 +160,7 @@ const DEFAULT_RATINGS = ["safe", "suggestive"];
 
 class MangaDexBridge extends BridgeBase {
   readonly info: BridgeInfo = {
-    id: "mangadex",
+    id: "pos5drow.mangadex",
     name: "MangaDex",
     version: "0.1.1",
     contractVersion: "1.0.0",

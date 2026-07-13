@@ -202,7 +202,7 @@ const LISTS: ReadonlyArray<ListDef> = [
 
 class NhentaiBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
-    id: "nhentai",
+    id: "pos5drow.nhentai",
     name: "nhentai",
     version: "0.1.3",
     contractVersion: "1.0.0",

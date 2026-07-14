@@ -23,7 +23,7 @@ See [`README.md`](README.md#status) for the summary.
 | ✓ | `sort.effect` | sort | sort "views" reorders results (asc ≠ desc) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 3 descriptor(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
-| ✓ | `read.chapters` | core | got 266 ordered, uniquely-identified chapter(s) |
+| ✓ | `read.chapters` | core | got 267 ordered, uniquely-identified chapter(s) |
 | ✓ | `read.pages` | core | got 58 page(s) |
 
 ## `mangadex` — ⚠ (8✓ 1⚠ 0✗)
@@ -46,7 +46,7 @@ See [`README.md`](README.md#status) for the summary.
 
 ## `nhentai` — ⚠ (11✓ 4⚠ 0✗)
 
-**7/10 capabilities** · cover 25 KB (500×662) · sampled 8 · failed 0 · bytes min 13 KB / avg 25 KB / median 27 KB / max 32 KB · dims avg 500×662 (max 500×750) · aspect avg 0.79
+**7/10 capabilities** · cover 27 KB (500×702) · sampled 8 · failed 0 · bytes min 19 KB / avg 27 KB / median 26 KB / max 47 KB · dims avg 500×702 (max 500×725) · aspect avg 0.71
 
 > Cloudflare / IP-gated from datacenters
 
@@ -65,18 +65,17 @@ See [`README.md`](README.md#status) for the summary.
 | ✓ | `filters.effect` | filters | filter "language" changed results (25→25) |
 | ✓ | `sort.options` | sort | getSortOptions returned 5 option(s) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 1 descriptor(s) |
-| ✓ | `direct.pages` | direct | getSeriesPages returned 41 page(s) |
+| ✓ | `direct.pages` | direct | getSeriesPages returned 30 page(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-## `e-hentai` — ⚠ (7✓ 6⚠ 1✗)
+## `e-hentai` — ⚠ (8✓ 6⚠ 0✗)
 
-**6/6 capabilities** · cover 15 KB (242×265) · sampled 8 · failed 0 · bytes min 9 KB / avg 15 KB / median 13 KB / max 33 KB · dims avg 242×265 (max 250×375) · aspect avg 1.11
+**6/6 capabilities** · cover 18 KB (250×310) · sampled 8 · failed 0 · bytes min 7 KB / avg 18 KB / median 15 KB / max 29 KB · dims avg 250×310 (max 250×365) · aspect avg 0.88
 
-> flaky (tolerated): sad-panda / IP + cookie gated from datacenters
+> sad-panda / IP + cookie gated from datacenters
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
-| ✗ | `lists.idStability` | lists | list "home" item ids are not stable across identical calls |
 | ⚠ | `search.items` | search | search for "the" returned no items (try --query) |
 | ⚠ | `filters.effect` | filters | applying filter "category=doujinshi" did not change results |
 | ⚠ | `favorites.read` | favorites | getFavorites could not be read (authentication required?): getFavorites threw: Error: favorites require your e-hentai session cookies — on a logged-in browser open DevTools → Application → Cookies and paste ipb_member_id and ipb_pass_hash into this bridge's settings |
@@ -86,9 +85,10 @@ See [`README.md`](README.md#status) for the summary.
 | ✓ | `info.capabilities` | core | declares 6 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 2 list(s) |
 | ✓ | `lists.items` | lists | list "home" returned 25 item(s) |
+| ✓ | `lists.idStability` | lists | list item ids are stable across calls |
 | ✓ | `filters.descriptors` | filters | getFilters returned 3 filter(s) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 3 descriptor(s) |
-| ✓ | `direct.pages` | direct | getSeriesPages returned 74 page(s) |
+| ✓ | `direct.pages` | direct | getSeriesPages returned 198 page(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-07-13 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-07-14 by the nightly live audit ([`audit.ts`](audit.ts))._

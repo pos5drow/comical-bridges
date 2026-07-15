@@ -46,7 +46,7 @@ See [`README.md`](README.md#status) for the summary.
 
 ## `nhentai` — ⚠ (11✓ 4⚠ 0✗)
 
-**7/10 capabilities** · cover 27 KB (500×702) · sampled 8 · failed 0 · bytes min 19 KB / avg 27 KB / median 26 KB / max 47 KB · dims avg 500×702 (max 500×725) · aspect avg 0.71
+**7/10 capabilities** · cover 31 KB (500×704) · sampled 8 · failed 0 · bytes min 24 KB / avg 31 KB / median 30 KB / max 45 KB · dims avg 500×704 (max 500×715) · aspect avg 0.71
 
 > Cloudflare / IP-gated from datacenters
 
@@ -65,12 +65,12 @@ See [`README.md`](README.md#status) for the summary.
 | ✓ | `filters.effect` | filters | filter "language" changed results (25→25) |
 | ✓ | `sort.options` | sort | getSortOptions returned 5 option(s) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 1 descriptor(s) |
-| ✓ | `direct.pages` | direct | getSeriesPages returned 30 page(s) |
+| ✓ | `direct.pages` | direct | getSeriesPages returned 70 page(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
 ## `e-hentai` — ⚠ (8✓ 6⚠ 0✗)
 
-**6/6 capabilities** · cover 18 KB (250×310) · sampled 8 · failed 0 · bytes min 7 KB / avg 18 KB / median 15 KB / max 29 KB · dims avg 250×310 (max 250×365) · aspect avg 0.88
+**6/6 capabilities** · cover 24 KB (250×333) · sampled 8 · failed 0 · bytes min 17 KB / avg 24 KB / median 24 KB / max 32 KB · dims avg 250×333 (max 250×375) · aspect avg 0.77
 
 > sad-panda / IP + cookie gated from datacenters
 
@@ -88,7 +88,7 @@ See [`README.md`](README.md#status) for the summary.
 | ✓ | `lists.idStability` | lists | list item ids are stable across calls |
 | ✓ | `filters.descriptors` | filters | getFilters returned 3 filter(s) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 3 descriptor(s) |
-| ✓ | `direct.pages` | direct | getSeriesPages returned 198 page(s) |
+| ✓ | `direct.pages` | direct | getSeriesPages returned 84 page(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-07-14 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-07-15 by the nightly live audit ([`audit.ts`](audit.ts))._

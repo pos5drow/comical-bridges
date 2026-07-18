@@ -34,10 +34,10 @@ flaky/blocked site; ✗ = a real regression. Per-check results are in
 |---|---|---|---|---|
 | `atsumaru` | ⚠ (13✓ 1⚠ 0✗) | 6/8 | 54 KB (360×540) | — |
 | `mangadex` | ⚠ (8✓ 1⚠ 0✗) | 3/3 | 51 KB (256×376) | Cloudflare challenges datacenter (runner) IPs |
-| `nhentai` | ⚠ (11✓ 4⚠ 0✗) | 7/10 | 27 KB (500×582) | Cloudflare / IP-gated from datacenters |
-| `e-hentai` | ⚠ (8✓ 6⚠ 0✗) | 6/6 | 20 KB (244×258) | sad-panda / IP + cookie gated from datacenters |
+| `nhentai` | ⚠ (11✓ 4⚠ 0✗) | 7/10 | 25 KB (500×628) | Cloudflare / IP-gated from datacenters |
+| `e-hentai` | ⚠ (8✓ 4⚠ 0✗) | 6/6 | 21 KB (250×289) | sad-panda / IP + cookie gated from datacenters |
 
-_Updated 2026-07-17 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-07-18 by the nightly live audit ([`audit.ts`](audit.ts))._
 <!-- BRIDGE-STATUS:END -->
 
 ## Develop

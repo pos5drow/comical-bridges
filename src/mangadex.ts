@@ -312,9 +312,11 @@ class MangaDexBridge extends BridgeBase {
       tagsByGroup.get(g)!.push(name);
     }
     const genres = tagsByGroup.get("genre") ?? [];
-    if (genres.length) info.genres = genres;
 
-    const tagGroups = [];
+    // Genres are a leading `kind: "genre"` tag group (no separate `genres` axis). MangaDex declares no
+    // genre search filter, so these are display-only (no tagIds to drive one).
+    const tagGroups: import("@comical/contract").TagGroup[] = [];
+    if (genres.length) tagGroups.push({ label: "Genres", kind: "genre", tags: genres });
     for (const [group, tags] of tagsByGroup) {
       if (group === "genre") continue;
       tagGroups.push({ label: group.charAt(0).toUpperCase() + group.slice(1), tags });

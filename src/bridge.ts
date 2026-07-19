@@ -539,12 +539,24 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     if (artists.length > 0) info.artist = artists.join(", ");
 
     // `type` (Manga / Manhwa / Manhua / …) is the series' format, surfaced as its own Type cell rather
-    // than mixed into the genre chips; `genres` carries only the actual genres.
+    // than mixed into the genre chips.
     if (dto.type) info.type = dto.type;
-    const genres = AtsumaruBridge.names(dto.genres);
-    if (genres.length > 0) info.genres = genres;
 
-    // Atsumaru exposes `tags` separately from `genres`; each item is {id, name, weight} so carry the ID.
+    const groups: import("@comical/contract").TagGroup[] = [];
+
+    // Genres are a leading `kind: "genre"` tag group (no separate `genres` axis). Reverse-map each
+    // genre name to its Typesense genreId (the same ids the "genre" search filter uses), so a tapped
+    // genre chip drives that filter. Names outside the table stay display-only (no id at that index).
+    const genres = AtsumaruBridge.names(dto.genres);
+    if (genres.length > 0) {
+      const genreIdByName = new Map(GENRES.map((g) => [g.name.toLowerCase(), g.id] as const));
+      const genreIds = genres.map((n) => genreIdByName.get(n.toLowerCase()) ?? "");
+      const genreGroup: import("@comical/contract").TagGroup = { label: "Genres", kind: "genre", tags: genres };
+      if (genreIds.some(Boolean)) genreGroup.tagIds = genreIds;
+      groups.push(genreGroup);
+    }
+
+    // Atsumaru exposes `tags` separately from genres; each item is {id, name, weight} so carry the ID.
     const rawTags = Array.isArray(dto.tags) ? dto.tags : [];
     if (rawTags.length > 0) {
       const tags: string[] = [];
@@ -562,9 +574,11 @@ class AtsumaruBridge extends BridgeBase<Settings> {
       if (tags.length > 0) {
         const group: import("@comical/contract").TagGroup = { label: "Tags", kind: "theme", tags };
         if (tagIds.every(Boolean)) group.tagIds = tagIds;
-        info.tagGroups = [group];
+        groups.push(group);
       }
     }
+
+    if (groups.length > 0) info.tagGroups = groups;
 
     info.status = STATUS_MAP[dto.status?.toLowerCase().trim() ?? ""] ?? "unknown";
 

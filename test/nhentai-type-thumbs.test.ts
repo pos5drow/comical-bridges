@@ -52,12 +52,12 @@ function detailHost(): HostCapabilities {
 }
 
 describe("nhentai category → SeriesInfo.type", () => {
-  test("category becomes the type, and is not folded into genres", async () => {
+  test("category becomes the type, and is not folded into a genre group", async () => {
     const bridge = factory(detailHost());
     const info = await bridge.getSeriesDetails("1");
     expect(info.type).toBe("doujinshi");
-    // The category must NOT also show up as a genre chip.
-    expect(info.genres).toBeUndefined();
+    // The category must NOT also show up as a genre chip — nhentai emits no `kind: "genre"` group.
+    expect(info.tagGroups?.some((g) => g.kind === "genre")).toBeFalsy();
   });
 });
 

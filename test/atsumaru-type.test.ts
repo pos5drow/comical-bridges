@@ -1,13 +1,17 @@
 /**
  * The Atsumaru series `type` (Manga / Manhwa / Manhua / …) is the series' format and is surfaced as
- * SeriesInfo.type — a single Type cell — rather than prepended to the genre chips. `genres` carries
- * only the real genres.
+ * SeriesInfo.type — a single Type cell — rather than prepended to the genre chips. Genres themselves
+ * are a `kind: "genre"` tag group (no separate `genres` axis).
  *
  * Instantiates the bridge with a mock host answering the single detail endpoint with canned JSON.
  */
 import { describe, expect, test } from "bun:test";
-import type { HostCapabilities, HttpRequest, HttpResponse } from "@comical/contract";
+import type { HostCapabilities, HttpRequest, HttpResponse, SeriesInfo } from "@comical/contract";
 import factory from "../src/bridge.ts";
+
+/** The tags of the `kind: "genre"` group, or undefined when there is none. */
+const genreTags = (info: SeriesInfo): string[] | undefined =>
+  info.tagGroups?.find((g) => g.kind === "genre")?.tags;
 
 /** A host that answers the manga-page detail endpoint with the given MangaDto. */
 function detailHost(mangaPage: Record<string, unknown>): HostCapabilities {
@@ -25,7 +29,7 @@ function detailHost(mangaPage: Record<string, unknown>): HostCapabilities {
 }
 
 describe("Atsumaru series type", () => {
-  test("maps `type` to SeriesInfo.type and keeps it out of genres", async () => {
+  test("maps `type` to SeriesInfo.type and keeps it out of the genre group", async () => {
     const bridge = factory(
       detailHost({
         title: "Subject Series",
@@ -38,13 +42,13 @@ describe("Atsumaru series type", () => {
     );
     const info = await bridge.getSeriesDetails("series-1");
     expect(info.type).toBe("Manga");
-    expect(info.genres).toEqual(["Action", "Romance"]);
+    expect(genreTags(info)).toEqual(["Action", "Romance"]);
   });
 
   test("omits type when the series has none", async () => {
     const bridge = factory(detailHost({ title: "No Type", genres: [{ id: 1, name: "Drama" }] }));
     const info = await bridge.getSeriesDetails("series-2");
     expect(info.type).toBeUndefined();
-    expect(info.genres).toEqual(["Drama"]);
+    expect(genreTags(info)).toEqual(["Drama"]);
   });
 });

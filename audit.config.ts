@@ -22,5 +22,7 @@ export const AUDIT: Record<string, BridgeAuditConfig> = {
   // tolerated (⚠, not ✗). Adjust as the nightly reveals what actually holds up in CI.
   mangadex: { searchQuery: "spy", flaky: "Cloudflare challenges datacenter (runner) IPs" },
   nhentai: { searchQuery: "the", settings: { adult: "true" }, flaky: "Cloudflare / IP-gated from datacenters" },
-  "e-hentai": { searchQuery: "the", settings: { adult: "true" }, flaky: "sad-panda / IP + cookie gated from datacenters" },
+  // "the" isn't a searchable token on e-hentai's tag-tokenized search (returns 0); "translated" is a
+  // near-universal tag that reliably returns hits.
+  "e-hentai": { searchQuery: "translated", settings: { adult: "true" }, flaky: "sad-panda / IP + cookie gated from datacenters" },
 };

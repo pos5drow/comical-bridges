@@ -28,6 +28,7 @@ interface Row {
   pass: number;
   warn: number;
   fail: number;
+  skip: number; // inconclusive/not-applicable probes (auth-gated, unobservable sort/filter)
   caps: string; // "N/M"
   cover: string; // "80 KB (360×540)"
   note: string;
@@ -69,6 +70,7 @@ async function auditOne(id: string, cfg: BridgeAuditConfig): Promise<Entry> {
         pass: 0,
         warn: 0,
         fail: cfg.flaky ? 0 : 1,
+        skip: 0,
         caps: "0/0",
         cover: "—",
         note: `load failed: ${message}`,
@@ -78,7 +80,7 @@ async function auditOne(id: string, cfg: BridgeAuditConfig): Promise<Entry> {
     };
   }
 
-  const { pass, warn, fail } = report.summary;
+  const { pass, warn, fail, skip } = report.summary;
   const realFailUntolerated = fail > 0 && !cfg.flaky;
   const icon: Row["icon"] = realFailUntolerated ? "✗" : fail > 0 || warn > 0 ? "⚠" : "✓";
   return {
@@ -88,6 +90,7 @@ async function auditOne(id: string, cfg: BridgeAuditConfig): Promise<Entry> {
       pass,
       warn,
       fail,
+      skip,
       caps: `${report.summary.capabilitiesExercised.length}/${report.summary.capabilitiesDeclared.length}`,
       cover: coverCell(report),
       note: cfg.flaky && fail > 0 ? `flaky (tolerated): ${cfg.flaky}` : (cfg.flaky ?? ""),
@@ -97,17 +100,21 @@ async function auditOne(id: string, cfg: BridgeAuditConfig): Promise<Entry> {
   };
 }
 
+/** Render the `(P✓ W⚠ F✗ S⊘)` tally, dropping the ⊘ term when nothing was skipped. */
+const tally = (r: Pick<Row, "pass" | "warn" | "fail" | "skip">): string =>
+  `${r.pass}✓ ${r.warn}⚠ ${r.fail}✗${r.skip ? ` ${r.skip}⊘` : ""}`;
+
 /** README summary block (inside the BRIDGE-STATUS markers). */
 function renderTable(rows: Row[]): string {
   const head = "| Bridge | Status | Capabilities | Avg cover | Notes |\n|---|---|---|---|---|";
   const body = rows
-    .map((r) => `| \`${r.id}\` | ${r.icon} (${r.pass}✓ ${r.warn}⚠ ${r.fail}✗) | ${r.caps} | ${r.cover} | ${r.note || "—"} |`)
+    .map((r) => `| \`${r.id}\` | ${r.icon} (${tally(r)}) | ${r.caps} | ${r.cover} | ${r.note || "—"} |`)
     .join("\n");
   return `${head}\n${body}\n\n${STAMP()}`;
 }
 
-const SEV_ICON = { pass: "✓", warn: "⚠", fail: "✗" } as const;
-const SEV_RANK = { fail: 0, warn: 1, pass: 2 } as const;
+const SEV_ICON = { pass: "✓", warn: "⚠", fail: "✗", skip: "⊘" } as const;
+const SEV_RANK = { fail: 0, warn: 1, skip: 2, pass: 3 } as const;
 const cell = (s: string): string => s.replace(/\|/g, "\\|").replace(/\s*\n\s*/g, " ").trim();
 
 /** Per-bridge metrics detail line (byte spread + dimensions + aspect). */
@@ -130,13 +137,14 @@ function renderDetails(entries: Entry[]): string {
     "# Bridge audit — detailed results",
     "",
     "Per-check results from the nightly live audit ([`audit.ts`](audit.ts)) — every conformance probe run",
-    "against the real backend. ✓ pass · ⚠ warn · ✗ fail. Warnings never fail the run; a tolerated",
+    "against the real backend. ✓ pass · ⚠ warn · ✗ fail · ⊘ skipped (auth-gated with no credentials, or an",
+    "inconclusive sort/filter probe — never a defect). Warnings never fail the run; a tolerated",
     "flaky/blocked bridge (see [`audit.config.ts`](audit.config.ts)) shows ⚠ even for a hard failure.",
     "See [`README.md`](README.md#status) for the summary.",
     "",
   ];
   for (const { row, report, loadError } of entries) {
-    lines.push(`## \`${row.id}\` — ${row.icon} (${row.pass}✓ ${row.warn}⚠ ${row.fail}✗)`, "");
+    lines.push(`## \`${row.id}\` — ${row.icon} (${tally(row)})`, "");
     if (loadError) {
       lines.push(`**Bridge failed to load:** ${cell(loadError)}`, "");
       continue;

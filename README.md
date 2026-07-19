@@ -26,7 +26,8 @@ pre-adds a single registry). For the desktop CLI, add either URL:
 
 Live conformance + cover-size metrics, refreshed nightly by [`audit.ts`](audit.ts) (the shared
 `@comical/testkit` evaluator run against each real backend). ⚠ = warnings only or a tolerated
-flaky/blocked site; ✗ = a real regression. Per-check results are in
+flaky/blocked site; ✗ = a real regression; ⊘ = skipped (auth-gated with no credentials, or an
+inconclusive sort/filter probe — never counted against a bridge). Per-check results are in
 **[`AUDIT.md`](AUDIT.md)**; flaky tags are in [`audit.config.ts`](audit.config.ts).
 
 <!-- BRIDGE-STATUS:START -->

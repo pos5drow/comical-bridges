@@ -162,7 +162,7 @@ class MangaDexBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.mangadex",
     name: "MangaDex",
-    version: "0.1.1",
+    version: "0.2.0",
     contractVersion: "1.0.0",
     languages: ["en"],
     nsfw: false,

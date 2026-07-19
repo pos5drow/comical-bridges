@@ -46,7 +46,7 @@ See [`README.md`](README.md#status) for the summary.
 
 ## `nhentai` — ⚠ (11✓ 4⚠ 0✗)
 
-**7/10 capabilities** · cover 25 KB (500×628) · sampled 8 · failed 0 · bytes min 15 KB / avg 25 KB / median 26 KB / max 35 KB · dims avg 500×628 (max 500×734) · aspect avg 0.86
+**7/10 capabilities** · cover 22 KB (500×612) · sampled 8 · failed 0 · bytes min 14 KB / avg 22 KB / median 24 KB / max 28 KB · dims avg 500×612 (max 500×734) · aspect avg 0.93
 
 > Cloudflare / IP-gated from datacenters
 
@@ -68,9 +68,9 @@ See [`README.md`](README.md#status) for the summary.
 | ✓ | `direct.pages` | direct | getSeriesPages returned 53 page(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-## `e-hentai` — ⚠ (8✓ 4⚠ 0✗)
+## `e-hentai` — ⚠ (8✓ 6⚠ 0✗)
 
-**6/6 capabilities** · cover 21 KB (250×289) · sampled 8 · failed 0 · bytes min 12 KB / avg 21 KB / median 19 KB / max 36 KB · dims avg 250×289 (max 250×375) · aspect avg 0.97
+**6/6 capabilities** · cover 23 KB (250×309) · sampled 8 · failed 0 · bytes min 14 KB / avg 23 KB / median 22 KB / max 32 KB · dims avg 250×309 (max 250×354) · aspect avg 0.82
 
 > sad-panda / IP + cookie gated from datacenters
 
@@ -79,6 +79,8 @@ See [`README.md`](README.md#status) for the summary.
 | ⚠ | `search.items` | search | search for "the" returned no items (try --query) |
 | ⚠ | `filters.effect` | filters | applying filter "category=doujinshi" did not change results |
 | ⚠ | `favorites.read` | favorites | getFavorites could not be read (authentication required?): getFavorites threw: Error: favorites require your e-hentai session cookies — on a logged-in browser open DevTools → Application → Cookies and paste ipb_member_id and ipb_pass_hash into this bridge's settings |
+| ⚠ | `read.details.author` | core | series details have no author |
+| ⚠ | `read.details.description` | core | series details have no description |
 | ⚠ | `read.details.genres` | core | series details have no genres |
 | ✓ | `info.capabilities` | core | declares 6 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 2 list(s) |
@@ -86,7 +88,7 @@ See [`README.md`](README.md#status) for the summary.
 | ✓ | `lists.idStability` | lists | list item ids are stable across calls |
 | ✓ | `filters.descriptors` | filters | getFilters returned 3 filter(s) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 3 descriptor(s) |
-| ✓ | `direct.pages` | direct | getSeriesPages returned 42 page(s) |
+| ✓ | `direct.pages` | direct | getSeriesPages returned 22 page(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-07-18 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-07-19 by the nightly live audit ([`audit.ts`](audit.ts))._

@@ -14,7 +14,6 @@ import {
   type BridgeInfo,
   type Chapter,
   type Filter,
-  type GenreExclusions,
   type HttpRequest,
   type HttpResponse,
   type InferSettings,
@@ -93,23 +92,6 @@ interface BrowseMangaDto {
 interface AvailableFiltersDto {
   genres?: Array<{ id: string | number; name: string }>;
   tags?: Array<{ id: string | number; name: string }>;
-}
-
-/**
- * The user's home-page preferences (account-bound). `global.excludedGenreIds` is the account-wide
- * genre hide-list atsu.moe applies to every surface — search, lists, pages. We treat the rest of the
- * object (`sections`, `contentRatings`, `adult`) as opaque and round-trip it untouched on write.
- *
- * GET /api/user/homePagePreferences returns `{ preferences, availableFilters }`; the PUT body is the
- * bare `preferences` object.
- */
-interface HomePagePrefs {
-  global?: { excludedGenreIds?: string[]; [k: string]: unknown };
-  [k: string]: unknown;
-}
-interface HomePagePrefsResponse {
-  preferences?: HomePagePrefs;
-  availableFilters?: { genres?: Array<{ id: string | number; name: string }> };
 }
 
 /** Typesense search response (from /collections/manga/documents/search). */
@@ -196,11 +178,11 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "pos5drow.atsumaru",
     name: "Atsumaru",
-    version: "0.1.4",
+    version: "0.2.0",
     contractVersion: "1.0.0",
     languages: ["en"],
     nsfw: false,
-    capabilities: ["lists", "search", "filters", "sort", "settings", "favorites", "exclude-tags", "exclude-genres"],
+    capabilities: ["lists", "search", "filters", "sort", "settings", "favorites", "exclude-tags"],
     iconUrl: `${BASE_URL}/favicon.ico`,
     // atsu.moe tolerates ~2 req/s; serialize and space requests to stay polite. Every host
     // (server, web, native) inherits this — no per-host configuration needed.
@@ -640,50 +622,6 @@ class AtsumaruBridge extends BridgeBase<Settings> {
         return imageUrl ? { index, imageUrl, headers: { Referer: referer } } : undefined;
       })
       .filter((p): p is Page => p !== undefined);
-  }
-
-  // ── Genre exclusions (capability "exclude-genres") — account-wide, via homePagePreferences ────────
-  // atsu.moe enforces `global.excludedGenreIds` server-side across search, lists and pages, so we
-  // simply read/write it on the account (auth via the same cookie session as favorites). This is the
-  // genre counterpart to the per-query tag push-down (`excludedTags` → `tagIds:!=`).
-
-  private prefsUrl(): string {
-    return `${this.base()}/api/user/homePagePreferences`;
-  }
-
-  /** Fetch the account's home-page prefs (the source of truth for excluded genres + the genre list). */
-  private async fetchPrefs(): Promise<HomePagePrefsResponse> {
-    const res = await this.authed({ url: this.prefsUrl(), headers: this.apiHeaders() });
-    return JSON.parse(res.body) as HomePagePrefsResponse;
-  }
-
-  /** Map the response into the contract shape: available genres + the currently-excluded ids. */
-  private static toGenreExclusions(data: HomePagePrefsResponse): GenreExclusions {
-    const available = (data.availableFilters?.genres ?? []).map((g) => ({ id: String(g.id), label: g.name }));
-    const excluded = (data.preferences?.global?.excludedGenreIds ?? []).map((id) => String(id));
-    return { available, excluded };
-  }
-
-  async getGenreExclusions(): Promise<GenreExclusions> {
-    return AtsumaruBridge.toGenreExclusions(await this.fetchPrefs());
-  }
-
-  async setExcludedGenres(genreIds: string[]): Promise<GenreExclusions> {
-    // Read-merge-write: keep every other preference (contentRatings, sections, adult) intact and only
-    // replace excludedGenreIds. The PUT body is the bare `preferences` object (not the GET wrapper).
-    const data = await this.fetchPrefs();
-    const ids = [...new Set(genreIds.map((id) => String(id).trim()).filter(Boolean))];
-    const preferences: HomePagePrefs = {
-      ...(data.preferences ?? {}),
-      global: { ...(data.preferences?.global ?? {}), excludedGenreIds: ids },
-    };
-    await this.authed({
-      url: this.prefsUrl(),
-      method: "PUT",
-      headers: { ...this.apiHeaders(), "Content-Type": "application/json" },
-      body: JSON.stringify(preferences),
-    });
-    return AtsumaruBridge.toGenreExclusions({ preferences, availableFilters: data.availableFilters });
   }
 
   // ── Favorites (capability "favorites") — atsu.moe "bookmarks", account-bound ──────────────────

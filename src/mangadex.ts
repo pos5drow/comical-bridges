@@ -167,7 +167,7 @@ class MangaDexBridge extends BridgeBase {
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters"],
-    iconUrl: "https://mangadex.org/favicon.ico",
+    iconUrl: "https://mangadex.org/pwa/icons/icon-512.png", // 512×512 (favicon.ico is tiny)
     rateLimit: { maxConcurrent: 2, minIntervalMs: 350 },
   };
 

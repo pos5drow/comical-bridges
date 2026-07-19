@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-07-13T23:06:03.147Z",
+  "updated": "2026-07-19T22:52:51.465Z",
   "displayName": "NSFW",
   "bridges": [
     {
@@ -21,7 +21,7 @@
         "favorites"
       ],
       "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/nsfw/bridges/pos5drow.e-hentai/0.2.1/bridge.js",
-      "sha256": "462c36b3ac9d40bd02301ae08b4db4d039dbdfd43cbf295bba87401598f5aea8",
+      "sha256": "911dc549c628c2e0aa5c4ce0771c97c6877b9dcd6b2a94a0a6a77da99eadd40c",
       "iconUrl": "https://e-hentai.org/favicon.ico",
       "assetProxy": {
         "hosts": [
@@ -54,7 +54,7 @@
         "related-series"
       ],
       "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/nsfw/bridges/pos5drow.nhentai/0.1.3/bridge.js",
-      "sha256": "59be9887e138e743a5db693ef75b289009c94f5128d8131fa790c09a074e1e8a",
+      "sha256": "4a7061c2facf42c8ff71093fd1612c491de680752c75b57d108e61b685ec05ab",
       "iconUrl": "https://nhentai.net/favicon.png"
     }
   ]

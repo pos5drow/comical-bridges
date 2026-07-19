@@ -4116,7 +4116,6 @@ var seriesInfoSchema = exports_external.object({
   artists: exports_external.array(creditSchema).optional(),
   description: exports_external.string().optional(),
   type: exports_external.string().min(1).optional(),
-  genres: exports_external.array(exports_external.string()).optional(),
   tagGroups: exports_external.array(tagGroupSchema).optional(),
   relatedSeriesGroups: exports_external.array(relatedSeriesGroupSchema).optional(),
   status: seriesStatusSchema.optional(),
@@ -4198,10 +4197,6 @@ var sortOptionSchema = exports_external.object({
 });
 var sortSelectionSchema = exports_external.object({ key: exports_external.string(), ascending: exports_external.boolean() });
 var tagSchema = exports_external.object({ id: exports_external.string(), label: exports_external.string() });
-var genreExclusionsSchema = exports_external.object({
-  available: exports_external.array(tagSchema),
-  excluded: exports_external.array(exports_external.string())
-});
 var seriesListSchema = exports_external.object({
   id: exports_external.string().min(1),
   name: exports_external.string().min(1),
@@ -4288,7 +4283,6 @@ var bridgeCapabilitySchema = exports_external.enum([
   "direct",
   "read-sync",
   "exclude-tags",
-  "exclude-genres",
   "resolve-tags",
   "related-series"
 ]);
@@ -4309,6 +4303,7 @@ var bridgeInfoSchema = exports_external.object({
   languages: exports_external.array(exports_external.string()).min(1),
   nsfw: exports_external.boolean(),
   capabilities: exports_external.array(bridgeCapabilitySchema),
+  cardSubtitles: exports_external.boolean().optional(),
   iconUrl: exports_external.string().url().optional(),
   rateLimit: exports_external.object({
     maxConcurrent: exports_external.number().int().positive().optional(),
@@ -18266,4 +18261,4 @@ class NhentaiBridge extends BridgeBase {
 }
 var nhentai_default = defineBridge((host) => new NhentaiBridge(host));
 
-//# debugId=6D71CE8AB940C18C64756E2164756E21
+//# debugId=64F1C61252C1AE6F64756E2164756E21

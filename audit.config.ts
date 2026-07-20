@@ -18,6 +18,7 @@ export interface BridgeAuditConfig {
 
 export const AUDIT: Record<string, BridgeAuditConfig> = {
   atsumaru: { searchQuery: "spy" },
+  weebcentral: { searchQuery: "blue" },
   // The following commonly block / rate-limit datacenter runner IPs, so their LIVE failures are
   // tolerated (⚠, not ✗). Adjust as the nightly reveals what actually holds up in CI.
   mangadex: { searchQuery: "spy", flaky: "Cloudflare challenges datacenter (runner) IPs" },

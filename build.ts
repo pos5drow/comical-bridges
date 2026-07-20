@@ -20,6 +20,7 @@ const CONSOLE_SHIM =
 const bridges: Array<{ id: string; src: string }> = [
   { id: "atsumaru", src: "bridge.ts" },
   { id: "mangadex", src: "mangadex.ts" },
+  { id: "weebcentral", src: "weebcentral.ts" },
   { id: "nhentai", src: "nhentai.ts" },
   { id: "e-hentai", src: "ehentai.ts" },
 ];

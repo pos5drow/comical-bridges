@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-07-19T22:52:51.284Z",
+  "updated": "2026-07-20T07:32:38.464Z",
   "displayName": "SFW",
   "bridges": [
     {
@@ -22,8 +22,8 @@
         "exclude-tags"
       ],
       "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/sfw/bridges/pos5drow.atsumaru/0.2.0/bridge.js",
-      "sha256": "284712c876cf072b76f0370b0365362c556f8a7d08a5d0d90391a52a3e118dbb",
-      "iconUrl": "https://atsu.moe/favicon.ico"
+      "sha256": "27e02c89656174d2a5631fdd2f64d0bff3034d61853b1afe9a7fea074d33dd64",
+      "iconUrl": "https://atsu.moe/favicon/android-chrome-512x512.png"
     },
     {
       "id": "pos5drow.mangadex",
@@ -40,8 +40,27 @@
         "filters"
       ],
       "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/sfw/bridges/pos5drow.mangadex/0.2.0/bridge.js",
-      "sha256": "5d00b8625f3c1e24a12becb9722d919cf015a3d3dc2dbf6d245b697841825f6b",
-      "iconUrl": "https://mangadex.org/favicon.ico"
+      "sha256": "3c8c882d97da30ce4e9f653ed0626dac9fa728fa274aa9643f4c15e90802457e",
+      "iconUrl": "https://mangadex.org/pwa/icons/icon-512.png"
+    },
+    {
+      "id": "pos5drow.weebcentral",
+      "name": "Weeb Central",
+      "version": "0.1.0",
+      "contractVersion": "1.0.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/sfw/bridges/pos5drow.weebcentral/0.1.0/bridge.js",
+      "sha256": "736f00dc7b514f38f8c1685833c44992f666e0a4c2ca9e2351ca51fbfd89fef9",
+      "iconUrl": "https://weebcentral.com/favicon.ico"
     }
   ]
 }

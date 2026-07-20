@@ -17760,6 +17760,37 @@ function parseDocument(data2, options) {
 // ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/load-parse.js
 var parse5 = getParse((content, options, isDocument2, context) => options._useHtmlParser2 ? parseDocument(content, options) : parseWithParse5(content, options, isDocument2, context));
 var load = getLoad(parse5, (dom, options) => options._useHtmlParser2 ? esm_default(dom, options) : renderWithParse5(dom));
+// ../comical/packages/sdk/src/base64.ts
+var ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+var LOOKUP = /* @__PURE__ */ (() => {
+  const t = new Int16Array(256).fill(-1);
+  for (let i = 0;i < ALPHABET.length; i++)
+    t[ALPHABET.charCodeAt(i)] = i;
+  return t;
+})();
+function base64ToBytes(b64) {
+  const sextets = [];
+  for (let i = 0;i < b64.length; i++) {
+    const v = LOOKUP[b64.charCodeAt(i)];
+    if (v >= 0)
+      sextets.push(v);
+  }
+  const byteLen = sextets.length * 6 >> 3;
+  const out = new Uint8Array(byteLen);
+  let bits = 0;
+  let acc = 0;
+  let o = 0;
+  for (const s of sextets) {
+    acc = acc << 6 | s;
+    bits += 6;
+    if (bits >= 8) {
+      bits -= 8;
+      out[o++] = acc >> bits & 255;
+    }
+  }
+  return out;
+}
+
 // ../comical/packages/sdk/src/bridge-base.ts
 class BridgeBase {
   host;
@@ -17799,6 +17830,10 @@ class BridgeBase {
   async fetchJson(url, headers) {
     const body = await this.fetchText(url, headers);
     return JSON.parse(body);
+  }
+  async fetchBytes(url, headers) {
+    const res = await this.request(headers ? { url, headers, responseType: "base64" } : { url, responseType: "base64" });
+    return base64ToBytes(res.body);
   }
   async fetchHtml(url, headers) {
     return this.parse(await this.fetchText(url, headers));
@@ -18137,8 +18172,8 @@ class EHentaiBridge extends BridgeBase {
   }
   getLists() {
     return Promise.resolve([
-      { id: "home", name: "Home", layout: "grid", featured: true, page: true },
-      { id: "popular", name: "Popular", layout: "grid", featured: true, page: true }
+      { id: "popular", name: "Popular", layout: "grid", featured: true, page: true },
+      { id: "home", name: "Home", layout: "grid", featured: false, page: true }
     ]);
   }
   async getListItems(listId, page, _options) {
@@ -18490,4 +18525,4 @@ function parseId(seriesId) {
 }
 var ehentai_default = defineBridge((host) => new EHentaiBridge(host));
 
-//# debugId=57FFD68D465FE87864756E2164756E21
+//# debugId=D8B7289B1E0CD1A564756E2164756E21

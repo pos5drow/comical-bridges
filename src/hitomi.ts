@@ -160,7 +160,7 @@ class HitomiBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.hitomi",
     name: "Hitomi.la",
-    version: "0.1.0",
+    version: "0.1.1",
     contractVersion: "1.0.0",
     languages: ["multi"],
     nsfw: true,
@@ -178,17 +178,16 @@ class HitomiBridge extends BridgeBase {
     return { "User-Agent": UA, Referer: REFERER };
   }
 
-  // ── /img-proxy URL builders ────────────────────────────────────────────────
+  // ── /img-proxy URL builder ─────────────────────────────────────────────────
 
-  /** Absolute proxied URL (covers: `SeriesEntry.thumbnailUrl` must be a valid absolute URL). Falls
-   *  back to the direct CDN url when the host base is unknown (e.g. the offline audit harness). */
-  private proxiedAbs(absUrl: string): string {
-    const base = this.host.hostUrl;
-    return base ? `${base}/img-proxy?url=${encodeURIComponent(absUrl)}` : absUrl;
-  }
-
-  /** Relative proxied URL (page images: `Page.imageUrl` may be server-relative). */
-  private proxiedRel(absUrl: string): string {
+  /**
+   * Server-relative proxied URL. Every hitomi image (covers AND pages) is Referer-gated, so all of
+   * them route through the host's `/img-proxy` (declared via `assetProxy`), which attaches the
+   * `hitomi.la` Referer. A relative path (not an absolute host URL) lets each client resolve it
+   * against its own host — the network server on web, the in-process transport on device — instead
+   * of a host baked in here that a device can't reach.
+   */
+  private proxied(absUrl: string): string {
     return `/img-proxy?url=${encodeURIComponent(absUrl)}`;
   }
 
@@ -262,7 +261,7 @@ class HitomiBridge extends BridgeBase {
       // The card's cover hash rides along in the thumbnail img/source; proxy it (Referer-gated).
       const raw = $("img.lazyload").first().attr("data-src");
       const hash = raw?.match(/([0-9a-f]{64})\.\w+$/)?.[1];
-      if (hash) entry.thumbnailUrl = this.proxiedAbs(this.coverUrl(hash));
+      if (hash) entry.thumbnailUrl = this.proxied(this.coverUrl(hash));
       const lang = $(".dj-content tr:has(td:contains(Language)) a").first().text().trim();
       if (lang) entry.badges = [{ text: abbreviateLanguage(lang), position: "bottom-right", tone: "info" }];
       return entry;
@@ -370,7 +369,7 @@ class HitomiBridge extends BridgeBase {
       title: g.title || seriesId,
       status: "completed",
     };
-    if (g.files[0]?.hash) info.thumbnailUrl = this.proxiedAbs(this.coverUrl(g.files[0].hash));
+    if (g.files[0]?.hash) info.thumbnailUrl = this.proxied(this.coverUrl(g.files[0].hash));
     if (g.japanese_title) info.description = g.japanese_title;
     if (g.type) info.type = TYPE_LABELS[g.type] ?? g.type;
     if (g.language_localname || g.language) info.languages = [g.language_localname || g.language!];
@@ -433,8 +432,8 @@ class HitomiBridge extends BridgeBase {
       const ext: "webp" | "avif" = f.hasavif ? "avif" : "webp";
       return {
         index,
-        imageUrl: this.proxiedRel(this.imageUrl(gg, f.hash, ext)),
-        thumbnail: { kind: "image", url: this.proxiedRel(this.coverUrl(f.hash)) },
+        imageUrl: this.proxied(this.imageUrl(gg, f.hash, ext)),
+        thumbnail: { kind: "image", url: this.proxied(this.coverUrl(f.hash)) },
       };
     });
   }

@@ -74,12 +74,12 @@ var require_boolbase = __commonJS((exports2, module2) => {
   };
 });
 
-// src/bridge.ts
-var exports_bridge = {};
-__export(exports_bridge, {
-  default: () => bridge_default
+// src/hitomi.ts
+var exports_hitomi = {};
+__export(exports_hitomi, {
+  default: () => hitomi_default
 });
-module.exports = __toCommonJS(exports_bridge);
+module.exports = __toCommonJS(exports_hitomi);
 // ../comical/node_modules/.bun/zod@3.25.76/node_modules/zod/v3/external.js
 var exports_external = {};
 __export(exports_external, {
@@ -4177,15 +4177,6 @@ var filterIncludeExcludeSchema = exports_external.object({
   include: exports_external.array(exports_external.string()),
   exclude: exports_external.array(exports_external.string())
 });
-function parseFilterIncludeExclude(value) {
-  if (value !== null && typeof value === "object" && !Array.isArray(value) && "include" in value) {
-    const v = value;
-    return { include: v.include ?? [], exclude: v.exclude ?? [] };
-  }
-  if (Array.isArray(value))
-    return { include: value, exclude: [] };
-  return { include: [], exclude: [] };
-}
 var filterValueSchema = exports_external.object({
   key: exports_external.string(),
   value: exports_external.union([exports_external.string(), exports_external.array(exports_external.string()), exports_external.number(), exports_external.boolean(), filterIncludeExcludeSchema])
@@ -17858,495 +17849,327 @@ class BridgeBase {
 function defineBridge(factory) {
   return factory;
 }
-// ../comical/packages/sdk/src/settings.ts
-function defineSettings(descriptors) {
-  return descriptors;
+// src/lang.ts
+var LANGUAGE_ABBREVIATIONS = {
+  english: "EN",
+  japanese: "JP",
+  chinese: "CN",
+  korean: "KR",
+  spanish: "ES",
+  french: "FR",
+  german: "DE",
+  russian: "RU",
+  portuguese: "PT",
+  italian: "IT",
+  dutch: "NL",
+  polish: "PL",
+  vietnamese: "VN",
+  thai: "TH",
+  indonesian: "ID",
+  tagalog: "TL",
+  arabic: "AR",
+  hungarian: "HU",
+  czech: "CS",
+  turkish: "TR",
+  ukrainian: "UA"
+};
+function abbreviateLanguage(name) {
+  const key = name.trim().toLowerCase();
+  return LANGUAGE_ABBREVIATIONS[key] ?? key.slice(0, 2).toUpperCase();
 }
-// src/bridge.ts
-var BASE_URL = "https://atsu.moe";
-var SETTINGS = defineSettings([
-  { type: "boolean", key: "adult", label: "Show adult content", default: false },
-  { type: "string", key: "username", label: "Username", description: "atsu.moe account (for favorites)", secret: true },
-  { type: "string", key: "password", label: "Password", secret: true }
-]);
-var PROTOCOL_REGEX = /^https?:?\/\//;
-var PER_PAGE = 40;
-var TYPES = "Manga,Manwha,Manhua,OEL";
-var USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
-var GENRES = [
-  { id: "39", name: "Action" },
-  { id: "37", name: "Adventure" },
-  { id: "6", name: "Comedy" },
-  { id: "31", name: "Drama" },
-  { id: "36", name: "Fantasy" },
-  { id: "44", name: "Horror" },
-  { id: "29", name: "Martial Arts" },
-  { id: "32", name: "Mystery" },
-  { id: "18", name: "Psychological" },
-  { id: "9", name: "Romance" },
-  { id: "1", name: "Sci-Fi" },
-  { id: "7", name: "Slice of Life" },
-  { id: "22", name: "Supernatural" },
-  { id: "19", name: "Thriller" },
-  { id: "5", name: "Tragedy" }
-];
-var STATUSES = ["Ongoing", "Completed", "Hiatus", "Canceled"];
-var SORTS = [
-  { value: "views", label: "Popularity" },
-  { value: "trending", label: "Trending" },
-  { value: "dateAdded", label: "Date Added" },
-  { value: "released", label: "Release Date" },
-  { value: "mbRating", label: "Top Rated" },
-  { value: "chapterCount", label: "Chapter Count" }
-];
-var RELATION_LABELS = {
-  Sequel: { label: "Sequels", kind: "sequel" },
-  Prequel: { label: "Prequels", kind: "prequel" },
-  SpinOff: { label: "Spin-offs", kind: "spin-off" },
-  SideStory: { label: "Side Stories", kind: "side-story" },
-  Alternative: { label: "Alternative Versions", kind: "alternative" },
-  AlternativeVersion: { label: "Alternative Versions", kind: "alternative" },
-  SharedUniverse: { label: "Same Universe", kind: "same-universe" },
-  Character: { label: "Shared Characters", kind: "same-universe" },
-  Adaptation: { label: "Adaptations", kind: "adaptation" },
-  MainStory: { label: "Main Story", kind: "other" },
-  Parent: { label: "Parent Story", kind: "other" },
-  Summary: { label: "Summaries", kind: "other" },
-  Other: { label: "Related", kind: "other" }
-};
-var STATUS_MAP = {
-  ongoing: "ongoing",
-  completed: "completed",
-  hiatus: "hiatus",
-  canceled: "cancelled",
-  cancelled: "cancelled"
-};
 
-class AtsumaruBridge extends BridgeBase {
+// src/hitomi.ts
+var SITE = "https://hitomi.la";
+var D2 = "gold-usergeneratedcontent.net";
+var LTN = `https://ltn.${D2}`;
+var TN = `https://tn.${D2}`;
+var REFERER = `${SITE}/`;
+var PER_PAGE = 24;
+var UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
+var LANGUAGES = [
+  { value: "all", label: "All" },
+  { value: "english", label: "English" },
+  { value: "japanese", label: "Japanese" },
+  { value: "chinese", label: "Chinese" },
+  { value: "korean", label: "Korean" },
+  { value: "spanish", label: "Spanish" },
+  { value: "french", label: "French" },
+  { value: "russian", label: "Russian" },
+  { value: "german", label: "German" }
+];
+var TYPES = [
+  { value: "doujinshi", label: "Doujinshi" },
+  { value: "manga", label: "Manga" },
+  { value: "artistcg", label: "Artist CG" },
+  { value: "gamecg", label: "Game CG" },
+  { value: "imageset", label: "Image Set" },
+  { value: "anime", label: "Anime" }
+];
+var TYPE_LABELS = Object.fromEntries(TYPES.map((t) => [t.value, t.label]));
+var LISTS = [
+  { id: "popular-today", name: "Popular Today", layout: "grid", featured: true, area: "popular/today" },
+  { id: "popular-week", name: "Popular This Week", layout: "grid", featured: true, area: "popular/week" },
+  { id: "latest", name: "Latest", layout: "grid", featured: true, area: "index" }
+];
+var SORTS = [
+  { key: "latest", label: "Latest", area: "index" },
+  { key: "popular-today", label: "Popular Today", area: "popular/today" },
+  { key: "popular-week", label: "Popular This Week", area: "popular/week" },
+  { key: "popular-month", label: "Popular This Month", area: "popular/month" },
+  { key: "popular-year", label: "Popular This Year", area: "popular/year" }
+];
+function thumbDir(hash) {
+  return `${hash.slice(-1)}/${hash.slice(-3, -1)}`;
+}
+function selectorFromUrl(url) {
+  if (!url)
+    return;
+  const path = decodeURIComponent(url).replace(/^\//, "").replace(/-[a-z]+\.html$/i, "");
+  return path || undefined;
+}
+
+class HitomiBridge extends BridgeBase {
   info = {
-    id: "pos5drow.atsumaru",
-    name: "Atsumaru",
-    version: "0.2.0",
+    id: "pos5drow.hitomi",
+    name: "Hitomi.la",
+    version: "0.1.1",
     contractVersion: "1.0.0",
-    languages: ["en"],
-    nsfw: false,
-    capabilities: ["lists", "search", "filters", "sort", "settings", "favorites", "exclude-tags"],
-    iconUrl: `${BASE_URL}/favicon/android-chrome-512x512.png`,
-    rateLimit: { maxConcurrent: 1, minIntervalMs: 550 }
+    languages: ["multi"],
+    nsfw: true,
+    capabilities: ["lists", "search", "filters", "sort", "direct", "related-series"],
+    iconUrl: `${SITE}/favicon.ico`,
+    rateLimit: { maxConcurrent: 5, minIntervalMs: 120 },
+    assetProxy: { hosts: [D2], referer: REFERER }
   };
-  tagCache = new Map;
-  tagPrewarmed = false;
-  async prewarmTagCache() {
-    if (this.tagPrewarmed)
-      return;
-    this.tagPrewarmed = true;
-    try {
-      const data2 = await this.getJson(`${this.base()}/api/explore/availableFilters`);
-      for (const tag of data2.tags ?? []) {
-        const id = String(tag.id);
-        if (id && tag.name)
-          this.tagCache.set(id, tag.name);
-      }
-    } catch {}
+  gg;
+  headers() {
+    return { "User-Agent": UA, Referer: REFERER };
   }
-  async getTags(query = "") {
-    if (this.tagCache.size === 0)
-      await this.prewarmTagCache();
-    const q = query.toLowerCase();
-    const results = [];
-    for (const [id, label] of this.tagCache)
-      if (!q || label.toLowerCase().includes(q))
-        results.push({ id, label });
-    return results.sort((a, b) => a.label.localeCompare(b.label)).slice(0, 50);
+  proxied(absUrl) {
+    return `/img-proxy?url=${encodeURIComponent(absUrl)}`;
   }
-  getSettings() {
-    return [...SETTINGS];
+  coverUrl(hash) {
+    return `${TN}/webpbigtn/${thumbDir(hash)}/${hash}.webp`;
   }
-  base() {
-    return BASE_URL;
+  async getGg() {
+    const GG_TTL_MS = 3 * 60 * 1000;
+    if (this.gg && Date.now() - this.gg.at < GG_TTL_MS)
+      return this.gg.value;
+    const text3 = await this.fetchText(`${LTN}/gg.js`, this.headers());
+    const b = text3.match(/b:\s*'([^']+)'/)?.[1] ?? "";
+    const cases = new Set;
+    for (const m of text3.matchAll(/case\s+(\d+):/g))
+      cases.add(parseInt(m[1], 10));
+    const value = { b, cases };
+    this.gg = { at: Date.now(), value };
+    return value;
   }
-  adultParam() {
-    return this.setting("adult") === true ? "&adult=1" : "";
+  imageUrl(gg, hash, ext) {
+    const m = /(..)(.)$/.exec(hash);
+    const g = parseInt(m[2] + m[1], 16);
+    const sub = (ext === "webp" ? "w" : "a") + (1 + (gg.cases.has(g) ? 1 : 0));
+    return `https://${sub}.${D2}/${gg.b}${g}/${hash}.${ext}`;
   }
-  apiHeaders() {
-    return {
-      "User-Agent": USER_AGENT,
-      Accept: "*/*",
-      Referer: `${this.base()}/`
-    };
+  nozomiPath(area, language) {
+    return `${LTN}/${area}-${language}.nozomi`;
   }
-  getJson(url) {
-    return this.fetchJson(url, this.apiHeaders());
-  }
-  resolveImage(raw) {
-    let path;
-    if (typeof raw === "string")
-      path = raw;
-    else if (raw && typeof raw === "object" && typeof raw.image === "string") {
-      path = raw.image;
-    }
-    if (!path)
-      return;
-    const cleaned = path.replace(/^\//, "").replace(/^static\//, "");
-    let url;
-    if (/^https?/.test(cleaned))
-      url = cleaned;
-    else if (cleaned.startsWith("//"))
-      url = `https:${cleaned}`;
-    else
-      url = `${this.base()}/static/${cleaned}`;
-    return url.replace(PROTOCOL_REGEX, "https://");
-  }
-  resolveCover(dto, size) {
-    const pick = (o) => o && (size === "small" ? [o.mediumImage, o.posterMedium, o.largeImage, o.image] : [o.largeImage, o.mediumImage, o.posterMedium, o.image]).find((v) => typeof v === "string" && v.length > 0);
-    const flat = pick(dto);
-    if (flat)
-      return this.resolveImage(flat);
-    const poster = dto.poster;
-    if (poster && typeof poster === "object" && !Array.isArray(poster)) {
-      const fromObject = pick(poster);
-      if (fromObject)
-        return this.resolveImage(fromObject);
-    }
-    return this.resolveImage(typeof poster === "string" ? poster : dto.image);
-  }
-  static names(element) {
-    if (!Array.isArray(element))
-      return [];
-    return element.map((item) => {
-      if (typeof item === "string")
-        return item;
-      if (item && typeof item === "object" && typeof item.name === "string") {
-        return item.name;
-      }
-      return;
-    }).filter((s) => !!s);
-  }
-  static credits(element) {
-    const authors = new Set;
-    const artists = new Set;
-    if (Array.isArray(element)) {
-      for (const item of element) {
-        if (typeof item === "string") {
-          authors.add(item);
-        } else if (item && typeof item === "object") {
-          const name = item.name;
-          const type = item.type;
-          if (typeof name !== "string")
-            continue;
-          if (type === "Artist")
-            artists.add(name);
-          else
-            authors.add(name);
-        }
-      }
-    }
-    return { authors: [...authors], artists: [...artists] };
-  }
-  toEntry(dto) {
-    const entry = { id: dto.id, title: dto.title };
-    const thumb = this.resolveCover(dto, "small");
-    if (thumb)
-      entry.thumbnailUrl = thumb;
-    return entry;
-  }
-  static humanizeRelation(type) {
-    return type.replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/_/g, " ").trim() || "Related";
-  }
-  relatedGroups(dto) {
-    const groups = [];
-    const byType = new Map;
-    for (const rel of dto.relations ?? []) {
-      const manga = rel?.manga;
-      if (!manga?.id || !manga.title)
-        continue;
-      const key = typeof rel.type === "string" && rel.type ? rel.type : "Other";
-      const list = byType.get(key) ?? [];
-      list.push(this.toEntry(manga));
-      byType.set(key, list);
-    }
-    for (const [type, series] of byType) {
-      if (series.length === 0)
-        continue;
-      const mapped = RELATION_LABELS[type];
-      groups.push({
-        label: mapped?.label ?? AtsumaruBridge.humanizeRelation(type),
-        kind: mapped?.kind ?? "other",
-        series
-      });
-    }
-    const mapEntries = (list) => (list ?? []).filter((m) => m?.id && m.title).map((m) => this.toEntry(m));
-    const similar = mapEntries(dto.similarManga);
-    if (similar.length > 0)
-      groups.push({ label: "Similar", kind: "similar", series: similar });
-    const recommended = mapEntries(dto.recommendations);
-    if (recommended.length > 0)
-      groups.push({ label: "Recommended", kind: "recommended", series: recommended });
-    return groups;
-  }
-  static LISTS = [
-    { id: "trending", name: "Trending", layout: "carousel", featured: true, endpoint: "trending" },
-    { id: "recentlyUpdated", name: "Recently Updated", layout: "grid", featured: true, endpoint: "recentlyUpdated" }
-  ];
-  async getLists() {
-    return AtsumaruBridge.LISTS.map(({ endpoint, ...list }) => {
-      return list;
+  async nozomiIds(area, language, page) {
+    const start = (page - 1) * PER_PAGE * 4;
+    const end2 = start + PER_PAGE * 4 - 1;
+    const res = await this.request({
+      url: this.nozomiPath(area, language),
+      headers: { ...this.headers(), Range: `bytes=${start}-${end2}` },
+      responseType: "base64"
     });
+    if (res.status === 404 || res.status === 416)
+      return { ids: [], hasNext: false };
+    if (res.status >= 400)
+      throw new Error(`nozomi ${area}: HTTP ${res.status}`);
+    const bytes = base64ToBytes(res.body);
+    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    const ids = [];
+    for (let i = 0;i + 4 <= bytes.byteLength; i += 4)
+      ids.push(view.getInt32(i, false));
+    const total = Number(res.headers["content-range"]?.match(/\/(\d+)$/)?.[1]);
+    const hasNext = Number.isFinite(total) ? start + bytes.byteLength < total : bytes.byteLength >= PER_PAGE * 4;
+    return { ids, hasNext };
   }
-  async getListItems(listId, page) {
-    const list = AtsumaruBridge.LISTS.find((l) => l.id === listId);
+  async galleryCard(id) {
+    try {
+      const $2 = this.parse(await this.fetchText(`${LTN}/galleryblock/${id}.html`, this.headers()));
+      const title = ($2("h1.lillie a").first().text() || $2(".lillie a").first().text()).trim();
+      if (!title)
+        return null;
+      const entry = { id: String(id), title };
+      const raw = $2("img.lazyload").first().attr("data-src");
+      const hash = raw?.match(/([0-9a-f]{64})\.\w+$/)?.[1];
+      if (hash)
+        entry.thumbnailUrl = this.proxied(this.coverUrl(hash));
+      const lang = $2(".dj-content tr:has(td:contains(Language)) a").first().text().trim();
+      if (lang)
+        entry.badges = [{ text: abbreviateLanguage(lang), position: "bottom-right", tone: "info" }];
+      return entry;
+    } catch {
+      return null;
+    }
+  }
+  async idsToEntries(ids) {
+    const cards = await Promise.all(ids.map((id) => this.galleryCard(id)));
+    return cards.filter((c) => c !== null);
+  }
+  async browse(area, language, page) {
+    const { ids, hasNext } = await this.nozomiIds(area, language, page);
+    return { items: await this.idsToEntries(ids), page, hasNextPage: hasNext };
+  }
+  async getLists() {
+    return LISTS.map(({ area: _a3, ...list }) => list);
+  }
+  async getListItems(listId, page, _options) {
+    const list = LISTS.find((l) => l.id === listId);
     if (!list)
       throw new Error(`unknown list: ${listId}`);
-    const url = `${this.base()}/api/infinite/${list.endpoint}?page=${page - 1}&types=${TYPES}${this.adultParam()}`;
-    const data2 = await this.getJson(url);
-    const items = (data2.items ?? []).map((d) => this.toEntry(d));
-    return { items, page, hasNextPage: items.length >= PER_PAGE };
+    return this.browse(list.area, "all", page);
   }
-  getFilters() {
-    this.prewarmTagCache();
-    return Promise.resolve([
-      { type: "multiselect", key: "genre", label: "Genres", excludable: true, options: GENRES.map((g) => ({ value: g.id, label: g.name })) },
-      { type: "multiselect", key: "status", label: "Status", options: STATUSES.map((s) => ({ value: s, label: s })) },
-      { type: "tag-multiselect", key: "tag", label: "Tag", excludable: true },
-      { type: "number", key: "year", label: "Release year", min: 1900, max: 2100 },
-      { type: "number", key: "minChapters", label: "Minimum chapters", min: 0 }
-    ]);
+  async getFilters() {
+    return [
+      { type: "select", key: "language", label: "Language", options: [...LANGUAGES] },
+      { type: "select", key: "type", label: "Type", options: [{ value: "", label: "Any" }, ...TYPES] },
+      { type: "text", key: "tag", label: "Tag" },
+      { type: "text", key: "artist", label: "Artist" }
+    ];
   }
-  getSortOptions() {
-    return Promise.resolve(SORTS.map((s) => ({ key: s.value, label: s.label })));
+  async getSortOptions() {
+    return SORTS.map((s) => ({ key: s.key, label: s.label, directionless: true }));
   }
   async getSearchResults(query, page, options) {
-    const clauses = [
-      "hidden:!=true",
-      ...this.setting("adult") === true ? [] : ["isAdult:=false"],
-      "(mbContentRating:=[`Safe`,`Suggestive`,`Erotica`] || mbContentRating:!=*)",
-      "views:>0"
-    ];
+    let language = "all";
+    let type = "";
+    let tag = "";
+    let artist = "";
     for (const f of options?.filters ?? []) {
-      const arr = Array.isArray(f.value) ? f.value : [];
-      if (f.key === "genre") {
-        const { include, exclude } = parseFilterIncludeExclude(f.value);
-        if (include.length)
-          clauses.push(include.map((id) => `genreIds:=\`${id}\``).join(" && "));
-        for (const id of exclude)
-          clauses.push(`genreIds:!=\`${id}\``);
-      } else if (f.key === "status" && arr.length)
-        clauses.push(`status:=[${arr.map((s) => `\`${s}\``).join(",")}]`);
-      else if (f.key === "tag") {
-        const { include, exclude } = parseFilterIncludeExclude(f.value);
-        for (const id of include)
-          if (String(id).trim())
-            clauses.push(`tagIds:=\`${String(id).trim()}\``);
-        for (const id of exclude)
-          if (String(id).trim())
-            clauses.push(`tagIds:!=\`${String(id).trim()}\``);
-      } else if (f.key === "year" && typeof f.value === "number")
-        clauses.push(`releaseYear:=[${f.value}]`);
-      else if (f.key === "minChapters" && typeof f.value === "number")
-        clauses.push(`chapterCount:>=${f.value}`);
+      if (f.key === "language" && typeof f.value === "string")
+        language = f.value || "all";
+      if (f.key === "type" && typeof f.value === "string")
+        type = f.value;
+      if (f.key === "artist" && typeof f.value === "string")
+        artist = f.value.trim();
+      if (f.key === "tag" && typeof f.value === "string")
+        tag = f.value.trim();
     }
-    for (const id of options?.excludedTags ?? []) {
-      if (String(id).trim())
-        clauses.push(`tagIds:!=\`${String(id).trim()}\``);
+    const q = query.trim();
+    let area;
+    if (q.includes("/"))
+      area = this.encodeSelector(q);
+    else if (artist)
+      area = `artist/${encodeURIComponent(artist.toLowerCase())}`;
+    else if (tag)
+      area = `tag/${encodeURIComponent(tag.toLowerCase())}`;
+    else if (q)
+      area = `tag/${encodeURIComponent(q.toLowerCase())}`;
+    else if (type)
+      area = `type/${type}`;
+    else
+      area = this.sortArea(options) ?? "index";
+    if (!q && !tag && !artist) {
+      const sorted = this.sortArea(options);
+      if (sorted && !type)
+        area = sorted;
     }
-    const sortBy = options?.sort ? `${options.sort.key}:${options.sort.ascending ? "asc" : "desc"}` : undefined;
-    const params = new URLSearchParams({
-      q: query.trim() || "*",
-      filter_by: clauses.join(" && "),
-      page: String(page),
-      per_page: String(PER_PAGE)
-    });
-    if (sortBy)
-      params.set("sort_by", sortBy);
-    if (query.trim()) {
-      params.set("query_by", "title,englishTitle,otherNames,authors");
-      params.set("query_by_weights", "4,3,2,1");
-      params.set("num_typos", "4,3,2,1");
-    }
-    const url = `${this.base()}/collections/manga/documents/search?${params.toString()}`;
-    const body = await this.fetchText(url, this.apiHeaders());
-    if (body.includes('"hits"')) {
-      const data3 = JSON.parse(body);
-      const items2 = (data3.hits ?? []).map((h) => this.toEntry(h.document));
-      const perPage = data3.request_params?.per_page || PER_PAGE;
-      return { items: items2, page, hasNextPage: data3.page * perPage < data3.found };
-    }
-    const data2 = JSON.parse(body);
-    const items = (data2.items ?? []).map((d) => this.toEntry(d));
-    return { items, page, hasNextPage: items.length >= PER_PAGE };
+    return this.browse(area, language, page);
+  }
+  encodeSelector(selector) {
+    const slash = selector.indexOf("/");
+    const ns = selector.slice(0, slash);
+    const value = selector.slice(slash + 1);
+    return `${ns}/${encodeURIComponent(value)}`;
+  }
+  sortArea(options) {
+    return SORTS.find((s) => s.key === options?.sort?.key)?.area;
+  }
+  async fetchGallery(id) {
+    const text3 = await this.fetchText(`${LTN}/galleries/${encodeURIComponent(id)}.js`, this.headers());
+    return JSON.parse(text3.replace(/^var\s+galleryinfo\s*=\s*/, ""));
   }
   async getSeriesDetails(seriesId) {
-    const url = `${this.base()}/api/manga/page?id=${encodeURIComponent(seriesId)}`;
-    const dto = (await this.getJson(url)).mangaPage;
-    const info = { id: seriesId, title: dto.title };
-    const thumb = this.resolveCover(dto, "large");
-    if (thumb)
-      info.thumbnailUrl = thumb;
-    if (dto.synopsis?.trim())
-      info.description = dto.synopsis.trim();
-    const { authors, artists } = AtsumaruBridge.credits(dto.authors);
-    if (authors.length > 0)
-      info.author = authors.join(", ");
-    if (artists.length > 0)
-      info.artist = artists.join(", ");
-    if (dto.type)
-      info.type = dto.type;
-    const groups = [];
-    const genres = AtsumaruBridge.names(dto.genres);
-    if (genres.length > 0) {
-      const genreIdByName = new Map(GENRES.map((g) => [g.name.toLowerCase(), g.id]));
-      const genreIds = genres.map((n) => genreIdByName.get(n.toLowerCase()) ?? "");
-      const genreGroup = { label: "Genres", kind: "genre", tags: genres };
-      if (genreIds.some(Boolean))
-        genreGroup.tagIds = genreIds;
-      groups.push(genreGroup);
+    const g = await this.fetchGallery(seriesId);
+    const info = {
+      id: seriesId,
+      title: g.title || seriesId,
+      status: "completed"
+    };
+    if (g.files[0]?.hash)
+      info.thumbnailUrl = this.proxied(this.coverUrl(g.files[0].hash));
+    if (g.japanese_title)
+      info.description = g.japanese_title;
+    if (g.type)
+      info.type = TYPE_LABELS[g.type] ?? g.type;
+    if (g.language_localname || g.language)
+      info.languages = [g.language_localname || g.language];
+    if (g.files.length)
+      info.pageCount = g.files.length;
+    const artists = (g.artists ?? []).map((a) => a.artist).filter((n) => !!n);
+    if (artists.length) {
+      info.author = artists.join(", ");
+      info.authors = artists.map((name) => ({ name }));
     }
-    const rawTags = Array.isArray(dto.tags) ? dto.tags : [];
-    if (rawTags.length > 0) {
+    const tagGroups = [];
+    const namedGroup = (label, items, name) => {
+      const list = items ?? [];
       const tags = [];
-      const tagIds = [];
-      for (const item of rawTags) {
-        const name = typeof item === "string" ? item : typeof item.name === "string" ? item.name : null;
-        const rawId = item && typeof item === "object" ? item.id : undefined;
-        const id = rawId !== undefined && rawId !== null ? String(rawId) : "";
-        if (name) {
-          tags.push(name);
-          tagIds.push(id);
-          if (id)
-            this.tagCache.set(id, name);
+      const queries = [];
+      for (const it of list) {
+        const n = name(it);
+        const sel = selectorFromUrl(it.url);
+        if (n && sel) {
+          tags.push(n);
+          queries.push(sel);
         }
       }
-      if (tags.length > 0) {
-        const group = { label: "Tags", kind: "theme", tags };
-        if (tagIds.every(Boolean))
-          group.tagIds = tagIds;
-        groups.push(group);
+      if (tags.length)
+        tagGroups.push({ label, tags, tagQueries: queries });
+    };
+    if (g.tags?.length) {
+      const tags = [];
+      const queries = [];
+      for (const t of g.tags) {
+        if (!t.tag)
+          continue;
+        const prefix = t.female === "1" ? "♀ " : t.male === "1" ? "♂ " : "";
+        const sel = selectorFromUrl(t.url);
+        if (sel) {
+          tags.push(prefix + t.tag);
+          queries.push(sel);
+        }
       }
+      if (tags.length)
+        tagGroups.push({ label: "Tags", kind: "theme", tags, tagQueries: queries });
     }
-    if (groups.length > 0)
-      info.tagGroups = groups;
-    info.status = STATUS_MAP[dto.status?.toLowerCase().trim() ?? ""] ?? "unknown";
-    const related = this.relatedGroups(dto);
-    if (related.length > 0)
-      info.relatedSeriesGroups = related;
+    namedGroup("Series", g.parodys, (n) => n.parody);
+    namedGroup("Characters", g.characters, (n) => n.character);
+    namedGroup("Groups", g.groups, (n) => n.group);
+    if (tagGroups.length)
+      info.tagGroups = tagGroups;
     return info;
   }
-  async getChapters(seriesId) {
-    const url = `${this.base()}/api/manga/allChapters?mangaId=${encodeURIComponent(seriesId)}`;
-    const raw = (await this.getJson(url)).chapters ?? [];
-    const teamIds = new Set(raw.map((c) => c.scanlationMangaId).filter((s) => !!s));
-    const multiTeam = teamIds.size > 1;
-    const teamName = multiTeam ? await this.scanlatorNames(seriesId) : new Map;
-    return raw.map((c) => {
-      const base = c.title?.trim() || `Chapter ${c.number}`;
-      const team = c.scanlationMangaId ? teamName.get(c.scanlationMangaId) : undefined;
-      const chapter = {
-        id: c.id,
-        name: multiTeam && team ? `${base} — ${team}` : base
+  async getRelatedSeries(seriesId) {
+    const g = await this.fetchGallery(seriesId);
+    if (!g.related?.length)
+      return [];
+    const series = await this.idsToEntries(g.related.slice(0, 10));
+    return series.length ? [{ label: "Related", kind: "similar", series }] : [];
+  }
+  async getSeriesPages(seriesId) {
+    const [g, gg] = await Promise.all([this.fetchGallery(seriesId), this.getGg()]);
+    return g.files.map((f, index2) => {
+      const ext = f.hasavif ? "avif" : "webp";
+      return {
+        index: index2,
+        imageUrl: this.proxied(this.imageUrl(gg, f.hash, ext)),
+        thumbnail: { kind: "image", url: this.proxied(this.coverUrl(f.hash)) }
       };
-      if (Number.isFinite(c.number))
-        chapter.number = c.number;
-      if (team)
-        chapter.group = team;
-      if (Number.isFinite(c.pageCount))
-        chapter.pageCount = c.pageCount;
-      const published = parseDate(c.createdAt);
-      if (published !== undefined)
-        chapter.publishedAt = published;
-      return chapter;
-    }).filter((c) => c.id.length > 0).sort((a, b) => (a.number ?? 0) - (b.number ?? 0));
-  }
-  async scanlatorNames(seriesId) {
-    const url = `${this.base()}/api/manga/page?id=${encodeURIComponent(seriesId)}`;
-    const page = (await this.getJson(url)).mangaPage;
-    const map2 = new Map;
-    for (const s of page.scanlators ?? [])
-      if (s?.id && s?.name)
-        map2.set(s.id, s.name);
-    return map2;
-  }
-  async getChapterPages(seriesId, chapterId) {
-    const url = `${this.base()}/api/read/chapter?mangaId=${encodeURIComponent(seriesId)}` + `&chapterId=${encodeURIComponent(chapterId)}`;
-    const data2 = await this.getJson(url);
-    const referer = `${this.base()}/`;
-    return (data2.readChapter?.pages ?? []).map((p, index2) => {
-      const imageUrl = this.resolveImage(p.image);
-      return imageUrl ? { index: index2, imageUrl, headers: { Referer: referer } } : undefined;
-    }).filter((p) => p !== undefined);
-  }
-  async getFavorites(page) {
-    const qs = this.setting("adult") === true ? "?adult=1&includeAdult=1" : "";
-    const url = `${this.base()}/api/user/bookmarksPage${qs}`;
-    const res = await this.authed({ url, headers: this.apiHeaders() });
-    const data2 = JSON.parse(res.body);
-    const items = (data2.bookmarks ?? []).map((b) => this.bookmarkToEntry(b));
-    return { items, page, hasNextPage: false };
-  }
-  async addFavorite(seriesId) {
-    await this.syncBookmark(seriesId, "PlanToRead");
-  }
-  async removeFavorite(seriesId) {
-    await this.syncBookmark(seriesId, null);
-  }
-  async syncBookmark(mangaId, status) {
-    const res = await this.authed({
-      url: `${this.base()}/api/user/syncBookmarks`,
-      method: "POST",
-      headers: { ...this.apiHeaders(), "Content-Type": "application/json" },
-      body: JSON.stringify([{ mangaId, status, ts: Date.now() }])
     });
-    if (res.status >= 400)
-      throw new Error(`syncBookmarks failed: ${res.status} ${res.statusText}`);
-  }
-  async authed(req) {
-    let res = await this.request(req);
-    if (res.status === 401) {
-      await this.login();
-      res = await this.request(req);
-    }
-    if (res.status >= 400)
-      throw new Error(`${req.url} → ${res.status} ${res.statusText}`);
-    return res;
-  }
-  async login() {
-    const username = this.setting("username");
-    const password = this.setting("password");
-    if (!username || !password) {
-      throw new Error("favorites require a username + password (set them in this bridge's settings)");
-    }
-    const res = await this.request({
-      url: `${this.base()}/api/auth/login`,
-      method: "POST",
-      headers: { ...this.apiHeaders(), "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ username, password }).toString()
-    });
-    let parsed = {};
-    try {
-      parsed = JSON.parse(res.body);
-    } catch {}
-    if (res.status >= 400 || parsed.status !== "success") {
-      throw new Error(`atsu.moe login failed: ${parsed.error ?? res.statusText}`);
-    }
-  }
-  bookmarkToEntry(b) {
-    const id = b.id ?? b.mangaId ?? "";
-    const entry = { id, title: b.title ?? b.englishTitle ?? id };
-    const thumb = this.resolveCover(b, "small");
-    if (thumb)
-      entry.thumbnailUrl = thumb;
-    return entry;
   }
 }
-function parseDate(value) {
-  if (typeof value === "number" && Number.isFinite(value))
-    return value;
-  if (typeof value === "string") {
-    const ms = Date.parse(value);
-    if (Number.isFinite(ms))
-      return ms;
-  }
-  return;
-}
-var bridge_default = defineBridge((host) => new AtsumaruBridge(host));
+var hitomi_default = defineBridge((host) => new HitomiBridge(host));
 
-//# debugId=3AC75046409CDB5364756E2164756E21
+//# debugId=F374344F97D8618764756E2164756E21

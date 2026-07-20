@@ -4075,7 +4075,7 @@ var cardBadgeSchema = exports_external.object({
 var seriesEntrySchema = exports_external.object({
   id: exports_external.string().min(1),
   title: exports_external.string().min(1),
-  thumbnailUrl: exports_external.string().url().optional(),
+  thumbnailUrl: exports_external.string().min(1).optional(),
   subtitle: exports_external.string().optional(),
   badges: exports_external.array(cardBadgeSchema).max(4).optional(),
   excluded: exports_external.boolean().optional()
@@ -4112,7 +4112,7 @@ var creditSchema = exports_external.object({
 var seriesInfoSchema = exports_external.object({
   id: exports_external.string().min(1),
   title: exports_external.string().min(1),
-  thumbnailUrl: exports_external.string().url().optional(),
+  thumbnailUrl: exports_external.string().min(1).optional(),
   author: exports_external.string().optional(),
   authorId: exports_external.string().optional(),
   artist: exports_external.string().optional(),
@@ -18525,4 +18525,4 @@ function parseId(seriesId) {
 }
 var ehentai_default = defineBridge((host) => new EHentaiBridge(host));
 
-//# debugId=1E13EF0C18484ED164756E2164756E21
+//# debugId=51454DD2C521577864756E2164756E21

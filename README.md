@@ -33,12 +33,14 @@ inconclusive sort/filter probe — never counted against a bridge). Per-check re
 <!-- BRIDGE-STATUS:START -->
 | Bridge | Status | Capabilities | Avg cover | Notes |
 |---|---|---|---|---|
-| `atsumaru` | ⚠ (13✓ 1⚠ 0✗) | 6/8 | 54 KB (360×540) | — |
+| `atsumaru` | ✓ (13✓ 0⚠ 0✗ 1⊘) | 6/7 | 54 KB (360×540) | — |
+| `weebcentral` | ✓ (11✓ 0⚠ 0✗ 1⊘) | 4/4 | 17 KB (200×300) | — |
 | `mangadex` | ⚠ (8✓ 1⚠ 0✗) | 3/3 | 51 KB (256×376) | Cloudflare challenges datacenter (runner) IPs |
-| `nhentai` | ⚠ (11✓ 4⚠ 0✗) | 7/10 | 22 KB (500×612) | Cloudflare / IP-gated from datacenters |
-| `e-hentai` | ⚠ (8✓ 6⚠ 0✗) | 6/6 | 23 KB (250×309) | sad-panda / IP + cookie gated from datacenters |
+| `nhentai` | ⚠ (11✓ 2⚠ 0✗ 2⊘) | 7/10 | 30 KB (500×703) | Cloudflare / IP-gated from datacenters |
+| `e-hentai` | ⚠ (10✓ 3⚠ 0✗ 1⊘) | 6/6 | 20 KB (245×313) | sad-panda / IP + cookie gated from datacenters |
+| `hitomi` | ⚠ (9✓ 1⚠ 0✗ 2⊘) | 5/6 | — | images need the host /img-proxy (Referer-gated), unavailable in the audit |
 
-_Updated 2026-07-19 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-07-20 by the nightly live audit ([`audit.ts`](audit.ts))._
 <!-- BRIDGE-STATUS:END -->
 
 ## Develop

@@ -26,4 +26,7 @@ export const AUDIT: Record<string, BridgeAuditConfig> = {
   // "the" isn't a searchable token on e-hentai's tag-tokenized search (returns 0); "translated" is a
   // near-universal tag that reliably returns hits.
   "e-hentai": { searchQuery: "translated", settings: { adult: "true" }, flaky: "sad-panda / IP + cookie gated from datacenters" },
+  // Structural checks run live; images are Referer-gated and only load through the host's /img-proxy
+  // (absent in this harness), so the cover/asset probes can't pass here — tolerated as ⚠.
+  hitomi: { searchQuery: "full color", settings: { adult: "true" }, flaky: "images need the host /img-proxy (Referer-gated), unavailable in the audit" },
 };

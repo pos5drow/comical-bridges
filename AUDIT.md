@@ -66,7 +66,7 @@ See [`README.md`](README.md#status) for the summary.
 
 ## `nhentai` — ⚠ (11✓ 2⚠ 0✗ 2⊘)
 
-**7/10 capabilities** · cover 26 KB (500×704) · sampled 8 · failed 0 · bytes min 20 KB / avg 26 KB / median 24 KB / max 36 KB · dims avg 500×704 (max 500×709) · aspect avg 0.71
+**7/10 capabilities** · cover 25 KB (500×663) · sampled 8 · failed 0 · bytes min 19 KB / avg 25 KB / median 24 KB / max 36 KB · dims avg 500×663 (max 500×710) · aspect avg 0.79
 
 > Cloudflare / IP-gated from datacenters
 
@@ -85,12 +85,12 @@ See [`README.md`](README.md#status) for the summary.
 | ✓ | `filters.effect` | filters | filter "language" changed results (25→25) |
 | ✓ | `sort.options` | sort | getSortOptions returned 5 option(s) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 1 descriptor(s) |
-| ✓ | `direct.pages` | direct | getSeriesPages returned 65 page(s) |
+| ✓ | `direct.pages` | direct | getSeriesPages returned 66 page(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
 ## `e-hentai` — ⚠ (10✓ 3⚠ 0✗ 1⊘)
 
-**6/6 capabilities** · cover 19 KB (250×237) · sampled 8 · failed 0 · bytes min 11 KB / avg 19 KB / median 16 KB / max 30 KB · dims avg 250×237 (max 250×365) · aspect avg 1.18
+**6/6 capabilities** · cover 21 KB (250×302) · sampled 8 · failed 0 · bytes min 14 KB / avg 21 KB / median 22 KB / max 26 KB · dims avg 250×302 (max 250×365) · aspect avg 0.88
 
 > sad-panda / IP + cookie gated from datacenters
 
@@ -102,16 +102,16 @@ See [`README.md`](README.md#status) for the summary.
 | ⊘ | `favorites.read` | favorites | getFavorites needs credentials (none configured) — skipped: getFavorites threw: Error: favorites require your e-hentai session cookies — on a logged-in browser open DevTools → Application → Cookies and paste ipb_member_id and ipb_pass_hash into this bridge's settings |
 | ✓ | `info.capabilities` | core | declares 6 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 2 list(s) |
-| ✓ | `lists.items` | lists | list "popular" returned 66 item(s) |
+| ✓ | `lists.items` | lists | list "popular" returned 70 item(s) |
 | ✓ | `lists.idStability` | lists | list item ids are stable across calls |
 | ✓ | `search.items` | search | search returned 25 item(s) |
 | ✓ | `filters.descriptors` | filters | getFilters returned 3 filter(s) |
 | ✓ | `filters.effect` | filters | filter "category" changed results (25→25) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 3 descriptor(s) |
-| ✓ | `direct.pages` | direct | getSeriesPages returned 133 page(s) |
+| ✓ | `direct.pages` | direct | getSeriesPages returned 281 page(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-## `hitomi` — ⚠ (9✓ 1⚠ 0✗ 2⊘)
+## `hitomi` — ⚠ (9✓ 2⚠ 0✗ 2⊘)
 
 **5/6 capabilities** · cover — · sampled 0 · failed 8 · bytes min 0 KB / avg 0 KB / median 0 KB / max 0 KB
 
@@ -119,6 +119,7 @@ See [`README.md`](README.md#status) for the summary.
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
+| ⚠ | `read.details.description` | core | series details have no description |
 | ⚠ | `read.details.genres` | core | series details have no genre tag group (kind: "genre") |
 | ⊘ | `filters.effect` | filters | applying filter "language=all" did not change the sampled page |
 | ⊘ | `sort.effect` | sort | asc/desc on "latest" produced identical order |
@@ -129,7 +130,7 @@ See [`README.md`](README.md#status) for the summary.
 | ✓ | `search.items` | search | search returned 24 item(s) |
 | ✓ | `filters.descriptors` | filters | getFilters returned 4 filter(s) |
 | ✓ | `sort.options` | sort | getSortOptions returned 5 option(s) |
-| ✓ | `direct.pages` | direct | getSeriesPages returned 502 page(s) |
+| ✓ | `direct.pages` | direct | getSeriesPages returned 23 page(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-07-20 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-07-21 by the nightly live audit ([`audit.ts`](audit.ts))._

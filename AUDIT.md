@@ -66,7 +66,7 @@ See [`README.md`](README.md#status) for the summary.
 
 ## `nhentai` — ⚠ (11✓ 2⚠ 0✗ 2⊘)
 
-**7/10 capabilities** · cover 25 KB (500×663) · sampled 8 · failed 0 · bytes min 19 KB / avg 25 KB / median 24 KB / max 36 KB · dims avg 500×663 (max 500×710) · aspect avg 0.79
+**7/10 capabilities** · cover 28 KB (500×711) · sampled 8 · failed 0 · bytes min 20 KB / avg 28 KB / median 28 KB / max 40 KB · dims avg 500×711 (max 500×742) · aspect avg 0.70
 
 > Cloudflare / IP-gated from datacenters
 
@@ -90,7 +90,7 @@ See [`README.md`](README.md#status) for the summary.
 
 ## `e-hentai` — ⚠ (10✓ 3⚠ 0✗ 1⊘)
 
-**6/6 capabilities** · cover 21 KB (250×302) · sampled 8 · failed 0 · bytes min 14 KB / avg 21 KB / median 22 KB / max 26 KB · dims avg 250×302 (max 250×365) · aspect avg 0.88
+**6/6 capabilities** · cover 20 KB (238×343) · sampled 8 · failed 0 · bytes min 13 KB / avg 20 KB / median 20 KB / max 29 KB · dims avg 238×343 (max 250×375) · aspect avg 0.75
 
 > sad-panda / IP + cookie gated from datacenters
 
@@ -102,13 +102,13 @@ See [`README.md`](README.md#status) for the summary.
 | ⊘ | `favorites.read` | favorites | getFavorites needs credentials (none configured) — skipped: getFavorites threw: Error: favorites require your e-hentai session cookies — on a logged-in browser open DevTools → Application → Cookies and paste ipb_member_id and ipb_pass_hash into this bridge's settings |
 | ✓ | `info.capabilities` | core | declares 6 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 2 list(s) |
-| ✓ | `lists.items` | lists | list "popular" returned 70 item(s) |
+| ✓ | `lists.items` | lists | list "popular" returned 76 item(s) |
 | ✓ | `lists.idStability` | lists | list item ids are stable across calls |
 | ✓ | `search.items` | search | search returned 25 item(s) |
 | ✓ | `filters.descriptors` | filters | getFilters returned 3 filter(s) |
 | ✓ | `filters.effect` | filters | filter "category" changed results (25→25) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 3 descriptor(s) |
-| ✓ | `direct.pages` | direct | getSeriesPages returned 281 page(s) |
+| ✓ | `direct.pages` | direct | getSeriesPages returned 1907 page(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
 ## `hitomi` — ⚠ (9✓ 2⚠ 0✗ 2⊘)
@@ -130,7 +130,7 @@ See [`README.md`](README.md#status) for the summary.
 | ✓ | `search.items` | search | search returned 24 item(s) |
 | ✓ | `filters.descriptors` | filters | getFilters returned 4 filter(s) |
 | ✓ | `sort.options` | sort | getSortOptions returned 5 option(s) |
-| ✓ | `direct.pages` | direct | getSeriesPages returned 23 page(s) |
+| ✓ | `direct.pages` | direct | getSeriesPages returned 147 page(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-07-21 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-07-22 by the nightly live audit ([`audit.ts`](audit.ts))._

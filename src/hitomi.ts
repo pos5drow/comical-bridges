@@ -160,12 +160,13 @@ class HitomiBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.hitomi",
     name: "Hitomi.la",
-    version: "0.1.2",
+    version: "0.1.3",
     contractVersion: "1.0.0",
     languages: ["multi"],
     nsfw: true,
     capabilities: ["lists", "search", "filters", "sort", "direct", "related-series"],
-    iconUrl: `${SITE}/favicon.ico`,
+    // hitomi.la/favicon.ico 404s; the real site icon is a CDN PNG (served without a Referer gate).
+    iconUrl: `${LTN}/favicon-192x192.png`,
     // Static CDN — tolerates parallel card fetches; a browse page pulls ~24 galleryblocks.
     rateLimit: { maxConcurrent: 5, minIntervalMs: 120 },
     // Every image (covers + pages) is served through the host's /img-proxy with the required Referer.

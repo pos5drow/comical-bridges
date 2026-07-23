@@ -195,6 +195,15 @@ class HitomiBridge extends BridgeBase {
     return `${TN}/webpbigtn/${thumbDir(hash)}/${hash}.webp`;
   }
 
+  /**
+   * Per-page thumbnail (reader strip). Hitomi only renders the big `webpbigtn` thumbnail for a
+   * gallery's cover image(s); interior pages 404 on `webpbigtn` and are only available as the
+   * smaller `webpsmalltn` — so page thumbnails must use that, while covers keep `coverUrl`.
+   */
+  private pageThumbUrl(hash: string): string {
+    return `${TN}/webpsmalltn/${thumbDir(hash)}/${hash}.webp`;
+  }
+
   // ── gg.js ──────────────────────────────────────────────────────────────────
 
   /** Fetch + parse gg.js, cached briefly. `b` rotates (~hourly), so a short TTL keeps page URLs fresh. */
@@ -433,7 +442,7 @@ class HitomiBridge extends BridgeBase {
       return {
         index,
         imageUrl: this.proxied(this.imageUrl(gg, f.hash, ext)),
-        thumbnail: { kind: "image", url: this.proxied(this.coverUrl(f.hash)) },
+        thumbnail: { kind: "image", url: this.proxied(this.pageThumbUrl(f.hash)) },
       };
     });
   }

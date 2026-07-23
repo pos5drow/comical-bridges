@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-07-20T17:09:57.944Z",
+  "updated": "2026-07-23T20:30:59.756Z",
   "displayName": "NSFW",
   "bridges": [
     {
@@ -35,7 +35,7 @@
     {
       "id": "pos5drow.hitomi",
       "name": "Hitomi.la",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "contractVersion": "1.0.0",
       "languages": [
         "multi"
@@ -49,8 +49,8 @@
         "direct",
         "related-series"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/nsfw/bridges/pos5drow.hitomi/0.1.1/bridge.js",
-      "sha256": "8d8ea35aabebbe0b38a6f0fae7412ebb5af00169dfc4a5fa9048b0e3c81a9f4d",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/nsfw/bridges/pos5drow.hitomi/0.1.2/bridge.js",
+      "sha256": "f766ad54d9cf8ffea7350c250cf71c391264fd408de9ca805810a6c5082f899b",
       "iconUrl": "https://hitomi.la/favicon.ico",
       "assetProxy": {
         "hosts": [

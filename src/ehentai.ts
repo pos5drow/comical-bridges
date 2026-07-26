@@ -492,10 +492,11 @@ class EHentaiBridge extends BridgeBase<Settings> {
   // ── Lists ─────────────────────────────────────────────────────────────────
 
   getLists(): Promise<SeriesList[]> {
-    // Popular is the featured (prominent) list; Home stays a selectable page but isn't featured.
+    // Both are standalone pages (neither is a home *section*), so `featured` is what tells a host
+    // which one to open on: Popular. Home is the site's front page, still one selector tap away.
     return Promise.resolve([
       { id: "popular", name: "Popular", layout: "grid", featured: true, page: true },
-      { id: "home", name: "Home", layout: "grid", featured: false, page: true },
+      { id: "home", name: "Home", layout: "grid", page: true },
     ]);
   }
 

@@ -178,7 +178,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "pos5drow.atsumaru",
     name: "Atsumaru",
-    version: "0.2.0",
+    version: "0.2.1",
     contractVersion: "1.0.0",
     languages: ["en"],
     nsfw: false,

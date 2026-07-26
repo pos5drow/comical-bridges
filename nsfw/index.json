@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-07-23T21:10:29.193Z",
+  "updated": "2026-07-26T07:51:33.448Z",
   "displayName": "NSFW",
   "bridges": [
     {
@@ -30,7 +30,8 @@
           "hath.network"
         ],
         "referer": "https://e-hentai.org/"
-      }
+      },
+      "signature": "VKjYz6YynpOD38i_kHoaIyIPNgQzfVaZy1er9RJRQtf7Pb9GTLDBVhNV1qW37_fqLqLFMSi3A-yxKZAfI3eVCQ"
     },
     {
       "id": "pos5drow.hitomi",
@@ -57,7 +58,8 @@
           "gold-usergeneratedcontent.net"
         ],
         "referer": "https://hitomi.la/"
-      }
+      },
+      "signature": "wNkUVHwIoFeiHbVK0JPWzc0PC6RAh5_Wka9swRoqkgCbW9u0VGmb-GuIbQeWKLDM6rbvE5nBeP1YFm8guRTYBA"
     },
     {
       "id": "pos5drow.nhentai",
@@ -82,7 +84,9 @@
       ],
       "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/nsfw/bridges/pos5drow.nhentai/0.1.3/bridge.js",
       "sha256": "86b558dd31d74fcc59405bfb559952aaf18426deb52baf5b9e5f9ab4a5c1d892",
-      "iconUrl": "https://nhentai.net/favicon.png"
+      "iconUrl": "https://nhentai.net/favicon.png",
+      "signature": "8A7pk7GQSMLL2z9k6XTWh5b512M7d9zccimNG6FuULtXdCdcgiStkcCnloy7KzzT6uMWtgLnpDn9EqRtlrliAw"
     }
-  ]
+  ],
+  "publicKey": "_w_wfsGg94fRKmD6kq4mIHQYReFo7qPcZ9IMwhy0L24"
 }

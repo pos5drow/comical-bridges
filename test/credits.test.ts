@@ -2,14 +2,13 @@
  * Credit parsing: each bridge maps its native author/artist data into `SeriesInfo.authors`/`artists`
  * (the multi-credit form) in addition to the back-compat single string. Splitting a credit line into
  * individual people is the bridge's job — the host renders the array verbatim without guessing
- * separators. nhentai/e-hentai carry names only (their author filter matches names); MangaDex carries
- * the real per-author UUIDs so the host can filter precisely.
+ * separators. MangaDex carries the real per-author UUIDs, so the host can filter precisely rather
+ * than matching on a name.
  *
  * Bridges are instantiated directly with a mock host that answers canned JSON — no network, no build.
  */
 import { describe, expect, test } from "bun:test";
 import type { HostCapabilities, HttpRequest, HttpResponse } from "@comical/contract";
-import nhentaiFactory from "../src/nhentai.ts";
 import mangadexFactory from "../src/mangadex.ts";
 
 function jsonHost(route: (path: string) => unknown): HostCapabilities {
@@ -28,30 +27,6 @@ function jsonHost(route: (path: string) => unknown): HostCapabilities {
     settings: {},
   };
 }
-
-describe("nhentai credits", () => {
-  test("splits multiple artist tags into name-only credits (no ids)", async () => {
-    const bridge = nhentaiFactory(
-      jsonHost((path) => {
-        if (path.endsWith("/cdn")) return { image_servers: ["https://i.example"], thumb_servers: ["https://t.example"] };
-        return {
-          id: 1,
-          media_id: "m1",
-          title: { english: "G", pretty: "G" },
-          cover: { path: "galleries/1/cover.webp" },
-          tags: [
-            { id: 100, type: "artist", name: "Artist One" },
-            { id: 101, type: "artist", name: "Artist Two" },
-            { id: 9, type: "tag", name: "example" },
-          ],
-        };
-      }),
-    );
-    const info = await bridge.getSeriesDetails("1");
-    expect(info.author).toBe("Artist One, Artist Two");
-    expect(info.authors).toEqual([{ name: "Artist One" }, { name: "Artist Two" }]);
-  });
-});
 
 describe("mangadex credits", () => {
   test("keeps each author's UUID so the host can filter precisely", async () => {

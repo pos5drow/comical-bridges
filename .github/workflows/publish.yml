@@ -83,12 +83,12 @@ jobs:
           git config user.email pos5drow@gmail.com
           # publish.ts sorts bridges deterministically, so a rebuild of unchanged bundles leaves only
           # the `updated` timestamp different. Ignore that line (-I) so we don't commit on every run —
-          # only when a bundle or real metadata actually changed. Both rating-specific registries
-          # (sfw/ and nsfw/) are checked together.
-          if git diff --quiet -I '"updated":' -- sfw nsfw; then
+          # only when a bundle or real metadata actually changed. The forwarding tombstones left at
+          # the old rating-split URLs (sfw/, nsfw/) are regenerated too, so they're checked together.
+          if git diff --quiet -I '"updated":' -- index.json bridges sfw nsfw; then
             echo "Registry unchanged (timestamp-only) — nothing to publish."
             exit 0
           fi
-          git add sfw nsfw
+          git add index.json bridges sfw nsfw
           git commit -m "ci: republish registry [skip ci]"
           git push

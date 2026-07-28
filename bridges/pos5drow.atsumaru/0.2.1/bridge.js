@@ -62,7 +62,7 @@ var __export = (target, all) => {
     });
 };
 
-// ../comical/node_modules/.bun/boolbase@1.0.0/node_modules/boolbase/index.js
+// ../../../Dev/comicals/comical/node_modules/.bun/boolbase@1.0.0/node_modules/boolbase/index.js
 var require_boolbase = __commonJS((exports2, module2) => {
   module2.exports = {
     trueFunc: function trueFunc() {
@@ -74,13 +74,13 @@ var require_boolbase = __commonJS((exports2, module2) => {
   };
 });
 
-// src/mangadex.ts
-var exports_mangadex = {};
-__export(exports_mangadex, {
-  default: () => mangadex_default
+// src/bridge.ts
+var exports_bridge = {};
+__export(exports_bridge, {
+  default: () => bridge_default
 });
-module.exports = __toCommonJS(exports_mangadex);
-// ../comical/node_modules/.bun/zod@3.25.76/node_modules/zod/v3/external.js
+module.exports = __toCommonJS(exports_bridge);
+// ../../../Dev/comicals/comical/node_modules/.bun/zod@3.25.76/node_modules/zod/v3/external.js
 var exports_external = {};
 __export(exports_external, {
   void: () => voidType,
@@ -192,7 +192,7 @@ __export(exports_external, {
   BRAND: () => BRAND
 });
 
-// ../comical/node_modules/.bun/zod@3.25.76/node_modules/zod/v3/helpers/util.js
+// ../../../Dev/comicals/comical/node_modules/.bun/zod@3.25.76/node_modules/zod/v3/helpers/util.js
 var util;
 (function(util2) {
   util2.assertEqual = (_) => {};
@@ -323,7 +323,7 @@ var getParsedType = (data) => {
   }
 };
 
-// ../comical/node_modules/.bun/zod@3.25.76/node_modules/zod/v3/ZodError.js
+// ../../../Dev/comicals/comical/node_modules/.bun/zod@3.25.76/node_modules/zod/v3/ZodError.js
 var ZodIssueCode = util.arrayToEnum([
   "invalid_type",
   "invalid_literal",
@@ -442,7 +442,7 @@ ZodError.create = (issues) => {
   return error;
 };
 
-// ../comical/node_modules/.bun/zod@3.25.76/node_modules/zod/v3/locales/en.js
+// ../../../Dev/comicals/comical/node_modules/.bun/zod@3.25.76/node_modules/zod/v3/locales/en.js
 var errorMap = (issue, _ctx) => {
   let message;
   switch (issue.code) {
@@ -545,7 +545,7 @@ var errorMap = (issue, _ctx) => {
 };
 var en_default = errorMap;
 
-// ../comical/node_modules/.bun/zod@3.25.76/node_modules/zod/v3/errors.js
+// ../../../Dev/comicals/comical/node_modules/.bun/zod@3.25.76/node_modules/zod/v3/errors.js
 var overrideErrorMap = en_default;
 function setErrorMap(map) {
   overrideErrorMap = map;
@@ -553,7 +553,7 @@ function setErrorMap(map) {
 function getErrorMap() {
   return overrideErrorMap;
 }
-// ../comical/node_modules/.bun/zod@3.25.76/node_modules/zod/v3/helpers/parseUtil.js
+// ../../../Dev/comicals/comical/node_modules/.bun/zod@3.25.76/node_modules/zod/v3/helpers/parseUtil.js
 var makeIssue = (params) => {
   const { data, path, errorMaps, issueData } = params;
   const fullPath = [...path, ...issueData.path || []];
@@ -659,14 +659,14 @@ var isAborted = (x) => x.status === "aborted";
 var isDirty = (x) => x.status === "dirty";
 var isValid = (x) => x.status === "valid";
 var isAsync = (x) => typeof Promise !== "undefined" && x instanceof Promise;
-// ../comical/node_modules/.bun/zod@3.25.76/node_modules/zod/v3/helpers/errorUtil.js
+// ../../../Dev/comicals/comical/node_modules/.bun/zod@3.25.76/node_modules/zod/v3/helpers/errorUtil.js
 var errorUtil;
 (function(errorUtil2) {
   errorUtil2.errToObj = (message) => typeof message === "string" ? { message } : message || {};
   errorUtil2.toString = (message) => typeof message === "string" ? message : message?.message;
 })(errorUtil || (errorUtil = {}));
 
-// ../comical/node_modules/.bun/zod@3.25.76/node_modules/zod/v3/types.js
+// ../../../Dev/comicals/comical/node_modules/.bun/zod@3.25.76/node_modules/zod/v3/types.js
 class ParseInputLazyPath {
   constructor(parent, value, path, key) {
     this._cachedPath = [];
@@ -4177,6 +4177,15 @@ var filterIncludeExcludeSchema = exports_external.object({
   include: exports_external.array(exports_external.string()),
   exclude: exports_external.array(exports_external.string())
 });
+function parseFilterIncludeExclude(value) {
+  if (value !== null && typeof value === "object" && !Array.isArray(value) && "include" in value) {
+    const v = value;
+    return { include: v.include ?? [], exclude: v.exclude ?? [] };
+  }
+  if (Array.isArray(value))
+    return { include: value, exclude: [] };
+  return { include: [], exclude: [] };
+}
 var filterValueSchema = exports_external.object({
   key: exports_external.string(),
   value: exports_external.union([exports_external.string(), exports_external.array(exports_external.string()), exports_external.number(), exports_external.boolean(), filterIncludeExcludeSchema])
@@ -4326,11 +4335,21 @@ var trackerInfoSchema = exports_external.object({
     minIntervalMs: exports_external.number().int().nonnegative().optional()
   }).optional()
 });
+var trackerDateSchema = exports_external.string().regex(/^\d{4}-\d{2}-\d{2}$/, "expected YYYY-MM-DD");
+var trackerEntryUpdateSchema = exports_external.object({
+  status: trackerStatusSchema.optional(),
+  chaptersRead: exports_external.number().optional(),
+  score: exports_external.number().optional(),
+  notes: exports_external.string().optional(),
+  startedAt: trackerDateSchema.optional(),
+  finishedAt: trackerDateSchema.optional()
+});
 var trackerLibraryEntrySchema = exports_external.object({
   externalId: exports_external.union([exports_external.string().min(1), exports_external.number().int().positive()]),
   title: exports_external.string().min(1),
   status: trackerStatusSchema,
   chaptersRead: exports_external.number().optional(),
+  totalChapters: exports_external.number().int().positive().optional(),
   thumbnailUrl: exports_external.string().url().optional()
 });
 var trackerSearchResultSchema = exports_external.object({
@@ -4339,7 +4358,7 @@ var trackerSearchResultSchema = exports_external.object({
   thumbnailUrl: exports_external.string().url().optional(),
   description: exports_external.string().optional()
 });
-// ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/static.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/static.js
 var exports_static = {};
 __export(exports_static, {
   xml: () => xml,
@@ -4352,7 +4371,7 @@ __export(exports_static, {
   contains: () => contains
 });
 
-// ../comical/node_modules/.bun/domutils@3.2.2/node_modules/domutils/lib/esm/index.js
+// ../../../Dev/comicals/comical/node_modules/.bun/domutils@3.2.2/node_modules/domutils/lib/esm/index.js
 var exports_esm2 = {};
 __export(exports_esm2, {
   uniqueSort: () => uniqueSort,
@@ -4399,7 +4418,7 @@ __export(exports_esm2, {
   DocumentPosition: () => DocumentPosition
 });
 
-// ../comical/node_modules/.bun/domelementtype@2.3.0/node_modules/domelementtype/lib/esm/index.js
+// ../../../Dev/comicals/comical/node_modules/.bun/domelementtype@2.3.0/node_modules/domelementtype/lib/esm/index.js
 var ElementType;
 (function(ElementType2) {
   ElementType2["Root"] = "root";
@@ -4425,7 +4444,7 @@ var Tag = ElementType.Tag;
 var CDATA = ElementType.CDATA;
 var Doctype = ElementType.Doctype;
 
-// ../comical/node_modules/.bun/domhandler@5.0.3/node_modules/domhandler/lib/esm/node.js
+// ../../../Dev/comicals/comical/node_modules/.bun/domhandler@5.0.3/node_modules/domhandler/lib/esm/node.js
 class Node {
   constructor() {
     this.parent = null;
@@ -4650,7 +4669,7 @@ function cloneChildren(childs) {
   return children;
 }
 
-// ../comical/node_modules/.bun/domhandler@5.0.3/node_modules/domhandler/lib/esm/index.js
+// ../../../Dev/comicals/comical/node_modules/.bun/domhandler@5.0.3/node_modules/domhandler/lib/esm/index.js
 var defaultOpts = {
   withStartIndices: false,
   withEndIndices: false,
@@ -4778,13 +4797,13 @@ class DomHandler {
   }
 }
 
-// ../comical/node_modules/.bun/entities@4.5.0/node_modules/entities/lib/esm/generated/decode-data-html.js
+// ../../../Dev/comicals/comical/node_modules/.bun/entities@4.5.0/node_modules/entities/lib/esm/generated/decode-data-html.js
 var decode_data_html_default = new Uint16Array("ᵁ<Õıʊҝջאٵ۞ޢߖࠏ੊ઑඡ๭༉༦჊ረዡᐕᒝᓃᓟᔥ\x00\x00\x00\x00\x00\x00ᕫᛍᦍᰒᷝ὾⁠↰⊍⏀⏻⑂⠤⤒ⴈ⹈⿎〖㊺㘹㞬㣾㨨㩱㫠㬮ࠀEMabcfglmnoprstu\\bfms¦³¹ÈÏlig耻Æ䃆P耻&䀦cute耻Á䃁reve;䄂Āiyx}rc耻Â䃂;䐐r;쀀\uD835\uDD04rave耻À䃀pha;䎑acr;䄀d;橓Āgp¡on;䄄f;쀀\uD835\uDD38plyFunction;恡ing耻Å䃅Ācs¾Ãr;쀀\uD835\uDC9Cign;扔ilde耻Ã䃃ml耻Ä䃄ЀaceforsuåûþėĜĢħĪĀcrêòkslash;或Ŷöø;櫧ed;挆y;䐑ƀcrtąċĔause;戵noullis;愬a;䎒r;쀀\uD835\uDD05pf;쀀\uD835\uDD39eve;䋘còēmpeq;扎܀HOacdefhilorsuōőŖƀƞƢƵƷƺǜȕɳɸɾcy;䐧PY耻©䂩ƀcpyŝŢźute;䄆Ā;iŧŨ拒talDifferentialD;慅leys;愭ȀaeioƉƎƔƘron;䄌dil耻Ç䃇rc;䄈nint;戰ot;䄊ĀdnƧƭilla;䂸terDot;䂷òſi;䎧rcleȀDMPTǇǋǑǖot;抙inus;抖lus;投imes;抗oĀcsǢǸkwiseContourIntegral;戲eCurlyĀDQȃȏoubleQuote;思uote;怙ȀlnpuȞȨɇɕonĀ;eȥȦ户;橴ƀgitȯȶȺruent;扡nt;戯ourIntegral;戮ĀfrɌɎ;愂oduct;成nterClockwiseContourIntegral;戳oss;樯cr;쀀\uD835\uDC9EpĀ;Cʄʅ拓ap;才րDJSZacefiosʠʬʰʴʸˋ˗ˡ˦̳ҍĀ;oŹʥtrahd;椑cy;䐂cy;䐅cy;䐏ƀgrsʿ˄ˇger;怡r;憡hv;櫤Āayː˕ron;䄎;䐔lĀ;t˝˞戇a;䎔r;쀀\uD835\uDD07Āaf˫̧Ācm˰̢riticalȀADGT̖̜̀̆cute;䂴oŴ̋̍;䋙bleAcute;䋝rave;䁠ilde;䋜ond;拄ferentialD;慆Ѱ̽\x00\x00\x00͔͂\x00Ѕf;쀀\uD835\uDD3Bƀ;DE͈͉͍䂨ot;惜qual;扐blèCDLRUVͣͲ΂ϏϢϸontourIntegraìȹoɴ͹\x00\x00ͻ»͉nArrow;懓Āeo·ΤftƀARTΐΖΡrrow;懐ightArrow;懔eåˊngĀLRΫτeftĀARγιrrow;柸ightArrow;柺ightArrow;柹ightĀATϘϞrrow;懒ee;抨pɁϩ\x00\x00ϯrrow;懑ownArrow;懕erticalBar;戥ǹABLRTaВЪаўѿͼrrowƀ;BUНОТ憓ar;椓pArrow;懵reve;䌑eft˒к\x00ц\x00ѐightVector;楐eeVector;楞ectorĀ;Bљњ憽ar;楖ightǔѧ\x00ѱeeVector;楟ectorĀ;BѺѻ懁ar;楗eeĀ;A҆҇护rrow;憧ĀctҒҗr;쀀\uD835\uDC9Frok;䄐ࠀNTacdfglmopqstuxҽӀӄӋӞӢӧӮӵԡԯԶՒ՝ՠեG;䅊H耻Ð䃐cute耻É䃉ƀaiyӒӗӜron;䄚rc耻Ê䃊;䐭ot;䄖r;쀀\uD835\uDD08rave耻È䃈ement;戈ĀapӺӾcr;䄒tyɓԆ\x00\x00ԒmallSquare;旻erySmallSquare;斫ĀgpԦԪon;䄘f;쀀\uD835\uDD3Csilon;䎕uĀaiԼՉlĀ;TՂՃ橵ilde;扂librium;懌Āci՗՚r;愰m;橳a;䎗ml耻Ë䃋Āipժկsts;戃onentialE;慇ʀcfiosօֈ֍ֲ׌y;䐤r;쀀\uD835\uDD09lledɓ֗\x00\x00֣mallSquare;旼erySmallSquare;斪Ͱֺ\x00ֿ\x00\x00ׄf;쀀\uD835\uDD3DAll;戀riertrf;愱cò׋؀JTabcdfgorstר׬ׯ׺؀ؒؖ؛؝أ٬ٲcy;䐃耻>䀾mmaĀ;d׷׸䎓;䏜reve;䄞ƀeiy؇،ؐdil;䄢rc;䄜;䐓ot;䄠r;쀀\uD835\uDD0A;拙pf;쀀\uD835\uDD3Eeater̀EFGLSTصلَٖٛ٦qualĀ;Lؾؿ扥ess;招ullEqual;执reater;檢ess;扷lantEqual;橾ilde;扳cr;쀀\uD835\uDCA2;扫ЀAacfiosuڅڋږڛڞڪھۊRDcy;䐪Āctڐڔek;䋇;䁞irc;䄤r;愌lbertSpace;愋ǰگ\x00ڲf;愍izontalLine;攀Āctۃۅòکrok;䄦mpńېۘownHumðįqual;扏܀EJOacdfgmnostuۺ۾܃܇܎ܚܞܡܨ݄ݸދޏޕcy;䐕lig;䄲cy;䐁cute耻Í䃍Āiyܓܘrc耻Î䃎;䐘ot;䄰r;愑rave耻Ì䃌ƀ;apܠܯܿĀcgܴܷr;䄪inaryI;慈lieóϝǴ݉\x00ݢĀ;eݍݎ戬Āgrݓݘral;戫section;拂isibleĀCTݬݲomma;恣imes;恢ƀgptݿރވon;䄮f;쀀\uD835\uDD40a;䎙cr;愐ilde;䄨ǫޚ\x00ޞcy;䐆l耻Ï䃏ʀcfosuެ޷޼߂ߐĀiyޱ޵rc;䄴;䐙r;쀀\uD835\uDD0Dpf;쀀\uD835\uDD41ǣ߇\x00ߌr;쀀\uD835\uDCA5rcy;䐈kcy;䐄΀HJacfosߤߨ߽߬߱ࠂࠈcy;䐥cy;䐌ppa;䎚Āey߶߻dil;䄶;䐚r;쀀\uD835\uDD0Epf;쀀\uD835\uDD42cr;쀀\uD835\uDCA6րJTaceflmostࠥࠩࠬࡐࡣ঳সে্਷ੇcy;䐉耻<䀼ʀcmnpr࠷࠼ࡁࡄࡍute;䄹bda;䎛g;柪lacetrf;愒r;憞ƀaeyࡗ࡜ࡡron;䄽dil;䄻;䐛Āfsࡨ॰tԀACDFRTUVarࡾࢩࢱࣦ࣠ࣼयज़ΐ४Ānrࢃ࢏gleBracket;柨rowƀ;BR࢙࢚࢞憐ar;懤ightArrow;懆eiling;挈oǵࢷ\x00ࣃbleBracket;柦nǔࣈ\x00࣒eeVector;楡ectorĀ;Bࣛࣜ懃ar;楙loor;挊ightĀAV࣯ࣵrrow;憔ector;楎Āerँगeƀ;AVउऊऐ抣rrow;憤ector;楚iangleƀ;BEतथऩ抲ar;槏qual;抴pƀDTVषूौownVector;楑eeVector;楠ectorĀ;Bॖॗ憿ar;楘ectorĀ;B॥०憼ar;楒ightáΜs̀EFGLSTॾঋকঝঢভqualGreater;拚ullEqual;扦reater;扶ess;檡lantEqual;橽ilde;扲r;쀀\uD835\uDD0FĀ;eঽা拘ftarrow;懚idot;䄿ƀnpw৔ਖਛgȀLRlr৞৷ਂਐeftĀAR০৬rrow;柵ightArrow;柷ightArrow;柶eftĀarγਊightáοightáϊf;쀀\uD835\uDD43erĀLRਢਬeftArrow;憙ightArrow;憘ƀchtਾੀੂòࡌ;憰rok;䅁;扪Ѐacefiosuਗ਼੝੠੷੼અઋ઎p;椅y;䐜Ādl੥੯iumSpace;恟lintrf;愳r;쀀\uD835\uDD10nusPlus;戓pf;쀀\uD835\uDD44cò੶;䎜ҀJacefostuણધભીଔଙඑ඗ඞcy;䐊cute;䅃ƀaey઴હાron;䅇dil;䅅;䐝ƀgswે૰଎ativeƀMTV૓૟૨ediumSpace;怋hiĀcn૦૘ë૙eryThiî૙tedĀGL૸ଆreaterGreateòٳessLesóੈLine;䀊r;쀀\uD835\uDD11ȀBnptଢନଷ଺reak;恠BreakingSpace;䂠f;愕ڀ;CDEGHLNPRSTV୕ୖ୪୼஡௫ఄ౞಄ದ೘ൡඅ櫬Āou୛୤ngruent;扢pCap;扭oubleVerticalBar;戦ƀlqxஃஊ஛ement;戉ualĀ;Tஒஓ扠ilde;쀀≂̸ists;戄reater΀;EFGLSTஶஷ஽௉௓௘௥扯qual;扱ullEqual;쀀≧̸reater;쀀≫̸ess;批lantEqual;쀀⩾̸ilde;扵umpń௲௽ownHump;쀀≎̸qual;쀀≏̸eĀfsఊధtTriangleƀ;BEచఛడ拪ar;쀀⧏̸qual;括s̀;EGLSTవశ఼ౄోౘ扮qual;扰reater;扸ess;쀀≪̸lantEqual;쀀⩽̸ilde;扴estedĀGL౨౹reaterGreater;쀀⪢̸essLess;쀀⪡̸recedesƀ;ESಒಓಛ技qual;쀀⪯̸lantEqual;拠ĀeiಫಹverseElement;戌ghtTriangleƀ;BEೋೌ೒拫ar;쀀⧐̸qual;拭ĀquೝഌuareSuĀbp೨೹setĀ;E೰ೳ쀀⊏̸qual;拢ersetĀ;Eഃആ쀀⊐̸qual;拣ƀbcpഓതൎsetĀ;Eഛഞ쀀⊂⃒qual;抈ceedsȀ;ESTലള഻െ抁qual;쀀⪰̸lantEqual;拡ilde;쀀≿̸ersetĀ;E൘൛쀀⊃⃒qual;抉ildeȀ;EFT൮൯൵ൿ扁qual;扄ullEqual;扇ilde;扉erticalBar;戤cr;쀀\uD835\uDCA9ilde耻Ñ䃑;䎝܀Eacdfgmoprstuvලෂ෉෕ෛ෠෧෼ขภยา฿ไlig;䅒cute耻Ó䃓Āiy෎ීrc耻Ô䃔;䐞blac;䅐r;쀀\uD835\uDD12rave耻Ò䃒ƀaei෮ෲ෶cr;䅌ga;䎩cron;䎟pf;쀀\uD835\uDD46enCurlyĀDQฎบoubleQuote;怜uote;怘;橔Āclวฬr;쀀\uD835\uDCAAash耻Ø䃘iŬื฼de耻Õ䃕es;樷ml耻Ö䃖erĀBP๋๠Āar๐๓r;怾acĀek๚๜;揞et;掴arenthesis;揜Ҁacfhilors๿ງຊຏຒດຝະ໼rtialD;戂y;䐟r;쀀\uD835\uDD13i;䎦;䎠usMinus;䂱Āipຢອncareplanåڝf;愙Ȁ;eio຺ູ໠໤檻cedesȀ;EST່້໏໚扺qual;檯lantEqual;扼ilde;找me;怳Ādp໩໮uct;戏ortionĀ;aȥ໹l;戝Āci༁༆r;쀀\uD835\uDCAB;䎨ȀUfos༑༖༛༟OT耻\"䀢r;쀀\uD835\uDD14pf;愚cr;쀀\uD835\uDCAC؀BEacefhiorsu༾གྷཇའཱིྦྷྪྭ႖ႩႴႾarr;椐G耻®䂮ƀcnrཎནབute;䅔g;柫rĀ;tཛྷཝ憠l;椖ƀaeyཧཬཱron;䅘dil;䅖;䐠Ā;vླྀཹ愜erseĀEUྂྙĀlq྇ྎement;戋uilibrium;懋pEquilibrium;楯r»ཹo;䎡ghtЀACDFTUVa࿁࿫࿳ဢဨၛႇϘĀnr࿆࿒gleBracket;柩rowƀ;BL࿜࿝࿡憒ar;懥eftArrow;懄eiling;按oǵ࿹\x00စbleBracket;柧nǔည\x00နeeVector;楝ectorĀ;Bဝသ懂ar;楕loor;挋Āerိ၃eƀ;AVဵံြ抢rrow;憦ector;楛iangleƀ;BEၐၑၕ抳ar;槐qual;抵pƀDTVၣၮၸownVector;楏eeVector;楜ectorĀ;Bႂႃ憾ar;楔ectorĀ;B႑႒懀ar;楓Āpuႛ႞f;愝ndImplies;楰ightarrow;懛ĀchႹႼr;愛;憱leDelayed;槴ڀHOacfhimoqstuფჱჷჽᄙᄞᅑᅖᅡᅧᆵᆻᆿĀCcჩხHcy;䐩y;䐨FTcy;䐬cute;䅚ʀ;aeiyᄈᄉᄎᄓᄗ檼ron;䅠dil;䅞rc;䅜;䐡r;쀀\uD835\uDD16ortȀDLRUᄪᄴᄾᅉownArrow»ОeftArrow»࢚ightArrow»࿝pArrow;憑gma;䎣allCircle;战pf;쀀\uD835\uDD4Aɲᅭ\x00\x00ᅰt;戚areȀ;ISUᅻᅼᆉᆯ斡ntersection;抓uĀbpᆏᆞsetĀ;Eᆗᆘ抏qual;抑ersetĀ;Eᆨᆩ抐qual;抒nion;抔cr;쀀\uD835\uDCAEar;拆ȀbcmpᇈᇛሉላĀ;sᇍᇎ拐etĀ;Eᇍᇕqual;抆ĀchᇠህeedsȀ;ESTᇭᇮᇴᇿ扻qual;檰lantEqual;扽ilde;承Tháྌ;我ƀ;esሒሓሣ拑rsetĀ;Eሜም抃qual;抇et»ሓրHRSacfhiorsሾቄ቉ቕ቞ቱቶኟዂወዑORN耻Þ䃞ADE;愢ĀHc቎ቒcy;䐋y;䐦Ābuቚቜ;䀉;䎤ƀaeyብቪቯron;䅤dil;䅢;䐢r;쀀\uD835\uDD17Āeiቻ኉ǲኀ\x00ኇefore;戴a;䎘Ācn኎ኘkSpace;쀀  Space;怉ldeȀ;EFTካኬኲኼ戼qual;扃ullEqual;扅ilde;扈pf;쀀\uD835\uDD4BipleDot;惛Āctዖዛr;쀀\uD835\uDCAFrok;䅦ૡዷጎጚጦ\x00ጬጱ\x00\x00\x00\x00\x00ጸጽ፷ᎅ\x00᏿ᐄᐊᐐĀcrዻጁute耻Ú䃚rĀ;oጇገ憟cir;楉rǣጓ\x00጖y;䐎ve;䅬Āiyጞጣrc耻Û䃛;䐣blac;䅰r;쀀\uD835\uDD18rave耻Ù䃙acr;䅪Ādiፁ፩erĀBPፈ፝Āarፍፐr;䁟acĀekፗፙ;揟et;掵arenthesis;揝onĀ;P፰፱拃lus;抎Āgp፻፿on;䅲f;쀀\uD835\uDD4CЀADETadps᎕ᎮᎸᏄϨᏒᏗᏳrrowƀ;BDᅐᎠᎤar;椒ownArrow;懅ownArrow;憕quilibrium;楮eeĀ;AᏋᏌ报rrow;憥ownáϳerĀLRᏞᏨeftArrow;憖ightArrow;憗iĀ;lᏹᏺ䏒on;䎥ing;䅮cr;쀀\uD835\uDCB0ilde;䅨ml耻Ü䃜ҀDbcdefosvᐧᐬᐰᐳᐾᒅᒊᒐᒖash;披ar;櫫y;䐒ashĀ;lᐻᐼ抩;櫦Āerᑃᑅ;拁ƀbtyᑌᑐᑺar;怖Ā;iᑏᑕcalȀBLSTᑡᑥᑪᑴar;戣ine;䁼eparator;杘ilde;所ThinSpace;怊r;쀀\uD835\uDD19pf;쀀\uD835\uDD4Dcr;쀀\uD835\uDCB1dash;抪ʀcefosᒧᒬᒱᒶᒼirc;䅴dge;拀r;쀀\uD835\uDD1Apf;쀀\uD835\uDD4Ecr;쀀\uD835\uDCB2Ȁfiosᓋᓐᓒᓘr;쀀\uD835\uDD1B;䎞pf;쀀\uD835\uDD4Fcr;쀀\uD835\uDCB3ҀAIUacfosuᓱᓵᓹᓽᔄᔏᔔᔚᔠcy;䐯cy;䐇cy;䐮cute耻Ý䃝Āiyᔉᔍrc;䅶;䐫r;쀀\uD835\uDD1Cpf;쀀\uD835\uDD50cr;쀀\uD835\uDCB4ml;䅸ЀHacdefosᔵᔹᔿᕋᕏᕝᕠᕤcy;䐖cute;䅹Āayᕄᕉron;䅽;䐗ot;䅻ǲᕔ\x00ᕛoWidtè૙a;䎖r;愨pf;愤cr;쀀\uD835\uDCB5௡ᖃᖊᖐ\x00ᖰᖶᖿ\x00\x00\x00\x00ᗆᗛᗫᙟ᙭\x00ᚕ᚛ᚲᚹ\x00ᚾcute耻á䃡reve;䄃̀;Ediuyᖜᖝᖡᖣᖨᖭ戾;쀀∾̳;房rc耻â䃢te肻´̆;䐰lig耻æ䃦Ā;r²ᖺ;쀀\uD835\uDD1Erave耻à䃠ĀepᗊᗖĀfpᗏᗔsym;愵èᗓha;䎱ĀapᗟcĀclᗤᗧr;䄁g;樿ɤᗰ\x00\x00ᘊʀ;adsvᗺᗻᗿᘁᘇ戧nd;橕;橜lope;橘;橚΀;elmrszᘘᘙᘛᘞᘿᙏᙙ戠;榤e»ᘙsdĀ;aᘥᘦ戡ѡᘰᘲᘴᘶᘸᘺᘼᘾ;榨;榩;榪;榫;榬;榭;榮;榯tĀ;vᙅᙆ戟bĀ;dᙌᙍ抾;榝Āptᙔᙗh;戢»¹arr;捼Āgpᙣᙧon;䄅f;쀀\uD835\uDD52΀;Eaeiop዁ᙻᙽᚂᚄᚇᚊ;橰cir;橯;扊d;手s;䀧roxĀ;e዁ᚒñᚃing耻å䃥ƀctyᚡᚦᚨr;쀀\uD835\uDCB6;䀪mpĀ;e዁ᚯñʈilde耻ã䃣ml耻ä䃤Āciᛂᛈoninôɲnt;樑ࠀNabcdefiklnoprsu᛭ᛱᜰ᜼ᝃᝈ᝸᝽០៦ᠹᡐᜍ᤽᥈ᥰot;櫭Ācrᛶ᜞kȀcepsᜀᜅᜍᜓong;扌psilon;䏶rime;怵imĀ;e᜚᜛戽q;拍Ŷᜢᜦee;抽edĀ;gᜬᜭ挅e»ᜭrkĀ;t፜᜷brk;掶Āoyᜁᝁ;䐱quo;怞ʀcmprtᝓ᝛ᝡᝤᝨausĀ;eĊĉptyv;榰séᜌnoõēƀahwᝯ᝱ᝳ;䎲;愶een;扬r;쀀\uD835\uDD1Fg΀costuvwឍឝឳេ៕៛៞ƀaiuបពរðݠrc;旯p»፱ƀdptឤឨឭot;樀lus;樁imes;樂ɱឹ\x00\x00ើcup;樆ar;昅riangleĀdu៍្own;施p;斳plus;樄eåᑄåᒭarow;植ƀako៭ᠦᠵĀcn៲ᠣkƀlst៺֫᠂ozenge;槫riangleȀ;dlr᠒᠓᠘᠝斴own;斾eft;旂ight;斸k;搣Ʊᠫ\x00ᠳƲᠯ\x00ᠱ;斒;斑4;斓ck;斈ĀeoᠾᡍĀ;qᡃᡆ쀀=⃥uiv;쀀≡⃥t;挐Ȁptwxᡙᡞᡧᡬf;쀀\uD835\uDD53Ā;tᏋᡣom»Ꮜtie;拈؀DHUVbdhmptuvᢅᢖᢪᢻᣗᣛᣬ᣿ᤅᤊᤐᤡȀLRlrᢎᢐᢒᢔ;敗;敔;敖;敓ʀ;DUduᢡᢢᢤᢦᢨ敐;敦;敩;敤;敧ȀLRlrᢳᢵᢷᢹ;敝;敚;敜;教΀;HLRhlrᣊᣋᣍᣏᣑᣓᣕ救;敬;散;敠;敫;敢;敟ox;槉ȀLRlrᣤᣦᣨᣪ;敕;敒;攐;攌ʀ;DUduڽ᣷᣹᣻᣽;敥;敨;攬;攴inus;抟lus;択imes;抠ȀLRlrᤙᤛᤝ᤟;敛;敘;攘;攔΀;HLRhlrᤰᤱᤳᤵᤷ᤻᤹攂;敪;敡;敞;攼;攤;攜Āevģ᥂bar耻¦䂦Ȁceioᥑᥖᥚᥠr;쀀\uD835\uDCB7mi;恏mĀ;e᜚᜜lƀ;bhᥨᥩᥫ䁜;槅sub;柈Ŭᥴ᥾lĀ;e᥹᥺怢t»᥺pƀ;Eeįᦅᦇ;檮Ā;qۜۛೡᦧ\x00᧨ᨑᨕᨲ\x00ᨷᩐ\x00\x00᪴\x00\x00᫁\x00\x00ᬡᬮ᭍᭒\x00᯽\x00ᰌƀcpr᦭ᦲ᧝ute;䄇̀;abcdsᦿᧀᧄ᧊᧕᧙戩nd;橄rcup;橉Āau᧏᧒p;橋p;橇ot;橀;쀀∩︀Āeo᧢᧥t;恁îړȀaeiu᧰᧻ᨁᨅǰ᧵\x00᧸s;橍on;䄍dil耻ç䃧rc;䄉psĀ;sᨌᨍ橌m;橐ot;䄋ƀdmnᨛᨠᨦil肻¸ƭptyv;榲t脀¢;eᨭᨮ䂢räƲr;쀀\uD835\uDD20ƀceiᨽᩀᩍy;䑇ckĀ;mᩇᩈ朓ark»ᩈ;䏇r΀;Ecefms᩟᩠ᩢᩫ᪤᪪᪮旋;槃ƀ;elᩩᩪᩭ䋆q;扗eɡᩴ\x00\x00᪈rrowĀlr᩼᪁eft;憺ight;憻ʀRSacd᪒᪔᪖᪚᪟»ཇ;擈st;抛irc;抚ash;抝nint;樐id;櫯cir;槂ubsĀ;u᪻᪼晣it»᪼ˬ᫇᫔᫺\x00ᬊonĀ;eᫍᫎ䀺Ā;qÇÆɭ᫙\x00\x00᫢aĀ;t᫞᫟䀬;䁀ƀ;fl᫨᫩᫫戁îᅠeĀmx᫱᫶ent»᫩eóɍǧ᫾\x00ᬇĀ;dኻᬂot;橭nôɆƀfryᬐᬔᬗ;쀀\uD835\uDD54oäɔ脀©;sŕᬝr;愗Āaoᬥᬩrr;憵ss;朗Ācuᬲᬷr;쀀\uD835\uDCB8Ābpᬼ᭄Ā;eᭁᭂ櫏;櫑Ā;eᭉᭊ櫐;櫒dot;拯΀delprvw᭠᭬᭷ᮂᮬᯔ᯹arrĀlr᭨᭪;椸;椵ɰ᭲\x00\x00᭵r;拞c;拟arrĀ;p᭿ᮀ憶;椽̀;bcdosᮏᮐᮖᮡᮥᮨ截rcap;橈Āauᮛᮞp;橆p;橊ot;抍r;橅;쀀∪︀Ȁalrv᮵ᮿᯞᯣrrĀ;mᮼᮽ憷;椼yƀevwᯇᯔᯘqɰᯎ\x00\x00ᯒreã᭳uã᭵ee;拎edge;拏en耻¤䂤earrowĀlrᯮ᯳eft»ᮀight»ᮽeäᯝĀciᰁᰇoninôǷnt;戱lcty;挭ঀAHabcdefhijlorstuwz᰸᰻᰿ᱝᱩᱵᲊᲞᲬᲷ᳻᳿ᴍᵻᶑᶫᶻ᷆᷍rò΁ar;楥Ȁglrs᱈ᱍ᱒᱔ger;怠eth;愸òᄳhĀ;vᱚᱛ怐»ऊūᱡᱧarow;椏aã̕Āayᱮᱳron;䄏;䐴ƀ;ao̲ᱼᲄĀgrʿᲁr;懊tseq;橷ƀglmᲑᲔᲘ耻°䂰ta;䎴ptyv;榱ĀirᲣᲨsht;楿;쀀\uD835\uDD21arĀlrᲳᲵ»ࣜ»သʀaegsv᳂͸᳖᳜᳠mƀ;oș᳊᳔ndĀ;ș᳑uit;晦amma;䏝in;拲ƀ;io᳧᳨᳸䃷de脀÷;o᳧ᳰntimes;拇nø᳷cy;䑒cɯᴆ\x00\x00ᴊrn;挞op;挍ʀlptuwᴘᴝᴢᵉᵕlar;䀤f;쀀\uD835\uDD55ʀ;emps̋ᴭᴷᴽᵂqĀ;d͒ᴳot;扑inus;戸lus;戔quare;抡blebarwedgåúnƀadhᄮᵝᵧownarrowóᲃarpoonĀlrᵲᵶefôᲴighôᲶŢᵿᶅkaro÷གɯᶊ\x00\x00ᶎrn;挟op;挌ƀcotᶘᶣᶦĀryᶝᶡ;쀀\uD835\uDCB9;䑕l;槶rok;䄑Ādrᶰᶴot;拱iĀ;fᶺ᠖斿Āah᷀᷃ròЩaòྦangle;榦Āci᷒ᷕy;䑟grarr;柿ऀDacdefglmnopqrstuxḁḉḙḸոḼṉṡṾấắẽỡἪἷὄ὎὚ĀDoḆᴴoôᲉĀcsḎḔute耻é䃩ter;橮ȀaioyḢḧḱḶron;䄛rĀ;cḭḮ扖耻ê䃪lon;払;䑍ot;䄗ĀDrṁṅot;扒;쀀\uD835\uDD22ƀ;rsṐṑṗ檚ave耻è䃨Ā;dṜṝ檖ot;檘Ȁ;ilsṪṫṲṴ檙nters;揧;愓Ā;dṹṺ檕ot;檗ƀapsẅẉẗcr;䄓tyƀ;svẒẓẕ戅et»ẓpĀ1;ẝẤĳạả;怄;怅怃ĀgsẪẬ;䅋p;怂ĀgpẴẸon;䄙f;쀀\uD835\uDD56ƀalsỄỎỒrĀ;sỊị拕l;槣us;橱iƀ;lvỚớở䎵on»ớ;䏵ȀcsuvỪỳἋἣĀioữḱrc»Ḯɩỹ\x00\x00ỻíՈantĀglἂἆtr»ṝess»Ṻƀaeiἒ἖Ἒls;䀽st;扟vĀ;DȵἠD;橸parsl;槥ĀDaἯἳot;打rr;楱ƀcdiἾὁỸr;愯oô͒ĀahὉὋ;䎷耻ð䃰Āmrὓὗl耻ë䃫o;悬ƀcipὡὤὧl;䀡sôծĀeoὬὴctatioîՙnentialåչৡᾒ\x00ᾞ\x00ᾡᾧ\x00\x00ῆῌ\x00ΐ\x00ῦῪ \x00 ⁚llingdotseñṄy;䑄male;晀ƀilrᾭᾳ῁lig;耀ﬃɩᾹ\x00\x00᾽g;耀ﬀig;耀ﬄ;쀀\uD835\uDD23lig;耀ﬁlig;쀀fjƀaltῙ῜ῡt;晭ig;耀ﬂns;斱of;䆒ǰ΅\x00ῳf;쀀\uD835\uDD57ĀakֿῷĀ;vῼ´拔;櫙artint;樍Āao‌⁕Ācs‑⁒α‚‰‸⁅⁈\x00⁐β•‥‧‪‬\x00‮耻½䂽;慓耻¼䂼;慕;慙;慛Ƴ‴\x00‶;慔;慖ʴ‾⁁\x00\x00⁃耻¾䂾;慗;慜5;慘ƶ⁌\x00⁎;慚;慝8;慞l;恄wn;挢cr;쀀\uD835\uDCBBࢀEabcdefgijlnorstv₂₉₟₥₰₴⃰⃵⃺⃿℃ℒℸ̗ℾ⅒↞Ā;lٍ₇;檌ƀcmpₐₕ₝ute;䇵maĀ;dₜ᳚䎳;檆reve;䄟Āiy₪₮rc;䄝;䐳ot;䄡Ȁ;lqsؾق₽⃉ƀ;qsؾٌ⃄lanô٥Ȁ;cdl٥⃒⃥⃕c;檩otĀ;o⃜⃝檀Ā;l⃢⃣檂;檄Ā;e⃪⃭쀀⋛︀s;檔r;쀀\uD835\uDD24Ā;gٳ؛mel;愷cy;䑓Ȁ;Eajٚℌℎℐ;檒;檥;檤ȀEaesℛℝ℩ℴ;扩pĀ;p℣ℤ檊rox»ℤĀ;q℮ℯ檈Ā;q℮ℛim;拧pf;쀀\uD835\uDD58Āci⅃ⅆr;愊mƀ;el٫ⅎ⅐;檎;檐茀>;cdlqr׮ⅠⅪⅮⅳⅹĀciⅥⅧ;檧r;橺ot;拗Par;榕uest;橼ʀadelsↄⅪ←ٖ↛ǰ↉\x00↎proø₞r;楸qĀlqؿ↖lesó₈ií٫Āen↣↭rtneqq;쀀≩︀Å↪ԀAabcefkosy⇄⇇⇱⇵⇺∘∝∯≨≽ròΠȀilmr⇐⇔⇗⇛rsðᒄf»․ilôکĀdr⇠⇤cy;䑊ƀ;cwࣴ⇫⇯ir;楈;憭ar;意irc;䄥ƀalr∁∎∓rtsĀ;u∉∊晥it»∊lip;怦con;抹r;쀀\uD835\uDD25sĀew∣∩arow;椥arow;椦ʀamopr∺∾≃≞≣rr;懿tht;戻kĀlr≉≓eftarrow;憩ightarrow;憪f;쀀\uD835\uDD59bar;怕ƀclt≯≴≸r;쀀\uD835\uDCBDasè⇴rok;䄧Ābp⊂⊇ull;恃hen»ᱛૡ⊣\x00⊪\x00⊸⋅⋎\x00⋕⋳\x00\x00⋸⌢⍧⍢⍿\x00⎆⎪⎴cute耻í䃭ƀ;iyݱ⊰⊵rc耻î䃮;䐸Ācx⊼⊿y;䐵cl耻¡䂡ĀfrΟ⋉;쀀\uD835\uDD26rave耻ì䃬Ȁ;inoܾ⋝⋩⋮Āin⋢⋦nt;樌t;戭fin;槜ta;愩lig;䄳ƀaop⋾⌚⌝ƀcgt⌅⌈⌗r;䄫ƀelpܟ⌏⌓inåގarôܠh;䄱f;抷ed;䆵ʀ;cfotӴ⌬⌱⌽⍁are;愅inĀ;t⌸⌹戞ie;槝doô⌙ʀ;celpݗ⍌⍐⍛⍡al;抺Āgr⍕⍙eróᕣã⍍arhk;樗rod;樼Ȁcgpt⍯⍲⍶⍻y;䑑on;䄯f;쀀\uD835\uDD5Aa;䎹uest耻¿䂿Āci⎊⎏r;쀀\uD835\uDCBEnʀ;EdsvӴ⎛⎝⎡ӳ;拹ot;拵Ā;v⎦⎧拴;拳Ā;iݷ⎮lde;䄩ǫ⎸\x00⎼cy;䑖l耻ï䃯̀cfmosu⏌⏗⏜⏡⏧⏵Āiy⏑⏕rc;䄵;䐹r;쀀\uD835\uDD27ath;䈷pf;쀀\uD835\uDD5Bǣ⏬\x00⏱r;쀀\uD835\uDCBFrcy;䑘kcy;䑔Ѐacfghjos␋␖␢␧␭␱␵␻ppaĀ;v␓␔䎺;䏰Āey␛␠dil;䄷;䐺r;쀀\uD835\uDD28reen;䄸cy;䑅cy;䑜pf;쀀\uD835\uDD5Ccr;쀀\uD835\uDCC0஀ABEHabcdefghjlmnoprstuv⑰⒁⒆⒍⒑┎┽╚▀♎♞♥♹♽⚚⚲⛘❝❨➋⟀⠁⠒ƀart⑷⑺⑼rò৆òΕail;椛arr;椎Ā;gঔ⒋;檋ar;楢ॣ⒥\x00⒪\x00⒱\x00\x00\x00\x00\x00⒵Ⓔ\x00ⓆⓈⓍ\x00⓹ute;䄺mptyv;榴raîࡌbda;䎻gƀ;dlࢎⓁⓃ;榑åࢎ;檅uo耻«䂫rЀ;bfhlpst࢙ⓞⓦⓩ⓫⓮⓱⓵Ā;f࢝ⓣs;椟s;椝ë≒p;憫l;椹im;楳l;憢ƀ;ae⓿─┄檫il;椙Ā;s┉┊檭;쀀⪭︀ƀabr┕┙┝rr;椌rk;杲Āak┢┬cĀek┨┪;䁻;䁛Āes┱┳;榋lĀdu┹┻;榏;榍Ȁaeuy╆╋╖╘ron;䄾Ādi═╔il;䄼ìࢰâ┩;䐻Ȁcqrs╣╦╭╽a;椶uoĀ;rนᝆĀdu╲╷har;楧shar;楋h;憲ʀ;fgqs▋▌উ◳◿扤tʀahlrt▘▤▷◂◨rrowĀ;t࢙□aé⓶arpoonĀdu▯▴own»њp»०eftarrows;懇ightƀahs◍◖◞rrowĀ;sࣴࢧarpoonó྘quigarro÷⇰hreetimes;拋ƀ;qs▋ও◺lanôবʀ;cdgsব☊☍☝☨c;檨otĀ;o☔☕橿Ā;r☚☛檁;檃Ā;e☢☥쀀⋚︀s;檓ʀadegs☳☹☽♉♋pproøⓆot;拖qĀgq♃♅ôউgtò⒌ôছiíলƀilr♕࣡♚sht;楼;쀀\uD835\uDD29Ā;Eজ♣;檑š♩♶rĀdu▲♮Ā;l॥♳;楪lk;斄cy;䑙ʀ;achtੈ⚈⚋⚑⚖rò◁orneòᴈard;楫ri;旺Āio⚟⚤dot;䅀ustĀ;a⚬⚭掰che»⚭ȀEaes⚻⚽⛉⛔;扨pĀ;p⛃⛄檉rox»⛄Ā;q⛎⛏檇Ā;q⛎⚻im;拦Ѐabnoptwz⛩⛴⛷✚✯❁❇❐Ānr⛮⛱g;柬r;懽rëࣁgƀlmr⛿✍✔eftĀar০✇ightá৲apsto;柼ightá৽parrowĀlr✥✩efô⓭ight;憬ƀafl✶✹✽r;榅;쀀\uD835\uDD5Dus;樭imes;樴š❋❏st;戗áፎƀ;ef❗❘᠀旊nge»❘arĀ;l❤❥䀨t;榓ʀachmt❳❶❼➅➇ròࢨorneòᶌarĀ;d྘➃;業;怎ri;抿̀achiqt➘➝ੀ➢➮➻quo;怹r;쀀\uD835\uDCC1mƀ;egল➪➬;檍;檏Ābu┪➳oĀ;rฟ➹;怚rok;䅂萀<;cdhilqrࠫ⟒☹⟜⟠⟥⟪⟰Āci⟗⟙;檦r;橹reå◲mes;拉arr;楶uest;橻ĀPi⟵⟹ar;榖ƀ;ef⠀भ᠛旃rĀdu⠇⠍shar;楊har;楦Āen⠗⠡rtneqq;쀀≨︀Å⠞܀Dacdefhilnopsu⡀⡅⢂⢎⢓⢠⢥⢨⣚⣢⣤ઃ⣳⤂Dot;戺Ȁclpr⡎⡒⡣⡽r耻¯䂯Āet⡗⡙;時Ā;e⡞⡟朠se»⡟Ā;sျ⡨toȀ;dluျ⡳⡷⡻owîҌefôएðᏑker;斮Āoy⢇⢌mma;権;䐼ash;怔asuredangle»ᘦr;쀀\uD835\uDD2Ao;愧ƀcdn⢯⢴⣉ro耻µ䂵Ȁ;acdᑤ⢽⣀⣄sôᚧir;櫰ot肻·Ƶusƀ;bd⣒ᤃ⣓戒Ā;uᴼ⣘;横ţ⣞⣡p;櫛ò−ðઁĀdp⣩⣮els;抧f;쀀\uD835\uDD5EĀct⣸⣽r;쀀\uD835\uDCC2pos»ᖝƀ;lm⤉⤊⤍䎼timap;抸ఀGLRVabcdefghijlmoprstuvw⥂⥓⥾⦉⦘⧚⧩⨕⨚⩘⩝⪃⪕⪤⪨⬄⬇⭄⭿⮮ⰴⱧⱼ⳩Āgt⥇⥋;쀀⋙̸Ā;v⥐௏쀀≫⃒ƀelt⥚⥲⥶ftĀar⥡⥧rrow;懍ightarrow;懎;쀀⋘̸Ā;v⥻ే쀀≪⃒ightarrow;懏ĀDd⦎⦓ash;抯ash;抮ʀbcnpt⦣⦧⦬⦱⧌la»˞ute;䅄g;쀀∠⃒ʀ;Eiop඄⦼⧀⧅⧈;쀀⩰̸d;쀀≋̸s;䅉roø඄urĀ;a⧓⧔普lĀ;s⧓ସǳ⧟\x00⧣p肻 ଷmpĀ;e௹ఀʀaeouy⧴⧾⨃⨐⨓ǰ⧹\x00⧻;橃on;䅈dil;䅆ngĀ;dൾ⨊ot;쀀⩭̸p;橂;䐽ash;怓΀;Aadqsxஒ⨩⨭⨻⩁⩅⩐rr;懗rĀhr⨳⨶k;椤Ā;oᏲᏰot;쀀≐̸uiöୣĀei⩊⩎ar;椨í஘istĀ;s஠டr;쀀\uD835\uDD2BȀEest௅⩦⩹⩼ƀ;qs஼⩭௡ƀ;qs஼௅⩴lanô௢ií௪Ā;rஶ⪁»ஷƀAap⪊⪍⪑rò⥱rr;憮ar;櫲ƀ;svྍ⪜ྌĀ;d⪡⪢拼;拺cy;䑚΀AEadest⪷⪺⪾⫂⫅⫶⫹rò⥦;쀀≦̸rr;憚r;急Ȁ;fqs఻⫎⫣⫯tĀar⫔⫙rro÷⫁ightarro÷⪐ƀ;qs఻⪺⫪lanôౕĀ;sౕ⫴»శiíౝĀ;rవ⫾iĀ;eచథiäඐĀpt⬌⬑f;쀀\uD835\uDD5F膀¬;in⬙⬚⬶䂬nȀ;Edvஉ⬤⬨⬮;쀀⋹̸ot;쀀⋵̸ǡஉ⬳⬵;拷;拶iĀ;vಸ⬼ǡಸ⭁⭃;拾;拽ƀaor⭋⭣⭩rȀ;ast୻⭕⭚⭟lleì୻l;쀀⫽⃥;쀀∂̸lint;樔ƀ;ceಒ⭰⭳uåಥĀ;cಘ⭸Ā;eಒ⭽ñಘȀAait⮈⮋⮝⮧rò⦈rrƀ;cw⮔⮕⮙憛;쀀⤳̸;쀀↝̸ghtarrow»⮕riĀ;eೋೖ΀chimpqu⮽⯍⯙⬄୸⯤⯯Ȁ;cerല⯆ഷ⯉uå൅;쀀\uD835\uDCC3ortɭ⬅\x00\x00⯖ará⭖mĀ;e൮⯟Ā;q൴൳suĀbp⯫⯭å೸åഋƀbcp⯶ⰑⰙȀ;Ees⯿ⰀഢⰄ抄;쀀⫅̸etĀ;eഛⰋqĀ;qണⰀcĀ;eലⰗñസȀ;EesⰢⰣൟⰧ抅;쀀⫆̸etĀ;e൘ⰮqĀ;qൠⰣȀgilrⰽⰿⱅⱇìௗlde耻ñ䃱çృiangleĀlrⱒⱜeftĀ;eచⱚñదightĀ;eೋⱥñ೗Ā;mⱬⱭ䎽ƀ;esⱴⱵⱹ䀣ro;愖p;怇ҀDHadgilrsⲏⲔⲙⲞⲣⲰⲶⳓⳣash;抭arr;椄p;쀀≍⃒ash;抬ĀetⲨⲬ;쀀≥⃒;쀀>⃒nfin;槞ƀAetⲽⳁⳅrr;椂;쀀≤⃒Ā;rⳊⳍ쀀<⃒ie;쀀⊴⃒ĀAtⳘⳜrr;椃rie;쀀⊵⃒im;쀀∼⃒ƀAan⳰⳴ⴂrr;懖rĀhr⳺⳽k;椣Ā;oᏧᏥear;椧ቓ᪕\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00ⴭ\x00ⴸⵈⵠⵥ⵲ⶄᬇ\x00\x00ⶍⶫ\x00ⷈⷎ\x00ⷜ⸙⸫⸾⹃Ācsⴱ᪗ute耻ó䃳ĀiyⴼⵅrĀ;c᪞ⵂ耻ô䃴;䐾ʀabios᪠ⵒⵗǈⵚlac;䅑v;樸old;榼lig;䅓Ācr⵩⵭ir;榿;쀀\uD835\uDD2Cͯ⵹\x00\x00⵼\x00ⶂn;䋛ave耻ò䃲;槁Ābmⶈ෴ar;榵Ȁacitⶕ⶘ⶥⶨrò᪀Āir⶝ⶠr;榾oss;榻nå๒;槀ƀaeiⶱⶵⶹcr;䅍ga;䏉ƀcdnⷀⷅǍron;䎿;榶pf;쀀\uD835\uDD60ƀaelⷔ⷗ǒr;榷rp;榹΀;adiosvⷪⷫⷮ⸈⸍⸐⸖戨rò᪆Ȁ;efmⷷⷸ⸂⸅橝rĀ;oⷾⷿ愴f»ⷿ耻ª䂪耻º䂺gof;抶r;橖lope;橗;橛ƀclo⸟⸡⸧ò⸁ash耻ø䃸l;折iŬⸯ⸴de耻õ䃵esĀ;aǛ⸺s;樶ml耻ö䃶bar;挽ૡ⹞\x00⹽\x00⺀⺝\x00⺢⺹\x00\x00⻋ຜ\x00⼓\x00\x00⼫⾼\x00⿈rȀ;astЃ⹧⹲຅脀¶;l⹭⹮䂶leìЃɩ⹸\x00\x00⹻m;櫳;櫽y;䐿rʀcimpt⺋⺏⺓ᡥ⺗nt;䀥od;䀮il;怰enk;怱r;쀀\uD835\uDD2Dƀimo⺨⺰⺴Ā;v⺭⺮䏆;䏕maô੶ne;明ƀ;tv⺿⻀⻈䏀chfork»´;䏖Āau⻏⻟nĀck⻕⻝kĀ;h⇴⻛;愎ö⇴sҀ;abcdemst⻳⻴ᤈ⻹⻽⼄⼆⼊⼎䀫cir;樣ir;樢Āouᵀ⼂;樥;橲n肻±ຝim;樦wo;樧ƀipu⼙⼠⼥ntint;樕f;쀀\uD835\uDD61nd耻£䂣Ԁ;Eaceinosu່⼿⽁⽄⽇⾁⾉⾒⽾⾶;檳p;檷uå໙Ā;c໎⽌̀;acens່⽙⽟⽦⽨⽾pproø⽃urlyeñ໙ñ໎ƀaes⽯⽶⽺pprox;檹qq;檵im;拨iíໟmeĀ;s⾈ຮ怲ƀEas⽸⾐⽺ð⽵ƀdfp໬⾙⾯ƀals⾠⾥⾪lar;挮ine;挒urf;挓Ā;t໻⾴ï໻rel;抰Āci⿀⿅r;쀀\uD835\uDCC5;䏈ncsp;怈̀fiopsu⿚⋢⿟⿥⿫⿱r;쀀\uD835\uDD2Epf;쀀\uD835\uDD62rime;恗cr;쀀\uD835\uDCC6ƀaeo⿸〉〓tĀei⿾々rnionóڰnt;樖stĀ;e【】䀿ñἙô༔઀ABHabcdefhilmnoprstux぀けさすムㄎㄫㅇㅢㅲㆎ㈆㈕㈤㈩㉘㉮㉲㊐㊰㊷ƀartぇおがròႳòϝail;検aròᱥar;楤΀cdenqrtとふへみわゔヌĀeuねぱ;쀀∽̱te;䅕iãᅮmptyv;榳gȀ;del࿑らるろ;榒;榥å࿑uo耻»䂻rր;abcfhlpstw࿜ガクシスゼゾダッデナp;極Ā;f࿠ゴs;椠;椳s;椞ë≝ð✮l;楅im;楴l;憣;憝Āaiパフil;椚oĀ;nホボ戶aló༞ƀabrョリヮrò៥rk;杳ĀakンヽcĀekヹ・;䁽;䁝Āes㄂㄄;榌lĀduㄊㄌ;榎;榐Ȁaeuyㄗㄜㄧㄩron;䅙Ādiㄡㄥil;䅗ì࿲âヺ;䑀Ȁclqsㄴㄷㄽㅄa;椷dhar;楩uoĀ;rȎȍh;憳ƀacgㅎㅟངlȀ;ipsླྀㅘㅛႜnåႻarôྩt;断ƀilrㅩဣㅮsht;楽;쀀\uD835\uDD2FĀaoㅷㆆrĀduㅽㅿ»ѻĀ;l႑ㆄ;楬Ā;vㆋㆌ䏁;䏱ƀgns㆕ㇹㇼht̀ahlrstㆤㆰ㇂㇘㇤㇮rrowĀ;t࿜ㆭaéトarpoonĀduㆻㆿowîㅾp»႒eftĀah㇊㇐rrowó࿪arpoonóՑightarrows;應quigarro÷ニhreetimes;拌g;䋚ingdotseñἲƀahm㈍㈐㈓rò࿪aòՑ;怏oustĀ;a㈞㈟掱che»㈟mid;櫮Ȁabpt㈲㈽㉀㉒Ānr㈷㈺g;柭r;懾rëဃƀafl㉇㉊㉎r;榆;쀀\uD835\uDD63us;樮imes;樵Āap㉝㉧rĀ;g㉣㉤䀩t;榔olint;樒arò㇣Ȁachq㉻㊀Ⴜ㊅quo;怺r;쀀\uD835\uDCC7Ābu・㊊oĀ;rȔȓƀhir㊗㊛㊠reåㇸmes;拊iȀ;efl㊪ၙᠡ㊫方tri;槎luhar;楨;愞ൡ㋕㋛㋟㌬㌸㍱\x00㍺㎤\x00\x00㏬㏰\x00㐨㑈㑚㒭㒱㓊㓱\x00㘖\x00\x00㘳cute;䅛quï➺Ԁ;Eaceinpsyᇭ㋳㋵㋿㌂㌋㌏㌟㌦㌩;檴ǰ㋺\x00㋼;檸on;䅡uåᇾĀ;dᇳ㌇il;䅟rc;䅝ƀEas㌖㌘㌛;檶p;檺im;择olint;樓iíሄ;䑁otƀ;be㌴ᵇ㌵担;橦΀Aacmstx㍆㍊㍗㍛㍞㍣㍭rr;懘rĀhr㍐㍒ë∨Ā;oਸ਼਴t耻§䂧i;䀻war;椩mĀin㍩ðnuóñt;朶rĀ;o㍶⁕쀀\uD835\uDD30Ȁacoy㎂㎆㎑㎠rp;景Āhy㎋㎏cy;䑉;䑈rtɭ㎙\x00\x00㎜iäᑤaraì⹯耻­䂭Āgm㎨㎴maƀ;fv㎱㎲㎲䏃;䏂Ѐ;deglnprካ㏅㏉㏎㏖㏞㏡㏦ot;橪Ā;q኱ኰĀ;E㏓㏔檞;檠Ā;E㏛㏜檝;檟e;扆lus;樤arr;楲aròᄽȀaeit㏸㐈㐏㐗Āls㏽㐄lsetmé㍪hp;樳parsl;槤Ādlᑣ㐔e;挣Ā;e㐜㐝檪Ā;s㐢㐣檬;쀀⪬︀ƀflp㐮㐳㑂tcy;䑌Ā;b㐸㐹䀯Ā;a㐾㐿槄r;挿f;쀀\uD835\uDD64aĀdr㑍ЂesĀ;u㑔㑕晠it»㑕ƀcsu㑠㑹㒟Āau㑥㑯pĀ;sᆈ㑫;쀀⊓︀pĀ;sᆴ㑵;쀀⊔︀uĀbp㑿㒏ƀ;esᆗᆜ㒆etĀ;eᆗ㒍ñᆝƀ;esᆨᆭ㒖etĀ;eᆨ㒝ñᆮƀ;afᅻ㒦ְrť㒫ֱ»ᅼaròᅈȀcemt㒹㒾㓂㓅r;쀀\uD835\uDCC8tmîñiì㐕aræᆾĀar㓎㓕rĀ;f㓔ឿ昆Āan㓚㓭ightĀep㓣㓪psiloîỠhé⺯s»⡒ʀbcmnp㓻㕞ሉ㖋㖎Ҁ;Edemnprs㔎㔏㔑㔕㔞㔣㔬㔱㔶抂;櫅ot;檽Ā;dᇚ㔚ot;櫃ult;櫁ĀEe㔨㔪;櫋;把lus;檿arr;楹ƀeiu㔽㕒㕕tƀ;en㔎㕅㕋qĀ;qᇚ㔏eqĀ;q㔫㔨m;櫇Ābp㕚㕜;櫕;櫓c̀;acensᇭ㕬㕲㕹㕻㌦pproø㋺urlyeñᇾñᇳƀaes㖂㖈㌛pproø㌚qñ㌗g;晪ڀ123;Edehlmnps㖩㖬㖯ሜ㖲㖴㗀㗉㗕㗚㗟㗨㗭耻¹䂹耻²䂲耻³䂳;櫆Āos㖹㖼t;檾ub;櫘Ā;dሢ㗅ot;櫄sĀou㗏㗒l;柉b;櫗arr;楻ult;櫂ĀEe㗤㗦;櫌;抋lus;櫀ƀeiu㗴㘉㘌tƀ;enሜ㗼㘂qĀ;qሢ㖲eqĀ;q㗧㗤m;櫈Ābp㘑㘓;櫔;櫖ƀAan㘜㘠㘭rr;懙rĀhr㘦㘨ë∮Ā;oਫ਩war;椪lig耻ß䃟௡㙑㙝㙠ዎ㙳㙹\x00㙾㛂\x00\x00\x00\x00\x00㛛㜃\x00㜉㝬\x00\x00\x00㞇ɲ㙖\x00\x00㙛get;挖;䏄rë๟ƀaey㙦㙫㙰ron;䅥dil;䅣;䑂lrec;挕r;쀀\uD835\uDD31Ȁeiko㚆㚝㚵㚼ǲ㚋\x00㚑eĀ4fኄኁaƀ;sv㚘㚙㚛䎸ym;䏑Ācn㚢㚲kĀas㚨㚮pproø዁im»ኬsðኞĀas㚺㚮ð዁rn耻þ䃾Ǭ̟㛆⋧es膀×;bd㛏㛐㛘䃗Ā;aᤏ㛕r;樱;樰ƀeps㛡㛣㜀á⩍Ȁ;bcf҆㛬㛰㛴ot;挶ir;櫱Ā;o㛹㛼쀀\uD835\uDD65rk;櫚á㍢rime;怴ƀaip㜏㜒㝤dåቈ΀adempst㜡㝍㝀㝑㝗㝜㝟ngleʀ;dlqr㜰㜱㜶㝀㝂斵own»ᶻeftĀ;e⠀㜾ñम;扜ightĀ;e㊪㝋ñၚot;旬inus;樺lus;樹b;槍ime;樻ezium;揢ƀcht㝲㝽㞁Āry㝷㝻;쀀\uD835\uDCC9;䑆cy;䑛rok;䅧Āio㞋㞎xô᝷headĀlr㞗㞠eftarro÷ࡏightarrow»ཝऀAHabcdfghlmoprstuw㟐㟓㟗㟤㟰㟼㠎㠜㠣㠴㡑㡝㡫㢩㣌㣒㣪㣶ròϭar;楣Ācr㟜㟢ute耻ú䃺òᅐrǣ㟪\x00㟭y;䑞ve;䅭Āiy㟵㟺rc耻û䃻;䑃ƀabh㠃㠆㠋ròᎭlac;䅱aòᏃĀir㠓㠘sht;楾;쀀\uD835\uDD32rave耻ù䃹š㠧㠱rĀlr㠬㠮»ॗ»ႃlk;斀Āct㠹㡍ɯ㠿\x00\x00㡊rnĀ;e㡅㡆挜r»㡆op;挏ri;旸Āal㡖㡚cr;䅫肻¨͉Āgp㡢㡦on;䅳f;쀀\uD835\uDD66̀adhlsuᅋ㡸㡽፲㢑㢠ownáᎳarpoonĀlr㢈㢌efô㠭ighô㠯iƀ;hl㢙㢚㢜䏅»ᏺon»㢚parrows;懈ƀcit㢰㣄㣈ɯ㢶\x00\x00㣁rnĀ;e㢼㢽挝r»㢽op;挎ng;䅯ri;旹cr;쀀\uD835\uDCCAƀdir㣙㣝㣢ot;拰lde;䅩iĀ;f㜰㣨»᠓Āam㣯㣲rò㢨l耻ü䃼angle;榧ހABDacdeflnoprsz㤜㤟㤩㤭㦵㦸㦽㧟㧤㧨㧳㧹㧽㨁㨠ròϷarĀ;v㤦㤧櫨;櫩asèϡĀnr㤲㤷grt;榜΀eknprst㓣㥆㥋㥒㥝㥤㦖appá␕othinçẖƀhir㓫⻈㥙opô⾵Ā;hᎷ㥢ïㆍĀiu㥩㥭gmá㎳Ābp㥲㦄setneqĀ;q㥽㦀쀀⊊︀;쀀⫋︀setneqĀ;q㦏㦒쀀⊋︀;쀀⫌︀Āhr㦛㦟etá㚜iangleĀlr㦪㦯eft»थight»ၑy;䐲ash»ံƀelr㧄㧒㧗ƀ;beⷪ㧋㧏ar;抻q;扚lip;拮Ābt㧜ᑨaòᑩr;쀀\uD835\uDD33tré㦮suĀbp㧯㧱»ജ»൙pf;쀀\uD835\uDD67roð໻tré㦴Ācu㨆㨋r;쀀\uD835\uDCCBĀbp㨐㨘nĀEe㦀㨖»㥾nĀEe㦒㨞»㦐igzag;榚΀cefoprs㨶㨻㩖㩛㩔㩡㩪irc;䅵Ādi㩀㩑Ābg㩅㩉ar;機eĀ;qᗺ㩏;扙erp;愘r;쀀\uD835\uDD34pf;쀀\uD835\uDD68Ā;eᑹ㩦atèᑹcr;쀀\uD835\uDCCCૣណ㪇\x00㪋\x00㪐㪛\x00\x00㪝㪨㪫㪯\x00\x00㫃㫎\x00㫘ៜ៟tré៑r;쀀\uD835\uDD35ĀAa㪔㪗ròσrò৶;䎾ĀAa㪡㪤ròθrò৫að✓is;拻ƀdptឤ㪵㪾Āfl㪺ឩ;쀀\uD835\uDD69imåឲĀAa㫇㫊ròώròਁĀcq㫒ីr;쀀\uD835\uDCCDĀpt៖㫜ré។Ѐacefiosu㫰㫽㬈㬌㬑㬕㬛㬡cĀuy㫶㫻te耻ý䃽;䑏Āiy㬂㬆rc;䅷;䑋n耻¥䂥r;쀀\uD835\uDD36cy;䑗pf;쀀\uD835\uDD6Acr;쀀\uD835\uDCCEĀcm㬦㬩y;䑎l耻ÿ䃿Ԁacdefhiosw㭂㭈㭔㭘㭤㭩㭭㭴㭺㮀cute;䅺Āay㭍㭒ron;䅾;䐷ot;䅼Āet㭝㭡træᕟa;䎶r;쀀\uD835\uDD37cy;䐶grarr;懝pf;쀀\uD835\uDD6Bcr;쀀\uD835\uDCCFĀjn㮅㮇;怍j;怌".split("").map((c) => c.charCodeAt(0)));
 
-// ../comical/node_modules/.bun/entities@4.5.0/node_modules/entities/lib/esm/generated/decode-data-xml.js
+// ../../../Dev/comicals/comical/node_modules/.bun/entities@4.5.0/node_modules/entities/lib/esm/generated/decode-data-xml.js
 var decode_data_xml_default = new Uint16Array("Ȁaglq\t\x15\x18\x1Bɭ\x0F\x00\x00\x12p;䀦os;䀧t;䀾t;䀼uot;䀢".split("").map((c) => c.charCodeAt(0)));
 
-// ../comical/node_modules/.bun/entities@4.5.0/node_modules/entities/lib/esm/decode_codepoint.js
+// ../../../Dev/comicals/comical/node_modules/.bun/entities@4.5.0/node_modules/entities/lib/esm/decode_codepoint.js
 var _a;
 var decodeMap = new Map([
   [0, 65533],
@@ -4833,7 +4852,7 @@ function replaceCodePoint(codePoint) {
   }
   return (_a2 = decodeMap.get(codePoint)) !== null && _a2 !== undefined ? _a2 : codePoint;
 }
-// ../comical/node_modules/.bun/entities@4.5.0/node_modules/entities/lib/esm/decode.js
+// ../../../Dev/comicals/comical/node_modules/.bun/entities@4.5.0/node_modules/entities/lib/esm/decode.js
 var CharCodes;
 (function(CharCodes2) {
   CharCodes2[CharCodes2["NUM"] = 35] = "NUM";
@@ -5108,7 +5127,7 @@ function determineBranch(decodeTree, current, nodeIdx, char) {
 var htmlDecoder = getDecoder(decode_data_html_default);
 var xmlDecoder = getDecoder(decode_data_xml_default);
 
-// ../comical/node_modules/.bun/entities@4.5.0/node_modules/entities/lib/esm/escape.js
+// ../../../Dev/comicals/comical/node_modules/.bun/entities@4.5.0/node_modules/entities/lib/esm/escape.js
 var xmlReplacer = /["&'<>$\x80-\uFFFF]/g;
 var xmlCodeMap = new Map([
   [34, "&quot;"],
@@ -5163,7 +5182,7 @@ var escapeText = getEscaper(/[&<>\u00A0]/g, new Map([
   [62, "&gt;"],
   [160, "&nbsp;"]
 ]));
-// ../comical/node_modules/.bun/entities@4.5.0/node_modules/entities/lib/esm/index.js
+// ../../../Dev/comicals/comical/node_modules/.bun/entities@4.5.0/node_modules/entities/lib/esm/index.js
 var EntityLevel;
 (function(EntityLevel2) {
   EntityLevel2[EntityLevel2["XML"] = 0] = "XML";
@@ -5178,7 +5197,7 @@ var EncodingMode;
   EncodingMode2[EncodingMode2["Text"] = 4] = "Text";
 })(EncodingMode || (EncodingMode = {}));
 
-// ../comical/node_modules/.bun/dom-serializer@2.0.0/node_modules/dom-serializer/lib/esm/foreignNames.js
+// ../../../Dev/comicals/comical/node_modules/.bun/dom-serializer@2.0.0/node_modules/dom-serializer/lib/esm/foreignNames.js
 var elementNames = new Map([
   "altGlyph",
   "altGlyphDef",
@@ -5280,7 +5299,7 @@ var attributeNames = new Map([
   "zoomAndPan"
 ].map((val) => [val.toLowerCase(), val]));
 
-// ../comical/node_modules/.bun/dom-serializer@2.0.0/node_modules/dom-serializer/lib/esm/index.js
+// ../../../Dev/comicals/comical/node_modules/.bun/dom-serializer@2.0.0/node_modules/dom-serializer/lib/esm/index.js
 var unencodedElements = new Set([
   "style",
   "script",
@@ -5421,7 +5440,7 @@ function renderComment(elem) {
   return `<!--${elem.data}-->`;
 }
 
-// ../comical/node_modules/.bun/domutils@3.2.2/node_modules/domutils/lib/esm/stringify.js
+// ../../../Dev/comicals/comical/node_modules/.bun/domutils@3.2.2/node_modules/domutils/lib/esm/stringify.js
 function getOuterHTML(node2, options) {
   return esm_default(node2, options);
 }
@@ -5460,7 +5479,7 @@ function innerText(node2) {
     return node2.data;
   return "";
 }
-// ../comical/node_modules/.bun/domutils@3.2.2/node_modules/domutils/lib/esm/traversal.js
+// ../../../Dev/comicals/comical/node_modules/.bun/domutils@3.2.2/node_modules/domutils/lib/esm/traversal.js
 function getChildren(elem) {
   return hasChildren(elem) ? elem.children : [];
 }
@@ -5505,7 +5524,7 @@ function prevElementSibling(elem) {
     ({ prev } = prev);
   return prev;
 }
-// ../comical/node_modules/.bun/domutils@3.2.2/node_modules/domutils/lib/esm/manipulation.js
+// ../../../Dev/comicals/comical/node_modules/.bun/domutils@3.2.2/node_modules/domutils/lib/esm/manipulation.js
 function removeElement(elem) {
   if (elem.prev)
     elem.prev.next = elem.next;
@@ -5595,7 +5614,7 @@ function prepend(elem, prev) {
   prev.next = elem;
   elem.prev = prev;
 }
-// ../comical/node_modules/.bun/domutils@3.2.2/node_modules/domutils/lib/esm/querying.js
+// ../../../Dev/comicals/comical/node_modules/.bun/domutils@3.2.2/node_modules/domutils/lib/esm/querying.js
 function filter(test, node2, recurse = true, limit = Infinity) {
   return find(test, Array.isArray(node2) ? node2 : [node2], recurse, limit);
 }
@@ -5667,7 +5686,7 @@ function findAll(test, nodes) {
     }
   }
 }
-// ../comical/node_modules/.bun/domutils@3.2.2/node_modules/domutils/lib/esm/legacy.js
+// ../../../Dev/comicals/comical/node_modules/.bun/domutils@3.2.2/node_modules/domutils/lib/esm/legacy.js
 var Checks = {
   tag_name(name) {
     if (typeof name === "function") {
@@ -5728,7 +5747,7 @@ function getElementsByClassName(className, nodes, recurse = true, limit = Infini
 function getElementsByTagType(type, nodes, recurse = true, limit = Infinity) {
   return filter(Checks["tag_type"](type), nodes, recurse, limit);
 }
-// ../comical/node_modules/.bun/domutils@3.2.2/node_modules/domutils/lib/esm/helpers.js
+// ../../../Dev/comicals/comical/node_modules/.bun/domutils@3.2.2/node_modules/domutils/lib/esm/helpers.js
 function removeSubsets(nodes) {
   let idx = nodes.length;
   while (--idx >= 0) {
@@ -5806,7 +5825,7 @@ function uniqueSort(nodes) {
   });
   return nodes;
 }
-// ../comical/node_modules/.bun/domutils@3.2.2/node_modules/domutils/lib/esm/feeds.js
+// ../../../Dev/comicals/comical/node_modules/.bun/domutils@3.2.2/node_modules/domutils/lib/esm/feeds.js
 function getFeed(doc) {
   const feedRoot = getOneElement(isValidFeed, doc);
   return !feedRoot ? null : feedRoot.name === "feed" ? getAtomFeed(feedRoot) : getRssFeed(feedRoot);
@@ -5928,7 +5947,7 @@ function addConditionally(obj, prop, tagName, where, recurse = false) {
 function isValidFeed(value) {
   return value === "rss" || value === "feed" || value === "rdf:RDF";
 }
-// ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/options.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/options.js
 var defaultOpts2 = {
   _useHtmlParser2: false
 };
@@ -5953,7 +5972,7 @@ function flattenOptions(options, baseOptions) {
   return opts;
 }
 
-// ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/static.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/static.js
 function render2(that, dom, options) {
   if (!that)
     return "";
@@ -6040,7 +6059,7 @@ function isArrayLike(item) {
   }
   return true;
 }
-// ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/api/attributes.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/api/attributes.js
 var exports_attributes = {};
 __export(exports_attributes, {
   val: () => val,
@@ -6054,7 +6073,7 @@ __export(exports_attributes, {
   addClass: () => addClass
 });
 
-// ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/utils.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/utils.js
 function isCheerio(maybeCheerio) {
   return maybeCheerio.cheerio != null;
 }
@@ -6086,7 +6105,7 @@ function isHtml(str) {
   return (tagChar >= CharacterCodes.LowerA && tagChar <= CharacterCodes.LowerZ || tagChar >= CharacterCodes.UpperA && tagChar <= CharacterCodes.UpperZ || tagChar === CharacterCodes.Exclamation) && str.includes(">", tagStart + 2);
 }
 
-// ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/api/attributes.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/api/attributes.js
 var hasOwn = Object.prototype.hasOwnProperty;
 var rspace = /\s+/;
 var dataAttrPrefix = "data-";
@@ -6460,7 +6479,7 @@ function toggleClass(value, stateVal) {
   return this;
 }
 
-// ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/api/traversing.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/api/traversing.js
 var exports_traversing = {};
 __export(exports_traversing, {
   toArray: () => toArray,
@@ -6497,7 +6516,7 @@ __export(exports_traversing, {
   _findBySelector: () => _findBySelector
 });
 
-// ../comical/node_modules/.bun/css-what@6.2.2/node_modules/css-what/lib/es/types.js
+// ../../../Dev/comicals/comical/node_modules/.bun/css-what@6.2.2/node_modules/css-what/lib/es/types.js
 var SelectorType;
 (function(SelectorType2) {
   SelectorType2["Attribute"] = "attribute";
@@ -6523,7 +6542,7 @@ var AttributeAction;
   AttributeAction2["Not"] = "not";
   AttributeAction2["Start"] = "start";
 })(AttributeAction || (AttributeAction = {}));
-// ../comical/node_modules/.bun/css-what@6.2.2/node_modules/css-what/lib/es/parse.js
+// ../../../Dev/comicals/comical/node_modules/.bun/css-what@6.2.2/node_modules/css-what/lib/es/parse.js
 var reName = /^[^\\#]?(?:\\(?:[\da-f]{1,6}\s?|.)|[\w\-\u00b0-\uFFFF])+/;
 var reEscape = /\\([\da-f]{1,6}\s?|(\s)|.)/gi;
 var actionTypes = new Map([
@@ -6859,13 +6878,13 @@ function parseSelector(subselects, selector, selectorIndex) {
   finalizeSubselector();
   return selectorIndex;
 }
-// ../comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/index.js
+// ../../../Dev/comicals/comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/index.js
 var import_boolbase6 = __toESM(require_boolbase(), 1);
 
-// ../comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/compile.js
+// ../../../Dev/comicals/comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/compile.js
 var import_boolbase5 = __toESM(require_boolbase(), 1);
 
-// ../comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/sort.js
+// ../../../Dev/comicals/comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/sort.js
 var procedure = new Map([
   [SelectorType.Universal, 50],
   [SelectorType.Tag, 30],
@@ -6926,7 +6945,7 @@ function getProcedure(token) {
   return proc;
 }
 
-// ../comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/attributes.js
+// ../../../Dev/comicals/comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/attributes.js
 var import_boolbase = __toESM(require_boolbase(), 1);
 var reChars = /[-[\]{}()*+?.,\\^$|#\s]/g;
 function escapeRegex(value) {
@@ -7104,7 +7123,7 @@ var attributeRules = {
   }
 };
 
-// ../comical/node_modules/.bun/nth-check@2.1.1/node_modules/nth-check/lib/esm/parse.js
+// ../../../Dev/comicals/comical/node_modules/.bun/nth-check@2.1.1/node_modules/nth-check/lib/esm/parse.js
 var whitespace = new Set([9, 10, 12, 13, 32]);
 var ZERO = 48;
 var NINE = 57;
@@ -7161,7 +7180,7 @@ function parse2(formula) {
   }
 }
 
-// ../comical/node_modules/.bun/nth-check@2.1.1/node_modules/nth-check/lib/esm/compile.js
+// ../../../Dev/comicals/comical/node_modules/.bun/nth-check@2.1.1/node_modules/nth-check/lib/esm/compile.js
 var import_boolbase2 = __toESM(require_boolbase(), 1);
 function compile(parsed) {
   const a = parsed[0];
@@ -7179,12 +7198,12 @@ function compile(parsed) {
   return a > 1 ? (index) => index >= b && index % absA === bMod : (index) => index <= b && index % absA === bMod;
 }
 
-// ../comical/node_modules/.bun/nth-check@2.1.1/node_modules/nth-check/lib/esm/index.js
+// ../../../Dev/comicals/comical/node_modules/.bun/nth-check@2.1.1/node_modules/nth-check/lib/esm/index.js
 function nthCheck(formula) {
   return compile(parse2(formula));
 }
 
-// ../comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/pseudo-selectors/filters.js
+// ../../../Dev/comicals/comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/pseudo-selectors/filters.js
 var import_boolbase3 = __toESM(require_boolbase(), 1);
 function getChildFunc(next, adapter) {
   return (elem) => {
@@ -7314,7 +7333,7 @@ function dynamicStatePseudo(name) {
   };
 }
 
-// ../comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/pseudo-selectors/pseudos.js
+// ../../../Dev/comicals/comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/pseudo-selectors/pseudos.js
 var pseudos = {
   empty(elem, { adapter }) {
     return !adapter.getChildren(elem).some((elem2) => adapter.isTag(elem2) || adapter.getText(elem2) !== "");
@@ -7380,7 +7399,7 @@ function verifyPseudoArgs(func, name, subselect, argIndex) {
   }
 }
 
-// ../comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/pseudo-selectors/aliases.js
+// ../../../Dev/comicals/comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/pseudo-selectors/aliases.js
 var aliases = {
   "any-link": ":is(a, area, link)[href]",
   link: ":any-link:not(:visited)",
@@ -7408,7 +7427,7 @@ var aliases = {
   text: "input:is(:not([type!='']), [type=text])"
 };
 
-// ../comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/pseudo-selectors/subselects.js
+// ../../../Dev/comicals/comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/pseudo-selectors/subselects.js
 var import_boolbase4 = __toESM(require_boolbase(), 1);
 var PLACEHOLDER_ELEMENT = {};
 function ensureIsTag(next, adapter) {
@@ -7473,7 +7492,7 @@ var subselects = {
   }
 };
 
-// ../comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/pseudo-selectors/index.js
+// ../../../Dev/comicals/comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/pseudo-selectors/index.js
 function compilePseudoSelector(next, selector, options, context, compileToken) {
   var _a2;
   const { name, data: data2 } = selector;
@@ -7507,7 +7526,7 @@ function compilePseudoSelector(next, selector, options, context, compileToken) {
   throw new Error(`Unknown pseudo-class :${name}`);
 }
 
-// ../comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/general.js
+// ../../../Dev/comicals/comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/general.js
 function getElementParent(node2, adapter) {
   const parent = adapter.getParent(node2);
   if (parent && adapter.isTag(parent)) {
@@ -7639,7 +7658,7 @@ function compileGeneralSelector(next, selector, options, context, compileToken) 
   }
 }
 
-// ../comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/compile.js
+// ../../../Dev/comicals/comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/compile.js
 function compile2(selector, options, context) {
   const next = compileUnsafe(selector, options, context);
   return ensureIsTag(next, options.adapter);
@@ -7716,7 +7735,7 @@ function reduceRules(a, b) {
   };
 }
 
-// ../comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/index.js
+// ../../../Dev/comicals/comical/node_modules/.bun/css-select@5.2.2/node_modules/css-select/lib/esm/index.js
 var defaultEquals = (a, b) => a === b;
 var defaultOptions = {
   adapter: exports_esm2,
@@ -7766,10 +7785,10 @@ function appendNextSiblings(elem, adapter) {
 var selectAll = getSelectorFunc((query, elems, options) => query === import_boolbase6.default.falseFunc || !elems || elems.length === 0 ? [] : options.adapter.findAll(query, elems));
 var selectOne = getSelectorFunc((query, elems, options) => query === import_boolbase6.default.falseFunc || !elems || elems.length === 0 ? null : options.adapter.findOne(query, elems));
 
-// ../comical/node_modules/.bun/cheerio-select@2.1.0/node_modules/cheerio-select/lib/esm/index.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio-select@2.1.0/node_modules/cheerio-select/lib/esm/index.js
 var boolbase7 = __toESM(require_boolbase(), 1);
 
-// ../comical/node_modules/.bun/cheerio-select@2.1.0/node_modules/cheerio-select/lib/esm/positionals.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio-select@2.1.0/node_modules/cheerio-select/lib/esm/positionals.js
 var filterNames = new Set([
   "first",
   "last",
@@ -7812,7 +7831,7 @@ function getLimit(filter2, data2, partLimit) {
   }
 }
 
-// ../comical/node_modules/.bun/cheerio-select@2.1.0/node_modules/cheerio-select/lib/esm/helpers.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio-select@2.1.0/node_modules/cheerio-select/lib/esm/helpers.js
 function getDocumentRoot(node2) {
   while (node2.parent)
     node2 = node2.parent;
@@ -7831,7 +7850,7 @@ function groupSelectors(selectors) {
   return [plainSelectors, filteredSelectors];
 }
 
-// ../comical/node_modules/.bun/cheerio-select@2.1.0/node_modules/cheerio-select/lib/esm/index.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio-select@2.1.0/node_modules/cheerio-select/lib/esm/index.js
 var UNIVERSAL_SELECTOR = {
   type: SelectorType.Universal,
   namespace: null
@@ -7986,7 +8005,7 @@ function filterElements(elements, sel, options) {
   return query === boolbase7.trueFunc ? els : els.filter(query);
 }
 
-// ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/api/traversing.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/api/traversing.js
 var reSiblingSelector = /^\s*[+~]/;
 function find3(selectorOrHaystack) {
   if (!selectorOrHaystack) {
@@ -8242,7 +8261,7 @@ function addBack(selector) {
   return this.prevObject ? this.add(selector ? this.prevObject.filter(selector) : this.prevObject) : this;
 }
 
-// ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/api/manipulation.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/api/manipulation.js
 var exports_manipulation = {};
 __export(exports_manipulation, {
   wrapInner: () => wrapInner,
@@ -8267,7 +8286,7 @@ __export(exports_manipulation, {
   _makeDomArray: () => _makeDomArray
 });
 
-// ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/parse.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/parse.js
 function getParse(parser) {
   return function parse3(content, options, isDocument2, context) {
     if (typeof Buffer !== "undefined" && Buffer.isBuffer(content)) {
@@ -8308,7 +8327,7 @@ function update(newChilds, parent2) {
   return parent2;
 }
 
-// ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/api/manipulation.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/api/manipulation.js
 function _makeDomArray(elem, clone) {
   if (elem == null) {
     return [];
@@ -8628,7 +8647,7 @@ function clone() {
   return this._make(clone2);
 }
 
-// ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/api/css.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/api/css.js
 var exports_css = {};
 __export(exports_css, {
   css: () => css
@@ -8706,7 +8725,7 @@ function parse3(styles) {
   return obj;
 }
 
-// ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/api/forms.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/api/forms.js
 var exports_forms = {};
 __export(exports_forms, {
   serializeArray: () => serializeArray,
@@ -8741,7 +8760,7 @@ function serializeArray() {
   }).toArray();
 }
 
-// ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/api/extract.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/api/extract.js
 var exports_extract = {};
 __export(exports_extract, {
   extract: () => extract2
@@ -8773,7 +8792,7 @@ function extract2(map2) {
   return ret;
 }
 
-// ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/cheerio.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/cheerio.js
 class Cheerio {
   constructor(elements, root2, options) {
     this.length = 0;
@@ -8792,7 +8811,7 @@ Cheerio.prototype.splice = Array.prototype.splice;
 Cheerio.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
 Object.assign(Cheerio.prototype, exports_attributes, exports_traversing, exports_manipulation, exports_css, exports_forms, exports_extract);
 
-// ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/load.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/load.js
 function getLoad(parse4, render3) {
   return function load(content, options, isDocument2 = true) {
     if (content == null) {
@@ -8852,7 +8871,7 @@ function isNode(obj) {
   return !!obj.name || obj.type === "root" || obj.type === "text" || obj.type === "comment";
 }
 
-// ../comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/common/unicode.js
+// ../../../Dev/comicals/comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/common/unicode.js
 var UNDEFINED_CODE_POINTS = new Set([
   65534,
   65535,
@@ -8943,7 +8962,7 @@ function isUndefinedCodePoint(cp) {
   return cp >= 64976 && cp <= 65007 || UNDEFINED_CODE_POINTS.has(cp);
 }
 
-// ../comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/common/error-codes.js
+// ../../../Dev/comicals/comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/common/error-codes.js
 var ERR;
 (function(ERR2) {
   ERR2["controlCharacterInInputStream"] = "control-character-in-input-stream";
@@ -9008,7 +9027,7 @@ var ERR;
   ERR2["eofInElementThatCanContainOnlyText"] = "eof-in-element-that-can-contain-only-text";
 })(ERR || (ERR = {}));
 
-// ../comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/tokenizer/preprocessor.js
+// ../../../Dev/comicals/comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/tokenizer/preprocessor.js
 var DEFAULT_BUFFER_WATERLINE = 1 << 16;
 
 class Preprocessor {
@@ -9177,7 +9196,7 @@ class Preprocessor {
   }
 }
 
-// ../comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/common/token.js
+// ../../../Dev/comicals/comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/common/token.js
 var TokenType;
 (function(TokenType2) {
   TokenType2[TokenType2["CHARACTER"] = 0] = "CHARACTER";
@@ -9199,10 +9218,10 @@ function getTokenAttr(token, attrName) {
   return null;
 }
 
-// ../comical/node_modules/.bun/entities@6.0.1/node_modules/entities/dist/esm/generated/decode-data-html.js
+// ../../../Dev/comicals/comical/node_modules/.bun/entities@6.0.1/node_modules/entities/dist/esm/generated/decode-data-html.js
 var htmlDecodeTree = /* @__PURE__ */ new Uint16Array(/* @__PURE__ */ "ᵁ<Õıʊҝջאٵ۞ޢߖࠏ੊ઑඡ๭༉༦჊ረዡᐕᒝᓃᓟᔥ\x00\x00\x00\x00\x00\x00ᕫᛍᦍᰒᷝ὾⁠↰⊍⏀⏻⑂⠤⤒ⴈ⹈⿎〖㊺㘹㞬㣾㨨㩱㫠㬮ࠀEMabcfglmnoprstu\\bfms¦³¹ÈÏlig耻Æ䃆P耻&䀦cute耻Á䃁reve;䄂Āiyx}rc耻Â䃂;䐐r;쀀\uD835\uDD04rave耻À䃀pha;䎑acr;䄀d;橓Āgp¡on;䄄f;쀀\uD835\uDD38plyFunction;恡ing耻Å䃅Ācs¾Ãr;쀀\uD835\uDC9Cign;扔ilde耻Ã䃃ml耻Ä䃄ЀaceforsuåûþėĜĢħĪĀcrêòkslash;或Ŷöø;櫧ed;挆y;䐑ƀcrtąċĔause;戵noullis;愬a;䎒r;쀀\uD835\uDD05pf;쀀\uD835\uDD39eve;䋘còēmpeq;扎܀HOacdefhilorsuōőŖƀƞƢƵƷƺǜȕɳɸɾcy;䐧PY耻©䂩ƀcpyŝŢźute;䄆Ā;iŧŨ拒talDifferentialD;慅leys;愭ȀaeioƉƎƔƘron;䄌dil耻Ç䃇rc;䄈nint;戰ot;䄊ĀdnƧƭilla;䂸terDot;䂷òſi;䎧rcleȀDMPTǇǋǑǖot;抙inus;抖lus;投imes;抗oĀcsǢǸkwiseContourIntegral;戲eCurlyĀDQȃȏoubleQuote;思uote;怙ȀlnpuȞȨɇɕonĀ;eȥȦ户;橴ƀgitȯȶȺruent;扡nt;戯ourIntegral;戮ĀfrɌɎ;愂oduct;成nterClockwiseContourIntegral;戳oss;樯cr;쀀\uD835\uDC9EpĀ;Cʄʅ拓ap;才րDJSZacefiosʠʬʰʴʸˋ˗ˡ˦̳ҍĀ;oŹʥtrahd;椑cy;䐂cy;䐅cy;䐏ƀgrsʿ˄ˇger;怡r;憡hv;櫤Āayː˕ron;䄎;䐔lĀ;t˝˞戇a;䎔r;쀀\uD835\uDD07Āaf˫̧Ācm˰̢riticalȀADGT̖̜̀̆cute;䂴oŴ̋̍;䋙bleAcute;䋝rave;䁠ilde;䋜ond;拄ferentialD;慆Ѱ̽\x00\x00\x00͔͂\x00Ѕf;쀀\uD835\uDD3Bƀ;DE͈͉͍䂨ot;惜qual;扐blèCDLRUVͣͲ΂ϏϢϸontourIntegraìȹoɴ͹\x00\x00ͻ»͉nArrow;懓Āeo·ΤftƀARTΐΖΡrrow;懐ightArrow;懔eåˊngĀLRΫτeftĀARγιrrow;柸ightArrow;柺ightArrow;柹ightĀATϘϞrrow;懒ee;抨pɁϩ\x00\x00ϯrrow;懑ownArrow;懕erticalBar;戥ǹABLRTaВЪаўѿͼrrowƀ;BUНОТ憓ar;椓pArrow;懵reve;䌑eft˒к\x00ц\x00ѐightVector;楐eeVector;楞ectorĀ;Bљњ憽ar;楖ightǔѧ\x00ѱeeVector;楟ectorĀ;BѺѻ懁ar;楗eeĀ;A҆҇护rrow;憧ĀctҒҗr;쀀\uD835\uDC9Frok;䄐ࠀNTacdfglmopqstuxҽӀӄӋӞӢӧӮӵԡԯԶՒ՝ՠեG;䅊H耻Ð䃐cute耻É䃉ƀaiyӒӗӜron;䄚rc耻Ê䃊;䐭ot;䄖r;쀀\uD835\uDD08rave耻È䃈ement;戈ĀapӺӾcr;䄒tyɓԆ\x00\x00ԒmallSquare;旻erySmallSquare;斫ĀgpԦԪon;䄘f;쀀\uD835\uDD3Csilon;䎕uĀaiԼՉlĀ;TՂՃ橵ilde;扂librium;懌Āci՗՚r;愰m;橳a;䎗ml耻Ë䃋Āipժկsts;戃onentialE;慇ʀcfiosօֈ֍ֲ׌y;䐤r;쀀\uD835\uDD09lledɓ֗\x00\x00֣mallSquare;旼erySmallSquare;斪Ͱֺ\x00ֿ\x00\x00ׄf;쀀\uD835\uDD3DAll;戀riertrf;愱cò׋؀JTabcdfgorstר׬ׯ׺؀ؒؖ؛؝أ٬ٲcy;䐃耻>䀾mmaĀ;d׷׸䎓;䏜reve;䄞ƀeiy؇،ؐdil;䄢rc;䄜;䐓ot;䄠r;쀀\uD835\uDD0A;拙pf;쀀\uD835\uDD3Eeater̀EFGLSTصلَٖٛ٦qualĀ;Lؾؿ扥ess;招ullEqual;执reater;檢ess;扷lantEqual;橾ilde;扳cr;쀀\uD835\uDCA2;扫ЀAacfiosuڅڋږڛڞڪھۊRDcy;䐪Āctڐڔek;䋇;䁞irc;䄤r;愌lbertSpace;愋ǰگ\x00ڲf;愍izontalLine;攀Āctۃۅòکrok;䄦mpńېۘownHumðįqual;扏܀EJOacdfgmnostuۺ۾܃܇܎ܚܞܡܨ݄ݸދޏޕcy;䐕lig;䄲cy;䐁cute耻Í䃍Āiyܓܘrc耻Î䃎;䐘ot;䄰r;愑rave耻Ì䃌ƀ;apܠܯܿĀcgܴܷr;䄪inaryI;慈lieóϝǴ݉\x00ݢĀ;eݍݎ戬Āgrݓݘral;戫section;拂isibleĀCTݬݲomma;恣imes;恢ƀgptݿރވon;䄮f;쀀\uD835\uDD40a;䎙cr;愐ilde;䄨ǫޚ\x00ޞcy;䐆l耻Ï䃏ʀcfosuެ޷޼߂ߐĀiyޱ޵rc;䄴;䐙r;쀀\uD835\uDD0Dpf;쀀\uD835\uDD41ǣ߇\x00ߌr;쀀\uD835\uDCA5rcy;䐈kcy;䐄΀HJacfosߤߨ߽߬߱ࠂࠈcy;䐥cy;䐌ppa;䎚Āey߶߻dil;䄶;䐚r;쀀\uD835\uDD0Epf;쀀\uD835\uDD42cr;쀀\uD835\uDCA6րJTaceflmostࠥࠩࠬࡐࡣ঳সে্਷ੇcy;䐉耻<䀼ʀcmnpr࠷࠼ࡁࡄࡍute;䄹bda;䎛g;柪lacetrf;愒r;憞ƀaeyࡗ࡜ࡡron;䄽dil;䄻;䐛Āfsࡨ॰tԀACDFRTUVarࡾࢩࢱࣦ࣠ࣼयज़ΐ४Ānrࢃ࢏gleBracket;柨rowƀ;BR࢙࢚࢞憐ar;懤ightArrow;懆eiling;挈oǵࢷ\x00ࣃbleBracket;柦nǔࣈ\x00࣒eeVector;楡ectorĀ;Bࣛࣜ懃ar;楙loor;挊ightĀAV࣯ࣵrrow;憔ector;楎Āerँगeƀ;AVउऊऐ抣rrow;憤ector;楚iangleƀ;BEतथऩ抲ar;槏qual;抴pƀDTVषूौownVector;楑eeVector;楠ectorĀ;Bॖॗ憿ar;楘ectorĀ;B॥०憼ar;楒ightáΜs̀EFGLSTॾঋকঝঢভqualGreater;拚ullEqual;扦reater;扶ess;檡lantEqual;橽ilde;扲r;쀀\uD835\uDD0FĀ;eঽা拘ftarrow;懚idot;䄿ƀnpw৔ਖਛgȀLRlr৞৷ਂਐeftĀAR০৬rrow;柵ightArrow;柷ightArrow;柶eftĀarγਊightáοightáϊf;쀀\uD835\uDD43erĀLRਢਬeftArrow;憙ightArrow;憘ƀchtਾੀੂòࡌ;憰rok;䅁;扪Ѐacefiosuਗ਼੝੠੷੼અઋ઎p;椅y;䐜Ādl੥੯iumSpace;恟lintrf;愳r;쀀\uD835\uDD10nusPlus;戓pf;쀀\uD835\uDD44cò੶;䎜ҀJacefostuણધભીଔଙඑ඗ඞcy;䐊cute;䅃ƀaey઴હાron;䅇dil;䅅;䐝ƀgswે૰଎ativeƀMTV૓૟૨ediumSpace;怋hiĀcn૦૘ë૙eryThiî૙tedĀGL૸ଆreaterGreateòٳessLesóੈLine;䀊r;쀀\uD835\uDD11ȀBnptଢନଷ଺reak;恠BreakingSpace;䂠f;愕ڀ;CDEGHLNPRSTV୕ୖ୪୼஡௫ఄ౞಄ದ೘ൡඅ櫬Āou୛୤ngruent;扢pCap;扭oubleVerticalBar;戦ƀlqxஃஊ஛ement;戉ualĀ;Tஒஓ扠ilde;쀀≂̸ists;戄reater΀;EFGLSTஶஷ஽௉௓௘௥扯qual;扱ullEqual;쀀≧̸reater;쀀≫̸ess;批lantEqual;쀀⩾̸ilde;扵umpń௲௽ownHump;쀀≎̸qual;쀀≏̸eĀfsఊధtTriangleƀ;BEచఛడ拪ar;쀀⧏̸qual;括s̀;EGLSTవశ఼ౄోౘ扮qual;扰reater;扸ess;쀀≪̸lantEqual;쀀⩽̸ilde;扴estedĀGL౨౹reaterGreater;쀀⪢̸essLess;쀀⪡̸recedesƀ;ESಒಓಛ技qual;쀀⪯̸lantEqual;拠ĀeiಫಹverseElement;戌ghtTriangleƀ;BEೋೌ೒拫ar;쀀⧐̸qual;拭ĀquೝഌuareSuĀbp೨೹setĀ;E೰ೳ쀀⊏̸qual;拢ersetĀ;Eഃആ쀀⊐̸qual;拣ƀbcpഓതൎsetĀ;Eഛഞ쀀⊂⃒qual;抈ceedsȀ;ESTലള഻െ抁qual;쀀⪰̸lantEqual;拡ilde;쀀≿̸ersetĀ;E൘൛쀀⊃⃒qual;抉ildeȀ;EFT൮൯൵ൿ扁qual;扄ullEqual;扇ilde;扉erticalBar;戤cr;쀀\uD835\uDCA9ilde耻Ñ䃑;䎝܀Eacdfgmoprstuvලෂ෉෕ෛ෠෧෼ขภยา฿ไlig;䅒cute耻Ó䃓Āiy෎ීrc耻Ô䃔;䐞blac;䅐r;쀀\uD835\uDD12rave耻Ò䃒ƀaei෮ෲ෶cr;䅌ga;䎩cron;䎟pf;쀀\uD835\uDD46enCurlyĀDQฎบoubleQuote;怜uote;怘;橔Āclวฬr;쀀\uD835\uDCAAash耻Ø䃘iŬื฼de耻Õ䃕es;樷ml耻Ö䃖erĀBP๋๠Āar๐๓r;怾acĀek๚๜;揞et;掴arenthesis;揜Ҁacfhilors๿ງຊຏຒດຝະ໼rtialD;戂y;䐟r;쀀\uD835\uDD13i;䎦;䎠usMinus;䂱Āipຢອncareplanåڝf;愙Ȁ;eio຺ູ໠໤檻cedesȀ;EST່້໏໚扺qual;檯lantEqual;扼ilde;找me;怳Ādp໩໮uct;戏ortionĀ;aȥ໹l;戝Āci༁༆r;쀀\uD835\uDCAB;䎨ȀUfos༑༖༛༟OT耻\"䀢r;쀀\uD835\uDD14pf;愚cr;쀀\uD835\uDCAC؀BEacefhiorsu༾གྷཇའཱིྦྷྪྭ႖ႩႴႾarr;椐G耻®䂮ƀcnrཎནབute;䅔g;柫rĀ;tཛྷཝ憠l;椖ƀaeyཧཬཱron;䅘dil;䅖;䐠Ā;vླྀཹ愜erseĀEUྂྙĀlq྇ྎement;戋uilibrium;懋pEquilibrium;楯r»ཹo;䎡ghtЀACDFTUVa࿁࿫࿳ဢဨၛႇϘĀnr࿆࿒gleBracket;柩rowƀ;BL࿜࿝࿡憒ar;懥eftArrow;懄eiling;按oǵ࿹\x00စbleBracket;柧nǔည\x00နeeVector;楝ectorĀ;Bဝသ懂ar;楕loor;挋Āerိ၃eƀ;AVဵံြ抢rrow;憦ector;楛iangleƀ;BEၐၑၕ抳ar;槐qual;抵pƀDTVၣၮၸownVector;楏eeVector;楜ectorĀ;Bႂႃ憾ar;楔ectorĀ;B႑႒懀ar;楓Āpuႛ႞f;愝ndImplies;楰ightarrow;懛ĀchႹႼr;愛;憱leDelayed;槴ڀHOacfhimoqstuფჱჷჽᄙᄞᅑᅖᅡᅧᆵᆻᆿĀCcჩხHcy;䐩y;䐨FTcy;䐬cute;䅚ʀ;aeiyᄈᄉᄎᄓᄗ檼ron;䅠dil;䅞rc;䅜;䐡r;쀀\uD835\uDD16ortȀDLRUᄪᄴᄾᅉownArrow»ОeftArrow»࢚ightArrow»࿝pArrow;憑gma;䎣allCircle;战pf;쀀\uD835\uDD4Aɲᅭ\x00\x00ᅰt;戚areȀ;ISUᅻᅼᆉᆯ斡ntersection;抓uĀbpᆏᆞsetĀ;Eᆗᆘ抏qual;抑ersetĀ;Eᆨᆩ抐qual;抒nion;抔cr;쀀\uD835\uDCAEar;拆ȀbcmpᇈᇛሉላĀ;sᇍᇎ拐etĀ;Eᇍᇕqual;抆ĀchᇠህeedsȀ;ESTᇭᇮᇴᇿ扻qual;檰lantEqual;扽ilde;承Tháྌ;我ƀ;esሒሓሣ拑rsetĀ;Eሜም抃qual;抇et»ሓրHRSacfhiorsሾቄ቉ቕ቞ቱቶኟዂወዑORN耻Þ䃞ADE;愢ĀHc቎ቒcy;䐋y;䐦Ābuቚቜ;䀉;䎤ƀaeyብቪቯron;䅤dil;䅢;䐢r;쀀\uD835\uDD17Āeiቻ኉ǲኀ\x00ኇefore;戴a;䎘Ācn኎ኘkSpace;쀀  Space;怉ldeȀ;EFTካኬኲኼ戼qual;扃ullEqual;扅ilde;扈pf;쀀\uD835\uDD4BipleDot;惛Āctዖዛr;쀀\uD835\uDCAFrok;䅦ૡዷጎጚጦ\x00ጬጱ\x00\x00\x00\x00\x00ጸጽ፷ᎅ\x00᏿ᐄᐊᐐĀcrዻጁute耻Ú䃚rĀ;oጇገ憟cir;楉rǣጓ\x00጖y;䐎ve;䅬Āiyጞጣrc耻Û䃛;䐣blac;䅰r;쀀\uD835\uDD18rave耻Ù䃙acr;䅪Ādiፁ፩erĀBPፈ፝Āarፍፐr;䁟acĀekፗፙ;揟et;掵arenthesis;揝onĀ;P፰፱拃lus;抎Āgp፻፿on;䅲f;쀀\uD835\uDD4CЀADETadps᎕ᎮᎸᏄϨᏒᏗᏳrrowƀ;BDᅐᎠᎤar;椒ownArrow;懅ownArrow;憕quilibrium;楮eeĀ;AᏋᏌ报rrow;憥ownáϳerĀLRᏞᏨeftArrow;憖ightArrow;憗iĀ;lᏹᏺ䏒on;䎥ing;䅮cr;쀀\uD835\uDCB0ilde;䅨ml耻Ü䃜ҀDbcdefosvᐧᐬᐰᐳᐾᒅᒊᒐᒖash;披ar;櫫y;䐒ashĀ;lᐻᐼ抩;櫦Āerᑃᑅ;拁ƀbtyᑌᑐᑺar;怖Ā;iᑏᑕcalȀBLSTᑡᑥᑪᑴar;戣ine;䁼eparator;杘ilde;所ThinSpace;怊r;쀀\uD835\uDD19pf;쀀\uD835\uDD4Dcr;쀀\uD835\uDCB1dash;抪ʀcefosᒧᒬᒱᒶᒼirc;䅴dge;拀r;쀀\uD835\uDD1Apf;쀀\uD835\uDD4Ecr;쀀\uD835\uDCB2Ȁfiosᓋᓐᓒᓘr;쀀\uD835\uDD1B;䎞pf;쀀\uD835\uDD4Fcr;쀀\uD835\uDCB3ҀAIUacfosuᓱᓵᓹᓽᔄᔏᔔᔚᔠcy;䐯cy;䐇cy;䐮cute耻Ý䃝Āiyᔉᔍrc;䅶;䐫r;쀀\uD835\uDD1Cpf;쀀\uD835\uDD50cr;쀀\uD835\uDCB4ml;䅸ЀHacdefosᔵᔹᔿᕋᕏᕝᕠᕤcy;䐖cute;䅹Āayᕄᕉron;䅽;䐗ot;䅻ǲᕔ\x00ᕛoWidtè૙a;䎖r;愨pf;愤cr;쀀\uD835\uDCB5௡ᖃᖊᖐ\x00ᖰᖶᖿ\x00\x00\x00\x00ᗆᗛᗫᙟ᙭\x00ᚕ᚛ᚲᚹ\x00ᚾcute耻á䃡reve;䄃̀;Ediuyᖜᖝᖡᖣᖨᖭ戾;쀀∾̳;房rc耻â䃢te肻´̆;䐰lig耻æ䃦Ā;r²ᖺ;쀀\uD835\uDD1Erave耻à䃠ĀepᗊᗖĀfpᗏᗔsym;愵èᗓha;䎱ĀapᗟcĀclᗤᗧr;䄁g;樿ɤᗰ\x00\x00ᘊʀ;adsvᗺᗻᗿᘁᘇ戧nd;橕;橜lope;橘;橚΀;elmrszᘘᘙᘛᘞᘿᙏᙙ戠;榤e»ᘙsdĀ;aᘥᘦ戡ѡᘰᘲᘴᘶᘸᘺᘼᘾ;榨;榩;榪;榫;榬;榭;榮;榯tĀ;vᙅᙆ戟bĀ;dᙌᙍ抾;榝Āptᙔᙗh;戢»¹arr;捼Āgpᙣᙧon;䄅f;쀀\uD835\uDD52΀;Eaeiop዁ᙻᙽᚂᚄᚇᚊ;橰cir;橯;扊d;手s;䀧roxĀ;e዁ᚒñᚃing耻å䃥ƀctyᚡᚦᚨr;쀀\uD835\uDCB6;䀪mpĀ;e዁ᚯñʈilde耻ã䃣ml耻ä䃤Āciᛂᛈoninôɲnt;樑ࠀNabcdefiklnoprsu᛭ᛱᜰ᜼ᝃᝈ᝸᝽០៦ᠹᡐᜍ᤽᥈ᥰot;櫭Ācrᛶ᜞kȀcepsᜀᜅᜍᜓong;扌psilon;䏶rime;怵imĀ;e᜚᜛戽q;拍Ŷᜢᜦee;抽edĀ;gᜬᜭ挅e»ᜭrkĀ;t፜᜷brk;掶Āoyᜁᝁ;䐱quo;怞ʀcmprtᝓ᝛ᝡᝤᝨausĀ;eĊĉptyv;榰séᜌnoõēƀahwᝯ᝱ᝳ;䎲;愶een;扬r;쀀\uD835\uDD1Fg΀costuvwឍឝឳេ៕៛៞ƀaiuបពរðݠrc;旯p»፱ƀdptឤឨឭot;樀lus;樁imes;樂ɱឹ\x00\x00ើcup;樆ar;昅riangleĀdu៍្own;施p;斳plus;樄eåᑄåᒭarow;植ƀako៭ᠦᠵĀcn៲ᠣkƀlst៺֫᠂ozenge;槫riangleȀ;dlr᠒᠓᠘᠝斴own;斾eft;旂ight;斸k;搣Ʊᠫ\x00ᠳƲᠯ\x00ᠱ;斒;斑4;斓ck;斈ĀeoᠾᡍĀ;qᡃᡆ쀀=⃥uiv;쀀≡⃥t;挐Ȁptwxᡙᡞᡧᡬf;쀀\uD835\uDD53Ā;tᏋᡣom»Ꮜtie;拈؀DHUVbdhmptuvᢅᢖᢪᢻᣗᣛᣬ᣿ᤅᤊᤐᤡȀLRlrᢎᢐᢒᢔ;敗;敔;敖;敓ʀ;DUduᢡᢢᢤᢦᢨ敐;敦;敩;敤;敧ȀLRlrᢳᢵᢷᢹ;敝;敚;敜;教΀;HLRhlrᣊᣋᣍᣏᣑᣓᣕ救;敬;散;敠;敫;敢;敟ox;槉ȀLRlrᣤᣦᣨᣪ;敕;敒;攐;攌ʀ;DUduڽ᣷᣹᣻᣽;敥;敨;攬;攴inus;抟lus;択imes;抠ȀLRlrᤙᤛᤝ᤟;敛;敘;攘;攔΀;HLRhlrᤰᤱᤳᤵᤷ᤻᤹攂;敪;敡;敞;攼;攤;攜Āevģ᥂bar耻¦䂦Ȁceioᥑᥖᥚᥠr;쀀\uD835\uDCB7mi;恏mĀ;e᜚᜜lƀ;bhᥨᥩᥫ䁜;槅sub;柈Ŭᥴ᥾lĀ;e᥹᥺怢t»᥺pƀ;Eeįᦅᦇ;檮Ā;qۜۛೡᦧ\x00᧨ᨑᨕᨲ\x00ᨷᩐ\x00\x00᪴\x00\x00᫁\x00\x00ᬡᬮ᭍᭒\x00᯽\x00ᰌƀcpr᦭ᦲ᧝ute;䄇̀;abcdsᦿᧀᧄ᧊᧕᧙戩nd;橄rcup;橉Āau᧏᧒p;橋p;橇ot;橀;쀀∩︀Āeo᧢᧥t;恁îړȀaeiu᧰᧻ᨁᨅǰ᧵\x00᧸s;橍on;䄍dil耻ç䃧rc;䄉psĀ;sᨌᨍ橌m;橐ot;䄋ƀdmnᨛᨠᨦil肻¸ƭptyv;榲t脀¢;eᨭᨮ䂢räƲr;쀀\uD835\uDD20ƀceiᨽᩀᩍy;䑇ckĀ;mᩇᩈ朓ark»ᩈ;䏇r΀;Ecefms᩟᩠ᩢᩫ᪤᪪᪮旋;槃ƀ;elᩩᩪᩭ䋆q;扗eɡᩴ\x00\x00᪈rrowĀlr᩼᪁eft;憺ight;憻ʀRSacd᪒᪔᪖᪚᪟»ཇ;擈st;抛irc;抚ash;抝nint;樐id;櫯cir;槂ubsĀ;u᪻᪼晣it»᪼ˬ᫇᫔᫺\x00ᬊonĀ;eᫍᫎ䀺Ā;qÇÆɭ᫙\x00\x00᫢aĀ;t᫞᫟䀬;䁀ƀ;fl᫨᫩᫫戁îᅠeĀmx᫱᫶ent»᫩eóɍǧ᫾\x00ᬇĀ;dኻᬂot;橭nôɆƀfryᬐᬔᬗ;쀀\uD835\uDD54oäɔ脀©;sŕᬝr;愗Āaoᬥᬩrr;憵ss;朗Ācuᬲᬷr;쀀\uD835\uDCB8Ābpᬼ᭄Ā;eᭁᭂ櫏;櫑Ā;eᭉᭊ櫐;櫒dot;拯΀delprvw᭠᭬᭷ᮂᮬᯔ᯹arrĀlr᭨᭪;椸;椵ɰ᭲\x00\x00᭵r;拞c;拟arrĀ;p᭿ᮀ憶;椽̀;bcdosᮏᮐᮖᮡᮥᮨ截rcap;橈Āauᮛᮞp;橆p;橊ot;抍r;橅;쀀∪︀Ȁalrv᮵ᮿᯞᯣrrĀ;mᮼᮽ憷;椼yƀevwᯇᯔᯘqɰᯎ\x00\x00ᯒreã᭳uã᭵ee;拎edge;拏en耻¤䂤earrowĀlrᯮ᯳eft»ᮀight»ᮽeäᯝĀciᰁᰇoninôǷnt;戱lcty;挭ঀAHabcdefhijlorstuwz᰸᰻᰿ᱝᱩᱵᲊᲞᲬᲷ᳻᳿ᴍᵻᶑᶫᶻ᷆᷍rò΁ar;楥Ȁglrs᱈ᱍ᱒᱔ger;怠eth;愸òᄳhĀ;vᱚᱛ怐»ऊūᱡᱧarow;椏aã̕Āayᱮᱳron;䄏;䐴ƀ;ao̲ᱼᲄĀgrʿᲁr;懊tseq;橷ƀglmᲑᲔᲘ耻°䂰ta;䎴ptyv;榱ĀirᲣᲨsht;楿;쀀\uD835\uDD21arĀlrᲳᲵ»ࣜ»သʀaegsv᳂͸᳖᳜᳠mƀ;oș᳊᳔ndĀ;ș᳑uit;晦amma;䏝in;拲ƀ;io᳧᳨᳸䃷de脀÷;o᳧ᳰntimes;拇nø᳷cy;䑒cɯᴆ\x00\x00ᴊrn;挞op;挍ʀlptuwᴘᴝᴢᵉᵕlar;䀤f;쀀\uD835\uDD55ʀ;emps̋ᴭᴷᴽᵂqĀ;d͒ᴳot;扑inus;戸lus;戔quare;抡blebarwedgåúnƀadhᄮᵝᵧownarrowóᲃarpoonĀlrᵲᵶefôᲴighôᲶŢᵿᶅkaro÷གɯᶊ\x00\x00ᶎrn;挟op;挌ƀcotᶘᶣᶦĀryᶝᶡ;쀀\uD835\uDCB9;䑕l;槶rok;䄑Ādrᶰᶴot;拱iĀ;fᶺ᠖斿Āah᷀᷃ròЩaòྦangle;榦Āci᷒ᷕy;䑟grarr;柿ऀDacdefglmnopqrstuxḁḉḙḸոḼṉṡṾấắẽỡἪἷὄ὎὚ĀDoḆᴴoôᲉĀcsḎḔute耻é䃩ter;橮ȀaioyḢḧḱḶron;䄛rĀ;cḭḮ扖耻ê䃪lon;払;䑍ot;䄗ĀDrṁṅot;扒;쀀\uD835\uDD22ƀ;rsṐṑṗ檚ave耻è䃨Ā;dṜṝ檖ot;檘Ȁ;ilsṪṫṲṴ檙nters;揧;愓Ā;dṹṺ檕ot;檗ƀapsẅẉẗcr;䄓tyƀ;svẒẓẕ戅et»ẓpĀ1;ẝẤĳạả;怄;怅怃ĀgsẪẬ;䅋p;怂ĀgpẴẸon;䄙f;쀀\uD835\uDD56ƀalsỄỎỒrĀ;sỊị拕l;槣us;橱iƀ;lvỚớở䎵on»ớ;䏵ȀcsuvỪỳἋἣĀioữḱrc»Ḯɩỹ\x00\x00ỻíՈantĀglἂἆtr»ṝess»Ṻƀaeiἒ἖Ἒls;䀽st;扟vĀ;DȵἠD;橸parsl;槥ĀDaἯἳot;打rr;楱ƀcdiἾὁỸr;愯oô͒ĀahὉὋ;䎷耻ð䃰Āmrὓὗl耻ë䃫o;悬ƀcipὡὤὧl;䀡sôծĀeoὬὴctatioîՙnentialåչৡᾒ\x00ᾞ\x00ᾡᾧ\x00\x00ῆῌ\x00ΐ\x00ῦῪ \x00 ⁚llingdotseñṄy;䑄male;晀ƀilrᾭᾳ῁lig;耀ﬃɩᾹ\x00\x00᾽g;耀ﬀig;耀ﬄ;쀀\uD835\uDD23lig;耀ﬁlig;쀀fjƀaltῙ῜ῡt;晭ig;耀ﬂns;斱of;䆒ǰ΅\x00ῳf;쀀\uD835\uDD57ĀakֿῷĀ;vῼ´拔;櫙artint;樍Āao‌⁕Ācs‑⁒α‚‰‸⁅⁈\x00⁐β•‥‧‪‬\x00‮耻½䂽;慓耻¼䂼;慕;慙;慛Ƴ‴\x00‶;慔;慖ʴ‾⁁\x00\x00⁃耻¾䂾;慗;慜5;慘ƶ⁌\x00⁎;慚;慝8;慞l;恄wn;挢cr;쀀\uD835\uDCBBࢀEabcdefgijlnorstv₂₉₟₥₰₴⃰⃵⃺⃿℃ℒℸ̗ℾ⅒↞Ā;lٍ₇;檌ƀcmpₐₕ₝ute;䇵maĀ;dₜ᳚䎳;檆reve;䄟Āiy₪₮rc;䄝;䐳ot;䄡Ȁ;lqsؾق₽⃉ƀ;qsؾٌ⃄lanô٥Ȁ;cdl٥⃒⃥⃕c;檩otĀ;o⃜⃝檀Ā;l⃢⃣檂;檄Ā;e⃪⃭쀀⋛︀s;檔r;쀀\uD835\uDD24Ā;gٳ؛mel;愷cy;䑓Ȁ;Eajٚℌℎℐ;檒;檥;檤ȀEaesℛℝ℩ℴ;扩pĀ;p℣ℤ檊rox»ℤĀ;q℮ℯ檈Ā;q℮ℛim;拧pf;쀀\uD835\uDD58Āci⅃ⅆr;愊mƀ;el٫ⅎ⅐;檎;檐茀>;cdlqr׮ⅠⅪⅮⅳⅹĀciⅥⅧ;檧r;橺ot;拗Par;榕uest;橼ʀadelsↄⅪ←ٖ↛ǰ↉\x00↎proø₞r;楸qĀlqؿ↖lesó₈ií٫Āen↣↭rtneqq;쀀≩︀Å↪ԀAabcefkosy⇄⇇⇱⇵⇺∘∝∯≨≽ròΠȀilmr⇐⇔⇗⇛rsðᒄf»․ilôکĀdr⇠⇤cy;䑊ƀ;cwࣴ⇫⇯ir;楈;憭ar;意irc;䄥ƀalr∁∎∓rtsĀ;u∉∊晥it»∊lip;怦con;抹r;쀀\uD835\uDD25sĀew∣∩arow;椥arow;椦ʀamopr∺∾≃≞≣rr;懿tht;戻kĀlr≉≓eftarrow;憩ightarrow;憪f;쀀\uD835\uDD59bar;怕ƀclt≯≴≸r;쀀\uD835\uDCBDasè⇴rok;䄧Ābp⊂⊇ull;恃hen»ᱛૡ⊣\x00⊪\x00⊸⋅⋎\x00⋕⋳\x00\x00⋸⌢⍧⍢⍿\x00⎆⎪⎴cute耻í䃭ƀ;iyݱ⊰⊵rc耻î䃮;䐸Ācx⊼⊿y;䐵cl耻¡䂡ĀfrΟ⋉;쀀\uD835\uDD26rave耻ì䃬Ȁ;inoܾ⋝⋩⋮Āin⋢⋦nt;樌t;戭fin;槜ta;愩lig;䄳ƀaop⋾⌚⌝ƀcgt⌅⌈⌗r;䄫ƀelpܟ⌏⌓inåގarôܠh;䄱f;抷ed;䆵ʀ;cfotӴ⌬⌱⌽⍁are;愅inĀ;t⌸⌹戞ie;槝doô⌙ʀ;celpݗ⍌⍐⍛⍡al;抺Āgr⍕⍙eróᕣã⍍arhk;樗rod;樼Ȁcgpt⍯⍲⍶⍻y;䑑on;䄯f;쀀\uD835\uDD5Aa;䎹uest耻¿䂿Āci⎊⎏r;쀀\uD835\uDCBEnʀ;EdsvӴ⎛⎝⎡ӳ;拹ot;拵Ā;v⎦⎧拴;拳Ā;iݷ⎮lde;䄩ǫ⎸\x00⎼cy;䑖l耻ï䃯̀cfmosu⏌⏗⏜⏡⏧⏵Āiy⏑⏕rc;䄵;䐹r;쀀\uD835\uDD27ath;䈷pf;쀀\uD835\uDD5Bǣ⏬\x00⏱r;쀀\uD835\uDCBFrcy;䑘kcy;䑔Ѐacfghjos␋␖␢␧␭␱␵␻ppaĀ;v␓␔䎺;䏰Āey␛␠dil;䄷;䐺r;쀀\uD835\uDD28reen;䄸cy;䑅cy;䑜pf;쀀\uD835\uDD5Ccr;쀀\uD835\uDCC0஀ABEHabcdefghjlmnoprstuv⑰⒁⒆⒍⒑┎┽╚▀♎♞♥♹♽⚚⚲⛘❝❨➋⟀⠁⠒ƀart⑷⑺⑼rò৆òΕail;椛arr;椎Ā;gঔ⒋;檋ar;楢ॣ⒥\x00⒪\x00⒱\x00\x00\x00\x00\x00⒵Ⓔ\x00ⓆⓈⓍ\x00⓹ute;䄺mptyv;榴raîࡌbda;䎻gƀ;dlࢎⓁⓃ;榑åࢎ;檅uo耻«䂫rЀ;bfhlpst࢙ⓞⓦⓩ⓫⓮⓱⓵Ā;f࢝ⓣs;椟s;椝ë≒p;憫l;椹im;楳l;憢ƀ;ae⓿─┄檫il;椙Ā;s┉┊檭;쀀⪭︀ƀabr┕┙┝rr;椌rk;杲Āak┢┬cĀek┨┪;䁻;䁛Āes┱┳;榋lĀdu┹┻;榏;榍Ȁaeuy╆╋╖╘ron;䄾Ādi═╔il;䄼ìࢰâ┩;䐻Ȁcqrs╣╦╭╽a;椶uoĀ;rนᝆĀdu╲╷har;楧shar;楋h;憲ʀ;fgqs▋▌উ◳◿扤tʀahlrt▘▤▷◂◨rrowĀ;t࢙□aé⓶arpoonĀdu▯▴own»њp»०eftarrows;懇ightƀahs◍◖◞rrowĀ;sࣴࢧarpoonó྘quigarro÷⇰hreetimes;拋ƀ;qs▋ও◺lanôবʀ;cdgsব☊☍☝☨c;檨otĀ;o☔☕橿Ā;r☚☛檁;檃Ā;e☢☥쀀⋚︀s;檓ʀadegs☳☹☽♉♋pproøⓆot;拖qĀgq♃♅ôউgtò⒌ôছiíলƀilr♕࣡♚sht;楼;쀀\uD835\uDD29Ā;Eজ♣;檑š♩♶rĀdu▲♮Ā;l॥♳;楪lk;斄cy;䑙ʀ;achtੈ⚈⚋⚑⚖rò◁orneòᴈard;楫ri;旺Āio⚟⚤dot;䅀ustĀ;a⚬⚭掰che»⚭ȀEaes⚻⚽⛉⛔;扨pĀ;p⛃⛄檉rox»⛄Ā;q⛎⛏檇Ā;q⛎⚻im;拦Ѐabnoptwz⛩⛴⛷✚✯❁❇❐Ānr⛮⛱g;柬r;懽rëࣁgƀlmr⛿✍✔eftĀar০✇ightá৲apsto;柼ightá৽parrowĀlr✥✩efô⓭ight;憬ƀafl✶✹✽r;榅;쀀\uD835\uDD5Dus;樭imes;樴š❋❏st;戗áፎƀ;ef❗❘᠀旊nge»❘arĀ;l❤❥䀨t;榓ʀachmt❳❶❼➅➇ròࢨorneòᶌarĀ;d྘➃;業;怎ri;抿̀achiqt➘➝ੀ➢➮➻quo;怹r;쀀\uD835\uDCC1mƀ;egল➪➬;檍;檏Ābu┪➳oĀ;rฟ➹;怚rok;䅂萀<;cdhilqrࠫ⟒☹⟜⟠⟥⟪⟰Āci⟗⟙;檦r;橹reå◲mes;拉arr;楶uest;橻ĀPi⟵⟹ar;榖ƀ;ef⠀भ᠛旃rĀdu⠇⠍shar;楊har;楦Āen⠗⠡rtneqq;쀀≨︀Å⠞܀Dacdefhilnopsu⡀⡅⢂⢎⢓⢠⢥⢨⣚⣢⣤ઃ⣳⤂Dot;戺Ȁclpr⡎⡒⡣⡽r耻¯䂯Āet⡗⡙;時Ā;e⡞⡟朠se»⡟Ā;sျ⡨toȀ;dluျ⡳⡷⡻owîҌefôएðᏑker;斮Āoy⢇⢌mma;権;䐼ash;怔asuredangle»ᘦr;쀀\uD835\uDD2Ao;愧ƀcdn⢯⢴⣉ro耻µ䂵Ȁ;acdᑤ⢽⣀⣄sôᚧir;櫰ot肻·Ƶusƀ;bd⣒ᤃ⣓戒Ā;uᴼ⣘;横ţ⣞⣡p;櫛ò−ðઁĀdp⣩⣮els;抧f;쀀\uD835\uDD5EĀct⣸⣽r;쀀\uD835\uDCC2pos»ᖝƀ;lm⤉⤊⤍䎼timap;抸ఀGLRVabcdefghijlmoprstuvw⥂⥓⥾⦉⦘⧚⧩⨕⨚⩘⩝⪃⪕⪤⪨⬄⬇⭄⭿⮮ⰴⱧⱼ⳩Āgt⥇⥋;쀀⋙̸Ā;v⥐௏쀀≫⃒ƀelt⥚⥲⥶ftĀar⥡⥧rrow;懍ightarrow;懎;쀀⋘̸Ā;v⥻ే쀀≪⃒ightarrow;懏ĀDd⦎⦓ash;抯ash;抮ʀbcnpt⦣⦧⦬⦱⧌la»˞ute;䅄g;쀀∠⃒ʀ;Eiop඄⦼⧀⧅⧈;쀀⩰̸d;쀀≋̸s;䅉roø඄urĀ;a⧓⧔普lĀ;s⧓ସǳ⧟\x00⧣p肻 ଷmpĀ;e௹ఀʀaeouy⧴⧾⨃⨐⨓ǰ⧹\x00⧻;橃on;䅈dil;䅆ngĀ;dൾ⨊ot;쀀⩭̸p;橂;䐽ash;怓΀;Aadqsxஒ⨩⨭⨻⩁⩅⩐rr;懗rĀhr⨳⨶k;椤Ā;oᏲᏰot;쀀≐̸uiöୣĀei⩊⩎ar;椨í஘istĀ;s஠டr;쀀\uD835\uDD2BȀEest௅⩦⩹⩼ƀ;qs஼⩭௡ƀ;qs஼௅⩴lanô௢ií௪Ā;rஶ⪁»ஷƀAap⪊⪍⪑rò⥱rr;憮ar;櫲ƀ;svྍ⪜ྌĀ;d⪡⪢拼;拺cy;䑚΀AEadest⪷⪺⪾⫂⫅⫶⫹rò⥦;쀀≦̸rr;憚r;急Ȁ;fqs఻⫎⫣⫯tĀar⫔⫙rro÷⫁ightarro÷⪐ƀ;qs఻⪺⫪lanôౕĀ;sౕ⫴»శiíౝĀ;rవ⫾iĀ;eచథiäඐĀpt⬌⬑f;쀀\uD835\uDD5F膀¬;in⬙⬚⬶䂬nȀ;Edvஉ⬤⬨⬮;쀀⋹̸ot;쀀⋵̸ǡஉ⬳⬵;拷;拶iĀ;vಸ⬼ǡಸ⭁⭃;拾;拽ƀaor⭋⭣⭩rȀ;ast୻⭕⭚⭟lleì୻l;쀀⫽⃥;쀀∂̸lint;樔ƀ;ceಒ⭰⭳uåಥĀ;cಘ⭸Ā;eಒ⭽ñಘȀAait⮈⮋⮝⮧rò⦈rrƀ;cw⮔⮕⮙憛;쀀⤳̸;쀀↝̸ghtarrow»⮕riĀ;eೋೖ΀chimpqu⮽⯍⯙⬄୸⯤⯯Ȁ;cerല⯆ഷ⯉uå൅;쀀\uD835\uDCC3ortɭ⬅\x00\x00⯖ará⭖mĀ;e൮⯟Ā;q൴൳suĀbp⯫⯭å೸åഋƀbcp⯶ⰑⰙȀ;Ees⯿ⰀഢⰄ抄;쀀⫅̸etĀ;eഛⰋqĀ;qണⰀcĀ;eലⰗñസȀ;EesⰢⰣൟⰧ抅;쀀⫆̸etĀ;e൘ⰮqĀ;qൠⰣȀgilrⰽⰿⱅⱇìௗlde耻ñ䃱çృiangleĀlrⱒⱜeftĀ;eచⱚñదightĀ;eೋⱥñ೗Ā;mⱬⱭ䎽ƀ;esⱴⱵⱹ䀣ro;愖p;怇ҀDHadgilrsⲏⲔⲙⲞⲣⲰⲶⳓⳣash;抭arr;椄p;쀀≍⃒ash;抬ĀetⲨⲬ;쀀≥⃒;쀀>⃒nfin;槞ƀAetⲽⳁⳅrr;椂;쀀≤⃒Ā;rⳊⳍ쀀<⃒ie;쀀⊴⃒ĀAtⳘⳜrr;椃rie;쀀⊵⃒im;쀀∼⃒ƀAan⳰⳴ⴂrr;懖rĀhr⳺⳽k;椣Ā;oᏧᏥear;椧ቓ᪕\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00ⴭ\x00ⴸⵈⵠⵥ⵲ⶄᬇ\x00\x00ⶍⶫ\x00ⷈⷎ\x00ⷜ⸙⸫⸾⹃Ācsⴱ᪗ute耻ó䃳ĀiyⴼⵅrĀ;c᪞ⵂ耻ô䃴;䐾ʀabios᪠ⵒⵗǈⵚlac;䅑v;樸old;榼lig;䅓Ācr⵩⵭ir;榿;쀀\uD835\uDD2Cͯ⵹\x00\x00⵼\x00ⶂn;䋛ave耻ò䃲;槁Ābmⶈ෴ar;榵Ȁacitⶕ⶘ⶥⶨrò᪀Āir⶝ⶠr;榾oss;榻nå๒;槀ƀaeiⶱⶵⶹcr;䅍ga;䏉ƀcdnⷀⷅǍron;䎿;榶pf;쀀\uD835\uDD60ƀaelⷔ⷗ǒr;榷rp;榹΀;adiosvⷪⷫⷮ⸈⸍⸐⸖戨rò᪆Ȁ;efmⷷⷸ⸂⸅橝rĀ;oⷾⷿ愴f»ⷿ耻ª䂪耻º䂺gof;抶r;橖lope;橗;橛ƀclo⸟⸡⸧ò⸁ash耻ø䃸l;折iŬⸯ⸴de耻õ䃵esĀ;aǛ⸺s;樶ml耻ö䃶bar;挽ૡ⹞\x00⹽\x00⺀⺝\x00⺢⺹\x00\x00⻋ຜ\x00⼓\x00\x00⼫⾼\x00⿈rȀ;astЃ⹧⹲຅脀¶;l⹭⹮䂶leìЃɩ⹸\x00\x00⹻m;櫳;櫽y;䐿rʀcimpt⺋⺏⺓ᡥ⺗nt;䀥od;䀮il;怰enk;怱r;쀀\uD835\uDD2Dƀimo⺨⺰⺴Ā;v⺭⺮䏆;䏕maô੶ne;明ƀ;tv⺿⻀⻈䏀chfork»´;䏖Āau⻏⻟nĀck⻕⻝kĀ;h⇴⻛;愎ö⇴sҀ;abcdemst⻳⻴ᤈ⻹⻽⼄⼆⼊⼎䀫cir;樣ir;樢Āouᵀ⼂;樥;橲n肻±ຝim;樦wo;樧ƀipu⼙⼠⼥ntint;樕f;쀀\uD835\uDD61nd耻£䂣Ԁ;Eaceinosu່⼿⽁⽄⽇⾁⾉⾒⽾⾶;檳p;檷uå໙Ā;c໎⽌̀;acens່⽙⽟⽦⽨⽾pproø⽃urlyeñ໙ñ໎ƀaes⽯⽶⽺pprox;檹qq;檵im;拨iíໟmeĀ;s⾈ຮ怲ƀEas⽸⾐⽺ð⽵ƀdfp໬⾙⾯ƀals⾠⾥⾪lar;挮ine;挒urf;挓Ā;t໻⾴ï໻rel;抰Āci⿀⿅r;쀀\uD835\uDCC5;䏈ncsp;怈̀fiopsu⿚⋢⿟⿥⿫⿱r;쀀\uD835\uDD2Epf;쀀\uD835\uDD62rime;恗cr;쀀\uD835\uDCC6ƀaeo⿸〉〓tĀei⿾々rnionóڰnt;樖stĀ;e【】䀿ñἙô༔઀ABHabcdefhilmnoprstux぀けさすムㄎㄫㅇㅢㅲㆎ㈆㈕㈤㈩㉘㉮㉲㊐㊰㊷ƀartぇおがròႳòϝail;検aròᱥar;楤΀cdenqrtとふへみわゔヌĀeuねぱ;쀀∽̱te;䅕iãᅮmptyv;榳gȀ;del࿑らるろ;榒;榥å࿑uo耻»䂻rր;abcfhlpstw࿜ガクシスゼゾダッデナp;極Ā;f࿠ゴs;椠;椳s;椞ë≝ð✮l;楅im;楴l;憣;憝Āaiパフil;椚oĀ;nホボ戶aló༞ƀabrョリヮrò៥rk;杳ĀakンヽcĀekヹ・;䁽;䁝Āes㄂㄄;榌lĀduㄊㄌ;榎;榐Ȁaeuyㄗㄜㄧㄩron;䅙Ādiㄡㄥil;䅗ì࿲âヺ;䑀Ȁclqsㄴㄷㄽㅄa;椷dhar;楩uoĀ;rȎȍh;憳ƀacgㅎㅟངlȀ;ipsླྀㅘㅛႜnåႻarôྩt;断ƀilrㅩဣㅮsht;楽;쀀\uD835\uDD2FĀaoㅷㆆrĀduㅽㅿ»ѻĀ;l႑ㆄ;楬Ā;vㆋㆌ䏁;䏱ƀgns㆕ㇹㇼht̀ahlrstㆤㆰ㇂㇘㇤㇮rrowĀ;t࿜ㆭaéトarpoonĀduㆻㆿowîㅾp»႒eftĀah㇊㇐rrowó࿪arpoonóՑightarrows;應quigarro÷ニhreetimes;拌g;䋚ingdotseñἲƀahm㈍㈐㈓rò࿪aòՑ;怏oustĀ;a㈞㈟掱che»㈟mid;櫮Ȁabpt㈲㈽㉀㉒Ānr㈷㈺g;柭r;懾rëဃƀafl㉇㉊㉎r;榆;쀀\uD835\uDD63us;樮imes;樵Āap㉝㉧rĀ;g㉣㉤䀩t;榔olint;樒arò㇣Ȁachq㉻㊀Ⴜ㊅quo;怺r;쀀\uD835\uDCC7Ābu・㊊oĀ;rȔȓƀhir㊗㊛㊠reåㇸmes;拊iȀ;efl㊪ၙᠡ㊫方tri;槎luhar;楨;愞ൡ㋕㋛㋟㌬㌸㍱\x00㍺㎤\x00\x00㏬㏰\x00㐨㑈㑚㒭㒱㓊㓱\x00㘖\x00\x00㘳cute;䅛quï➺Ԁ;Eaceinpsyᇭ㋳㋵㋿㌂㌋㌏㌟㌦㌩;檴ǰ㋺\x00㋼;檸on;䅡uåᇾĀ;dᇳ㌇il;䅟rc;䅝ƀEas㌖㌘㌛;檶p;檺im;择olint;樓iíሄ;䑁otƀ;be㌴ᵇ㌵担;橦΀Aacmstx㍆㍊㍗㍛㍞㍣㍭rr;懘rĀhr㍐㍒ë∨Ā;oਸ਼਴t耻§䂧i;䀻war;椩mĀin㍩ðnuóñt;朶rĀ;o㍶⁕쀀\uD835\uDD30Ȁacoy㎂㎆㎑㎠rp;景Āhy㎋㎏cy;䑉;䑈rtɭ㎙\x00\x00㎜iäᑤaraì⹯耻­䂭Āgm㎨㎴maƀ;fv㎱㎲㎲䏃;䏂Ѐ;deglnprካ㏅㏉㏎㏖㏞㏡㏦ot;橪Ā;q኱ኰĀ;E㏓㏔檞;檠Ā;E㏛㏜檝;檟e;扆lus;樤arr;楲aròᄽȀaeit㏸㐈㐏㐗Āls㏽㐄lsetmé㍪hp;樳parsl;槤Ādlᑣ㐔e;挣Ā;e㐜㐝檪Ā;s㐢㐣檬;쀀⪬︀ƀflp㐮㐳㑂tcy;䑌Ā;b㐸㐹䀯Ā;a㐾㐿槄r;挿f;쀀\uD835\uDD64aĀdr㑍ЂesĀ;u㑔㑕晠it»㑕ƀcsu㑠㑹㒟Āau㑥㑯pĀ;sᆈ㑫;쀀⊓︀pĀ;sᆴ㑵;쀀⊔︀uĀbp㑿㒏ƀ;esᆗᆜ㒆etĀ;eᆗ㒍ñᆝƀ;esᆨᆭ㒖etĀ;eᆨ㒝ñᆮƀ;afᅻ㒦ְrť㒫ֱ»ᅼaròᅈȀcemt㒹㒾㓂㓅r;쀀\uD835\uDCC8tmîñiì㐕aræᆾĀar㓎㓕rĀ;f㓔ឿ昆Āan㓚㓭ightĀep㓣㓪psiloîỠhé⺯s»⡒ʀbcmnp㓻㕞ሉ㖋㖎Ҁ;Edemnprs㔎㔏㔑㔕㔞㔣㔬㔱㔶抂;櫅ot;檽Ā;dᇚ㔚ot;櫃ult;櫁ĀEe㔨㔪;櫋;把lus;檿arr;楹ƀeiu㔽㕒㕕tƀ;en㔎㕅㕋qĀ;qᇚ㔏eqĀ;q㔫㔨m;櫇Ābp㕚㕜;櫕;櫓c̀;acensᇭ㕬㕲㕹㕻㌦pproø㋺urlyeñᇾñᇳƀaes㖂㖈㌛pproø㌚qñ㌗g;晪ڀ123;Edehlmnps㖩㖬㖯ሜ㖲㖴㗀㗉㗕㗚㗟㗨㗭耻¹䂹耻²䂲耻³䂳;櫆Āos㖹㖼t;檾ub;櫘Ā;dሢ㗅ot;櫄sĀou㗏㗒l;柉b;櫗arr;楻ult;櫂ĀEe㗤㗦;櫌;抋lus;櫀ƀeiu㗴㘉㘌tƀ;enሜ㗼㘂qĀ;qሢ㖲eqĀ;q㗧㗤m;櫈Ābp㘑㘓;櫔;櫖ƀAan㘜㘠㘭rr;懙rĀhr㘦㘨ë∮Ā;oਫ਩war;椪lig耻ß䃟௡㙑㙝㙠ዎ㙳㙹\x00㙾㛂\x00\x00\x00\x00\x00㛛㜃\x00㜉㝬\x00\x00\x00㞇ɲ㙖\x00\x00㙛get;挖;䏄rë๟ƀaey㙦㙫㙰ron;䅥dil;䅣;䑂lrec;挕r;쀀\uD835\uDD31Ȁeiko㚆㚝㚵㚼ǲ㚋\x00㚑eĀ4fኄኁaƀ;sv㚘㚙㚛䎸ym;䏑Ācn㚢㚲kĀas㚨㚮pproø዁im»ኬsðኞĀas㚺㚮ð዁rn耻þ䃾Ǭ̟㛆⋧es膀×;bd㛏㛐㛘䃗Ā;aᤏ㛕r;樱;樰ƀeps㛡㛣㜀á⩍Ȁ;bcf҆㛬㛰㛴ot;挶ir;櫱Ā;o㛹㛼쀀\uD835\uDD65rk;櫚á㍢rime;怴ƀaip㜏㜒㝤dåቈ΀adempst㜡㝍㝀㝑㝗㝜㝟ngleʀ;dlqr㜰㜱㜶㝀㝂斵own»ᶻeftĀ;e⠀㜾ñम;扜ightĀ;e㊪㝋ñၚot;旬inus;樺lus;樹b;槍ime;樻ezium;揢ƀcht㝲㝽㞁Āry㝷㝻;쀀\uD835\uDCC9;䑆cy;䑛rok;䅧Āio㞋㞎xô᝷headĀlr㞗㞠eftarro÷ࡏightarrow»ཝऀAHabcdfghlmoprstuw㟐㟓㟗㟤㟰㟼㠎㠜㠣㠴㡑㡝㡫㢩㣌㣒㣪㣶ròϭar;楣Ācr㟜㟢ute耻ú䃺òᅐrǣ㟪\x00㟭y;䑞ve;䅭Āiy㟵㟺rc耻û䃻;䑃ƀabh㠃㠆㠋ròᎭlac;䅱aòᏃĀir㠓㠘sht;楾;쀀\uD835\uDD32rave耻ù䃹š㠧㠱rĀlr㠬㠮»ॗ»ႃlk;斀Āct㠹㡍ɯ㠿\x00\x00㡊rnĀ;e㡅㡆挜r»㡆op;挏ri;旸Āal㡖㡚cr;䅫肻¨͉Āgp㡢㡦on;䅳f;쀀\uD835\uDD66̀adhlsuᅋ㡸㡽፲㢑㢠ownáᎳarpoonĀlr㢈㢌efô㠭ighô㠯iƀ;hl㢙㢚㢜䏅»ᏺon»㢚parrows;懈ƀcit㢰㣄㣈ɯ㢶\x00\x00㣁rnĀ;e㢼㢽挝r»㢽op;挎ng;䅯ri;旹cr;쀀\uD835\uDCCAƀdir㣙㣝㣢ot;拰lde;䅩iĀ;f㜰㣨»᠓Āam㣯㣲rò㢨l耻ü䃼angle;榧ހABDacdeflnoprsz㤜㤟㤩㤭㦵㦸㦽㧟㧤㧨㧳㧹㧽㨁㨠ròϷarĀ;v㤦㤧櫨;櫩asèϡĀnr㤲㤷grt;榜΀eknprst㓣㥆㥋㥒㥝㥤㦖appá␕othinçẖƀhir㓫⻈㥙opô⾵Ā;hᎷ㥢ïㆍĀiu㥩㥭gmá㎳Ābp㥲㦄setneqĀ;q㥽㦀쀀⊊︀;쀀⫋︀setneqĀ;q㦏㦒쀀⊋︀;쀀⫌︀Āhr㦛㦟etá㚜iangleĀlr㦪㦯eft»थight»ၑy;䐲ash»ံƀelr㧄㧒㧗ƀ;beⷪ㧋㧏ar;抻q;扚lip;拮Ābt㧜ᑨaòᑩr;쀀\uD835\uDD33tré㦮suĀbp㧯㧱»ജ»൙pf;쀀\uD835\uDD67roð໻tré㦴Ācu㨆㨋r;쀀\uD835\uDCCBĀbp㨐㨘nĀEe㦀㨖»㥾nĀEe㦒㨞»㦐igzag;榚΀cefoprs㨶㨻㩖㩛㩔㩡㩪irc;䅵Ādi㩀㩑Ābg㩅㩉ar;機eĀ;qᗺ㩏;扙erp;愘r;쀀\uD835\uDD34pf;쀀\uD835\uDD68Ā;eᑹ㩦atèᑹcr;쀀\uD835\uDCCCૣណ㪇\x00㪋\x00㪐㪛\x00\x00㪝㪨㪫㪯\x00\x00㫃㫎\x00㫘ៜ៟tré៑r;쀀\uD835\uDD35ĀAa㪔㪗ròσrò৶;䎾ĀAa㪡㪤ròθrò৫að✓is;拻ƀdptឤ㪵㪾Āfl㪺ឩ;쀀\uD835\uDD69imåឲĀAa㫇㫊ròώròਁĀcq㫒ីr;쀀\uD835\uDCCDĀpt៖㫜ré។Ѐacefiosu㫰㫽㬈㬌㬑㬕㬛㬡cĀuy㫶㫻te耻ý䃽;䑏Āiy㬂㬆rc;䅷;䑋n耻¥䂥r;쀀\uD835\uDD36cy;䑗pf;쀀\uD835\uDD6Acr;쀀\uD835\uDCCEĀcm㬦㬩y;䑎l耻ÿ䃿Ԁacdefhiosw㭂㭈㭔㭘㭤㭩㭭㭴㭺㮀cute;䅺Āay㭍㭒ron;䅾;䐷ot;䅼Āet㭝㭡træᕟa;䎶r;쀀\uD835\uDD37cy;䐶grarr;懝pf;쀀\uD835\uDD6Bcr;쀀\uD835\uDCCFĀjn㮅㮇;怍j;怌".split("").map((c) => c.charCodeAt(0)));
 
-// ../comical/node_modules/.bun/entities@6.0.1/node_modules/entities/dist/esm/decode-codepoint.js
+// ../../../Dev/comicals/comical/node_modules/.bun/entities@6.0.1/node_modules/entities/dist/esm/decode-codepoint.js
 var _a2;
 var decodeMap2 = new Map([
   [0, 65533],
@@ -9251,7 +9270,7 @@ function replaceCodePoint2(codePoint) {
   }
   return (_a3 = decodeMap2.get(codePoint)) !== null && _a3 !== undefined ? _a3 : codePoint;
 }
-// ../comical/node_modules/.bun/entities@6.0.1/node_modules/entities/dist/esm/decode.js
+// ../../../Dev/comicals/comical/node_modules/.bun/entities@6.0.1/node_modules/entities/dist/esm/decode.js
 var CharCodes2;
 (function(CharCodes3) {
   CharCodes3[CharCodes3["NUM"] = 35] = "NUM";
@@ -9502,7 +9521,7 @@ function determineBranch2(decodeTree, current, nodeIndex, char) {
   return -1;
 }
 
-// ../comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/common/html.js
+// ../../../Dev/comicals/comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/common/html.js
 var exports_html = {};
 __export(exports_html, {
   hasUnescapedText: () => hasUnescapedText,
@@ -10028,7 +10047,7 @@ function hasUnescapedText(tn, scriptingEnabled) {
   return UNESCAPED_TEXT.has(tn) || scriptingEnabled && tn === TAG_NAMES.NOSCRIPT;
 }
 
-// ../comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/tokenizer/index.js
+// ../../../Dev/comicals/comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/tokenizer/index.js
 var State;
 (function(State2) {
   State2[State2["DATA"] = 0] = "DATA";
@@ -12477,7 +12496,7 @@ class Tokenizer {
   }
 }
 
-// ../comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/parser/open-element-stack.js
+// ../../../Dev/comicals/comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/parser/open-element-stack.js
 var IMPLICIT_END_TAG_REQUIRED = new Set([TAG_ID.DD, TAG_ID.DT, TAG_ID.LI, TAG_ID.OPTGROUP, TAG_ID.OPTION, TAG_ID.P, TAG_ID.RB, TAG_ID.RP, TAG_ID.RT, TAG_ID.RTC]);
 var IMPLICIT_END_TAG_REQUIRED_THOROUGHLY = new Set([
   ...IMPLICIT_END_TAG_REQUIRED,
@@ -12789,7 +12808,7 @@ class OpenElementStack {
   }
 }
 
-// ../comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/parser/formatting-element-list.js
+// ../../../Dev/comicals/comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/parser/formatting-element-list.js
 var NOAH_ARK_CAPACITY = 3;
 var EntryType;
 (function(EntryType2) {
@@ -12885,7 +12904,7 @@ class FormattingElementList {
   }
 }
 
-// ../comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/tree-adapters/default.js
+// ../../../Dev/comicals/comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/tree-adapters/default.js
 var defaultTreeAdapter = {
   createDocument() {
     return {
@@ -13051,7 +13070,7 @@ var defaultTreeAdapter = {
   }
 };
 
-// ../comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/common/doctype.js
+// ../../../Dev/comicals/comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/common/doctype.js
 var VALID_DOCTYPE_NAME = "html";
 var VALID_SYSTEM_ID = "about:legacy-compat";
 var QUIRKS_MODE_SYSTEM_ID = "http://www.ibm.com/data/dtd/v11/ibmxhtml1-transitional.dtd";
@@ -13160,7 +13179,7 @@ function getDocumentMode(token) {
   return DOCUMENT_MODE.NO_QUIRKS;
 }
 
-// ../comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/common/foreign-content.js
+// ../../../Dev/comicals/comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/common/foreign-content.js
 var MIME_TYPES = {
   TEXT_HTML: "text/html",
   APPLICATION_XML: "application/xhtml+xml"
@@ -13380,7 +13399,7 @@ function isIntegrationPoint(tn, ns, attrs, foreignNS) {
   return (!foreignNS || foreignNS === NS.HTML) && isHtmlIntegrationPoint(tn, ns, attrs) || (!foreignNS || foreignNS === NS.MATHML) && isMathMLTextIntegrationPoint(tn, ns);
 }
 
-// ../comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/parser/index.js
+// ../../../Dev/comicals/comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/parser/index.js
 var HIDDEN_INPUT_TYPE = "hidden";
 var AA_OUTER_LOOP_ITER = 8;
 var AA_INNER_LOOP_ITER = 3;
@@ -16328,7 +16347,7 @@ function endTagInForeignContent(p, token) {
     }
   }
 }
-// ../comical/node_modules/.bun/entities@6.0.1/node_modules/entities/dist/esm/escape.js
+// ../../../Dev/comicals/comical/node_modules/.bun/entities@6.0.1/node_modules/entities/dist/esm/escape.js
 var xmlCodeMap2 = new Map([
   [34, "&quot;"],
   [38, "&amp;"],
@@ -16364,7 +16383,7 @@ var escapeText2 = /* @__PURE__ */ getEscaper2(/[&<>\u00A0]/g, new Map([
   [160, "&nbsp;"]
 ]));
 
-// ../comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/serializer/index.js
+// ../../../Dev/comicals/comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/serializer/index.js
 var VOID_ELEMENTS = new Set([
   TAG_NAMES.AREA,
   TAG_NAMES.BASE,
@@ -16469,7 +16488,7 @@ function serializeDocumentTypeNode(node2, { treeAdapter }) {
   return `<!DOCTYPE ${treeAdapter.getDocumentTypeNodeName(node2)}>`;
 }
 
-// ../comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/index.js
+// ../../../Dev/comicals/comical/node_modules/.bun/parse5@7.3.0/node_modules/parse5/dist/index.js
 function parse4(html3, options) {
   return Parser.parse(html3, options);
 }
@@ -16484,7 +16503,7 @@ function parseFragment(fragmentContext, html3, options) {
   return parser.getFragment();
 }
 
-// ../comical/node_modules/.bun/parse5-htmlparser2-tree-adapter@7.1.0/node_modules/parse5-htmlparser2-tree-adapter/dist/index.js
+// ../../../Dev/comicals/comical/node_modules/.bun/parse5-htmlparser2-tree-adapter@7.1.0/node_modules/parse5-htmlparser2-tree-adapter/dist/index.js
 function enquoteDoctypeId(id) {
   const quote = id.includes('"') ? "'" : '"';
   return quote + id + quote;
@@ -16685,7 +16704,7 @@ var adapter = {
   }
 };
 
-// ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/parsers/parse5-adapter.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/parsers/parse5-adapter.js
 function parseWithParse5(content, options, isDocument2, context) {
   var _a3;
   (_a3 = options.treeAdapter) !== null && _a3 !== undefined || (options.treeAdapter = adapter);
@@ -16711,7 +16730,7 @@ function renderWithParse5(dom) {
   return result;
 }
 
-// ../comical/node_modules/.bun/htmlparser2@9.1.0/node_modules/htmlparser2/lib/esm/Tokenizer.js
+// ../../../Dev/comicals/comical/node_modules/.bun/htmlparser2@9.1.0/node_modules/htmlparser2/lib/esm/Tokenizer.js
 var CharCodes3;
 (function(CharCodes4) {
   CharCodes4[CharCodes4["Tab"] = 9] = "Tab";
@@ -17354,7 +17373,7 @@ class Tokenizer2 {
   }
 }
 
-// ../comical/node_modules/.bun/htmlparser2@9.1.0/node_modules/htmlparser2/lib/esm/Parser.js
+// ../../../Dev/comicals/comical/node_modules/.bun/htmlparser2@9.1.0/node_modules/htmlparser2/lib/esm/Parser.js
 var formTags = new Set([
   "input",
   "option",
@@ -17745,14 +17764,14 @@ class Parser2 {
     this.end(chunk);
   }
 }
-// ../comical/node_modules/.bun/htmlparser2@9.1.0/node_modules/htmlparser2/lib/esm/index.js
+// ../../../Dev/comicals/comical/node_modules/.bun/htmlparser2@9.1.0/node_modules/htmlparser2/lib/esm/index.js
 function parseDocument(data2, options) {
   const handler = new DomHandler(undefined, options);
   new Parser2(handler, options).end(data2);
   return handler.root;
 }
 
-// ../comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/load-parse.js
+// ../../../Dev/comicals/comical/node_modules/.bun/cheerio@1.0.0/node_modules/cheerio/dist/browser/load-parse.js
 var parse5 = getParse((content, options, isDocument2, context) => options._useHtmlParser2 ? parseDocument(content, options) : parseWithParse5(content, options, isDocument2, context));
 var load = getLoad(parse5, (dom, options) => options._useHtmlParser2 ? esm_default(dom, options) : renderWithParse5(dom));
 // ../comical/packages/sdk/src/base64.ts
@@ -17849,260 +17868,495 @@ class BridgeBase {
 function defineBridge(factory) {
   return factory;
 }
-// src/mangadex.ts
-var BASE = "https://api.mangadex.org";
-var COVER_BASE = "https://uploads.mangadex.org/covers";
-var PER_PAGE = 24;
+// ../comical/packages/sdk/src/settings.ts
+function defineSettings(descriptors) {
+  return descriptors;
+}
+// src/bridge.ts
+var BASE_URL = "https://atsu.moe";
+var SETTINGS = defineSettings([
+  { type: "boolean", key: "adult", label: "Show adult content", default: false },
+  { type: "string", key: "username", label: "Username", description: "atsu.moe account (for favorites)", secret: true },
+  { type: "string", key: "password", label: "Password", secret: true }
+]);
+var PROTOCOL_REGEX = /^https?:?\/\//;
+var PER_PAGE = 40;
+var TYPES = "Manga,Manwha,Manhua,OEL";
+var USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
+var GENRES = [
+  { id: "39", name: "Action" },
+  { id: "37", name: "Adventure" },
+  { id: "6", name: "Comedy" },
+  { id: "31", name: "Drama" },
+  { id: "36", name: "Fantasy" },
+  { id: "44", name: "Horror" },
+  { id: "29", name: "Martial Arts" },
+  { id: "32", name: "Mystery" },
+  { id: "18", name: "Psychological" },
+  { id: "9", name: "Romance" },
+  { id: "1", name: "Sci-Fi" },
+  { id: "7", name: "Slice of Life" },
+  { id: "22", name: "Supernatural" },
+  { id: "19", name: "Thriller" },
+  { id: "5", name: "Tragedy" }
+];
+var STATUSES = ["Ongoing", "Completed", "Hiatus", "Canceled"];
+var SORTS = [
+  { value: "views", label: "Popularity" },
+  { value: "trending", label: "Trending" },
+  { value: "dateAdded", label: "Date Added" },
+  { value: "released", label: "Release Date" },
+  { value: "mbRating", label: "Top Rated" },
+  { value: "chapterCount", label: "Chapter Count" }
+];
+var RELATION_LABELS = {
+  Sequel: { label: "Sequels", kind: "sequel" },
+  Prequel: { label: "Prequels", kind: "prequel" },
+  SpinOff: { label: "Spin-offs", kind: "spin-off" },
+  SideStory: { label: "Side Stories", kind: "side-story" },
+  Alternative: { label: "Alternative Versions", kind: "alternative" },
+  AlternativeVersion: { label: "Alternative Versions", kind: "alternative" },
+  SharedUniverse: { label: "Same Universe", kind: "same-universe" },
+  Character: { label: "Shared Characters", kind: "same-universe" },
+  Adaptation: { label: "Adaptations", kind: "adaptation" },
+  MainStory: { label: "Main Story", kind: "other" },
+  Parent: { label: "Parent Story", kind: "other" },
+  Summary: { label: "Summaries", kind: "other" },
+  Other: { label: "Related", kind: "other" }
+};
 var STATUS_MAP = {
   ongoing: "ongoing",
   completed: "completed",
   hiatus: "hiatus",
+  canceled: "cancelled",
   cancelled: "cancelled"
 };
-function firstTitle(attrs) {
-  return attrs.title["en"] ?? Object.values(attrs.title)[0] ?? "Unknown";
-}
-function coverUrl(mangaId, rels, size = 256) {
-  const cover = rels.find((r) => r.type === "cover_art");
-  const fileName = cover?.attributes?.["fileName"];
-  if (typeof fileName !== "string")
-    return;
-  return `${COVER_BASE}/${mangaId}/${fileName}.${size}.jpg`;
-}
-function creditList(rels, type) {
-  return rels.filter((r) => r.type === type).map((r) => {
-    const name = r.attributes?.["name"];
-    return typeof name === "string" && name ? { name, id: r.id } : undefined;
-  }).filter((c) => !!c);
-}
-function toEntry(d) {
-  const entry = { id: d.id, title: firstTitle(d.attributes) };
-  const thumb = coverUrl(d.id, d.relationships);
-  if (thumb)
-    entry.thumbnailUrl = thumb;
-  return entry;
-}
-function parseExternalId(links, key) {
-  const raw = links?.[key];
-  if (!raw)
-    return;
-  const n = parseInt(raw, 10);
-  return Number.isFinite(n) && n > 0 ? n : undefined;
-}
-var LISTS = [
-  { id: "popular", name: "Popular", layout: "grid", featured: true, order: { followedCount: "desc" } },
-  { id: "recent", name: "Recently Updated", layout: "grid", featured: true, order: { updatedAt: "desc" } },
-  { id: "new", name: "New Titles", layout: "grid", featured: false, order: { createdAt: "desc" } }
-];
-var CONTENT_RATINGS = ["safe", "suggestive", "erotica", "pornographic"];
-var DEFAULT_RATINGS = ["safe", "suggestive"];
 
-class MangaDexBridge extends BridgeBase {
+class AtsumaruBridge extends BridgeBase {
   info = {
-    id: "pos5drow.mangadex",
-    name: "MangaDex",
+    id: "pos5drow.atsumaru",
+    name: "Atsumaru",
     version: "0.2.1",
     contractVersion: "1.0.0",
     languages: ["en"],
     nsfw: false,
-    capabilities: ["lists", "search", "filters"],
-    iconUrl: "https://mangadex.org/pwa/icons/icon-512.png",
-    rateLimit: { maxConcurrent: 2, minIntervalMs: 350 }
+    capabilities: ["lists", "search", "filters", "sort", "settings", "favorites", "exclude-tags"],
+    iconUrl: `${BASE_URL}/favicon/android-chrome-512x512.png`,
+    rateLimit: { maxConcurrent: 1, minIntervalMs: 550 }
   };
-  async getJson(url) {
-    return this.fetchJson(url, {
-      "User-Agent": "comical/0.1 (https://github.com/comical)"
+  tagCache = new Map;
+  tagPrewarmed = false;
+  async prewarmTagCache() {
+    if (this.tagPrewarmed)
+      return;
+    this.tagPrewarmed = true;
+    try {
+      const data2 = await this.getJson(`${this.base()}/api/explore/availableFilters`);
+      for (const tag of data2.tags ?? []) {
+        const id = String(tag.id);
+        if (id && tag.name)
+          this.tagCache.set(id, tag.name);
+      }
+    } catch {}
+  }
+  async getTags(query = "") {
+    if (this.tagCache.size === 0)
+      await this.prewarmTagCache();
+    const q = query.toLowerCase();
+    const results = [];
+    for (const [id, label] of this.tagCache)
+      if (!q || label.toLowerCase().includes(q))
+        results.push({ id, label });
+    return results.sort((a, b) => a.label.localeCompare(b.label)).slice(0, 50);
+  }
+  getSettings() {
+    return [...SETTINGS];
+  }
+  base() {
+    return BASE_URL;
+  }
+  adultParam() {
+    return this.setting("adult") === true ? "&adult=1" : "";
+  }
+  apiHeaders() {
+    return {
+      "User-Agent": USER_AGENT,
+      Accept: "*/*",
+      Referer: `${this.base()}/`
+    };
+  }
+  getJson(url) {
+    return this.fetchJson(url, this.apiHeaders());
+  }
+  resolveImage(raw) {
+    let path;
+    if (typeof raw === "string")
+      path = raw;
+    else if (raw && typeof raw === "object" && typeof raw.image === "string") {
+      path = raw.image;
+    }
+    if (!path)
+      return;
+    const cleaned = path.replace(/^\//, "").replace(/^static\//, "");
+    let url;
+    if (/^https?/.test(cleaned))
+      url = cleaned;
+    else if (cleaned.startsWith("//"))
+      url = `https:${cleaned}`;
+    else
+      url = `${this.base()}/static/${cleaned}`;
+    return url.replace(PROTOCOL_REGEX, "https://");
+  }
+  resolveCover(dto, size) {
+    const pick = (o) => o && (size === "small" ? [o.mediumImage, o.posterMedium, o.largeImage, o.image] : [o.largeImage, o.mediumImage, o.posterMedium, o.image]).find((v) => typeof v === "string" && v.length > 0);
+    const flat = pick(dto);
+    if (flat)
+      return this.resolveImage(flat);
+    const poster = dto.poster;
+    if (poster && typeof poster === "object" && !Array.isArray(poster)) {
+      const fromObject = pick(poster);
+      if (fromObject)
+        return this.resolveImage(fromObject);
+    }
+    return this.resolveImage(typeof poster === "string" ? poster : dto.image);
+  }
+  static names(element) {
+    if (!Array.isArray(element))
+      return [];
+    return element.map((item) => {
+      if (typeof item === "string")
+        return item;
+      if (item && typeof item === "object" && typeof item.name === "string") {
+        return item.name;
+      }
+      return;
+    }).filter((s) => !!s);
+  }
+  static credits(element) {
+    const authors = new Set;
+    const artists = new Set;
+    if (Array.isArray(element)) {
+      for (const item of element) {
+        if (typeof item === "string") {
+          authors.add(item);
+        } else if (item && typeof item === "object") {
+          const name = item.name;
+          const type = item.type;
+          if (typeof name !== "string")
+            continue;
+          if (type === "Artist")
+            artists.add(name);
+          else
+            authors.add(name);
+        }
+      }
+    }
+    return { authors: [...authors], artists: [...artists] };
+  }
+  toEntry(dto) {
+    const entry = { id: dto.id, title: dto.title };
+    const thumb = this.resolveCover(dto, "small");
+    if (thumb)
+      entry.thumbnailUrl = thumb;
+    return entry;
+  }
+  static humanizeRelation(type) {
+    return type.replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/_/g, " ").trim() || "Related";
+  }
+  relatedGroups(dto) {
+    const groups = [];
+    const byType = new Map;
+    for (const rel of dto.relations ?? []) {
+      const manga = rel?.manga;
+      if (!manga?.id || !manga.title)
+        continue;
+      const key = typeof rel.type === "string" && rel.type ? rel.type : "Other";
+      const list = byType.get(key) ?? [];
+      list.push(this.toEntry(manga));
+      byType.set(key, list);
+    }
+    for (const [type, series] of byType) {
+      if (series.length === 0)
+        continue;
+      const mapped = RELATION_LABELS[type];
+      groups.push({
+        label: mapped?.label ?? AtsumaruBridge.humanizeRelation(type),
+        kind: mapped?.kind ?? "other",
+        series
+      });
+    }
+    const mapEntries = (list) => (list ?? []).filter((m) => m?.id && m.title).map((m) => this.toEntry(m));
+    const similar = mapEntries(dto.similarManga);
+    if (similar.length > 0)
+      groups.push({ label: "Similar", kind: "similar", series: similar });
+    const recommended = mapEntries(dto.recommendations);
+    if (recommended.length > 0)
+      groups.push({ label: "Recommended", kind: "recommended", series: recommended });
+    return groups;
+  }
+  static LISTS = [
+    { id: "trending", name: "Trending", layout: "carousel", featured: true, endpoint: "trending" },
+    { id: "recentlyUpdated", name: "Recently Updated", layout: "grid", featured: true, endpoint: "recentlyUpdated" }
+  ];
+  async getLists() {
+    return AtsumaruBridge.LISTS.map(({ endpoint, ...list }) => {
+      return list;
     });
   }
-  contentRatingParams() {
-    return DEFAULT_RATINGS.map((r) => `contentRating[]=${r}`).join("&");
-  }
-  async getLists() {
-    return LISTS.map(({ order: _, ...list }) => list);
-  }
   async getListItems(listId, page) {
-    const list = LISTS.find((l) => l.id === listId);
+    const list = AtsumaruBridge.LISTS.find((l) => l.id === listId);
     if (!list)
       throw new Error(`unknown list: ${listId}`);
-    const offset = (page - 1) * PER_PAGE;
-    const order = Object.entries(list.order).map(([k, v]) => `order[${k}]=${v}`).join("&");
-    const url = `${BASE}/manga?limit=${PER_PAGE}&offset=${offset}` + `&${this.contentRatingParams()}&${order}` + `&includes[]=cover_art`;
-    const res = await this.getJson(url);
-    const items = res.data.map(toEntry);
-    return { items, page, hasNextPage: offset + items.length < res.total };
+    const url = `${this.base()}/api/infinite/${list.endpoint}?page=${page - 1}&types=${TYPES}${this.adultParam()}`;
+    const data2 = await this.getJson(url);
+    const items = (data2.items ?? []).map((d) => this.toEntry(d));
+    return { items, page, hasNextPage: items.length >= PER_PAGE };
   }
-  async getFilters() {
-    return [
-      {
-        type: "select",
-        key: "contentRating",
-        label: "Content rating",
-        options: CONTENT_RATINGS.map((r) => ({ value: r, label: r.charAt(0).toUpperCase() + r.slice(1) }))
-      },
-      {
-        type: "select",
-        key: "status",
-        label: "Status",
-        options: [
-          { value: "ongoing", label: "Ongoing" },
-          { value: "completed", label: "Completed" },
-          { value: "hiatus", label: "Hiatus" },
-          { value: "cancelled", label: "Cancelled" }
-        ]
-      },
-      { type: "text", key: "author", label: "Author" }
-    ];
+  getFilters() {
+    this.prewarmTagCache();
+    return Promise.resolve([
+      { type: "multiselect", key: "genre", label: "Genres", excludable: true, options: GENRES.map((g) => ({ value: g.id, label: g.name })) },
+      { type: "multiselect", key: "status", label: "Status", options: STATUSES.map((s) => ({ value: s, label: s })) },
+      { type: "tag-multiselect", key: "tag", label: "Tag", excludable: true },
+      { type: "number", key: "year", label: "Release year", min: 1900, max: 2100 },
+      { type: "number", key: "minChapters", label: "Minimum chapters", min: 0 }
+    ]);
   }
-  async getSortOptions() {
-    return [
-      { key: "followedCount", label: "Popularity" },
-      { key: "updatedAt", label: "Recently Updated" },
-      { key: "createdAt", label: "Newest" },
-      { key: "relevance", label: "Relevance" },
-      { key: "rating", label: "Rating" },
-      { key: "year", label: "Year" }
-    ];
+  getSortOptions() {
+    return Promise.resolve(SORTS.map((s) => ({ key: s.value, label: s.label })));
   }
   async getSearchResults(query, page, options) {
-    const offset = (page - 1) * PER_PAGE;
-    const params = new URLSearchParams;
-    params.set("limit", String(PER_PAGE));
-    params.set("offset", String(offset));
-    params.append("includes[]", "cover_art");
-    if (query.trim())
-      params.set("title", query.trim());
-    for (const rating of DEFAULT_RATINGS)
-      params.append("contentRating[]", rating);
+    const clauses = [
+      "hidden:!=true",
+      ...this.setting("adult") === true ? [] : ["isAdult:=false"],
+      "(mbContentRating:=[`Safe`,`Suggestive`,`Erotica`] || mbContentRating:!=*)",
+      "views:>0"
+    ];
     for (const f of options?.filters ?? []) {
-      if (f.key === "status" && typeof f.value === "string")
-        params.set("status", f.value);
-      if (f.key === "contentRating" && typeof f.value === "string") {
-        params.delete("contentRating[]");
-        params.append("contentRating[]", f.value);
-      }
-      if (f.key === "author" && typeof f.value === "string" && f.value.trim()) {
-        params.append("authors[]", f.value.trim());
-      }
+      const arr = Array.isArray(f.value) ? f.value : [];
+      if (f.key === "genre") {
+        const { include, exclude } = parseFilterIncludeExclude(f.value);
+        if (include.length)
+          clauses.push(include.map((id) => `genreIds:=\`${id}\``).join(" && "));
+        for (const id of exclude)
+          clauses.push(`genreIds:!=\`${id}\``);
+      } else if (f.key === "status" && arr.length)
+        clauses.push(`status:=[${arr.map((s) => `\`${s}\``).join(",")}]`);
+      else if (f.key === "tag") {
+        const { include, exclude } = parseFilterIncludeExclude(f.value);
+        for (const id of include)
+          if (String(id).trim())
+            clauses.push(`tagIds:=\`${String(id).trim()}\``);
+        for (const id of exclude)
+          if (String(id).trim())
+            clauses.push(`tagIds:!=\`${String(id).trim()}\``);
+      } else if (f.key === "year" && typeof f.value === "number")
+        clauses.push(`releaseYear:=[${f.value}]`);
+      else if (f.key === "minChapters" && typeof f.value === "number")
+        clauses.push(`chapterCount:>=${f.value}`);
     }
-    if (options?.sort) {
-      params.set(`order[${options.sort.key}]`, options.sort.ascending ? "asc" : "desc");
-    } else if (!query.trim()) {
-      params.set("order[followedCount]", "desc");
+    for (const id of options?.excludedTags ?? []) {
+      if (String(id).trim())
+        clauses.push(`tagIds:!=\`${String(id).trim()}\``);
     }
-    const url = `${BASE}/manga?${params.toString()}`;
-    const res = await this.getJson(url);
-    const items = res.data.map(toEntry);
-    return { items, page, hasNextPage: offset + items.length < res.total };
+    const sortBy = options?.sort ? `${options.sort.key}:${options.sort.ascending ? "asc" : "desc"}` : undefined;
+    const params = new URLSearchParams({
+      q: query.trim() || "*",
+      filter_by: clauses.join(" && "),
+      page: String(page),
+      per_page: String(PER_PAGE)
+    });
+    if (sortBy)
+      params.set("sort_by", sortBy);
+    if (query.trim()) {
+      params.set("query_by", "title,englishTitle,otherNames,authors");
+      params.set("query_by_weights", "4,3,2,1");
+      params.set("num_typos", "4,3,2,1");
+    }
+    const url = `${this.base()}/collections/manga/documents/search?${params.toString()}`;
+    const body = await this.fetchText(url, this.apiHeaders());
+    if (body.includes('"hits"')) {
+      const data3 = JSON.parse(body);
+      const items2 = (data3.hits ?? []).map((h) => this.toEntry(h.document));
+      const perPage = data3.request_params?.per_page || PER_PAGE;
+      return { items: items2, page, hasNextPage: data3.page * perPage < data3.found };
+    }
+    const data2 = JSON.parse(body);
+    const items = (data2.items ?? []).map((d) => this.toEntry(d));
+    return { items, page, hasNextPage: items.length >= PER_PAGE };
   }
   async getSeriesDetails(seriesId) {
-    const url = `${BASE}/manga/${encodeURIComponent(seriesId)}?includes[]=cover_art&includes[]=author&includes[]=artist`;
-    const res = await this.getJson(url);
-    const d = res.data;
-    const attrs = d.attributes;
-    const info = { id: d.id, title: firstTitle(attrs) };
-    const thumb = coverUrl(d.id, d.relationships, 512);
+    const url = `${this.base()}/api/manga/page?id=${encodeURIComponent(seriesId)}`;
+    const dto = (await this.getJson(url)).mangaPage;
+    const info = { id: seriesId, title: dto.title };
+    const thumb = this.resolveCover(dto, "large");
     if (thumb)
       info.thumbnailUrl = thumb;
-    const desc = attrs.description?.["en"] ?? Object.values(attrs.description ?? {})[0];
-    if (desc?.trim())
-      info.description = desc.trim();
-    const authors = creditList(d.relationships, "author");
-    const artists = creditList(d.relationships, "artist");
-    if (authors.length) {
-      info.author = authors.map((c) => c.name).join(", ");
-      info.authors = authors;
-      if (authors[0].id)
-        info.authorId = authors[0].id;
+    if (dto.synopsis?.trim())
+      info.description = dto.synopsis.trim();
+    const { authors, artists } = AtsumaruBridge.credits(dto.authors);
+    if (authors.length > 0)
+      info.author = authors.join(", ");
+    if (artists.length > 0)
+      info.artist = artists.join(", ");
+    if (dto.type)
+      info.type = dto.type;
+    const groups = [];
+    const genres = AtsumaruBridge.names(dto.genres);
+    if (genres.length > 0) {
+      const genreIdByName = new Map(GENRES.map((g) => [g.name.toLowerCase(), g.id]));
+      const genreIds = genres.map((n) => genreIdByName.get(n.toLowerCase()) ?? "");
+      const genreGroup = { label: "Genres", kind: "genre", tags: genres };
+      if (genreIds.some(Boolean))
+        genreGroup.tagIds = genreIds;
+      groups.push(genreGroup);
     }
-    if (artists.length) {
-      info.artist = artists.map((c) => c.name).join(", ");
-      info.artists = artists;
-      if (artists[0].id)
-        info.artistId = artists[0].id;
+    const rawTags = Array.isArray(dto.tags) ? dto.tags : [];
+    if (rawTags.length > 0) {
+      const tags = [];
+      const tagIds = [];
+      for (const item of rawTags) {
+        const name = typeof item === "string" ? item : typeof item.name === "string" ? item.name : null;
+        const rawId = item && typeof item === "object" ? item.id : undefined;
+        const id = rawId !== undefined && rawId !== null ? String(rawId) : "";
+        if (name) {
+          tags.push(name);
+          tagIds.push(id);
+          if (id)
+            this.tagCache.set(id, name);
+        }
+      }
+      if (tags.length > 0) {
+        const group = { label: "Tags", kind: "theme", tags };
+        if (tagIds.every(Boolean))
+          group.tagIds = tagIds;
+        groups.push(group);
+      }
     }
-    if (attrs.status)
-      info.status = STATUS_MAP[attrs.status] ?? "unknown";
-    const tagsByGroup = new Map;
-    for (const tag of attrs.tags ?? []) {
-      const name = tag.attributes.name["en"] ?? Object.values(tag.attributes.name)[0];
-      if (!name)
-        continue;
-      const g = tag.attributes.group;
-      if (!tagsByGroup.has(g))
-        tagsByGroup.set(g, []);
-      tagsByGroup.get(g).push(name);
-    }
-    const genres = tagsByGroup.get("genre") ?? [];
-    const tagGroups = [];
-    if (genres.length)
-      tagGroups.push({ label: "Genres", kind: "genre", tags: genres });
-    for (const [group, tags] of tagsByGroup) {
-      if (group === "genre")
-        continue;
-      tagGroups.push({ label: group.charAt(0).toUpperCase() + group.slice(1), tags });
-    }
-    if (attrs.publicationDemographic) {
-      tagGroups.push({ label: "Demographic", tags: [attrs.publicationDemographic] });
-    }
-    if (tagGroups.length)
-      info.tagGroups = tagGroups;
-    const mal = parseExternalId(attrs.links, "mal");
-    const al = parseExternalId(attrs.links, "al");
-    const mu = typeof attrs.links?.["mu"] === "string" ? attrs.links["mu"] : undefined;
-    if (mal !== undefined || al !== undefined || mu !== undefined) {
-      info.externalIds = {
-        ...mal !== undefined && { mal },
-        ...al !== undefined && { anilist: al },
-        ...mu !== undefined && { mu }
-      };
-    }
+    if (groups.length > 0)
+      info.tagGroups = groups;
+    info.status = STATUS_MAP[dto.status?.toLowerCase().trim() ?? ""] ?? "unknown";
+    const related = this.relatedGroups(dto);
+    if (related.length > 0)
+      info.relatedSeriesGroups = related;
     return info;
   }
   async getChapters(seriesId) {
-    const all = [];
-    let offset = 0;
-    const limit = 500;
-    while (true) {
-      const url = `${BASE}/manga/${encodeURIComponent(seriesId)}/feed` + `?limit=${limit}&offset=${offset}` + `&translatedLanguage[]=en` + `&order[chapter]=asc&order[publishAt]=asc` + `&includes[]=scanlation_group` + `&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&contentRating[]=pornographic`;
-      const res = await this.getJson(url);
-      all.push(...res.data);
-      offset += res.data.length;
-      if (offset >= res.total)
-        break;
-    }
-    return all.filter((c) => !c.attributes.externalUrl).map((c) => {
-      const attrs = c.attributes;
-      const num = attrs.chapter ? parseFloat(attrs.chapter) : undefined;
-      const vol = attrs.volume ? `Vol.${attrs.volume} ` : "";
-      const chNum = attrs.chapter ? `Ch.${attrs.chapter}` : "";
-      const title = attrs.title?.trim();
-      const name = title ? `${vol}${chNum} — ${title}`.trim() : `${vol}${chNum}`.trim() || c.id;
-      const group = c.relationships.find((r) => r.type === "scanlation_group");
-      const groupName = group?.attributes?.["name"];
-      const ch = { id: c.id, name };
-      if (Number.isFinite(num))
-        ch.number = num;
-      if (typeof groupName === "string")
-        ch.group = groupName;
-      if (typeof attrs.pages === "number")
-        ch.pageCount = attrs.pages;
-      if (attrs.publishAt) {
-        const ms = Date.parse(attrs.publishAt);
-        if (Number.isFinite(ms))
-          ch.publishedAt = ms;
-      }
-      return ch;
-    });
+    const url = `${this.base()}/api/manga/allChapters?mangaId=${encodeURIComponent(seriesId)}`;
+    const raw = (await this.getJson(url)).chapters ?? [];
+    const teamIds = new Set(raw.map((c) => c.scanlationMangaId).filter((s) => !!s));
+    const multiTeam = teamIds.size > 1;
+    const teamName = multiTeam ? await this.scanlatorNames(seriesId) : new Map;
+    return raw.map((c) => {
+      const base = c.title?.trim() || `Chapter ${c.number}`;
+      const team = c.scanlationMangaId ? teamName.get(c.scanlationMangaId) : undefined;
+      const chapter = {
+        id: c.id,
+        name: multiTeam && team ? `${base} — ${team}` : base
+      };
+      if (Number.isFinite(c.number))
+        chapter.number = c.number;
+      if (team)
+        chapter.group = team;
+      if (Number.isFinite(c.pageCount))
+        chapter.pageCount = c.pageCount;
+      const published = parseDate(c.createdAt);
+      if (published !== undefined)
+        chapter.publishedAt = published;
+      return chapter;
+    }).filter((c) => c.id.length > 0).sort((a, b) => (a.number ?? 0) - (b.number ?? 0));
+  }
+  async scanlatorNames(seriesId) {
+    const url = `${this.base()}/api/manga/page?id=${encodeURIComponent(seriesId)}`;
+    const page = (await this.getJson(url)).mangaPage;
+    const map2 = new Map;
+    for (const s of page.scanlators ?? [])
+      if (s?.id && s?.name)
+        map2.set(s.id, s.name);
+    return map2;
   }
   async getChapterPages(seriesId, chapterId) {
-    const res = await this.getJson(`${BASE}/at-home/server/${encodeURIComponent(chapterId)}`);
-    const { baseUrl, chapter } = res;
-    return chapter.data.map((filename, index2) => ({
-      index: index2,
-      imageUrl: `${baseUrl}/data/${chapter.hash}/${filename}`
-    }));
+    const url = `${this.base()}/api/read/chapter?mangaId=${encodeURIComponent(seriesId)}` + `&chapterId=${encodeURIComponent(chapterId)}`;
+    const data2 = await this.getJson(url);
+    const referer = `${this.base()}/`;
+    return (data2.readChapter?.pages ?? []).map((p, index2) => {
+      const imageUrl = this.resolveImage(p.image);
+      return imageUrl ? { index: index2, imageUrl, headers: { Referer: referer } } : undefined;
+    }).filter((p) => p !== undefined);
+  }
+  async getFavorites(page) {
+    const qs = this.setting("adult") === true ? "?adult=1&includeAdult=1" : "";
+    const url = `${this.base()}/api/user/bookmarksPage${qs}`;
+    const res = await this.authed({ url, headers: this.apiHeaders() });
+    const data2 = JSON.parse(res.body);
+    const items = (data2.bookmarks ?? []).map((b) => this.bookmarkToEntry(b));
+    return { items, page, hasNextPage: false };
+  }
+  async addFavorite(seriesId) {
+    await this.syncBookmark(seriesId, "PlanToRead");
+  }
+  async removeFavorite(seriesId) {
+    await this.syncBookmark(seriesId, null);
+  }
+  async syncBookmark(mangaId, status) {
+    const res = await this.authed({
+      url: `${this.base()}/api/user/syncBookmarks`,
+      method: "POST",
+      headers: { ...this.apiHeaders(), "Content-Type": "application/json" },
+      body: JSON.stringify([{ mangaId, status, ts: Date.now() }])
+    });
+    if (res.status >= 400)
+      throw new Error(`syncBookmarks failed: ${res.status} ${res.statusText}`);
+  }
+  async authed(req) {
+    let res = await this.request(req);
+    if (res.status === 401) {
+      await this.login();
+      res = await this.request(req);
+    }
+    if (res.status >= 400)
+      throw new Error(`${req.url} → ${res.status} ${res.statusText}`);
+    return res;
+  }
+  async login() {
+    const username = this.setting("username");
+    const password = this.setting("password");
+    if (!username || !password) {
+      throw new Error("favorites require a username + password (set them in this bridge's settings)");
+    }
+    const res = await this.request({
+      url: `${this.base()}/api/auth/login`,
+      method: "POST",
+      headers: { ...this.apiHeaders(), "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ username, password }).toString()
+    });
+    let parsed = {};
+    try {
+      parsed = JSON.parse(res.body);
+    } catch {}
+    if (res.status >= 400 || parsed.status !== "success") {
+      throw new Error(`atsu.moe login failed: ${parsed.error ?? res.statusText}`);
+    }
+  }
+  bookmarkToEntry(b) {
+    const id = b.id ?? b.mangaId ?? "";
+    const entry = { id, title: b.title ?? b.englishTitle ?? id };
+    const thumb = this.resolveCover(b, "small");
+    if (thumb)
+      entry.thumbnailUrl = thumb;
+    return entry;
   }
 }
-var mangadex_default = defineBridge((host) => new MangaDexBridge(host));
+function parseDate(value) {
+  if (typeof value === "number" && Number.isFinite(value))
+    return value;
+  if (typeof value === "string") {
+    const ms = Date.parse(value);
+    if (Number.isFinite(ms))
+      return ms;
+  }
+  return;
+}
+var bridge_default = defineBridge((host) => new AtsumaruBridge(host));
 
-//# debugId=830549C74D2760A264756E2164756E21
+//# debugId=055BD831EC993C0764756E2164756E21

@@ -1,0 +1,72 @@
+{
+  "registryVersion": "1",
+  "updated": "2026-07-28T07:23:57.768Z",
+  "bridges": [
+    {
+      "id": "pos5drow.atsumaru",
+      "name": "Atsumaru",
+      "version": "0.2.1",
+      "contractVersion": "1.0.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort",
+        "settings",
+        "favorites",
+        "exclude-tags"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.atsumaru/0.2.1/bridge.js",
+      "sha256": "44dd6ebbd6a7e64edc3a22d672d9874e027ec9926e7168bcee6dbd07d2fb3131",
+      "iconUrl": "https://atsu.moe/favicon/android-chrome-512x512.png",
+      "signature": "usYwPrjAJLVzC38rcdHdaTGKK0OzJA6bKWoQ8lt1olci6Cbbsw32NHAdLyjqu-oxMUKr_kIOIONwbFYhzBaJBQ"
+    },
+    {
+      "id": "pos5drow.mangadex",
+      "name": "MangaDex",
+      "version": "0.2.1",
+      "contractVersion": "1.0.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangadex/0.2.1/bridge.js",
+      "sha256": "d331e4c41dc6b575250f44cc7cc3c8e5dfc0fdfc64ff13161bc461af3c309860",
+      "iconUrl": "https://mangadex.org/pwa/icons/icon-512.png",
+      "signature": "gRck-CfvzXNADUM4xuEQuQWhlN2jg6who8CRSFL8_AwU9Ci7zjJq24kShhAz24JHILHrGQFmUyy2y19dshUcBA"
+    },
+    {
+      "id": "pos5drow.weebcentral",
+      "name": "Weeb Central",
+      "version": "0.1.1",
+      "contractVersion": "1.0.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.weebcentral/0.1.1/bridge.js",
+      "sha256": "e9373eced4c99f7bb0b642f2249f49b9895b3f86299c810bca3dc7409cacec73",
+      "iconUrl": "https://weebcentral.com/favicon.ico",
+      "signature": "3ll5_8QrCJrfEfrgWk0rKE2k3nzekKtaMD9ad4h9ovdXfLc1EVJe-JQXl-aSJdwMv-iJme8yx11hXigubJNPAQ"
+    }
+  ],
+  "publicKey": "_w_wfsGg94fRKmD6kq4mIHQYReFo7qPcZ9IMwhy0L24",
+  "movedFrom": [
+    "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/sfw/index.json"
+  ]
+}

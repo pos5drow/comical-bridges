@@ -2,10 +2,6 @@
 
 Various comical bridges, published as a registry the app can source.
 
-Adult-only bridges live in a separate repo,
-[`comical-bridges-nsfw`](https://github.com/pos5drow/comical-bridges-nsfw) — adding this registry
-never so much as lists them.
-
 ## Use this registry in the app
 
 **One-click (if you already have the Comical app installed):**

@@ -89,15 +89,14 @@ jobs:
           git config user.email pos5drow@gmail.com
           # publish.ts sorts bridges deterministically, so a rebuild of unchanged bundles leaves only
           # the `updated` timestamp different. Ignore that line (-I) so we don't commit on every run —
-          # only when a bundle or real metadata actually changed. The forwarding tombstones left at
-          # the old rating-split URLs (sfw/, nsfw/) are regenerated too, so they're checked together.
+          # only when a bundle or real metadata actually changed.
           #
           # Stage BEFORE comparing. `git diff` against the working tree cannot see untracked files,
           # so once the artifacts stopped being committed from a local machine, a rebuild produced
           # them fresh-and-untracked, the guard called that "unchanged", and CI published nothing —
           # index.json 404'd for every client. `--cached` counts a new file as a change.
-          git add -A -- index.json bridges sfw nsfw
-          if git diff --cached --quiet -I '"updated":' -- index.json bridges sfw nsfw; then
+          git add -A -- index.json bridges
+          if git diff --cached --quiet -I '"updated":' -- index.json bridges; then
             echo "Registry unchanged (timestamp-only) — nothing to publish."
             exit 0
           fi

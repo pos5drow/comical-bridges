@@ -9,8 +9,3 @@
 # guard with phantom "content changed" errors. `-text` pins the bytes byte-for-byte.
 bridges/** -text
 index.json -text
-
-# The forwarding tombstones left at the old rating-split URLs. Signed, so the exact bytes matter
-# for the same reason.
-sfw/index.json -text
-nsfw/index.json -text

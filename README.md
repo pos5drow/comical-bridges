@@ -21,19 +21,6 @@ Set it as `EXPO_PUBLIC_COMICAL_REGISTRY` in the app's gitignored `apps/mobile/.e
 pre-adds a single registry). For the desktop CLI:
 `comical registry add https://raw.githubusercontent.com/pos5drow/comical-bridges/main/index.json`.
 
-### If you added the old `sfw/` or `nsfw/` URL
-
-This repo used to publish two rating-split registries, `sfw/index.json` and `nsfw/index.json`. The
-adult bridges moved to their own repo and what's left is published at the root. Nothing to do:
-
-- `sfw/index.json` is now a **signed forwarding tombstone** → the root `index.json`;
-- `nsfw/index.json` is a signed tombstone → the `comical-bridges-nsfw` registry;
-- each destination claims its predecessor via `movedFrom`, so re-adding a URL by hand adopts the
-  installs you already had rather than stranding them.
-
-Both ends are signed with the same key as before — that key continuity is the whole proof the same
-operator is behind both URLs, and it's why the move needs no confirmation from you.
-
 ## Status
 
 Live conformance + cover-size metrics, refreshed nightly by [`audit.ts`](audit.ts) (the shared

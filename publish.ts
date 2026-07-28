@@ -2,24 +2,20 @@
  * Publish this repo as ONE Comical registry, served from the repo root via raw.githubusercontent
  * (`index.json` + `bridges/**`).
  *
- * This repo used to publish **two** rating-split registries out of one build — `sfw/` and `nsfw/`.
- * The adult bridges now live in their own repo (`comical-bridges-nsfw`), so what's left here is
- * simply "the bridges", published at the root. Both old URLs stay alive as **signed tombstones**
- * that forward to wherever their bridges actually went:
+ * Emits three files, two of them **signed tombstones** kept alive at retired URLs:
  *
- *   <base>/index.json        the registry (was <base>/sfw/index.json)
+ *   <base>/index.json        the registry
  *   <base>/sfw/index.json    tombstone → <base>/index.json
  *   <base>/nsfw/index.json   tombstone → the comical-bridges-nsfw registry
  *
  * `--moved-to` (asserted by the old host) forwards clients that still hold the old URL;
  * `--moved-from` (asserted by the new host) lets someone re-adding a URL by hand adopt their
- * existing installs instead of stranding them. Both are wanted — see "Moving a registry" in the
- * comical README.
+ * existing installs instead of stranding them. See "Moving a registry" in the comical README.
  *
- * **Every one of these must be signed with the same key as before.** A client follows a move only
- * when the forwarding index carries the key it already pinned for that URL — key continuity is the
- * whole proof that the same operator is behind both ends. An unsigned tombstone doesn't forward
- * anyone; it parks the move for manual confirmation.
+ * **Every one of these must be signed with the same key.** A client follows a move only when the
+ * forwarding index carries the key it already pinned for that URL — key continuity is the whole
+ * proof that the same operator is behind both ends. An unsigned tombstone forwards nobody; it
+ * parks the move for manual confirmation.
  *
  * Uses the local comical CLI (../comical) for now — once `comical` ships to npm this becomes
  * `bunx comical …`.
@@ -36,7 +32,7 @@ const baseUrl =
   process.env.COMICAL_BASE_URL ??
   "https://raw.githubusercontent.com/pos5drow/comical-bridges/main";
 
-/** Where the adult bridges moved to. Their old `nsfw/` URL forwards here. */
+/** The adult registry. The retired `nsfw/` URL forwards here. */
 const NSFW_REGISTRY = "https://raw.githubusercontent.com/pos5drow/comical-bridges-nsfw/main/index.json";
 
 const key = process.env.COMICAL_KEY;
@@ -52,8 +48,8 @@ async function run(label: string, args: string[]): Promise<void> {
   if (code !== 0) process.exit(code);
 }
 
-// 1. The registry itself, at the repo root. `movedFrom` names the old sfw/ URL so re-adding by hand
-//    adopts installs made from it.
+// 1. The registry itself, at the repo root. `movedFrom` names the retired sfw/ URL so re-adding
+//    that one by hand adopts installs made from it.
 await run(
   "Publishing registry (root)",
   withKey([

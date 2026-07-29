@@ -28,7 +28,7 @@ shows ⚠ even for a hard failure.
 
 ## `weebcentral` — ✓ (11✓ 0⚠ 0✗ 1⊘)
 
-**4/4 capabilities** · cover 17 KB (200×300) · sampled 8 · failed 0 · bytes min 11 KB / avg 17 KB / median 16 KB / max 25 KB · dims avg 200×300 (max 200×300) · aspect avg 0.67
+**4/4 capabilities** · cover 17 KB (200×300) · sampled 8 · failed 0 · bytes min 11 KB / avg 17 KB / median 16 KB / max 27 KB · dims avg 200×300 (max 200×300) · aspect avg 0.67
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
@@ -63,4 +63,4 @@ shows ⚠ even for a hard failure.
 | ✓ | `filters.effect` | filters | filter "contentRating" changed results (24→24) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-07-28 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-07-29 by the nightly live audit ([`audit.ts`](audit.ts))._

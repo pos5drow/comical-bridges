@@ -28,11 +28,11 @@ inconclusive sort/filter probe — never counted against a bridge). Per-check re
 <!-- BRIDGE-STATUS:START -->
 | Bridge | Status | Capabilities | Avg cover | Notes |
 |---|---|---|---|---|
-| `atsumaru` | ✓ (13✓ 0⚠ 0✗ 1⊘) | 6/7 | 54 KB (360×540) | — |
-| `weebcentral` | ✓ (11✓ 0⚠ 0✗ 1⊘) | 4/4 | 17 KB (200×300) | — |
-| `mangadex` | ⚠ (8✓ 1⚠ 0✗) | 3/3 | 51 KB (256×376) | Cloudflare challenges datacenter (runner) IPs |
+| `atsumaru` | ✗ (0✓ 0⚠ 1✗) | 0/0 | — | load failed: bridge "pos5drow.atsumaru" targets contract 1.0.0, incompatible with runtime 2.0.0 |
+| `weebcentral` | ✗ (0✓ 0⚠ 1✗) | 0/0 | — | load failed: bridge "pos5drow.weebcentral" targets contract 1.0.0, incompatible with runtime 2.0.0 |
+| `mangadex` | ⚠ (0✓ 0⚠ 0✗) | 0/0 | — | load failed: bridge "pos5drow.mangadex" targets contract 1.0.0, incompatible with runtime 2.0.0 |
 
-_Updated 2026-07-29 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-07-30 by the nightly live audit ([`audit.ts`](audit.ts))._
 <!-- BRIDGE-STATUS:END -->
 
 ## Develop

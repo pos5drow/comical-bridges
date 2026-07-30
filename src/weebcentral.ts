@@ -93,8 +93,8 @@ class WeebCentralBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.weebcentral",
     name: "Weeb Central",
-    version: "0.1.1",
-    contractVersion: "1.0.0",
+    version: "0.2.0",
+    contractVersion: "2.0.0",
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort"],

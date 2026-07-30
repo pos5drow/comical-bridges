@@ -26,6 +26,7 @@ import {
 } from "@comical/sdk";
 
 const BASE = "https://api.mangadex.org";
+const SITE = "https://mangadex.org";
 const COVER_BASE = "https://uploads.mangadex.org/covers";
 const PER_PAGE = 24;
 
@@ -278,7 +279,7 @@ class MangaDexBridge extends BridgeBase {
     const d = res.data;
     const attrs = d.attributes;
 
-    const info: SeriesInfo = { id: d.id, title: firstTitle(attrs) };
+    const info: SeriesInfo = { id: d.id, title: firstTitle(attrs), shareUrl: `${SITE}/title/${d.id}` };
 
     // Detail hero: the larger 512px cover (cards default to 256 via coverUrl).
     const thumb = coverUrl(d.id, d.relationships, 512);

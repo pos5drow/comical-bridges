@@ -224,12 +224,14 @@ class WeebCentralBridge extends BridgeBase {
   // ── Series detail ───────────────────────────────────────────────────────────
 
   async getSeriesDetails(seriesId: string): Promise<SeriesInfo> {
-    const $ = this.parse(await this.fetchText(`${BASE}/series/${encodeURIComponent(seriesId)}`, this.headers()));
+    const url = `${BASE}/series/${encodeURIComponent(seriesId)}`;
+    const $ = this.parse(await this.fetchText(url, this.headers()));
 
     const info: SeriesInfo = {
       id: seriesId,
       title: $("h1").first().text().trim() || seriesId,
       thumbnailUrl: coverUrl(seriesId, "normal"),
+      shareUrl: url,
     };
 
     // Metadata rows are `<li><strong>Label:</strong> …</li>`; :has/:contains locate each by label.

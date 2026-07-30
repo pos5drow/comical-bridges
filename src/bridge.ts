@@ -31,6 +31,7 @@ import {
   type SortOption,
   defineBridge,
   defineSettings,
+  Lock,
   nextPageCursor,
   pageFromCursor,
   parseFilterIncludeExclude,
@@ -194,6 +195,8 @@ class AtsumaruBridge extends BridgeBase<Settings> {
 
   private tagCache = new Map<string, string>(); // tagId → tagName
   private tagPrewarmed = false;
+  // Serializes login() so concurrent 401s share one in-flight login instead of racing to log in twice.
+  private readonly loginLock = new Lock();
 
   private async prewarmTagCache(): Promise<void> {
     if (this.tagPrewarmed) return;
@@ -667,7 +670,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   private async authed(req: HttpRequest): Promise<HttpResponse> {
     let res = await this.request(req);
     if (res.status === 401) {
-      await this.login();
+      await this.loginLock.run(() => this.login());
       res = await this.request(req);
     }
     if (res.status >= 400) throw new Error(`${req.url} → ${res.status} ${res.statusText}`);

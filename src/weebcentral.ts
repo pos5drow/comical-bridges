@@ -18,9 +18,10 @@ import {
   type Chapter,
   type Credit,
   type Filter,
+  type ListRequest,
   type Page,
   type PagedResults,
-  type SearchOptions,
+  type SearchRequest,
   type SeriesEntry,
   type SeriesInfo,
   type SeriesList,
@@ -28,6 +29,8 @@ import {
   type SortOption,
   type TagGroup,
   defineBridge,
+  nextPageCursor,
+  pageFromCursor,
 } from "@comical/sdk";
 
 const BASE = "https://weebcentral.com";
@@ -131,7 +134,7 @@ class WeebCentralBridge extends BridgeBase {
     return `${BASE}/search/data?${q.toString()}`;
   }
 
-  /** Parse a `/search/data` htmx fragment into entries + whether a "View More" button is present. */
+  /** Parse a `/search/data` htmx fragment into entries plus the cursor for the next offset. */
   private parseListing(html: string, page: number): PagedResults<SeriesEntry> {
     const $ = this.parse(html);
     const items: SeriesEntry[] = [];
@@ -151,17 +154,19 @@ class WeebCentralBridge extends BridgeBase {
     });
     // The endpoint appends a "View More Results…" button (its own hx-get to the next offset) only
     // when another page exists; trust that over a 32-per-page count (the last page can be full).
-    const hasNextPage = $("button[hx-get*='/search/data']").length > 0;
-    return { items, page, hasNextPage };
+    const hasNext = $("button[hx-get*='/search/data']").length > 0;
+    return { items, nextCursor: nextPageCursor(page, hasNext) };
   }
 
   async getLists(): Promise<SeriesList[]> {
     return LISTS.map(({ sort: _s, order: _o, ...list }) => list);
   }
 
-  async getListItems(listId: string, page: number): Promise<PagedResults<SeriesEntry>> {
+  async getListItems(listId: string, req: ListRequest = {}): Promise<PagedResults<SeriesEntry>> {
     const list = LISTS.find((l) => l.id === listId);
     if (!list) throw new Error(`unknown list: ${listId}`);
+    // searchDataUrl turns the page into `offset`, so a plain page cursor is all this needs.
+    const page = pageFromCursor(req.cursor);
     const html = await this.fetchText(
       this.searchDataUrl({ page, sort: list.sort, order: list.order }),
       this.headers(),
@@ -199,21 +204,18 @@ class WeebCentralBridge extends BridgeBase {
     return SORTS.map((s) => ({ key: s.key, label: s.label }));
   }
 
-  async getSearchResults(
-    query: string,
-    page: number,
-    options?: SearchOptions,
-  ): Promise<PagedResults<SeriesEntry>> {
-    const sort = options?.sort?.key ?? (query.trim() ? "Best Match" : "Popularity");
-    const order = options?.sort && options.sort.ascending ? "Ascending" : "Descending";
+  async getSearchResults(req: SearchRequest): Promise<PagedResults<SeriesEntry>> {
+    const page = pageFromCursor(req.cursor);
+    const sort = req.sort?.key ?? (req.text.trim() ? "Best Match" : "Popularity");
+    const order = req.sort && req.sort.ascending ? "Ascending" : "Descending";
     let official: string | undefined;
     let status: string | undefined;
-    for (const f of options?.filters ?? []) {
+    for (const f of req.filters ?? []) {
       if (f.key === "official" && typeof f.value === "string") official = f.value;
       if (f.key === "status" && typeof f.value === "string") status = f.value;
     }
     const html = await this.fetchText(
-      this.searchDataUrl({ text: query, page, sort, order, official, status }),
+      this.searchDataUrl({ text: req.text, page, sort, order, official, status }),
       this.headers(),
     );
     return this.parseListing(html, page);

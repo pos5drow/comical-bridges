@@ -63,13 +63,13 @@ describe("Atsumaru cover variants", () => {
           : {},
       ),
     );
-    const { items } = await bridge.getSearchResults("q", 1);
+    const { items } = await bridge.getSearchResults({ text: "q" });
     expect(items[0].thumbnailUrl).toBe(`https://atsu.moe/static/${POSTER}-medium.webp`);
   });
 
   test("browse cards use mediumImage, not the full-size image", async () => {
     const bridge = factory(host((url) => (url.includes("/api/infinite/") ? { items: [LIST_ITEM] } : {})));
-    const { items } = await bridge.getListItems("trending", 1);
+    const { items } = await bridge.getListItems("trending");
     expect(items[0].thumbnailUrl).toBe(`https://atsu.moe/static/${POSTER}-medium.webp`);
   });
 
@@ -99,7 +99,7 @@ describe("Atsumaru cover variants", () => {
           : {},
       ),
     );
-    const { items } = await bridge.getSearchResults("q", 1);
+    const { items } = await bridge.getSearchResults({ text: "q" });
     expect(items[0].thumbnailUrl).toBe(`https://atsu.moe/static/${POSTER}.png`);
   });
 });

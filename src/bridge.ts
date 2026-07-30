@@ -17,11 +17,12 @@ import {
   type HttpRequest,
   type HttpResponse,
   type InferSettings,
+  type ListRequest,
   type Page,
   type PagedResults,
   type RelatedKind,
   type RelatedSeriesGroup,
-  type SearchOptions,
+  type SearchRequest,
   type SeriesEntry,
   type SeriesInfo,
   type SeriesList,
@@ -30,6 +31,8 @@ import {
   type SortOption,
   defineBridge,
   defineSettings,
+  nextPageCursor,
+  pageFromCursor,
   parseFilterIncludeExclude,
 } from "@comical/sdk";
 
@@ -409,13 +412,16 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     });
   }
 
-  async getListItems(listId: string, page: number): Promise<PagedResults<SeriesEntry>> {
+  async getListItems(listId: string, req: ListRequest = {}): Promise<PagedResults<SeriesEntry>> {
     const list = AtsumaruBridge.LISTS.find((l) => l.id === listId);
     if (!list) throw new Error(`unknown list: ${listId}`);
+    // atsu.moe's infinite-scroll endpoints are page-numbered, so the cursor is just a page number.
+    const page = pageFromCursor(req.cursor);
     const url = `${this.base()}/api/infinite/${list.endpoint}?page=${page - 1}&types=${TYPES}${this.adultParam()}`;
     const data = await this.getJson<BrowseMangaDto>(url);
     const items = (data.items ?? []).map((d) => this.toEntry(d));
-    return { items, page, hasNextPage: items.length >= PER_PAGE };
+    // A short page is the last one — the endpoint reports no total.
+    return { items, nextCursor: nextPageCursor(page, items.length >= PER_PAGE) };
   }
 
   /**
@@ -439,11 +445,9 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     return Promise.resolve(SORTS.map((s) => ({ key: s.value, label: s.label })));
   }
 
-  async getSearchResults(
-    query: string,
-    page: number,
-    options?: SearchOptions,
-  ): Promise<PagedResults<SeriesEntry>> {
+  async getSearchResults(req: SearchRequest): Promise<PagedResults<SeriesEntry>> {
+    // Typesense pages are 1-based (unlike the 0-indexed infinite-scroll endpoints above).
+    const page = pageFromCursor(req.cursor);
     // Single-quoted so the backtick field-quoting from Typesense's syntax stays literal.
     const clauses = [
       "hidden:!=true",
@@ -452,7 +456,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
       "views:>0",
     ];
 
-    for (const f of options?.filters ?? []) {
+    for (const f of req.filters ?? []) {
       const arr = Array.isArray(f.value) ? f.value : [];
       if (f.key === "genre") {
         const { include, exclude } = parseFilterIncludeExclude(f.value);
@@ -470,21 +474,21 @@ class AtsumaruBridge extends BridgeBase<Settings> {
 
     // Persistent per-bridge exclusions (capability "exclude-tags"): negate each tag id so the
     // excluded tags never appear in any search result. Typesense `!=` mirrors the `:=` inclusion above.
-    for (const id of options?.excludedTags ?? []) {
+    for (const id of req.excludedTags ?? []) {
       if (String(id).trim()) clauses.push(`tagIds:!=\`${String(id).trim()}\``);
     }
 
     // Sort is its own concern → Typesense sort_by (mirrors the backend's filter_by/sort_by split).
-    const sortBy = options?.sort ? `${options.sort.key}:${options.sort.ascending ? "asc" : "desc"}` : undefined;
+    const sortBy = req.sort ? `${req.sort.key}:${req.sort.ascending ? "asc" : "desc"}` : undefined;
 
     const params = new URLSearchParams({
-      q: query.trim() || "*",
+      q: req.text.trim() || "*",
       filter_by: clauses.join(" && "),
       page: String(page),
       per_page: String(PER_PAGE),
     });
     if (sortBy) params.set("sort_by", sortBy);
-    if (query.trim()) {
+    if (req.text.trim()) {
       params.set("query_by", "title,englishTitle,otherNames,authors");
       params.set("query_by_weights", "4,3,2,1");
       params.set("num_typos", "4,3,2,1");
@@ -499,11 +503,12 @@ class AtsumaruBridge extends BridgeBase<Settings> {
       const data = JSON.parse(body) as SearchResultsDto;
       const items = (data.hits ?? []).map((h) => this.toEntry(h.document));
       const perPage = data.request_params?.per_page || PER_PAGE;
-      return { items, page, hasNextPage: data.page * perPage < data.found };
+      // Typesense reports the total, so "is there more" is exact here rather than inferred.
+      return { items, nextCursor: nextPageCursor(page, data.page * perPage < data.found) };
     }
     const data = JSON.parse(body) as BrowseMangaDto;
     const items = (data.items ?? []).map((d) => this.toEntry(d));
-    return { items, page, hasNextPage: items.length >= PER_PAGE };
+    return { items, nextCursor: nextPageCursor(page, items.length >= PER_PAGE) };
   }
 
   async getSeriesDetails(seriesId: string): Promise<SeriesInfo> {
@@ -628,14 +633,15 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   // Auth is cookie-based: POST /api/auth/login establishes a session; core's gated network holds the
   // cookie. Calls retry once after a fresh login on 401 (lazy login). Credentials are secret settings.
 
-  async getFavorites(page: number): Promise<PagedResults<SeriesEntry>> {
+  async getFavorites(): Promise<PagedResults<SeriesEntry>> {
     // Omit the params when false — atsu.moe 400s on empty values (it doesn't accept `adult=`).
     const qs = this.setting("adult") === true ? "?adult=1&includeAdult=1" : "";
     const url = `${this.base()}/api/user/bookmarksPage${qs}`;
     const res = await this.authed({ url, headers: this.apiHeaders() });
     const data = JSON.parse(res.body) as { bookmarks?: BookmarkDto[] };
     const items = (data.bookmarks ?? []).map((b) => this.bookmarkToEntry(b));
-    return { items, page, hasNextPage: false };
+    // bookmarksPage returns the whole set in one shot — a single page, so no cursor.
+    return { items };
   }
 
   async addFavorite(seriesId: string): Promise<void> {

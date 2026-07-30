@@ -43,7 +43,7 @@ describe("getSearchResults exclude-tags push-down", () => {
     const { host, urls } = captureHost();
     const bridge = factory(host);
 
-    await bridge.getSearchResults("naruto", 1, { excludedTags: ["t1", "t2"] });
+    await bridge.getSearchResults({ text: "naruto", excludedTags: ["t1", "t2"] });
 
     expect(urls).toHaveLength(1);
     const fb = filterBy(urls[0]!);
@@ -55,7 +55,7 @@ describe("getSearchResults exclude-tags push-down", () => {
     const { host, urls } = captureHost();
     const bridge = factory(host);
 
-    await bridge.getSearchResults("naruto", 1, {});
+    await bridge.getSearchResults({ text: "naruto" });
 
     expect(filterBy(urls[0]!)).not.toContain("tagIds:!=");
   });
@@ -64,7 +64,7 @@ describe("getSearchResults exclude-tags push-down", () => {
     const { host, urls } = captureHost();
     const bridge = factory(host);
 
-    await bridge.getSearchResults("naruto", 1, { excludedTags: ["  ", "real"] });
+    await bridge.getSearchResults({ text: "naruto", excludedTags: ["  ", "real"] });
 
     const fb = filterBy(urls[0]!);
     expect(fb).toContain("tagIds:!=`real`");
@@ -75,7 +75,8 @@ describe("getSearchResults exclude-tags push-down", () => {
     const { host, urls } = captureHost();
     const bridge = factory(host);
 
-    await bridge.getSearchResults("naruto", 1, {
+    await bridge.getSearchResults({
+      text: "naruto",
       filters: [{ key: "tag", value: ["want"] }],
       excludedTags: ["avoid"],
     });

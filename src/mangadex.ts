@@ -11,15 +11,18 @@ import {
   type Chapter,
   type Credit,
   type Filter,
+  type ListRequest,
   type Page,
   type PagedResults,
-  type SearchOptions,
+  type SearchRequest,
   type SeriesEntry,
   type SeriesInfo,
   type SeriesList,
   type SeriesStatus,
   type SortOption,
   defineBridge,
+  nextOffsetCursor,
+  offsetFromCursor,
 } from "@comical/sdk";
 
 const BASE = "https://api.mangadex.org";
@@ -185,11 +188,12 @@ class MangaDexBridge extends BridgeBase {
     return LISTS.map(({ order: _, ...list }) => list);
   }
 
-  async getListItems(listId: string, page: number): Promise<PagedResults<SeriesEntry>> {
+  async getListItems(listId: string, req: ListRequest = {}): Promise<PagedResults<SeriesEntry>> {
     const list = LISTS.find((l) => l.id === listId);
     if (!list) throw new Error(`unknown list: ${listId}`);
 
-    const offset = (page - 1) * PER_PAGE;
+    // MangaDex is an offset/total API, so "is there another page" is exact, not inferred.
+    const offset = offsetFromCursor(req.cursor);
     const order = Object.entries(list.order).map(([k, v]) => `order[${k}]=${v}`).join("&");
     const url =
       `${BASE}/manga?limit=${PER_PAGE}&offset=${offset}` +
@@ -197,7 +201,7 @@ class MangaDexBridge extends BridgeBase {
       `&includes[]=cover_art`;
     const res = await this.getJson<MangaListResponse>(url);
     const items = res.data.map(toEntry);
-    return { items, page, hasNextPage: offset + items.length < res.total };
+    return { items, nextCursor: nextOffsetCursor(offset, items.length, res.total) };
   }
 
   async getFilters(): Promise<Filter[]> {
@@ -234,22 +238,18 @@ class MangaDexBridge extends BridgeBase {
     ];
   }
 
-  async getSearchResults(
-    query: string,
-    page: number,
-    options?: SearchOptions,
-  ): Promise<PagedResults<SeriesEntry>> {
-    const offset = (page - 1) * PER_PAGE;
+  async getSearchResults(req: SearchRequest): Promise<PagedResults<SeriesEntry>> {
+    const offset = offsetFromCursor(req.cursor);
     const params = new URLSearchParams();
     params.set("limit", String(PER_PAGE));
     params.set("offset", String(offset));
     params.append("includes[]", "cover_art");
 
-    if (query.trim()) params.set("title", query.trim());
+    if (req.text.trim()) params.set("title", req.text.trim());
 
     for (const rating of DEFAULT_RATINGS) params.append("contentRating[]", rating);
 
-    for (const f of options?.filters ?? []) {
+    for (const f of req.filters ?? []) {
       if (f.key === "status" && typeof f.value === "string") params.set("status", f.value);
       if (f.key === "contentRating" && typeof f.value === "string") {
         params.delete("contentRating[]");
@@ -260,16 +260,16 @@ class MangaDexBridge extends BridgeBase {
       }
     }
 
-    if (options?.sort) {
-      params.set(`order[${options.sort.key}]`, options.sort.ascending ? "asc" : "desc");
-    } else if (!query.trim()) {
+    if (req.sort) {
+      params.set(`order[${req.sort.key}]`, req.sort.ascending ? "asc" : "desc");
+    } else if (!req.text.trim()) {
       params.set("order[followedCount]", "desc");
     }
 
     const url = `${BASE}/manga?${params.toString()}`;
     const res = await this.getJson<MangaListResponse>(url);
     const items = res.data.map(toEntry);
-    return { items, page, hasNextPage: offset + items.length < res.total };
+    return { items, nextCursor: nextOffsetCursor(offset, items.length, res.total) };
   }
 
   async getSeriesDetails(seriesId: string): Promise<SeriesInfo> {

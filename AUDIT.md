@@ -7,7 +7,7 @@ shows ⚠ even for a hard failure.
 
 ## `atsumaru` — ✓ (15✓ 0⚠ 0✗ 1⊘)
 
-**6/7 capabilities** · cover 58 KB (360×540) · sampled 8 · failed 0 · bytes min 32 KB / avg 58 KB / median 54 KB / max 81 KB · dims avg 360×540 (max 360×540) · aspect avg 0.67
+**6/7 capabilities** · cover 48 KB (360×540) · sampled 8 · failed 0 · bytes min 23 KB / avg 48 KB / median 46 KB / max 77 KB · dims avg 360×540 (max 360×540) · aspect avg 0.67
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
@@ -30,7 +30,7 @@ shows ⚠ even for a hard failure.
 
 ## `weebcentral` — ✓ (13✓ 0⚠ 0✗ 1⊘)
 
-**4/4 capabilities** · cover 17 KB (200×300) · sampled 8 · failed 0 · bytes min 10 KB / avg 17 KB / median 17 KB / max 27 KB · dims avg 200×300 (max 200×300) · aspect avg 0.67
+**4/4 capabilities** · cover 17 KB (200×300) · sampled 8 · failed 0 · bytes min 10 KB / avg 17 KB / median 16 KB / max 27 KB · dims avg 200×300 (max 200×300) · aspect avg 0.67
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
@@ -49,24 +49,20 @@ shows ⚠ even for a hard failure.
 | ✓ | `read.chapters` | core | got 174 ordered, uniquely-identified chapter(s) |
 | ✓ | `read.pages` | core | got 16 page(s) |
 
-## `mangadex` — ⚠ (10✓ 1⚠ 0✗)
+## `mangadex` — ⚠ (3✓ 2⚠ 2✗)
 
-**3/3 capabilities** · cover 51 KB (256×376) · sampled 8 · failed 0 · bytes min 23 KB / avg 51 KB / median 46 KB / max 81 KB · dims avg 256×376 (max 256×402) · aspect avg 0.68
+**3/3 capabilities** · cover —
 
-> Cloudflare challenges datacenter (runner) IPs
+> flaky (tolerated): Cloudflare challenges datacenter (runner) IPs
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
-| ⚠ | `read.chapters.empty` | core | series has no chapters |
+| ✗ | `search.threw` | search | getSearchResults threw: getSearchResults threw: Was there a typo in the url or port? |
+| ✗ | `filters.effect` | filters | applying a filter threw: getSearchResults threw: Unable to connect. Is the computer able to access the url? |
+| ⚠ | `lists.threw` | lists | lists browse threw: getListItems threw: Unable to connect. Is the computer able to access the url? |
+| ⚠ | `read.noSample` | core | no item available to sample the read path (search/lists returned nothing) |
 | ✓ | `info.capabilities` | core | declares 3 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 3 list(s) |
-| ✓ | `lists.items` | lists | list "popular" returned 24 item(s) |
-| ✓ | `lists.idStability` | lists | list item ids are stable across calls |
-| ✓ | `lists.cursor` | lists | nextCursor advanced to 24 further item(s) |
-| ✓ | `search.items` | search | search returned 24 item(s) |
-| ✓ | `search.cursor` | search | nextCursor advanced to 24 further item(s) |
 | ✓ | `filters.descriptors` | filters | getFilters returned 3 filter(s) |
-| ✓ | `filters.effect` | filters | filter "contentRating" changed results (24→24) |
-| ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-08-01 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-08-02 by the nightly live audit ([`audit.ts`](audit.ts))._

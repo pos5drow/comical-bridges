@@ -25,12 +25,12 @@ shows ⚠ even for a hard failure.
 | ✓ | `sort.effect` | sort | sort "views" reorders results (asc ≠ desc) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 3 descriptor(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
-| ✓ | `read.chapters` | core | got 269 ordered, uniquely-identified chapter(s) |
+| ✓ | `read.chapters` | core | got 270 ordered, uniquely-identified chapter(s) |
 | ✓ | `read.pages` | core | got 58 page(s) |
 
 ## `weebcentral` — ✓ (13✓ 0⚠ 0✗ 1⊘)
 
-**4/4 capabilities** · cover 17 KB (200×300) · sampled 8 · failed 0 · bytes min 10 KB / avg 17 KB / median 16 KB / max 27 KB · dims avg 200×300 (max 200×300) · aspect avg 0.67
+**4/4 capabilities** · cover 17 KB (200×300) · sampled 8 · failed 0 · bytes min 11 KB / avg 17 KB / median 16 KB / max 27 KB · dims avg 200×300 (max 200×300) · aspect avg 0.67
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
@@ -46,23 +46,27 @@ shows ⚠ even for a hard failure.
 | ✓ | `filters.effect` | filters | filter "status" changed results (32→27) |
 | ✓ | `sort.options` | sort | getSortOptions returned 4 option(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
-| ✓ | `read.chapters` | core | got 174 ordered, uniquely-identified chapter(s) |
-| ✓ | `read.pages` | core | got 16 page(s) |
+| ✓ | `read.chapters` | core | got 1189 ordered, uniquely-identified chapter(s) |
+| ✓ | `read.pages` | core | got 17 page(s) |
 
-## `mangadex` — ⚠ (3✓ 2⚠ 2✗)
+## `mangadex` — ⚠ (10✓ 1⚠ 0✗)
 
-**3/3 capabilities** · cover —
+**3/3 capabilities** · cover 51 KB (256×376) · sampled 8 · failed 0 · bytes min 23 KB / avg 51 KB / median 46 KB / max 81 KB · dims avg 256×376 (max 256×402) · aspect avg 0.68
 
-> flaky (tolerated): Cloudflare challenges datacenter (runner) IPs
+> Cloudflare challenges datacenter (runner) IPs
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
-| ✗ | `search.threw` | search | getSearchResults threw: getSearchResults threw: Was there a typo in the url or port? |
-| ✗ | `filters.effect` | filters | applying a filter threw: getSearchResults threw: Unable to connect. Is the computer able to access the url? |
-| ⚠ | `lists.threw` | lists | lists browse threw: getListItems threw: Unable to connect. Is the computer able to access the url? |
-| ⚠ | `read.noSample` | core | no item available to sample the read path (search/lists returned nothing) |
+| ⚠ | `read.chapters.empty` | core | series has no chapters |
 | ✓ | `info.capabilities` | core | declares 3 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 3 list(s) |
+| ✓ | `lists.items` | lists | list "popular" returned 24 item(s) |
+| ✓ | `lists.idStability` | lists | list item ids are stable across calls |
+| ✓ | `lists.cursor` | lists | nextCursor advanced to 24 further item(s) |
+| ✓ | `search.items` | search | search returned 24 item(s) |
+| ✓ | `search.cursor` | search | nextCursor advanced to 24 further item(s) |
 | ✓ | `filters.descriptors` | filters | getFilters returned 3 filter(s) |
+| ✓ | `filters.effect` | filters | filter "contentRating" changed results (24→24) |
+| ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-08-02 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-08-03 by the nightly live audit ([`audit.ts`](audit.ts))._

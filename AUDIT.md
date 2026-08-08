@@ -46,8 +46,8 @@ shows ⚠ even for a hard failure.
 | ✓ | `filters.effect` | filters | filter "status" changed results (32→27) |
 | ✓ | `sort.options` | sort | getSortOptions returned 4 option(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
-| ✓ | `read.chapters` | core | got 357 ordered, uniquely-identified chapter(s) |
-| ✓ | `read.pages` | core | got 19 page(s) |
+| ✓ | `read.chapters` | core | got 1190 ordered, uniquely-identified chapter(s) |
+| ✓ | `read.pages` | core | got 16 page(s) |
 
 ## `mangadex` — ⚠ (10✓ 1⚠ 0✗)
 
@@ -69,4 +69,4 @@ shows ⚠ even for a hard failure.
 | ✓ | `filters.effect` | filters | filter "contentRating" changed results (24→24) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-08-06 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-08-08 by the nightly live audit ([`audit.ts`](audit.ts))._

@@ -17,10 +17,10 @@ shows ⚠ even for a hard failure.
 | ✓ | `lists.items` | lists | list "trending" returned 40 item(s) |
 | ✓ | `lists.idStability` | lists | list item ids are stable across calls |
 | ✓ | `lists.cursor` | lists | nextCursor advanced to 40 further item(s) |
-| ✓ | `search.items` | search | search returned 11 item(s) |
+| ✓ | `search.items` | search | search returned 12 item(s) |
 | ✓ | `search.cursor` | search | single page (no nextCursor) |
 | ✓ | `filters.descriptors` | filters | getFilters returned 5 filter(s) |
-| ✓ | `filters.effect` | filters | filter "genre" changed results (11→7) |
+| ✓ | `filters.effect` | filters | filter "genre" changed results (12→8) |
 | ✓ | `sort.options` | sort | getSortOptions returned 6 option(s) |
 | ✓ | `sort.effect` | sort | sort "views" reorders results (asc ≠ desc) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 3 descriptor(s) |
@@ -69,4 +69,4 @@ shows ⚠ even for a hard failure.
 | ✓ | `filters.effect` | filters | filter "contentRating" changed results (24→24) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-08-26 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-08-27 by the nightly live audit ([`audit.ts`](audit.ts))._

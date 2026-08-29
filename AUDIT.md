@@ -51,7 +51,7 @@ shows ⚠ even for a hard failure.
 
 ## `mangadex` — ⚠ (10✓ 1⚠ 0✗)
 
-**3/3 capabilities** · cover 51 KB (256×376) · sampled 8 · failed 0 · bytes min 23 KB / avg 51 KB / median 46 KB / max 81 KB · dims avg 256×376 (max 256×402) · aspect avg 0.68
+**3/3 capabilities** · cover 50 KB (256×376) · sampled 8 · failed 0 · bytes min 23 KB / avg 50 KB / median 46 KB / max 81 KB · dims avg 256×376 (max 256×402) · aspect avg 0.68
 
 > Cloudflare challenges datacenter (runner) IPs
 
@@ -69,4 +69,4 @@ shows ⚠ even for a hard failure.
 | ✓ | `filters.effect` | filters | filter "contentRating" changed results (24→24) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-08-27 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-08-29 by the nightly live audit ([`audit.ts`](audit.ts))._

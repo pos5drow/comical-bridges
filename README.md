@@ -32,7 +32,7 @@ inconclusive sort/filter probe — never counted against a bridge). Per-check re
 | `weebcentral` | ✓ (13✓ 0⚠ 0✗ 1⊘) | 4/4 | 19 KB (200×300) | — |
 | `mangadex` | ⚠ (10✓ 1⚠ 0✗) | 3/3 | 50 KB (256×376) | Cloudflare challenges datacenter (runner) IPs |
 
-_Updated 2026-08-29 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-08-31 by the nightly live audit ([`audit.ts`](audit.ts))._
 <!-- BRIDGE-STATUS:END -->
 
 ## Develop

@@ -25,7 +25,7 @@ shows ⚠ even for a hard failure.
 | ✓ | `sort.effect` | sort | sort "views" reorders results (asc ≠ desc) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 3 descriptor(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
-| ✓ | `read.chapters` | core | got 273 ordered, uniquely-identified chapter(s) |
+| ✓ | `read.chapters` | core | got 274 ordered, uniquely-identified chapter(s) |
 | ✓ | `read.pages` | core | got 58 page(s) |
 
 ## `weebcentral` — ✓ (13✓ 0⚠ 0✗ 1⊘)
@@ -47,7 +47,7 @@ shows ⚠ even for a hard failure.
 | ✓ | `sort.options` | sort | getSortOptions returned 4 option(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 | ✓ | `read.chapters` | core | got 1192 ordered, uniquely-identified chapter(s) |
-| ✓ | `read.pages` | core | got 14 page(s) |
+| ✓ | `read.pages` | core | got 15 page(s) |
 
 ## `mangadex` — ⚠ (10✓ 1⚠ 0✗)
 
@@ -69,4 +69,4 @@ shows ⚠ even for a hard failure.
 | ✓ | `filters.effect` | filters | filter "contentRating" changed results (24→24) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-09-06 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-09-07 by the nightly live audit ([`audit.ts`](audit.ts))._

@@ -28,26 +28,21 @@ shows ⚠ even for a hard failure.
 | ✓ | `read.chapters` | core | got 274 ordered, uniquely-identified chapter(s) |
 | ✓ | `read.pages` | core | got 58 page(s) |
 
-## `weebcentral` — ✓ (13✓ 0⚠ 0✗ 1⊘)
+## `weebcentral` — ✗ (4✓ 2⚠ 1✗ 2⊘)
 
-**4/4 capabilities** · cover 16 KB (200×300) · sampled 8 · failed 0 · bytes min 11 KB / avg 16 KB / median 14 KB / max 27 KB · dims avg 200×300 (max 200×300) · aspect avg 0.67
+**4/4 capabilities** · cover —
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
-| ⊘ | `sort.effect` | sort | asc/desc on "Best Match" produced identical order |
+| ✗ | `lists.items` | lists | list "popular" returned no items |
+| ⚠ | `search.items` | search | search for "blue" returned no items (try --query) |
+| ⚠ | `read.noSample` | core | no item available to sample the read path (search/lists returned nothing) |
+| ⊘ | `filters.effect` | filters | applying filter "status=Ongoing" did not change the sampled page |
+| ⊘ | `sort.effect` | sort | not enough results to observe sort order |
 | ✓ | `info.capabilities` | core | declares 4 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 2 list(s) |
-| ✓ | `lists.items` | lists | list "popular" returned 32 item(s) |
-| ✓ | `lists.idStability` | lists | list item ids are stable across calls |
-| ✓ | `lists.cursor` | lists | nextCursor advanced to 32 further item(s) |
-| ✓ | `search.items` | search | search returned 32 item(s) |
-| ✓ | `search.cursor` | search | nextCursor advanced to 32 further item(s) |
 | ✓ | `filters.descriptors` | filters | getFilters returned 2 filter(s) |
-| ✓ | `filters.effect` | filters | filter "status" changed results (32→28) |
 | ✓ | `sort.options` | sort | getSortOptions returned 4 option(s) |
-| ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
-| ✓ | `read.chapters` | core | got 1192 ordered, uniquely-identified chapter(s) |
-| ✓ | `read.pages` | core | got 15 page(s) |
 
 ## `mangadex` — ⚠ (10✓ 1⚠ 0✗)
 
@@ -69,4 +64,4 @@ shows ⚠ even for a hard failure.
 | ✓ | `filters.effect` | filters | filter "contentRating" changed results (24→24) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-09-09 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-09-10 by the nightly live audit ([`audit.ts`](audit.ts))._

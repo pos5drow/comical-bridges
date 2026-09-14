@@ -25,7 +25,7 @@ shows ⚠ even for a hard failure.
 | ✓ | `sort.effect` | sort | sort "views" reorders results (asc ≠ desc) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 3 descriptor(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
-| ✓ | `read.chapters` | core | got 274 ordered, uniquely-identified chapter(s) |
+| ✓ | `read.chapters` | core | got 275 ordered, uniquely-identified chapter(s) |
 | ✓ | `read.pages` | core | got 58 page(s) |
 
 ## `weebcentral` — ✗ (4✓ 2⚠ 1✗ 2⊘)
@@ -64,4 +64,4 @@ shows ⚠ even for a hard failure.
 | ✓ | `filters.effect` | filters | filter "contentRating" changed results (24→24) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-09-10 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-09-14 by the nightly live audit ([`audit.ts`](audit.ts))._

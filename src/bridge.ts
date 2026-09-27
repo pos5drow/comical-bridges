@@ -43,6 +43,13 @@ import {
  * adult-content toggle (the reference's +18 mode → `&adult=1`).
  */
 const BASE_URL = "https://atsu.moe";
+/**
+ * Images (covers + chapter pages) live on the CDN, which is what the site itself loads from. The
+ * legacy `atsu.moe/static/…` path only 301s here, and its nginx intermittently answers `410 Gone`
+ * instead under a reader's burst of page requests — so some pages failed to load for us but never
+ * on the site.
+ */
+const CDN_URL = "https://cdn.atsu.moe";
 
 const SETTINGS = defineSettings([
   { type: "boolean", key: "adult", label: "Show adult content", default: false },
@@ -182,7 +189,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "pos5drow.atsumaru",
     name: "Atsumaru",
-    version: "0.3.0",
+    version: "0.3.1",
     contractVersion: "2.0.0",
     languages: ["en"],
     nsfw: false,
@@ -257,8 +264,11 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     let url: string;
     if (/^https?/.test(cleaned)) url = cleaned;
     else if (cleaned.startsWith("//")) url = `https:${cleaned}`;
-    else url = `${this.base()}/static/${cleaned}`;
-    return url.replace(PROTOCOL_REGEX, "https://");
+    else url = `${CDN_URL}/static/${cleaned}`;
+    // Absolute URLs on the legacy origin path get the same CDN rewrite as relative ones.
+    return url
+      .replace(PROTOCOL_REGEX, "https://")
+      .replace(/^https:\/\/(?:www\.)?atsu\.moe\/static\//, `${CDN_URL}/static/`);
   }
 
   /**

@@ -64,13 +64,13 @@ describe("Atsumaru cover variants", () => {
       ),
     );
     const { items } = await bridge.getSearchResults({ text: "q" });
-    expect(items[0].thumbnailUrl).toBe(`https://atsu.moe/static/${POSTER}-medium.webp`);
+    expect(items[0].thumbnailUrl).toBe(`https://cdn.atsu.moe/static/${POSTER}-medium.webp`);
   });
 
   test("browse cards use mediumImage, not the full-size image", async () => {
     const bridge = factory(host((url) => (url.includes("/api/infinite/") ? { items: [LIST_ITEM] } : {})));
     const { items } = await bridge.getListItems("trending");
-    expect(items[0].thumbnailUrl).toBe(`https://atsu.moe/static/${POSTER}-medium.webp`);
+    expect(items[0].thumbnailUrl).toBe(`https://cdn.atsu.moe/static/${POSTER}-medium.webp`);
   });
 
   test("the detail hero keeps largeImage from the nested poster object", async () => {
@@ -82,7 +82,7 @@ describe("Atsumaru cover variants", () => {
       ),
     );
     const info = await bridge.getSeriesDetails("d1");
-    expect(info.thumbnailUrl).toBe(`https://atsu.moe/static/${POSTER}-large.webp`);
+    expect(info.thumbnailUrl).toBe(`https://cdn.atsu.moe/static/${POSTER}-large.webp`);
   });
 
   test("falls back to the original only when no 2:3 variant exists", async () => {
@@ -100,6 +100,6 @@ describe("Atsumaru cover variants", () => {
       ),
     );
     const { items } = await bridge.getSearchResults({ text: "q" });
-    expect(items[0].thumbnailUrl).toBe(`https://atsu.moe/static/${POSTER}.png`);
+    expect(items[0].thumbnailUrl).toBe(`https://cdn.atsu.moe/static/${POSTER}.png`);
   });
 });

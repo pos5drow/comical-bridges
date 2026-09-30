@@ -7,7 +7,7 @@ shows ⚠ even for a hard failure.
 
 ## `atsumaru` — ✓ (15✓ 0⚠ 0✗ 1⊘)
 
-**6/7 capabilities** · cover 48 KB (360×540) · sampled 8 · failed 0 · bytes min 23 KB / avg 48 KB / median 46 KB / max 77 KB · dims avg 360×540 (max 360×540) · aspect avg 0.67
+**6/7 capabilities** · cover 47 KB · sampled 8 · failed 0 · bytes min 23 KB / avg 47 KB / median 45 KB / max 77 KB
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
@@ -64,4 +64,4 @@ shows ⚠ even for a hard failure.
 | ✓ | `filters.effect` | filters | filter "contentRating" changed results (24→24) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-09-28 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-09-30 by the nightly live audit ([`audit.ts`](audit.ts))._

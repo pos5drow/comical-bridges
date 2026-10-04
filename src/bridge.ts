@@ -17,6 +17,7 @@ import {
   type HttpRequest,
   type HttpResponse,
   type InferSettings,
+  type InfoCell,
   type ListRequest,
   type Page,
   type PagedResults,
@@ -86,6 +87,16 @@ interface MangaDto {
   tags?: unknown;
   status?: string;
   type?: string;
+  /** Detail-only. `otherNames` routinely repeats `title` in another casing; see `altTitles`. */
+  englishTitle?: unknown;
+  otherNames?: unknown;
+  /** Out of 10. NOT averaged over `reviewCount` — that counts written reviews, and a series with one
+   *  review carries a many-decimal average — so the site gives no sample size for it. */
+  avgRating?: unknown;
+  /** Already abbreviated by the site ("716.5K"). */
+  views?: unknown;
+  /** Epoch ms at midnight UTC on 1 January: a release YEAR, not a date. */
+  released?: unknown;
   /** Scanlation teams aggregated for this series; Atsumaru labels them Alpha/Beta/Gamma/… */
   scanlators?: Array<{ id: string; name: string }>;
   /** Editorial related series, each typed (SpinOff/Sequel/Prequel/…). Only on the detail payload. */
@@ -189,11 +200,12 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "pos5drow.atsumaru",
     name: "Atsumaru",
-    version: "0.3.1",
+    version: "0.3.2",
     contractVersion: "2.0.0",
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "settings", "favorites", "exclude-tags"],
+    ratings: true,
     iconUrl: `${BASE_URL}/favicon/android-chrome-512x512.png`, // 512×512 (favicon.ico is tiny)
     // atsu.moe tolerates ~2 req/s; serialize and space requests to stay polite. Every host
     // (server, web, native) inherits this — no per-host configuration needed.
@@ -336,6 +348,35 @@ class AtsumaruBridge extends BridgeBase<Settings> {
         return undefined;
       })
       .filter((s): s is string => !!s);
+  }
+
+  /** `englishTitle` + `otherNames`, minus blanks, repeats, and anything that is just `title` again. */
+  private static altTitles(dto: MangaDto): string[] {
+    const seen = new Set([dto.title.trim().toLowerCase()]);
+    const out: string[] = [];
+    for (const raw of [dto.englishTitle, ...(Array.isArray(dto.otherNames) ? dto.otherNames : [])]) {
+      const name = typeof raw === "string" ? raw.trim() : "";
+      if (!name || seen.has(name.toLowerCase())) continue;
+      seen.add(name.toLowerCase());
+      out.push(name);
+    }
+    return out;
+  }
+
+  /** The facts the app only prints. Values are cut to the contract's 80-char cell limit. */
+  private static infoCells(dto: MangaDto): InfoCell[] {
+    const cells: InfoCell[] = [];
+    if (typeof dto.released === "number" && Number.isFinite(dto.released)) {
+      // UTC, or the site's midnight-on-New-Year's timestamp reads as the previous year west of Greenwich.
+      const year = new Date(dto.released).getUTCFullYear();
+      if (year >= 1900 && year <= 2100) cells.push({ label: "Year", value: String(year) });
+    }
+    const views =
+      typeof dto.views === "string" ? dto.views.trim()
+      : typeof dto.views === "number" && dto.views > 0 ? String(dto.views)
+      : "";
+    if (views) cells.push({ label: "Views", value: views.slice(0, 80) });
+    return cells;
   }
 
   /** Split authors into author/artist names by `type`, deduped (ports Dto.kt toSManga). */
@@ -581,6 +622,17 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     if (groups.length > 0) info.tagGroups = groups;
 
     info.status = STATUS_MAP[dto.status?.toLowerCase().trim() ?? ""] ?? "unknown";
+
+    const altTitles = AtsumaruBridge.altTitles(dto);
+    if (altTitles.length > 0) info.altTitles = altTitles;
+
+    // No `votes`: see `MangaDto.avgRating`. An unrated series comes back null or 0, never a real zero.
+    if (typeof dto.avgRating === "number" && dto.avgRating > 0) {
+      info.rating = { score: Math.min(1, dto.avgRating / 10) };
+    }
+
+    const infoCells = AtsumaruBridge.infoCells(dto);
+    if (infoCells.length > 0) info.infoCells = infoCells;
 
     const related = this.relatedGroups(dto);
     if (related.length > 0) info.relatedSeriesGroups = related;

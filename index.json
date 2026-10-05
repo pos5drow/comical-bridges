@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-10-05T00:27:25.906Z",
+  "updated": "2026-10-05T02:55:24.937Z",
   "bridges": [
     {
       "id": "pos5drow.atsumaru",
@@ -23,6 +23,7 @@
       "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.atsumaru/0.3.2/bridge.js",
       "sha256": "e74b51ae8e3449045a474eefeb4d1453e650c03431a85d4f8bd162874f0cfd85",
       "iconUrl": "https://atsu.moe/favicon/android-chrome-512x512.png",
+      "ratings": true,
       "signature": "knVRqs6M0Hws3eOaTriYTArBtMvW9zOj-MZdaajbJzos8ZC9NRdeAmy38_z56jZSBMPQXvxEBCBGLsEgC8W0BQ"
     },
     {

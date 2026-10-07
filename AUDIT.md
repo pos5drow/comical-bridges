@@ -5,17 +5,17 @@ backend. ✓ pass · ⚠ warn · ✗ fail · ⊘ skipped (auth-gated with no cre
 sort/filter probe — never a defect). Warnings never fail the run; a tolerated flaky/blocked bridge
 shows ⚠ even for a hard failure.
 
-## `atsumaru` — ✓ (15✓ 0⚠ 0✗ 1⊘)
+## `atsumaru` — ✗ (14✓ 0⚠ 1✗ 1⊘)
 
 **6/7 capabilities** · cover 47 KB · sampled 8 · failed 0 · bytes min 23 KB / avg 47 KB / median 45 KB / max 77 KB
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
+| ✗ | `lists.idStability` | lists | list "trending" item ids are not stable across identical calls |
 | ⊘ | `favorites.read` | favorites | getFavorites needs credentials (none configured) — skipped: getFavorites threw: Error: favorites require a username + password (set them in this bridge's settings) |
 | ✓ | `info.capabilities` | core | declares 7 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 2 list(s) |
 | ✓ | `lists.items` | lists | list "trending" returned 40 item(s) |
-| ✓ | `lists.idStability` | lists | list item ids are stable across calls |
 | ✓ | `lists.cursor` | lists | nextCursor advanced to 40 further item(s) |
 | ✓ | `search.items` | search | search returned 13 item(s) |
 | ✓ | `search.cursor` | search | single page (no nextCursor) |
@@ -64,4 +64,4 @@ shows ⚠ even for a hard failure.
 | ✓ | `filters.effect` | filters | filter "contentRating" changed results (24→24) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-10-05 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-10-07 by the nightly live audit ([`audit.ts`](audit.ts))._

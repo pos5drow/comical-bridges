@@ -28,11 +28,11 @@ inconclusive sort/filter probe — never counted against a bridge). Per-check re
 <!-- BRIDGE-STATUS:START -->
 | Bridge | Status | Capabilities | Avg cover | Notes |
 |---|---|---|---|---|
-| `atsumaru` | ✓ (15✓ 0⚠ 0✗ 1⊘) | 6/7 | 47 KB | — |
+| `atsumaru` | ✗ (14✓ 0⚠ 1✗ 1⊘) | 6/7 | 47 KB | — |
 | `weebcentral` | ✗ (4✓ 2⚠ 1✗ 2⊘) | 4/4 | — | — |
 | `mangadex` | ⚠ (10✓ 1⚠ 0✗) | 3/3 | 50 KB (256×376) | Cloudflare challenges datacenter (runner) IPs |
 
-_Updated 2026-10-05 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-10-07 by the nightly live audit ([`audit.ts`](audit.ts))._
 <!-- BRIDGE-STATUS:END -->
 
 ## Develop

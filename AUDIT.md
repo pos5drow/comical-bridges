@@ -28,17 +28,17 @@ shows ⚠ even for a hard failure.
 | ✓ | `read.chapters` | core | got 278 ordered, uniquely-identified chapter(s) |
 | ✓ | `read.pages` | core | got 58 page(s) |
 
-## `weebcentral` — ✗ (4✓ 2⚠ 1✗ 2⊘)
+## `weebcentral` — ✗ (4✓ 3⚠ 2✗)
 
 **4/4 capabilities** · cover —
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
-| ✗ | `lists.items` | lists | list "popular" returned no items |
-| ⚠ | `search.items` | search | search for "blue" returned no items (try --query) |
+| ✗ | `filters.effect` | filters | applying a filter threw: getSearchResults threw: Error: [rate-limited:300000] challenged by Cloudflare |
+| ✗ | `sort.effect` | sort | applying a sort threw: getSearchResults threw: Error: [rate-limited:300000] challenged by Cloudflare |
+| ⚠ | `lists.threw` | lists | lists browse threw: getListItems threw: Error: [rate-limited:300000] challenged by Cloudflare |
+| ⚠ | `search.threw` | search | getSearchResults threw: getSearchResults threw: Error: [rate-limited:300000] challenged by Cloudflare |
 | ⚠ | `read.noSample` | core | no item available to sample the read path (search/lists returned nothing) |
-| ⊘ | `filters.effect` | filters | applying filter "status=Ongoing" did not change the sampled page |
-| ⊘ | `sort.effect` | sort | not enough results to observe sort order |
 | ✓ | `info.capabilities` | core | declares 4 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 2 list(s) |
 | ✓ | `filters.descriptors` | filters | getFilters returned 2 filter(s) |
@@ -64,4 +64,4 @@ shows ⚠ even for a hard failure.
 | ✓ | `filters.effect` | filters | filter "contentRating" changed results (24→24) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-10-12 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-10-15 by the nightly live audit ([`audit.ts`](audit.ts))._

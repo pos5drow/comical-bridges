@@ -200,7 +200,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "pos5drow.atsumaru",
     name: "Atsumaru",
-    version: "0.3.3",
+    version: "0.3.4",
     contractVersion: "2.0.0",
     languages: ["en"],
     nsfw: false,
@@ -210,6 +210,8 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     // atsu.moe tolerates ~2 req/s; serialize and space requests to stay polite. Every host
     // (server, web, native) inherits this — no per-host configuration needed.
     rateLimit: { maxConcurrent: 1, minIntervalMs: 550 },
+    // Paces a chapter download's page fetches against the image host.
+    assetRateLimit: { maxConcurrent: 2, minIntervalMs: 500 },
   };
 
   private tagCache = new Map<string, string>(); // tagId → tagName

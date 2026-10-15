@@ -18,6 +18,8 @@ import {
   type Chapter,
   type Credit,
   type Filter,
+  type HttpRequest,
+  type HttpResponse,
   type ListRequest,
   type Page,
   type PagedResults,
@@ -31,11 +33,14 @@ import {
   defineBridge,
   nextPageCursor,
   pageFromCursor,
+  rateLimitedMessage,
 } from "@comical/sdk";
 
 const BASE = "https://weebcentral.com";
 const COVER_BASE = "https://temp.compsci88.com/cover";
 const PER_PAGE = 32;
+/** Cloudflare challenges a client it has decided is a bot for a while; asking again only extends it. */
+const CHALLENGE_WAIT_MS = 5 * 60 * 1000;
 const UA =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
 
@@ -93,7 +98,7 @@ class WeebCentralBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.weebcentral",
     name: "Weeb Central",
-    version: "0.2.3",
+    version: "0.2.4",
     contractVersion: "2.0.0",
     languages: ["en"],
     nsfw: false,
@@ -101,7 +106,19 @@ class WeebCentralBridge extends BridgeBase {
     iconUrl: `${BASE}/favicon.ico`,
     // The site is strict — its own extension throttles to 1 request / 2s.
     rateLimit: { maxConcurrent: 1, minIntervalMs: 2000 },
+    // Paces a chapter download's page fetches against the image host.
+    assetRateLimit: { maxConcurrent: 3, minIntervalMs: 250 },
   };
+
+  /** A Cloudflare challenge page is a refusal to wait out, not markup to parse. */
+  protected override async request(req: HttpRequest): Promise<HttpResponse> {
+    const res = await super.request(req);
+    const mitigated = Object.entries(res.headers).find(([k]) => k.toLowerCase() === "cf-mitigated")?.[1];
+    if (mitigated?.toLowerCase().includes("challenge")) {
+      throw new Error(rateLimitedMessage(CHALLENGE_WAIT_MS, "challenged by Cloudflare"));
+    }
+    return res;
+  }
 
   private headers(): Record<string, string> {
     return {

@@ -29,6 +29,9 @@ const BASE = "https://api.mangadex.org";
 const SITE = "https://mangadex.org";
 const COVER_BASE = "https://uploads.mangadex.org/covers";
 const PER_PAGE = 24;
+/** An at-home server assignment is good for ~15 min and its endpoint allows ~40 req/min, so a
+ *  chapter reopened, re-resolved or downloaded soon after reading reuses the one it got. */
+const AT_HOME_TTL_MS = 5 * 60 * 1000;
 
 // ── API DTOs ──────────────────────────────────────────────────────────────────
 
@@ -166,14 +169,18 @@ class MangaDexBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.mangadex",
     name: "MangaDex",
-    version: "0.3.3",
+    version: "0.3.4",
     contractVersion: "2.0.0",
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters"],
     iconUrl: "https://mangadex.org/pwa/icons/icon-512.png", // 512×512 (favicon.ico is tiny)
     rateLimit: { maxConcurrent: 2, minIntervalMs: 350 },
+    // Paces a chapter download's page fetches against the at-home image servers.
+    assetRateLimit: { maxConcurrent: 3, minIntervalMs: 350 },
   };
+
+  private readonly atHome = new Map<string, { at: number; pages: Page[] }>();
 
   private async getJson<T>(url: string): Promise<T> {
     return this.fetchJson<T>(url, {
@@ -389,12 +396,18 @@ class MangaDexBridge extends BridgeBase {
 
   async getChapterPages(seriesId: string, chapterId: string): Promise<Page[]> {
     void seriesId;
+    const now = Date.now();
+    const hit = this.atHome.get(chapterId);
+    if (hit && now - hit.at < AT_HOME_TTL_MS) return hit.pages;
+    for (const [id, entry] of this.atHome) if (now - entry.at >= AT_HOME_TTL_MS) this.atHome.delete(id);
     const res = await this.getJson<AtHomeResponse>(`${BASE}/at-home/server/${encodeURIComponent(chapterId)}`);
     const { baseUrl, chapter } = res;
-    return chapter.data.map((filename, index): Page => ({
+    const pages = chapter.data.map((filename, index): Page => ({
       index,
       imageUrl: `${baseUrl}/data/${chapter.hash}/${filename}`,
     }));
+    this.atHome.set(chapterId, { at: now, pages });
+    return pages;
   }
 }
 

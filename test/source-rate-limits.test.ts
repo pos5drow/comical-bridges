@@ -6,6 +6,8 @@
  */
 import { afterEach, describe, expect, setSystemTime, test } from "bun:test";
 import type { HostCapabilities, HttpRequest, HttpResponse } from "@comical/contract";
+import { bridgeInfoSchema } from "@comical/contract";
+import { compilePathGlob, hostMatches, hostOf, pathOf } from "@comical/core";
 import { parseRateLimited } from "@comical/sdk";
 import mangadexFactory from "../src/mangadex.ts";
 import weebcentralFactory from "../src/weebcentral.ts";
@@ -61,6 +63,19 @@ describe("mangadex at-home assignments", () => {
     const fresh = await bridge.getChapterPages("s", "c1");
     expect(asked).toBe(3);
     expect(fresh[0]?.imageUrl).toBe("https://node3.example/data/h/1.png");
+  });
+});
+
+describe("mangadex at-home route quota", () => {
+  test("the at-home endpoint alone carries the 40/min route, parsing under the contract", () => {
+    const bridge = mangadexFactory(host(() => ({})));
+    expect(() => bridgeInfoSchema.parse(bridge.info)).not.toThrow();
+    const routes = bridge.info.rateLimit!.routes!;
+    const matches = (url: string) =>
+      routes.find((r) => (r.host === undefined || hostMatches(hostOf(url)!, r.host)) && compilePathGlob(r.match).test(pathOf(url)));
+    expect(matches("https://api.mangadex.org/at-home/server/abc-123")?.limit).toBe(40);
+    expect(matches("https://api.mangadex.org/manga?limit=24")).toBeUndefined();
+    expect(matches("https://uploads.mangadex.org/at-home/server/x")).toBeUndefined();
   });
 });
 

@@ -169,13 +169,18 @@ class MangaDexBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.mangadex",
     name: "MangaDex",
-    version: "0.3.4",
+    version: "0.3.5",
     contractVersion: "2.0.0",
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters"],
     iconUrl: "https://mangadex.org/pwa/icons/icon-512.png", // 512×512 (favicon.ico is tiny)
-    rateLimit: { maxConcurrent: 2, minIntervalMs: 350 },
+    rateLimit: {
+      maxConcurrent: 2,
+      minIntervalMs: 350,
+      // The at-home endpoint has its own 40/min budget on top of the global pacing.
+      routes: [{ match: "/at-home/server/*", host: "api.mangadex.org", limit: 40, windowMs: 60_000 }],
+    },
     // Paces a chapter download's page fetches against the at-home image servers.
     assetRateLimit: { maxConcurrent: 3, minIntervalMs: 350 },
   };

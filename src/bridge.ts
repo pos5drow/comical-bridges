@@ -200,7 +200,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "pos5drow.atsumaru",
     name: "Atsumaru",
-    version: "0.3.6",
+    version: "0.3.7",
     contractVersion: "2.0.0",
     languages: ["en"],
     nsfw: false,
@@ -248,10 +248,6 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     return BASE_URL;
   }
 
-  private adultParam(): string {
-    return this.setting("adult") === true ? "&adult=1" : "";
-  }
-
   /** Browser-like headers; mirrors the reference's apiHeaders (Accept, Referer) + a real UA. */
   private apiHeaders(): Record<string, string> {
     return {
@@ -261,8 +257,19 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     };
   }
 
-  private getJson<T>(url: string): Promise<T> {
-    return this.fetchJson<T>(url, this.apiHeaders());
+  /**
+   * GET + parse JSON, but fail loudly on a non-2xx or non-JSON answer. The runtime hands a 404's
+   * plain-text body straight back, so without this a retired endpoint surfaced as an opaque
+   * "JSON Parse error" instead of naming the URL that broke.
+   */
+  private async getJson<T>(url: string): Promise<T> {
+    const res = await this.request({ url, headers: this.apiHeaders() });
+    if (res.status >= 400) throw new Error(`atsu.moe answered HTTP ${res.status} for ${url}`);
+    try {
+      return JSON.parse(res.body) as T;
+    } catch {
+      throw new Error(`atsu.moe answered non-JSON for ${url}: ${res.body.slice(0, 80)}`);
+    }
   }
 
   /** Three-tier image resolution, ported from Dto.kt getImagePath + toSManga. */
@@ -455,25 +462,54 @@ class AtsumaruBridge extends BridgeBase<Settings> {
 
   // ── Required + capability methods ────────────────────────────────────────────
 
-  /** Atsumaru's browsable lists. Each maps to an `/api/infinite/{endpoint}` route. */
-  private static readonly LISTS: ReadonlyArray<SeriesList & { endpoint: string }> = [
-    { id: "trending", name: "Trending", layout: "carousel", featured: true, endpoint: "trending" },
-    { id: "recentlyUpdated", name: "Recently Updated", layout: "grid", featured: true, endpoint: "recentlyUpdated" },
+  /**
+   * Atsumaru's browsable lists. The site retired its `/api/infinite/{list}` routes (2026-10): its
+   * browse page now serves every list either as a Typesense query with a `sort_by` (trending, plus
+   * the sorts in SORTS) or from a dedicated `/api/home2/{endpoint}` route for the curated/temporal
+   * ones (recently updated, popular, hot updates, …). Each entry records which path it takes.
+   */
+  private static readonly LISTS: ReadonlyArray<
+    SeriesList & ({ source: "typesense"; sort: string } | { source: "home2"; endpoint: string })
+  > = [
+    { id: "trending", name: "Trending", layout: "carousel", featured: true, source: "typesense", sort: "trending" },
+    { id: "recentlyUpdated", name: "Recently Updated", layout: "grid", featured: true, source: "home2", endpoint: "recentlyUpdated" },
   ];
 
   async getLists(): Promise<SeriesList[]> {
-    return AtsumaruBridge.LISTS.map(({ endpoint, ...list }) => {
-      void endpoint;
-      return list;
+    return AtsumaruBridge.LISTS.map((list) => {
+      const { id, name, layout, featured } = list;
+      return { id, name, layout, featured };
     });
   }
 
   async getListItems(listId: string, req: ListRequest = {}): Promise<PagedResults<SeriesEntry>> {
     const list = AtsumaruBridge.LISTS.find((l) => l.id === listId);
     if (!list) throw new Error(`unknown list: ${listId}`);
-    // atsu.moe's infinite-scroll endpoints are page-numbered, so the cursor is just a page number.
+
+    if (list.source === "typesense") {
+      // Same query the site's browse page issues for this sort: a wildcard search, sorted.
+      return this.getSearchResults({
+        text: "",
+        cursor: req.cursor,
+        sort: { key: list.sort, ascending: false },
+        excludedTags: req.excludedTags,
+      });
+    }
+
+    // home2 routes are offset-paged and mirror the browse page's query params: `types` and
+    // `mediums` narrow to comics (the site also hosts novels now), `adult=1` mirrors +18 mode, and
+    // `excludedTags` is the same comma-joined negation the search path pushes down.
     const page = pageFromCursor(req.cursor);
-    const url = `${this.base()}/api/infinite/${list.endpoint}?page=${page - 1}&types=${TYPES}${this.adultParam()}`;
+    const params = new URLSearchParams({
+      offset: String((page - 1) * PER_PAGE),
+      limit: String(PER_PAGE),
+      types: TYPES,
+      mediums: "Comic",
+    });
+    if (this.setting("adult") === true) params.set("adult", "1");
+    const excluded = (req.excludedTags ?? []).map((t) => String(t).trim()).filter(Boolean);
+    if (excluded.length) params.set("excludedTags", excluded.join(","));
+    const url = `${this.base()}/api/home2/${list.endpoint}?${params.toString()}`;
     const data = await this.getJson<BrowseMangaDto>(url);
     const items = (data.items ?? []).map((d) => this.toEntry(d));
     // A short page is the last one — the endpoint reports no total.
@@ -509,6 +545,10 @@ class AtsumaruBridge extends BridgeBase<Settings> {
       "hidden:!=true",
       ...(this.setting("adult") === true ? [] : ["isAdult:=false"]),
       "(mbContentRating:=[`Safe`,`Suggestive`,`Erotica`] || mbContentRating:!=*)",
+      // atsu.moe also indexes light novels now (`medium: "Novel"`); this is a comic reader, so drop
+      // them the way the site's own "Comic" medium filter does (a negation, so docs that predate the
+      // field still match).
+      "medium:!=[`Novel`]",
       "views:>0",
     ];
 

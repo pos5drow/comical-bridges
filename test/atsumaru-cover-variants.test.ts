@@ -68,8 +68,8 @@ describe("Atsumaru cover variants", () => {
   });
 
   test("browse cards use mediumImage, not the full-size image", async () => {
-    const bridge = factory(host((url) => (url.includes("/api/infinite/") ? { items: [LIST_ITEM] } : {})));
-    const { items } = await bridge.getListItems("trending");
+    const bridge = factory(host((url) => (url.includes("/api/home2/") ? { items: [LIST_ITEM] } : {})));
+    const { items } = await bridge.getListItems("recentlyUpdated");
     expect(items[0].thumbnailUrl).toBe(`https://cdn.atsu.moe/static/${POSTER}-medium.webp`);
   });
 

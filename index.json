@@ -1,11 +1,11 @@
 {
   "registryVersion": "1",
-  "updated": "2026-10-16T04:43:31.339Z",
+  "updated": "2026-10-17T01:23:51.330Z",
   "bridges": [
     {
       "id": "pos5drow.atsumaru",
       "name": "Atsumaru",
-      "version": "0.3.6",
+      "version": "0.3.7",
       "contractVersion": "2.0.0",
       "languages": [
         "en"
@@ -20,15 +20,15 @@
         "favorites",
         "exclude-tags"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.atsumaru/0.3.6/bridge.js",
-      "sha256": "d9745d32c84cd606631cc4898933d417da802c7231ec4e81d1a86b906bd0d292",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.atsumaru/0.3.7/bridge.js",
+      "sha256": "9aab8b0f93f82a018fc2dba3e589c8ad842153029f1cf67eab682cf45a574235",
       "iconUrl": "https://atsu.moe/favicon/android-chrome-512x512.png",
       "ratings": true,
       "assetRateLimit": {
         "maxConcurrent": 2,
         "minIntervalMs": 500
       },
-      "signature": "tvLpcQZ2bis4Uun4VIWuOiWZZQZ9rtoDqWYVXMsYR5tmg6KysFeA9AxVXjQVfBI3mDKpyqOgvXEL8WNiuDc3Ag"
+      "signature": "oeokciZp81Fs0Ux-lPx_yTCa_p7VZhwzAJs5S-b4kQGYsT4St7SHv3KwglU0UC84YLhHcc8WHFvbu2izS2eCBQ"
     },
     {
       "id": "pos5drow.mangadex",

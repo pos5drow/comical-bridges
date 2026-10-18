@@ -23,6 +23,7 @@ import {
   defineBridge,
   nextOffsetCursor,
   offsetFromCursor,
+  seriesGoneMessage,
 } from "@comical/sdk";
 
 const BASE = "https://api.mangadex.org";
@@ -69,6 +70,12 @@ interface MangaListResponse {
 
 interface MangaResponse {
   data: MangaData;
+}
+
+/** The API's error envelope — `result: "error"` with the HTTP status repeated per error. */
+interface ErrorResponse {
+  result: "error";
+  errors?: Array<{ status?: number; title?: string; detail?: string }>;
 }
 
 interface ChapterAttributes {
@@ -169,7 +176,7 @@ class MangaDexBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.mangadex",
     name: "MangaDex",
-    version: "0.3.6",
+    version: "0.3.7",
     contractVersion: "2.0.0",
     languages: ["en"],
     nsfw: false,
@@ -191,6 +198,20 @@ class MangaDexBridge extends BridgeBase {
     return this.fetchJson<T>(url, {
       "User-Agent": "comical/0.1 (https://github.com/comical)",
     });
+  }
+
+  /**
+   * GET a manga endpoint, throwing a series-gone error when the API says the manga doesn't exist
+   * (a 404 whose detail reads "Manga `<id>` not found." — a mistyped route 404s too, but says so).
+   */
+  private async manga(url: string): Promise<MangaResponse> {
+    const res = await this.getJson<MangaResponse | ErrorResponse>(url);
+    if ("result" in res && res.result === "error") {
+      const err = res.errors?.[0];
+      if (err?.status === 404 && /^Manga .* not found/i.test(err.detail ?? "")) throw new Error(seriesGoneMessage());
+      throw new Error(`MangaDex API error: ${err?.detail ?? err?.title ?? "unknown"}`);
+    }
+    return res as MangaResponse;
   }
 
   private contentRatingParams(): string {
@@ -287,8 +308,7 @@ class MangaDexBridge extends BridgeBase {
 
   async getSeriesDetails(seriesId: string): Promise<SeriesInfo> {
     const url = `${BASE}/manga/${encodeURIComponent(seriesId)}?includes[]=cover_art&includes[]=author&includes[]=artist`;
-    const res = await this.getJson<MangaResponse>(url);
-    const d = res.data;
+    const d = (await this.manga(url)).data;
     const attrs = d.attributes;
 
     const info: SeriesInfo = { id: d.id, title: firstTitle(attrs), shareUrl: `${SITE}/title/${d.id}` };
@@ -373,6 +393,9 @@ class MangaDexBridge extends BridgeBase {
       offset += res.data.length;
       if (offset >= res.total) break;
     }
+    // The feed of an unknown manga is an empty 200, same as one with no English chapters — so an
+    // empty feed asks the manga endpoint, which 404s a deleted series by name.
+    if (all.length === 0) await this.manga(`${BASE}/manga/${encodeURIComponent(seriesId)}`);
 
     return all
       .filter((c) => !c.attributes.externalUrl) // skip external-hosted chapters

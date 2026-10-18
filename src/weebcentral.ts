@@ -34,6 +34,7 @@ import {
   nextPageCursor,
   pageFromCursor,
   rateLimitedMessage,
+  seriesGoneMessage,
 } from "@comical/sdk";
 
 const BASE = "https://weebcentral.com";
@@ -98,7 +99,7 @@ class WeebCentralBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.weebcentral",
     name: "Weeb Central",
-    version: "0.2.6",
+    version: "0.2.7",
     contractVersion: "2.0.0",
     languages: ["en"],
     nsfw: false,
@@ -242,7 +243,7 @@ class WeebCentralBridge extends BridgeBase {
 
   async getSeriesDetails(seriesId: string): Promise<SeriesInfo> {
     const url = `${BASE}/series/${encodeURIComponent(seriesId)}`;
-    const $ = this.parse(await this.fetchText(url, this.headers()));
+    const $ = this.parse(await this.seriesPage(url));
 
     const info: SeriesInfo = {
       id: seriesId,
@@ -307,7 +308,23 @@ class WeebCentralBridge extends BridgeBase {
       }
       chapters.push(ch);
     });
+    // An unknown series gets an empty list here rather than a 404, so ask its page whether it exists.
+    if (chapters.length === 0) await this.seriesPage(`${BASE}/series/${encodeURIComponent(seriesId)}`);
     return chapters;
+  }
+
+  /**
+   * A series page's HTML, or a series-gone error. The site redirects an unknown series to `/404` and
+   * renders that page with a 200, so the final URL (or the page's own "404 |" title) is the evidence.
+   */
+  private async seriesPage(url: string): Promise<string> {
+    const res = await this.request({ url, headers: this.headers() });
+    const missing =
+      res.status === 404 ||
+      /\/404\/?(?:[?#]|$)/.test(res.url) ||
+      /<title>\s*404\s*\|/i.test(res.body);
+    if (missing) throw new Error(seriesGoneMessage());
+    return res.body;
   }
 
   // ── Pages ───────────────────────────────────────────────────────────────────

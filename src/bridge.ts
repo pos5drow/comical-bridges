@@ -36,6 +36,7 @@ import {
   nextPageCursor,
   pageFromCursor,
   parseFilterIncludeExclude,
+  seriesGoneMessage,
 } from "@comical/sdk";
 
 /**
@@ -125,7 +126,8 @@ interface SearchResultsDto {
 }
 
 interface MangaObjectDto {
-  mangaPage: MangaDto;
+  /** Null for an id the site doesn't know (deleted, or never existed) — still an HTTP 200. */
+  mangaPage: MangaDto | null;
 }
 
 interface ChapterDto {
@@ -200,7 +202,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "pos5drow.atsumaru",
     name: "Atsumaru",
-    version: "0.3.7",
+    version: "0.3.8",
     contractVersion: "2.0.0",
     languages: ["en"],
     nsfw: false,
@@ -608,8 +610,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   }
 
   async getSeriesDetails(seriesId: string): Promise<SeriesInfo> {
-    const url = `${this.base()}/api/manga/page?id=${encodeURIComponent(seriesId)}`;
-    const dto = (await this.getJson<MangaObjectDto>(url)).mangaPage;
+    const dto = await this.mangaPage(seriesId);
 
     const info: SeriesInfo = { id: seriesId, title: dto.title };
     // The detail hero keeps the full/large poster (that's what the site's detail page loads too).
@@ -685,6 +686,9 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   async getChapters(seriesId: string): Promise<Chapter[]> {
     const url = `${this.base()}/api/manga/allChapters?mangaId=${encodeURIComponent(seriesId)}`;
     const raw = (await this.getJson<AllChaptersDto>(url)).chapters ?? [];
+    // An unknown id gets an empty list here too, so an empty answer asks the series page whether the
+    // series still exists — that's the only endpoint that says so.
+    if (raw.length === 0) await this.mangaPage(seriesId);
 
     // Atsumaru aggregates multiple scanlation teams; `allChapters` returns every team's chapters, so
     // a chapter number can appear once per team. Keep them all and label each with its team name
@@ -712,10 +716,17 @@ class AtsumaruBridge extends BridgeBase<Settings> {
       .sort((a, b) => (a.number ?? 0) - (b.number ?? 0)); // ascending; conformance wants consistency
   }
 
-  /** Map scanlationMangaId → team name (Alpha/Beta/…) from the manga page's `scanlators` list. */
-  private async scanlatorNames(seriesId: string): Promise<Map<string, string>> {
+  /** The series page, or a series-gone error when the site no longer knows the id. */
+  private async mangaPage(seriesId: string): Promise<MangaDto> {
     const url = `${this.base()}/api/manga/page?id=${encodeURIComponent(seriesId)}`;
     const page = (await this.getJson<MangaObjectDto>(url)).mangaPage;
+    if (!page) throw new Error(seriesGoneMessage());
+    return page;
+  }
+
+  /** Map scanlationMangaId → team name (Alpha/Beta/…) from the manga page's `scanlators` list. */
+  private async scanlatorNames(seriesId: string): Promise<Map<string, string>> {
+    const page = await this.mangaPage(seriesId);
     const map = new Map<string, string>();
     for (const s of page.scanlators ?? []) if (s?.id && s?.name) map.set(s.id, s.name);
     return map;

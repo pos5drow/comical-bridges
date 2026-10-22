@@ -1,11 +1,11 @@
 {
   "registryVersion": "1",
-  "updated": "2026-10-22T07:09:12.765Z",
+  "updated": "2026-10-22T08:43:47.431Z",
   "bridges": [
     {
       "id": "pos5drow.atsumaru",
       "name": "Atsumaru",
-      "version": "0.4.0",
+      "version": "0.4.1",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -20,8 +20,8 @@
         "favorites",
         "exclude-tags"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.atsumaru/0.4.0/bridge.js",
-      "sha256": "c2639ba0a7ab154dc80917ab937c9d28caa1a33251e1b469ba02ec08caf6f9b4",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.atsumaru/0.4.1/bridge.js",
+      "sha256": "0f6cc7aa4c630e86fbb23e5f276bcd53eb20d56e4e1479ff3feb6de4e0a86bc6",
       "iconUrl": "https://atsu.moe/favicon/android-chrome-512x512.png",
       "ratings": true,
       "assetRateLimit": {
@@ -31,12 +31,12 @@
       "linkHosts": [
         "atsu.moe"
       ],
-      "signature": "A5No2OVyXNyqDX4iXtbg3HehS9W-8PNZi3Ul8GqwvizEPORaW3eMrTGKNkFNb2RXVie7dAHldO6hLVrYgKkODg"
+      "signature": "Gf791kcVCPbfhD2yeQlDEQuBuHpFYHZ_JGGtJVj23fbDLeVX3L4zV3Q44V69w1eQAXl_j9kS5VoKubxkx__fDQ"
     },
     {
       "id": "pos5drow.mangadex",
       "name": "MangaDex",
-      "version": "0.4.0",
+      "version": "0.4.1",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -47,8 +47,8 @@
         "search",
         "filters"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangadex/0.4.0/bridge.js",
-      "sha256": "024f8282e357271f446df22131626d515d33a858a14b63f88ae8b7ce2139c7be",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangadex/0.4.1/bridge.js",
+      "sha256": "289243b55073a6eb1ba02775527282ee033c3ae2b79918a3b6ad4b84983ac2a1",
       "iconUrl": "https://mangadex.org/pwa/icons/icon-512.png",
       "assetRateLimit": {
         "maxConcurrent": 3,
@@ -57,12 +57,12 @@
       "linkHosts": [
         "mangadex.org"
       ],
-      "signature": "ewykSQZ7HRK_MVrLVefVUmgYOfZ1zc5DbN_nLCzvBFM1y7aEr8iaPajI_goYtKl0dRUXFGkpuHfEa-CA5_V4Dg"
+      "signature": "5hT-TXkpk2a9XmtMkrhcFl2rYMG_27ATnH3Tg2QPIp2nmAYxruOyEMo4pYccHtVfsKf3NZfKM6EBrsv_Do4WDg"
     },
     {
       "id": "pos5drow.weebcentral",
       "name": "Weeb Central",
-      "version": "0.3.0",
+      "version": "0.3.1",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -74,8 +74,8 @@
         "filters",
         "sort"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.weebcentral/0.3.0/bridge.js",
-      "sha256": "fe519ac310cc0a1673ccda103757cbc0c2bc738e3a7f674e0aa84378972bd14d",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.weebcentral/0.3.1/bridge.js",
+      "sha256": "26fa9434f42e234a9f5092eb2feea48fb187fbf4e93b2a708f85a28efbcde322",
       "iconUrl": "https://weebcentral.com/favicon.ico",
       "assetRateLimit": {
         "maxConcurrent": 3,
@@ -84,7 +84,7 @@
       "linkHosts": [
         "weebcentral.com"
       ],
-      "signature": "A2CMSq6G4oGf1-flz-wEXGjuMAQqUa-zRDbc_MQJpKei4IwrRcY5r2L7Z3ZVlO10mUv4lgWKVFBmk12BWD_gDA"
+      "signature": "bqbrmKympjO-q0zGPpQWG3-mUDdIIIoyxJefkjPzoprJTegv4rROQlw7EP2VLJa3cAOIHVpEvAwY657sXn71AA"
     }
   ],
   "publicKey": "_w_wfsGg94fRKmD6kq4mIHQYReFo7qPcZ9IMwhy0L24",

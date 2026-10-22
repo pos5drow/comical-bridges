@@ -28,36 +28,40 @@ shows ⚠ even for a hard failure.
 | ✓ | `read.chapters` | core | got 279 ordered, uniquely-identified chapter(s) |
 | ✓ | `read.pages` | core | got 58 page(s) |
 
-## `weebcentral` — ✗ (4✓ 3⚠ 2✗)
+## `weebcentral` — ⚠ (4✓ 5⚠ 0✗)
 
 **4/4 capabilities** · cover —
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
-| ✗ | `filters.effect` | filters | applying a filter threw: getSearchResults threw: Error: [rate-limited:300000] challenged by Cloudflare |
-| ✗ | `sort.effect` | sort | applying a sort threw: getSearchResults threw: Error: [rate-limited:300000] challenged by Cloudflare |
 | ⚠ | `lists.threw` | lists | lists browse threw: getListItems threw: Error: [rate-limited:300000] challenged by Cloudflare |
 | ⚠ | `search.threw` | search | getSearchResults threw: getSearchResults threw: Error: [rate-limited:300000] challenged by Cloudflare |
+| ⚠ | `filters.effect` | filters | applying a filter threw: getSearchResults threw: Error: [rate-limited:300000] challenged by Cloudflare |
+| ⚠ | `sort.effect` | sort | applying a sort threw: getSearchResults threw: Error: [rate-limited:300000] challenged by Cloudflare |
 | ⚠ | `read.noSample` | core | no item available to sample the read path (search/lists returned nothing) |
 | ✓ | `info.capabilities` | core | declares 4 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 2 list(s) |
 | ✓ | `filters.descriptors` | filters | getFilters returned 2 filter(s) |
 | ✓ | `sort.options` | sort | getSortOptions returned 4 option(s) |
 
-## `mangadex` — ⚠ (3✓ 1⚠ 3✗)
+## `mangadex` — ⚠ (10✓ 1⚠ 0✗)
 
-**3/3 capabilities** · cover —
+**3/3 capabilities** · cover 50 KB (256×376) · sampled 8 · failed 0 · bytes min 23 KB / avg 50 KB / median 46 KB / max 81 KB · dims avg 256×376 (max 256×402) · aspect avg 0.68
 
-> flaky (tolerated): Cloudflare challenges datacenter (runner) IPs
+> Cloudflare challenges datacenter (runner) IPs
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
-| ✗ | `lists.threw` | lists | lists browse threw: getListItems threw: SyntaxError: JSON Parse error: Unrecognized token '<' |
-| ✗ | `search.threw` | search | getSearchResults threw: getSearchResults threw: SyntaxError: JSON Parse error: Unrecognized token '<' |
-| ✗ | `filters.effect` | filters | applying a filter threw: getSearchResults threw: SyntaxError: JSON Parse error: Unrecognized token '<' |
-| ⚠ | `read.noSample` | core | no item available to sample the read path (search/lists returned nothing) |
+| ⚠ | `read.chapters.empty` | core | series has no chapters |
 | ✓ | `info.capabilities` | core | declares 3 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 3 list(s) |
+| ✓ | `lists.items` | lists | list "popular" returned 24 item(s) |
+| ✓ | `lists.idStability` | lists | list item ids are stable across calls |
+| ✓ | `lists.cursor` | lists | nextCursor advanced to 24 further item(s) |
+| ✓ | `search.items` | search | search returned 24 item(s) |
+| ✓ | `search.cursor` | search | nextCursor advanced to 24 further item(s) |
 | ✓ | `filters.descriptors` | filters | getFilters returned 3 filter(s) |
+| ✓ | `filters.effect` | filters | filter "contentRating" changed results (24→24) |
+| ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-10-21 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-10-22 by the nightly live audit ([`audit.ts`](audit.ts))._

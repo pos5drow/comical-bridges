@@ -29,7 +29,9 @@ import {
   type SeriesInfo,
   type SeriesList,
   type SeriesStatus,
+  type SettingActionResult,
   type SettingDescriptor,
+  type SettingsForm,
   type SortOption,
   defineBridge,
   defineSettings,
@@ -53,6 +55,8 @@ const BASE_URL = "https://atsu.moe";
  * on the site.
  */
 const CDN_URL = "https://cdn.atsu.moe";
+
+const TEST_LOGIN = "test-login";
 
 const SETTINGS = defineSettings([
   { type: "boolean", key: "adult", label: "Show adult content", default: false },
@@ -246,6 +250,28 @@ class AtsumaruBridge extends BridgeBase<Settings> {
 
   getSettings(): SettingDescriptor[] {
     return [...SETTINGS];
+  }
+
+  async loadSettings(): Promise<SettingsForm> {
+    const field = (key: keyof Settings) => SETTINGS.find((d) => d.key === key)!;
+    return {
+      sections: [
+        { title: "Content", items: [field("adult")] },
+        {
+          title: "Account",
+          footer: "Only favorites need an account; browsing works without one.",
+          items: [field("username"), field("password"), { type: "action", key: TEST_LOGIN, label: "Test login" }],
+        },
+      ],
+    };
+  }
+
+  async runSettingAction(key: string): Promise<SettingActionResult> {
+    if (key !== TEST_LOGIN) throw new Error(`unknown settings action "${key}"`);
+    const username = this.setting("username");
+    if (!username || !this.setting("password")) return { ok: false, message: "Enter a username and password first." };
+    const rejected = await this.loginLock.run(() => this.attemptLogin());
+    return rejected ? { ok: false, message: rejected } : { ok: true, message: `Signed in as ${username}` };
   }
 
   private base(): string {
@@ -804,11 +830,18 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   }
 
   private async login(): Promise<void> {
-    const username = this.setting("username");
-    const password = this.setting("password");
-    if (!username || !password) {
+    if (!this.setting("username") || !this.setting("password")) {
       throw new Error("favorites require a username + password (set them in this bridge's settings)");
     }
+    const rejected = await this.attemptLogin();
+    if (rejected) throw new Error(`atsu.moe login failed: ${rejected}`);
+  }
+
+  /** Log in with the saved credentials; answers why the site refused them, or null on success. A
+   *  transport failure still throws — that isn't the credentials' fault. */
+  private async attemptLogin(): Promise<string | null> {
+    const username = this.setting("username") ?? "";
+    const password = this.setting("password") ?? "";
     const res = await this.request({
       url: `${this.base()}/api/auth/login`,
       method: "POST",
@@ -817,9 +850,8 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     });
     let parsed: { status?: string; error?: string } = {};
     try { parsed = JSON.parse(res.body) as typeof parsed; } catch { /* non-JSON error body */ }
-    if (res.status >= 400 || parsed.status !== "success") {
-      throw new Error(`atsu.moe login failed: ${parsed.error ?? res.statusText}`);
-    }
+    if (res.status >= 400 || parsed.status !== "success") return parsed.error ?? (res.statusText || `HTTP ${res.status}`);
+    return null;
   }
 
   private bookmarkToEntry(b: BookmarkDto): SeriesEntry {

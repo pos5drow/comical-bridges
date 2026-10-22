@@ -20,6 +20,7 @@ import {
   type Filter,
   type HttpRequest,
   type HttpResponse,
+  type LinkTarget,
   type ListRequest,
   type Page,
   type PagedResults,
@@ -99,8 +100,8 @@ class WeebCentralBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.weebcentral",
     name: "Weeb Central",
-    version: "0.2.8",
-    contractVersion: "2.0.0",
+    version: "0.3.0",
+    contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort"],
@@ -109,6 +110,7 @@ class WeebCentralBridge extends BridgeBase {
     rateLimit: { maxConcurrent: 1, minIntervalMs: 2000 },
     // Paces a chapter download's page fetches against the image host.
     assetRateLimit: { maxConcurrent: 3, minIntervalMs: 250 },
+    linkHosts: ["weebcentral.com"],
   };
 
   /** A Cloudflare challenge page is a refusal to wait out, not markup to parse. */
@@ -328,6 +330,20 @@ class WeebCentralBridge extends BridgeBase {
   }
 
   // ── Pages ───────────────────────────────────────────────────────────────────
+
+  /** A `/series/{id}` link names its series; a `/chapters/{id}` reader page links back to its series. */
+  async resolveUrl(url: string): Promise<LinkTarget | null> {
+    const m = /^https?:\/\/(?:www\.)?weebcentral\.com\/(series|chapters)\/([0-9A-Za-z]+)(?:[/?#]|$)/.exec(url);
+    if (!m) return null;
+    if (m[1] === "series") return { seriesId: m[2]! };
+    const $ = this.parse(await this.fetchText(`${BASE}/chapters/${encodeURIComponent(m[2]!)}`, this.headers()));
+    // The page also links the nav's `/series/random` and share buttons; take the first real series id.
+    const seriesId = $("a[href]")
+      .toArray()
+      .map((a) => /^https:\/\/weebcentral\.com\/series\/([0-9A-Z]{26})(?:[/?#]|$)/.exec($(a).attr("href") ?? "")?.[1])
+      .find((id) => id !== undefined);
+    return seriesId ? { seriesId, chapterId: m[2]! } : null;
+  }
 
   async getChapterPages(_seriesId: string, chapterId: string): Promise<Page[]> {
     const url = `${BASE}/chapters/${encodeURIComponent(chapterId)}/images?is_prev=False&reading_style=long_strip`;

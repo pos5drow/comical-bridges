@@ -11,6 +11,7 @@ import {
   type Chapter,
   type Credit,
   type Filter,
+  type LinkTarget,
   type ListRequest,
   type Page,
   type PagedResults,
@@ -176,8 +177,8 @@ class MangaDexBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.mangadex",
     name: "MangaDex",
-    version: "0.3.8",
-    contractVersion: "2.0.0",
+    version: "0.4.0",
+    contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters"],
@@ -190,6 +191,7 @@ class MangaDexBridge extends BridgeBase {
     },
     // Paces a chapter download's page fetches against the at-home image servers.
     assetRateLimit: { maxConcurrent: 3, minIntervalMs: 350 },
+    linkHosts: ["mangadex.org"],
   };
 
   private readonly atHome = new Map<string, { at: number; pages: Page[] }>();
@@ -420,6 +422,17 @@ class MangaDexBridge extends BridgeBase {
         }
         return ch;
       });
+  }
+
+  /** A `/title/{id}` link names its series; a `/chapter/{id}` link is looked up for the series it belongs to. */
+  async resolveUrl(url: string): Promise<LinkTarget | null> {
+    const m = /^https?:\/\/(?:www\.)?mangadex\.org\/(title|chapter)\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:[/?#]|$)/i.exec(url);
+    if (!m) return null;
+    const id = m[2]!.toLowerCase();
+    if (m[1]!.toLowerCase() === "title") return { seriesId: id };
+    const res = await this.getJson<{ data?: { relationships?: Relationship[] } }>(`${BASE}/chapter/${id}`);
+    const manga = res.data?.relationships?.find((r) => r.type === "manga");
+    return manga ? { seriesId: manga.id, chapterId: id } : null;
   }
 
   async getChapterPages(seriesId: string, chapterId: string): Promise<Page[]> {

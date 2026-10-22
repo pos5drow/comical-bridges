@@ -18,6 +18,7 @@ import {
   type HttpResponse,
   type InferSettings,
   type InfoCell,
+  type LinkTarget,
   type ListRequest,
   type Page,
   type PagedResults,
@@ -202,8 +203,8 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "pos5drow.atsumaru",
     name: "Atsumaru",
-    version: "0.3.9",
-    contractVersion: "2.0.0",
+    version: "0.4.0",
+    contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "settings", "favorites", "exclude-tags"],
@@ -214,6 +215,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     rateLimit: { maxConcurrent: 1, minIntervalMs: 550 },
     // Paces a chapter download's page fetches against the image host.
     assetRateLimit: { maxConcurrent: 2, minIntervalMs: 500 },
+    linkHosts: ["atsu.moe"],
   };
 
   private tagCache = new Map<string, string>(); // tagId → tagName
@@ -730,6 +732,15 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     const map = new Map<string, string>();
     for (const s of page.scanlators ?? []) if (s?.id && s?.name) map.set(s.id, s.name);
     return map;
+  }
+
+  /** Parse a series (`/manga/{id}[/…]`) or reader (`/read/{mangaId}/{chapterId}`) link — no fetch needed. */
+  async resolveUrl(url: string): Promise<LinkTarget | null> {
+    const path = /^https?:\/\/(?:www\.)?atsu\.moe(\/[^?#]*)/i.exec(url)?.[1] ?? "";
+    const read = /^\/read\/([^/]+)\/([^/]+)\/?$/.exec(path);
+    if (read) return { seriesId: read[1]!, chapterId: read[2]! };
+    const manga = /^\/manga\/([^/]+)(?:\/|$)/.exec(path);
+    return manga ? { seriesId: manga[1]! } : null;
   }
 
   async getChapterPages(seriesId: string, chapterId: string): Promise<Page[]> {

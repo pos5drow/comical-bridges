@@ -5,28 +5,23 @@ backend. ✓ pass · ⚠ warn · ✗ fail · ⊘ skipped (auth-gated with no cre
 sort/filter probe — never a defect). Warnings never fail the run; a tolerated flaky/blocked bridge
 shows ⚠ even for a hard failure.
 
-## `atsumaru` — ✓ (15✓ 0⚠ 0✗ 1⊘)
+## `atsumaru` — ✗ (5✓ 2⚠ 4✗)
 
-**6/7 capabilities** · cover 47 KB · sampled 8 · failed 0 · bytes min 23 KB / avg 47 KB / median 45 KB / max 77 KB
+**6/7 capabilities** · cover —
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
-| ⊘ | `favorites.read` | favorites | getFavorites needs credentials (none configured) — skipped: getFavorites threw: Error: favorites require a username + password (set them in this bridge's settings) |
+| ✗ | `lists.threw` | lists | lists browse threw: getListItems threw: SyntaxError: JSON Parse error: Unrecognized token '<' |
+| ✗ | `search.threw` | search | getSearchResults threw: getSearchResults threw: SyntaxError: JSON Parse error: Unrecognized token '<' |
+| ✗ | `filters.effect` | filters | applying a filter threw: getSearchResults threw: SyntaxError: JSON Parse error: Unrecognized token '<' |
+| ✗ | `sort.effect` | sort | applying a sort threw: getSearchResults threw: SyntaxError: JSON Parse error: Unrecognized token '<' |
+| ⚠ | `favorites.read` | favorites | getFavorites could not be read: getFavorites threw: Error: https://atsu.moe/api/user/bookmarksPage → 403 Forbidden |
+| ⚠ | `read.noSample` | core | no item available to sample the read path (search/lists returned nothing) |
 | ✓ | `info.capabilities` | core | declares 7 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 2 list(s) |
-| ✓ | `lists.items` | lists | list "trending" returned 40 item(s) |
-| ✓ | `lists.idStability` | lists | list item ids are stable across calls |
-| ✓ | `lists.cursor` | lists | nextCursor advanced to 40 further item(s) |
-| ✓ | `search.items` | search | search returned 13 item(s) |
-| ✓ | `search.cursor` | search | single page (no nextCursor) |
 | ✓ | `filters.descriptors` | filters | getFilters returned 5 filter(s) |
-| ✓ | `filters.effect` | filters | filter "genre" changed results (13→8) |
 | ✓ | `sort.options` | sort | getSortOptions returned 6 option(s) |
-| ✓ | `sort.effect` | sort | sort "views" reorders results (asc ≠ desc) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 3 descriptor(s) |
-| ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
-| ✓ | `read.chapters` | core | got 280 ordered, uniquely-identified chapter(s) |
-| ✓ | `read.pages` | core | got 58 page(s) |
 
 ## `weebcentral` — ⚠ (4✓ 5⚠ 0✗)
 
@@ -46,7 +41,7 @@ shows ⚠ even for a hard failure.
 
 ## `mangadex` — ⚠ (10✓ 1⚠ 0✗)
 
-**3/3 capabilities** · cover 49 KB (256×376) · sampled 8 · failed 0 · bytes min 23 KB / avg 49 KB / median 46 KB / max 81 KB · dims avg 256×376 (max 256×402) · aspect avg 0.68
+**3/3 capabilities** · cover 50 KB (256×376) · sampled 8 · failed 0 · bytes min 23 KB / avg 50 KB / median 46 KB / max 81 KB · dims avg 256×376 (max 256×402) · aspect avg 0.68
 
 > Cloudflare challenges datacenter (runner) IPs
 
@@ -64,4 +59,4 @@ shows ⚠ even for a hard failure.
 | ✓ | `filters.effect` | filters | filter "contentRating" changed results (24→24) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
 
-_Updated 2026-10-31 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-11-01 by the nightly live audit ([`audit.ts`](audit.ts))._

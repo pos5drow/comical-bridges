@@ -39,6 +39,7 @@ import {
   nextPageCursor,
   pageFromCursor,
   parseFilterIncludeExclude,
+  rateLimitedMessage,
   seriesGoneMessage,
 } from "@comical/sdk";
 
@@ -55,6 +56,8 @@ const BASE_URL = "https://atsu.moe";
  * on the site.
  */
 const CDN_URL = "https://cdn.atsu.moe";
+/** Cloudflare challenges a client it has decided is a bot for a while; asking again only extends it. */
+const CHALLENGE_WAIT_MS = 5 * 60 * 1000;
 
 const TEST_LOGIN = "test-login";
 
@@ -203,11 +206,19 @@ const STATUS_MAP: Record<string, SeriesStatus> = {
   cancelled: "cancelled",
 };
 
+function parseJson<T>(url: string, body: string): T {
+  try {
+    return JSON.parse(body) as T;
+  } catch {
+    throw new Error(`atsu.moe answered non-JSON for ${url}: ${body.slice(0, 80)}`);
+  }
+}
+
 class AtsumaruBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "pos5drow.atsumaru",
     name: "Atsumaru",
-    version: "0.4.1",
+    version: "0.4.2",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
@@ -288,18 +299,33 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   }
 
   /**
-   * GET + parse JSON, but fail loudly on a non-2xx or non-JSON answer. The runtime hands a 404's
-   * plain-text body straight back, so without this a retired endpoint surfaced as an opaque
-   * "JSON Parse error" instead of naming the URL that broke.
+   * A Cloudflare challenge is a refusal to wait out, not a body to parse. atsu.moe sits behind
+   * Cloudflare, which challenges datacenter IPs (and, sometimes, a burst from a phone) with a 403
+   * HTML page — parsed as JSON, that surfaced as an opaque "JSON Parse error" instead of a hold.
    */
-  private async getJson<T>(url: string): Promise<T> {
-    const res = await this.request({ url, headers: this.apiHeaders() });
-    if (res.status >= 400) throw new Error(`atsu.moe answered HTTP ${res.status} for ${url}`);
-    try {
-      return JSON.parse(res.body) as T;
-    } catch {
-      throw new Error(`atsu.moe answered non-JSON for ${url}: ${res.body.slice(0, 80)}`);
+  protected override async request(req: HttpRequest): Promise<HttpResponse> {
+    const res = await super.request(req);
+    const mitigated = Object.entries(res.headers).find(([k]) => k.toLowerCase() === "cf-mitigated")?.[1];
+    if (mitigated?.toLowerCase().includes("challenge")) {
+      throw new Error(rateLimitedMessage(CHALLENGE_WAIT_MS, "challenged by Cloudflare"));
     }
+    return res;
+  }
+
+  /**
+   * GET an API body, but fail loudly on a non-2xx answer. The runtime hands a 404's plain-text body
+   * straight back, so without this a retired endpoint surfaced as an opaque "JSON Parse error"
+   * instead of naming the URL that broke.
+   */
+  private async getText(url: string): Promise<string> {
+    const res = await this.request({ url, headers: this.apiHeaders() });
+    if (res.status >= 400) throw new Error(`atsu.moe answered HTTP ${res.status} for ${url}: ${res.body.slice(0, 80)}`);
+    return res.body;
+  }
+
+  /** GET + parse JSON, naming the URL (and what came back) when the answer isn't JSON. */
+  private async getJson<T>(url: string): Promise<T> {
+    return parseJson<T>(url, await this.getText(url));
   }
 
   /** Three-tier image resolution, ported from Dto.kt getImagePath + toSManga. */
@@ -621,18 +647,18 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     }
 
     const url = `${this.base()}/collections/manga/documents/search?${params.toString()}`;
-    const body = await this.fetchText(url, this.apiHeaders());
+    const body = await this.getText(url);
 
     // Typesense returns { hits: [{ document }], found, page, request_params } — fall back to the
     // browse shape if the proxy ever answers with { items } instead (matches the reference).
     if (body.includes('"hits"')) {
-      const data = JSON.parse(body) as SearchResultsDto;
+      const data = parseJson<SearchResultsDto>(url, body);
       const items = (data.hits ?? []).map((h) => this.toEntry(h.document));
       const perPage = data.request_params?.per_page || PER_PAGE;
       // Typesense reports the total, so "is there more" is exact here rather than inferred.
       return { items, nextCursor: nextPageCursor(page, data.page * perPage < data.found) };
     }
-    const data = JSON.parse(body) as BrowseMangaDto;
+    const data = parseJson<BrowseMangaDto>(url, body);
     const items = (data.items ?? []).map((d) => this.toEntry(d));
     return { items, nextCursor: nextPageCursor(page, items.length >= PER_PAGE) };
   }

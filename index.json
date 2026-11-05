@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-05T08:36:08.583Z",
+  "updated": "2026-11-05T09:35:16.973Z",
   "bridges": [
     {
       "id": "pos5drow.atsumaru",
@@ -36,7 +36,7 @@
     {
       "id": "pos5drow.mangadex",
       "name": "MangaDex",
-      "version": "0.4.1",
+      "version": "0.4.2",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -47,17 +47,26 @@
         "search",
         "filters"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangadex/0.4.1/bridge.js",
-      "sha256": "289243b55073a6eb1ba02775527282ee033c3ae2b79918a3b6ad4b84983ac2a1",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangadex/0.4.2/bridge.js",
+      "sha256": "9ac2c7d2a9f30777d3d2cbf369906cfd34022db3e8741dc00aefb93f90e5f666",
       "iconUrl": "https://mangadex.org/pwa/icons/icon-512.png",
       "assetRateLimit": {
         "maxConcurrent": 3,
         "minIntervalMs": 350
       },
+      "images": {
+        "hosts": [
+          "mangadex.org",
+          "mangadex.network"
+        ],
+        "headers": {
+          "User-Agent": "comical-mangadex (+https://github.com/pos5drow/comical-bridges)"
+        }
+      },
       "linkHosts": [
         "mangadex.org"
       ],
-      "signature": "5hT-TXkpk2a9XmtMkrhcFl2rYMG_27ATnH3Tg2QPIp2nmAYxruOyEMo4pYccHtVfsKf3NZfKM6EBrsv_Do4WDg"
+      "signature": "EQmo65nfD6zz7rm91obuoqwgOi-F4FJjlFgjHz_QlYD-I5d__96ePjppofHfc2jcwGDBMyRONx5jJDoEyapxCg"
     },
     {
       "id": "pos5drow.weebcentral",

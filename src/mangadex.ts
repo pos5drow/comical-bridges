@@ -170,6 +170,15 @@ const LISTS: ReadonlyArray<SeriesList & { order: Record<string, string> }> = [
   { id: "new", name: "New Titles", layout: "grid", featured: false, order: { createdAt: "desc" } },
 ];
 
+/**
+ * MangaDex requires every client to send a User-Agent that names it — "it must not be spoofed" — and
+ * to proxy what its users load rather than hotlink it (https://api.mangadex.org/docs/2-limitations/).
+ * Since 2026-11 a browser-looking request for a cover or page is redirected to an HTML challenge
+ * (`mangadex.org/edge/challenge`), which an <img> renders as nothing. So the API calls and the
+ * images both go out under this name, the images through the host's image proxy (`info.images`).
+ */
+const USER_AGENT = "comical-mangadex (+https://github.com/pos5drow/comical-bridges)";
+
 const CONTENT_RATINGS = ["safe", "suggestive", "erotica", "pornographic"];
 const DEFAULT_RATINGS = ["safe", "suggestive"];
 
@@ -177,7 +186,7 @@ class MangaDexBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.mangadex",
     name: "MangaDex",
-    version: "0.4.1",
+    version: "0.4.2",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
@@ -191,15 +200,17 @@ class MangaDexBridge extends BridgeBase {
     },
     // Paces a chapter download's page fetches against the at-home image servers.
     assetRateLimit: { maxConcurrent: 3, minIntervalMs: 350 },
+    // Covers live on uploads.mangadex.org and pages on MangaDex@Home nodes (*.mangadex.network). A
+    // header makes every host fetch them itself — proxied, under our own name — instead of handing
+    // the client a URL to hotlink with a browser's User-Agent.
+    images: { hosts: ["mangadex.org", "mangadex.network"], headers: { "User-Agent": USER_AGENT } },
     linkHosts: ["mangadex.org"],
   };
 
   private readonly atHome = new Map<string, { at: number; pages: Page[] }>();
 
   private async getJson<T>(url: string): Promise<T> {
-    return this.fetchJson<T>(url, {
-      "User-Agent": "comical/0.1 (https://github.com/comical)",
-    });
+    return this.fetchJson<T>(url, { "User-Agent": USER_AGENT });
   }
 
   /**

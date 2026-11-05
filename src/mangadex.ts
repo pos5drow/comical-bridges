@@ -186,12 +186,14 @@ class MangaDexBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.mangadex",
     name: "MangaDex",
-    version: "0.4.2",
+    version: "0.4.3",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters"],
-    iconUrl: "https://mangadex.org/pwa/icons/icon-512.png", // 512×512 (favicon.ico is tiny)
+    // MangaDex's 512×512 PWA icon, kept in this repo: a client shows the icon straight from its URL
+    // (no image proxy for info), and mangadex.org challenges a browser that hotlinks it.
+    iconUrl: "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/mangadex.png",
     rateLimit: {
       maxConcurrent: 2,
       minIntervalMs: 350,

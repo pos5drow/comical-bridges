@@ -47,6 +47,12 @@ describe("mangadex images", () => {
     expect(ua).not.toMatch(/Mozilla|Chrome|Safari/);
   });
 
+  test("the icon isn't hotlinked from MangaDex (clients load it directly, with no proxy)", () => {
+    const host = new URL(info.iconUrl ?? "").hostname;
+    expect(host).toBe("raw.githubusercontent.com");
+    expect(info.iconUrl).toContain("/pos5drow/comical-bridges/main/icons/mangadex.png");
+  });
+
   test("API calls send the same name", async () => {
     const seen: HttpRequest[] = [];
     await factory(host(seen)).getSearchResults({ text: "spy" }).catch(() => undefined);

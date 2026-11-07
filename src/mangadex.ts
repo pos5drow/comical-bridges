@@ -53,6 +53,8 @@ interface MangaAttributes {
   links?: Record<string, string | null>;
   publicationDemographic?: string | null;
   contentRating?: string;
+  /** The language the series was first published in (`ja`, `ko`, `zh`, `en`, …). */
+  originalLanguage?: string;
   availableTranslatedLanguages?: string[];
 }
 
@@ -148,8 +150,26 @@ function creditList(rels: Relationship[], type: "author" | "artist"): Credit[] {
     .filter((c): c is Credit => !!c);
 }
 
+/**
+ * What a series is as an object and how it reads (the contract's cover hints), from its format tags
+ * and the language it was first published in: a long strip is a webtoon, read down; a doujinshi a
+ * thin stapled issue; anything else a volume — read right to left when it is Japanese, left to
+ * right otherwise (a Korean or Chinese work in pages, a Western comic).
+ */
+function coverHints(a: MangaAttributes): Pick<SeriesEntry, "coverForm" | "readingDirection"> {
+  const formats = new Set(
+    (a.tags ?? []).filter((t) => t.attributes.group === "format").map((t) => t.attributes.name["en"]),
+  );
+  if (formats.has("Long Strip")) return { coverForm: "scroll", readingDirection: "vertical" };
+  const hints: Pick<SeriesEntry, "coverForm" | "readingDirection"> = {
+    coverForm: formats.has("Doujinshi") ? "issue" : "volume",
+  };
+  if (a.originalLanguage) hints.readingDirection = a.originalLanguage === "ja" ? "rtl" : "ltr";
+  return hints;
+}
+
 function toEntry(d: MangaData): SeriesEntry {
-  const entry: SeriesEntry = { id: d.id, title: firstTitle(d.attributes) };
+  const entry: SeriesEntry = { id: d.id, title: firstTitle(d.attributes), ...coverHints(d.attributes) };
   const thumb = coverUrl(d.id, d.relationships);
   if (thumb) entry.thumbnailUrl = thumb;
   return entry;
@@ -186,7 +206,7 @@ class MangaDexBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.mangadex",
     name: "MangaDex",
-    version: "0.4.3",
+    version: "0.4.4",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
@@ -326,7 +346,7 @@ class MangaDexBridge extends BridgeBase {
     const d = (await this.manga(url)).data;
     const attrs = d.attributes;
 
-    const info: SeriesInfo = { id: d.id, title: firstTitle(attrs), shareUrl: `${SITE}/title/${d.id}` };
+    const info: SeriesInfo = { id: d.id, title: firstTitle(attrs), shareUrl: `${SITE}/title/${d.id}`, ...coverHints(attrs) };
 
     // Detail hero: the larger 512px cover (cards default to 256 via coverUrl).
     const thumb = coverUrl(d.id, d.relationships, 512);

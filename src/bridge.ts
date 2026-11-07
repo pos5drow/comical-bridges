@@ -42,6 +42,7 @@ import {
   rateLimitedMessage,
   seriesGoneMessage,
 } from "@comical/sdk";
+import { hintsForType } from "./cover-hints";
 
 /**
  * Atsumaru is a single fixed public site, so its base URL is a constant — not a user setting
@@ -218,7 +219,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "pos5drow.atsumaru",
     name: "Atsumaru",
-    version: "0.4.2",
+    version: "0.4.3",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
@@ -465,7 +466,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   }
 
   private toEntry(dto: MangaDto): SeriesEntry {
-    const entry: SeriesEntry = { id: dto.id, title: dto.title };
+    const entry: SeriesEntry = { id: dto.id, title: dto.title, ...hintsForType(dto.type) };
     // Cards use the SMALL pre-generated variant (what the site's own grid loads) — not the full poster.
     const thumb = this.resolveCover(dto, "small");
     if (thumb) entry.thumbnailUrl = thumb;
@@ -679,6 +680,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     // `type` (Manga / Manhwa / Manhua / …) is the series' format, surfaced as its own Type cell rather
     // than mixed into the genre chips.
     if (dto.type) info.type = dto.type;
+    Object.assign(info, hintsForType(dto.type));
 
     const groups: import("@comical/contract").TagGroup[] = [];
 

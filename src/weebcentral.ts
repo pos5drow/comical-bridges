@@ -37,6 +37,7 @@ import {
   rateLimitedMessage,
   seriesGoneMessage,
 } from "@comical/sdk";
+import { hintsForType } from "./cover-hints";
 
 const BASE = "https://weebcentral.com";
 const COVER_BASE = "https://temp.compsci88.com/cover";
@@ -100,7 +101,7 @@ class WeebCentralBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.weebcentral",
     name: "Weeb Central",
-    version: "0.3.1",
+    version: "0.3.2",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
@@ -169,7 +170,9 @@ class WeebCentralBridge extends BridgeBase {
         $el.find(".text-lg.font-semibold a").first().text().trim() ||
         $el.find(".text-ellipsis.truncate").first().text().trim() ||
         href!.split("/").pop()!.replace(/-/g, " ");
-      const entry: SeriesEntry = { id, title, thumbnailUrl: coverUrl(id, "small") };
+      // The card names the series' type (Manga, Manhwa, …) on a "Type:" line, which says what it is.
+      const type = $el.find('strong:contains("Type")').first().next("span").text();
+      const entry: SeriesEntry = { id, title, thumbnailUrl: coverUrl(id, "small"), ...hintsForType(type) };
       items.push(entry);
     });
     // The endpoint appends a "View More Results…" button (its own hx-get to the next offset) only
@@ -270,6 +273,7 @@ class WeebCentralBridge extends BridgeBase {
 
     const type = $('li:has(strong:contains("Type")) a, li:has(strong:contains("Type")) span').first().text().trim();
     if (type) info.type = type;
+    Object.assign(info, hintsForType(type));
 
     const desc = $('li:has(strong:contains("Description")) p').first().text().trim();
     if (desc) info.description = desc;

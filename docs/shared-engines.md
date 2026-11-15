@@ -202,39 +202,31 @@ Options for the pixel transforms (tiles and strips):
 Byte transforms (XOR, AES-CTR) are cheap either way: pure JS in core's image route, declared as
 data by the bridge. No platform API is needed, so no host changes.
 
-### A′ implementation status (2026-11-14)
+### Final design: processed page images (2026-11-15)
 
-**Done, on local branch `page-scramble` in `comical` (commit `2a137c5`, not pushed):**
-- `Page.scramble` (`pageScrambleSchema`): `tiles {cols, rows, order}` and `strips {order}`, with
-  `order[dest] = source`, geometry relative to the decoded size, output the same size as the input,
-  and the order validated as a permutation. This covers Asura (tiles, remainder dropped by
-  Keiyoushi but harmless to keep), Comix (5×5 tiles, remainder kept) and JMComic (reversed strips,
-  last source strip takes the remainder).
-- Downloads record `scramble` per page; the stored bytes stay the source's.
-- Full suite: 1945 pass, typecheck clean.
+A′ was superseded by the shape Aidoku and Kotatsu use: **logic in the bridge, pixels in the
+client**. It's in comical `dd49ca4` (pushed). The app side is on the local `page-scramble` branch in
+the `comical-app-scramble` worktree, not pushed.
 
-**App plan (`comical-app`, not started):**
-1. `data/scramble.ts`, pure and unit-tested: `withScramble(url, s)` appends
-   `#comical-scramble=<json>`; `splitScramble(url)`; and `drawOps(w, h, s)` returns the src→dst
-   rects.
-2. `source.ts`: `getChapterPages`/`getDirectPages` map pages through `withScramble(p.imageUrl,
-   p.scramble)`, so the descriptor rides the existing `string[]` pipeline. Fragments never reach a
-   server.
-3. `api.ts`: `resolveAssetSource` sees the fragment, fetches the bytes (transport for routes,
-   `fetch` for absolute URLs, the file system for `file://`), unscrambles, and returns a `data:`
-   URI. `peekResolvedAssetSource` and `resolvesImmediately` must **not** treat a scrambled absolute
-   URL as already resolved.
-4. `unscramble.ts` (Skia: decode, draw rects onto an offscreen surface, encode) and
-   `unscramble.web.ts` (canvas).
-5. Offline: `index-cache.ts` appends the fragment from each manifest page's `scramble`, in both
-   embedded mode and remote mode (`remotePageUrls` needs the manifest, not just a page count). The
-   app's downloader already fetches the raw `sourceUrl`, so the stored bytes stay scrambled, which
-   matches core.
-6. Bump the `external/comical` submodule once `page-scramble` is on `porksphere/comical`.
+- A bridge marks a page `Page.process` (optional `context`) and declares
+  `images.process: { bytes?, layout? }`.
+- `decodePageImage({ url, headers, context })` returns byte transforms as data (`xor`, `aes-ctr`),
+  which core runs in plain JS. A keystream generated from a seed is just an `xor` key as long as
+  the range it covers.
+- `layoutPageImage({ url, width, height, headers, context })` returns `{ width, height, ops }`
+  with `copy` operations. `@comical/sdk`'s `tileLayout` / `stripLayout` cover grids and strips.
+- The image route serves the decoded bytes plus a `Comical-Page-Layout` header. The app draws
+  the layout once in `resolveAssetSource`. Downloads store the layout, and a downloaded page's
+  file is served with it.
+- Because the hooks see the **response headers**, this covers sources whose order arrives with
+  the image (IMG-RESP), as well as byte encryption (IMG-BYTES) and tiles/strips (IMG-TILES).
+  All three blocker codes are closed in principle; each still needs its bridge written.
+- Known gaps: hub-served downloads aren't marked (the hub only knows page counts), the remote
+  index learns `processed` at hydration only, and none of it has run on a device yet.
 
 ## Decisions
 
 1. ~~Option B: one bridge per site, with shared engines and core~~ **adopted 2026-11-14.**
 2. Shared helpers: the three-layer split above (Comical unchanged, a pinned standalone kit, sites
    in the bridge repos). Proposed, awaiting a yes.
-3. Pixel transforms: A′ proposed. Byte transforms can go ahead independently.
+3. ~~Pixel transforms~~ **decided 2026-11-15:** processed page images (above).

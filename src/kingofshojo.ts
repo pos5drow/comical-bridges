@@ -1,4 +1,4 @@
 /** King of Shojo — a MangaThemesia site (see `engines/mangathemesia.ts`). */
 import { mangaThemesia } from "./engines/mangathemesia";
 
-export default mangaThemesia({ id: "pos5drow.kingofshojo", name: "King of Shojo", version: "0.1.1", base: "https://kingofshojo.com" });
+export default mangaThemesia({ id: "pos5drow.kingofshojo", name: "King of Shojo", version: "0.1.2", base: "https://kingofshojo.com" });

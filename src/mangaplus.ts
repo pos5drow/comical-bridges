@@ -127,7 +127,7 @@ class MangaPlusBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.mangaplus",
     name: "MANGA Plus",
-    version: "0.1.1",
+    version: "0.1.2",
     contractVersion: "2.1.0",
     languages: ["en", "es", "fr", "id", "pt-BR", "ru", "th", "de", "vi"],
     nsfw: false,

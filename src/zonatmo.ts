@@ -83,7 +83,7 @@ class ZonaTmoBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.zonatmo",
     name: "ZonaTMO",
-    version: "0.1.1",
+    version: "0.1.2",
     contractVersion: "2.1.0",
     languages: ["es"],
     nsfw: false,

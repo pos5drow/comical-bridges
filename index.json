@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-07T20:20:02.616Z",
+  "updated": "2026-11-15T05:58:07.753Z",
   "bridges": [
     {
       "id": "pos5drow.atsumaru",
@@ -32,6 +32,45 @@
         "atsu.moe"
       ],
       "signature": "vA1b0n_yhHM6xaza6bkT_-wxNTEF6UdhRiUyQpumKCMrXyG4fw4C1dPtwosd84BcspYfsQ-UegX-YOk3NF-1BA"
+    },
+    {
+      "id": "pos5drow.mangabat",
+      "name": "Mangabat",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort",
+        "settings"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangabat/0.1.0/bridge.js",
+      "sha256": "e55cbe1fb17e4e0ce6834200cd77c46f2e26c8723d8562177f77c7edce5a82a0",
+      "iconUrl": "https://www.mangabats.com/favicon.ico",
+      "cardSubtitles": true,
+      "ratings": true,
+      "assetRateLimit": {
+        "maxConcurrent": 3,
+        "minIntervalMs": 200
+      },
+      "images": {
+        "hosts": [
+          "2xstorage.com",
+          "mangabats.com"
+        ],
+        "headers": {
+          "Referer": "https://www.mangabats.com/"
+        }
+      },
+      "linkHosts": [
+        "mangabats.com"
+      ],
+      "signature": "DaDRCmp5elOvwp3ln0clfeAvJ3p_6w7VcU__V3J7vOZN2e-uBRfNIcl0pbEl5UKHeZCMHS2E2wUp7srj-Ey2DA"
     },
     {
       "id": "pos5drow.mangadex",
@@ -67,6 +106,94 @@
         "mangadex.org"
       ],
       "signature": "73vgtSfaGVDJ4AyPEXUTRCaWeWswFV-SDq08QLIVeFeLTSi27pu30gRvjNLdTQmfkyFsdtjlYZZO-xNl5W8JDg"
+    },
+    {
+      "id": "pos5drow.mangakakalot",
+      "name": "Mangakakalot",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort",
+        "settings"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangakakalot/0.1.0/bridge.js",
+      "sha256": "adda2b9fd363d7e42ee69cddcb06281089a07e8bdc39faf73afba1669f5fdf65",
+      "iconUrl": "https://www.kakamanga.com/favicon.ico",
+      "cardSubtitles": true,
+      "ratings": true,
+      "assetRateLimit": {
+        "maxConcurrent": 3,
+        "minIntervalMs": 200
+      },
+      "images": {
+        "hosts": [
+          "2xstorage.com",
+          "kakamanga.com",
+          "mangakakalove.com",
+          "mangakakalot.gg"
+        ],
+        "headers": {
+          "Referer": "https://www.kakamanga.com/"
+        }
+      },
+      "linkHosts": [
+        "kakamanga.com",
+        "mangakakalove.com",
+        "mangakakalot.gg"
+      ],
+      "signature": "k_NgRQwYwuugBf58wkrH5SjY1mg9Bz3_epAFOvsuf3UTDKDcsCVDDFoSfTXCbKtKP-2nYAhptlOdvexvj5h-BQ"
+    },
+    {
+      "id": "pos5drow.manganato",
+      "name": "Manganato",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort",
+        "settings"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.manganato/0.1.0/bridge.js",
+      "sha256": "9ca1be29356ec73e579f97e5c5fa9af5c8fa0a1cd1cdec7324240a017b10b643",
+      "iconUrl": "https://www.manganato.gg/favicon.ico",
+      "cardSubtitles": true,
+      "ratings": true,
+      "assetRateLimit": {
+        "maxConcurrent": 3,
+        "minIntervalMs": 200
+      },
+      "images": {
+        "hosts": [
+          "2xstorage.com",
+          "manganato.gg",
+          "natomanga.com",
+          "nelomanga.net",
+          "manganami.com"
+        ],
+        "headers": {
+          "Referer": "https://www.manganato.gg/"
+        }
+      },
+      "linkHosts": [
+        "manganato.gg",
+        "natomanga.com",
+        "nelomanga.net",
+        "manganami.com"
+      ],
+      "signature": "vh2GHAA9lIiCTiahZ6dFmmyXFIHn42V83F3dyXGyGhWqeXNcwPFw7LozTe88W5v1xkvag-rOGor3-6fsEfEoCw"
     },
     {
       "id": "pos5drow.weebcentral",

@@ -64,7 +64,7 @@ isn't merged yet, and no bridge uses it yet.
 
 | Source | Site | Engine | Upstream refs | Signals | Blockers | Status |
 |---|---|---|---|---|---|---|
-| Mangago | mangago.me | bespoke | kei `en/mangago`, aidoku `en.mangago` | #12 | IMG-TILES + encrypted image list | todo |
+| Mangago | mangago.me | bespoke | kei `en/mangago`, aidoku `en.mangago` | #12 | IMG-TILES + encrypted image list: done (kit `aes`, tiles via processed page images). **TLS-FINGERPRINT** | **shipped 0.1.0**; verified through host-server against a local mock, not yet against the live site |
 | King of Shojo | kingofshojo.com | **mangathemesia** | kei `en/kingofshojo`, aidoku `en.kingofshojo` | #21 | — | shipped `0.1.0` (first site on the long-tail engine) |
 | Flame Comics | flamecomics.xyz | bespoke (Next.js data routes) | kei `en/flamecomics`, aidoku `en.flamecomics` | in every app | — | shipped `0.1.0` |
 | MangaK (ex-MangaBuddy) | mangak.io (API at api.mangak.io) | **madtheme** | kei `en/mangabuddy`, aidoku `en.mangak` | #44 | — | shipped `0.1.1` |
@@ -108,6 +108,7 @@ repo), **comical** (contract/core/host), or **app** (comical-app).
 | MangaFire | not started | A VRF token computed by the site's JS (Keiyoushi uses a WebView solver page). | **JS-SOLVER**: port the VRF algorithm to TypeScript. |
 | MangaDot, BatCave | not started | Keiyoushi uses a WebView for something; not yet investigated. | **JS-SOLVER** investigation; may turn out to be only a Cloudflare cookie. |
 | Toonkotsu | shipped, live site unverified | 1. Cloudflare challenges the API for Node and Bun's TLS fingerprint, whatever the headers (curl passes, even with an OkHttp User-Agent; checked 2026-11-15, home IP). So the desktop/server hosts (Bun/Node `fetch`) and the CI audit can't reach it; phones (OkHttp, NSURLSession) should, as Keiyoushi and Aidoku do, but that hasn't been checked. 2. After some chapters the reader API answers 429 `manga-limit`/`verify` until a Turnstile check passes (Keiyoushi solves it in a WebView and POSTs the token to `/api/manga/unlock`); the bridge says so in plain words. | 1. **TLS-FINGERPRINT** (below): first check from the app on a phone. 2. **CF-CLEARANCE**-style web check: the same web-view flow, finishing with a token POST rather than a cookie. Everything but reachability is verified: the built bundle ran through `createHost()`'s router against a local mock serving the captured responses and a real encrypted page (lists, details, chapters, pages, and the image route returning the decrypted JPEG). |
+| Mangago | shipped, live site unverified | 1. Same **TLS-FINGERPRINT** challenge as Toonkotsu on every page (checked 2026-11-15; curl passes). 2. Page hosts like `iweb_2.mangapicgallery.com` have underscores; they load over HTTPS from curl, but Keiyoushi switches them to `http`, which suggests Android's hostname check rejects them. 3. List cards carry no genres, so browse results are unrated (search results and details are rated); the catalogue is adult-heavy. 4. No scrambled (`cspiclink`) page was found in a sample of 8 popular series, so the tile path is tested on synthetic pages only. | 1. **TLS-FINGERPRINT** (below). 2. Check on Android; if images fail, rewrite underscore hosts to `http` (and allow cleartext for that host on iOS). 3. Accept, or rate the series on first details fetch. 4. Watch for a real scrambled chapter. |
 | ReadComicOnline | not started | Obfuscated image URLs; Keiyoushi dropped the source. | Investigate once everything else is done. |
 
 **Cross-cutting: CF-CLEARANCE.** Comical has no way to pass a Cloudflare challenge. Keiyoushi opens
@@ -179,6 +180,15 @@ The MangaBox search challenges may be this too; untested.
   site's links, not the internal `hid` (the API takes both). The API is unreachable from Node/Bun
   (TLS-FINGERPRINT), so it was built from responses fetched by hand and verified end to end through
   host-server against a local mock of them; the live audit is flaky.
+
+- **Mangago (2026-11-15):** the reader's page list is AES-128-CBC encrypted; the key and IV, and
+  the tile orders for scrambled images, sit in an obfuscated `chapter.js` (sojson v4, character
+  codes split by letters). The bridge reads all of it as data and runs none of it: regexes for the
+  key, IV, tile-order table and grid size, plus a port of the site's string shuffle for the two
+  orders stored shuffled (each comes out a permutation of 0–80 only once unshuffled, which the tests
+  check). The kit gained `aesCbcDecrypt` (NIST-tested). The list's own shuffle step in the script is
+  a decoy: the result is thrown away and the plain decrypted list used. Built from pages fetched by
+  hand and verified through host-server against a local mock (TLS-FINGERPRINT again).
 
 ## Suggested build order
 

@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T08:37:34.083Z",
+  "updated": "2026-11-15T08:43:54.945Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -688,6 +688,42 @@
         "toontop.io"
       ],
       "signature": "j1A1_xOo5iOuU8myG-jXMRkmsq3KW2iCS9bXy6OWdpCTIr5eK8HHNp9Nq-U317wPXSQd8u-oYw1YVzaWAVJACw"
+    },
+    {
+      "id": "pos5drow.toonkotsu",
+      "name": "Toonkotsu",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort",
+        "content-rating"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.toonkotsu/0.1.0/bridge.js",
+      "sha256": "50ce41d12920808b61823cf957b051441c6eec82b58b536ac9b6c9c59d55cfb0",
+      "iconUrl": "https://toonkotsu.com/favicon.ico",
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "images": {
+        "hosts": [
+          "toonkotsu.com"
+        ],
+        "process": {
+          "bytes": true
+        }
+      },
+      "linkHosts": [
+        "toonkotsu.com"
+      ],
+      "signature": "57Ematc9SVljGUrgJNhv0M5yhfvH6RjnB1wKbLptU-4yIftwd-pe7iOf7L9Tl1vHPwPYt-Vl1HKCi-nodTnoAQ"
     },
     {
       "id": "pos5drow.webtoons",

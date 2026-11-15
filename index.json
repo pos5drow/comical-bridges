@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T07:27:18.651Z",
+  "updated": "2026-11-15T07:33:34.613Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -231,6 +231,35 @@
         "manganami.com"
       ],
       "signature": "knokzjXsFRttwYiSsRDgcuKUhvoDnMpm07_SU9KLWhzcnkjHbMGrFOb5uuD9DgQ-yChq13AmB9ypmu-JQplVBA"
+    },
+    {
+      "id": "pos5drow.olympus",
+      "name": "Olympus Scanlation",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "es"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort",
+        "settings"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.olympus/0.1.0/bridge.js",
+      "sha256": "3fea099220a9c1c9dc0d50f1d2430a4694a771247d59bac62db8953fd34f11f3",
+      "iconUrl": "https://olympusxyz.com/favicon.ico",
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "linkHosts": [
+        "olympusxyz.com",
+        "olympusbiblioteca.com"
+      ],
+      "signature": "69HyojIBF9MjWb4NTe55FQKVo7cSDJ0b-Fu611p8f7DkTASUWxtUvegpTDjStiC7G1754bVo4_3n3uxqyrRWCw"
     },
     {
       "id": "pos5drow.weebcentral",

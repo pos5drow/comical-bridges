@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T07:33:34.613Z",
+  "updated": "2026-11-15T07:37:10.494Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -231,6 +231,43 @@
         "manganami.com"
       ],
       "signature": "knokzjXsFRttwYiSsRDgcuKUhvoDnMpm07_SU9KLWhzcnkjHbMGrFOb5uuD9DgQ-yChq13AmB9ypmu-JQplVBA"
+    },
+    {
+      "id": "pos5drow.manhwaweb",
+      "name": "ManhwaWeb",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "es"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort",
+        "content-rating"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.manhwaweb/0.1.0/bridge.js",
+      "sha256": "9a2f556054c5bfdcd94243a76a45aab73a9909dd4f767d304dba9ae631d515ff",
+      "iconUrl": "https://manhwaweb.com/favicon.ico",
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "images": {
+        "hosts": [
+          "img1mw.xyz",
+          "img2mw.xyz"
+        ],
+        "headers": {
+          "Referer": "https://manhwaweb.com/"
+        }
+      },
+      "linkHosts": [
+        "manhwaweb.com"
+      ],
+      "signature": "a3lwQlzGk0sDdNb9E-Zit5V9wPHf7a6aVvoKchO-UrG5JH8CjWze1wngfUf_6kCUFLS9SW3Z5Tx7tikaC6E3Bw"
     },
     {
       "id": "pos5drow.olympus",

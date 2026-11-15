@@ -16,13 +16,19 @@ Built and pushed, following the derived design below:
   phone's `WebCheckHost` (hidden web view first, the same view full screen when the check wants a
   person, done when a clearance cookie changes); Verify in the retry block; the desktop shell's
   hidden window; Chromium's network for the desktop host behind `COMICAL_CHROMIUM_NETWORK=1`.
+- **Page-storage values** (point 14), comical 29f584c and comical-app 0367f477: a bridge names
+  the localStorage keys on its own challenge, `challengeMessage({ url, userAgent, storage })`,
+  thrown from its request override when the site's API refuses for want of the token. No
+  `BridgeInfo` field is needed. The check is done once every key is set and one is new. The
+  values go to the import (`values`), and the bridge reads them with
+  `host.storage.secure.get(webCheckStorageKey(key))`. They're forgotten with the session's
+  cookies.
 - **Bridge repos:** the guard adapter turns the kit's `challenge` verdict into the same marker,
   with the request's User-Agent; every bridge using it got a patch bump.
 
 Still to do: an on-device run against a real challenged site (iOS first, then Android, where the
 WebView and OkHttp have different TLS fingerprints); turning the desktop's Chromium network on
-by default once a build shows Set-Cookie and User-Agent come through it; page-storage values for
-HDoujin and Schale (not built: point 14); and building the blocked bridges, which needs pages or
+by default once a build shows Set-Cookie and User-Agent come through it; and building the blocked bridges, which needs pages or
 a HAR from a browser, or probing through a session the user has cleared.
 
 ## The idea
@@ -144,10 +150,10 @@ Each part follows the apps above and fits Comical's split. Comical and the app s
 13. The adapter maps the kit's `challenge` verdict to the new marker. Bridges switch from their
     hard-coded Chrome User-Agent to the host's default where they can.
 14. **Values from the page instead of cookies** (HDoujin's and Schale's localStorage `clearance`
-    token): Paperback's approach fits here. The bridge declares the keys
-    (`info.webCheck.storage`), the sheet reads them after the check, and they're handed to the
-    bridge (its storage, under a reserved key). This is the only part that needs bridge
-    declarations.
+    token): built. The keys ride on the bridge's own challenge (`storage`) rather than a
+    `BridgeInfo` declaration, since only the bridge knows when its token is missing or stale. The
+    runner reads them from the check's page and they reach the bridge's secure storage under
+    `webCheckStorageKey(key)`.
 15. **Then build the blocked bridges.** They can't be studied from this machine without a
     cleared session: either pages or a HAR exported from a browser, or probing through a session
     the user cleared once desktop has the check (may need the user's go-ahead).
@@ -158,7 +164,7 @@ Each part follows the apps above and fits Comical's split. Comical and the app s
 - No separate clearance store: core's cookie jar, persisted, is the one store.
 - Detection in core, not per bridge: every bridge is covered at once.
 - Named cookies don't need declaring: success is `cf_clearance` (or the other vendors' cookies)
-  changing, plus Done. Only page-storage values need a declaration.
+  changing, plus Done. Page-storage keys travel on the challenge itself, not in a declaration.
 
 ## Which sources it would unblock
 
@@ -170,8 +176,8 @@ Each part follows the apps above and fits Comical's split. Comical and the app s
 | MangaDot | `cf_clearance` | Good |
 | MyReadingManga | `cf_clearance` ("Verification Required") | Good |
 | BatCave | DLE Guard page plus Cloudflare | Unverified: depends on what DLE Guard sets |
-| HDoujin | localStorage `clearance` token | Good once storage values are collected |
-| Schale Network | localStorage `clearance` token (after the user solves its Turnstile) | Good once storage values are collected |
+| HDoujin | localStorage `clearance` token | Good: storage values are collected; the bridge still needs building |
+| Schale Network | localStorage `clearance` token (after the user solves its Turnstile) | Good: storage values are collected; the bridge still needs building |
 | MangaFire (captcha) | `waf_pass` cookie | Good |
 | Toonkotsu (reading check) | session cookie after the site's own unlock | Unverified |
 

@@ -71,7 +71,7 @@ isn't merged yet, and no bridge uses it yet.
 | Toonily.me | toontop.io (API at api.toontop.io) | **madtheme** | kei `en/toonilyme`, aidoku `en.toonilyme` | — | — | shipped `0.1.1` |
 | MangaTaro | mangataro.org | **mangataro** | kei `en/mangataro` | 27 👍 request | many top licensed titles are taken down on the site (shown as such); English chapters only | shipped `0.1.0` |
 | Rolia Scan | roliascan.com | **mangataro** | kei `en/roliascan` | #19 — *added: nearly free once the MangaTaro engine exists* | — | shipped `0.1.0` |
-| Toonkotsu | toonkotsu.com | bespoke | kei `en/toonkotsu`, aidoku `en.toonkotsu` | EverythingMoe "new" | IMG-BYTES (AES-CTR, key in the URL) | todo |
+| Toonkotsu | toonkotsu.com | bespoke (JSON API) | kei `en/toonkotsu`, aidoku `en.toonkotsu` | EverythingMoe "new" | IMG-BYTES (AES-CTR per page): done with processed page images. **TLS-FINGERPRINT** and a Turnstile reading check (see blocked table) | **shipped 0.1.0**, not yet seen working through a host |
 | OniSaga | onisaga.com | bespoke (RPC + Next.js) | kei `all/onisaga` | 16 👍 request | **CF-CLEARANCE site-wide** | blocked |
 | Manga Ball | mangaball.com | bespoke (API, multilingual) | kei `all/mangaball`, aidoku `multi.mangaball` | 15 👍 request | — | shipped `0.1.0` (one bridge; Language setting) |
 | MangaDot | mangadot.net | bespoke | kei `all/mangadotnet`, aidoku `multi.mangadotnet` | EverythingMoe hub | JS-SOLVER? (kei uses a WebView — investigate) | todo |
@@ -107,6 +107,7 @@ repo), **comical** (contract/core/host), or **app** (comical-app).
 | Comix | not started | 1. Requests are signed by the site's own obfuscated JS (Keiyoushi runs it in a WebView). 2. Images are XOR'd and grid-scrambled, with the parameters in the response headers. | 1. **JS-SOLVER** investigation: port the signer to TypeScript if feasible. 2. Already covered by processed page images (`decodePageImage` reads the headers, `layoutPageImage` the grid). |
 | MangaFire | not started | A VRF token computed by the site's JS (Keiyoushi uses a WebView solver page). | **JS-SOLVER**: port the VRF algorithm to TypeScript. |
 | MangaDot, BatCave | not started | Keiyoushi uses a WebView for something; not yet investigated. | **JS-SOLVER** investigation; may turn out to be only a Cloudflare cookie. |
+| Toonkotsu | shipped, unverified through a host | 1. Cloudflare challenges the API for Node and Bun's TLS fingerprint, whatever the headers (curl passes, even with an OkHttp User-Agent; checked 2026-11-15, home IP). So the desktop/server hosts (Bun/Node `fetch`) and the CI audit can't reach it; phones (OkHttp, NSURLSession) should, as Keiyoushi and Aidoku do, but that hasn't been checked. 2. After some chapters the reader API answers 429 `manga-limit`/`verify` until a Turnstile check passes (Keiyoushi solves it in a WebView and POSTs the token to `/api/manga/unlock`); the bridge says so in plain words. | 1. **TLS-FINGERPRINT** (below): first check from the app on a phone. 2. **CF-CLEARANCE**-style web check: the same web-view flow, finishing with a token POST rather than a cookie. Covered by the bridge's fixture tests; page decryption checked against core's AES-CTR on a real page. |
 | ReadComicOnline | not started | Obfuscated image URLs; Keiyoushi dropped the source. | Investigate once everything else is done. |
 
 **Cross-cutting: CF-CLEARANCE.** Comical has no way to pass a Cloudflare challenge. Keiyoushi opens
@@ -117,6 +118,16 @@ to the browser's User-Agent and IP. What it would take:
   handler that reacts to the challenge error the guard already raises.
 - **host:** send that cookie, and the same User-Agent the browser used, on the bridge's requests.
 - **app:** the web-view sheet, reusing what `web-login` already does.
+
+**Cross-cutting: TLS-FINGERPRINT.** Some Cloudflare setups challenge by TLS/HTTP fingerprint, not
+headers: Node's and Bun's `fetch` are challenged while curl and the phones' native stacks pass. A
+host whose network is Node/Bun `fetch` (host-server, desktop, the CI audit) can't reach such a site
+at all. What it would take, smallest first:
+- **check** which hosts are affected: the app on Android/iOS (native stacks) likely isn't.
+- **comical/host:** if desktop matters, give the Node host a network path with a browser-like
+  fingerprint (e.g. Electron's `net` module, which uses Chromium's stack) instead of Node `fetch`.
+- **audit:** run such bridges' live audit from a device, or mark them flaky (done for Toonkotsu).
+The MangaBox search challenges may be this too; untested.
 
 ## Notes from building
 
@@ -160,6 +171,13 @@ to the browser's User-Agent and IP. What it would take:
   the page host (`jumpg-assets3`) is intercepted so covers load directly; a page on any other host
   makes `getChapterPages` throw, so a CDN move shows up in the nightly audit. Verified end to end
   through the loader, `resolveImageRequest` and `processPageImage` on the built bundle.
+
+- **Toonkotsu (2026-11-15):** a clean JSON API with lots of uploads per chapter (groups, and one
+  group's copies from several sources); the list keeps one per chapter and group like the site's,
+  complete before partial. Pages are AES-256-CTR with a per-page key and an 8-byte nonce (the counter
+  is the nonce plus zeros), carried in `Page.process.context`. Series ids are the `code` in the
+  site's links, not the internal `hid` (the API takes both). The API is unreachable from Node/Bun
+  (TLS-FINGERPRINT), so it was built from responses fetched by hand, and the live audit is flaky.
 
 ## Suggested build order
 

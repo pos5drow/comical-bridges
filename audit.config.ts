@@ -37,5 +37,7 @@ export const AUDIT: Record<string, BridgeAuditConfig> = {
   webtoons: { searchQuery: "tower" },
   zonatmo: { searchQuery: "solo leveling" },
   mangaplus: { searchQuery: "one piece" },
+  // Cloudflare challenges the Node/Bun TLS fingerprint on the API, so the runner can't reach it.
+  toonkotsu: { searchQuery: "solo leveling", flaky: "Cloudflare challenges the Bun/Node TLS fingerprint" },
   cubari: { searchQuery: "https://raw.githubusercontent.com/catgirl-v/cubari/d/catgirl-v/main/series/Fawnduu/My%20Dragon%20Girlfriend/cubari.json" },
 };

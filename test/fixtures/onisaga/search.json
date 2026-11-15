@@ -1,0 +1,234 @@
+{
+ "json": {
+  "items": [
+   {
+    "id": "240",
+    "slug": "solo-fessional-solo-katsu-danshi-to-bocchi-joshi-no-koubou-sen",
+    "title": "Solo-fessional: Solo Katsu Danshi to Bocchi Joshi no Koubou-sen",
+    "titleLanguage": "ja-Latn",
+    "medium": "comic",
+    "origin": "manga",
+    "form": "serial",
+    "layout": null,
+    "publicationStatus": "releasing",
+    "demographic": "seinen",
+    "originalLanguage": "ja",
+    "startDate": "2024-08-27",
+    "startPrecision": "day",
+    "synopsis": "Hasama Shin is a solo guy who loves being alone. He even changed jobs to enjoy his time alone after coming home, and one day, a girl living in the apartment next door asks him if he wants to hang out …",
+    "coverColor": null,
+    "metadataVersion": 101,
+    "publishedAt": "2026-11-04T14:25:26.724861Z",
+    "nativeTitle": {
+     "title": "ソロフェッショナル～ソロ活男子とボッチ女子の攻防戦～",
+     "language": "ja"
+    },
+    "contentRating": "safe",
+    "coverUrl": "https://media.onisaga.com/api/covers/solo-fessional-solo-katsu-danshi-to-bocchi-joshi-no-koubou-sen?mv=101",
+    "updatedAt": "2025-11-07T12:54:09.000000Z",
+    "languages": [
+     {
+      "language": "en",
+      "readableUnits": 2
+     }
+    ],
+    "latest": {
+     "releaseId": "100019855",
+     "chapterId": "11664",
+     "language": "en",
+     "at": "2025-11-07T12:54:09.000000Z",
+     "label": "2"
+    }
+   },
+   {
+    "id": "1222",
+    "slug": "becoming-a-god-by-myself",
+    "title": "Becoming a God by Myself",
+    "titleLanguage": null,
+    "medium": "comic",
+    "origin": null,
+    "form": "serial",
+    "layout": null,
+    "publicationStatus": "releasing",
+    "demographic": null,
+    "originalLanguage": "zh",
+    "startDate": null,
+    "startPrecision": null,
+    "synopsis": "Three years ago, he harvested a spiritual fruit, but was snatched by a Shoushan disciple. Three years later, the Moriyama disciple became the most dazzling genius in the sect, but he discovered that t…",
+    "coverColor": null,
+    "metadataVersion": 39,
+    "publishedAt": "2026-11-06T21:11:03.448486Z",
+    "nativeTitle": null,
+    "contentRating": "safe",
+    "coverUrl": "https://media.onisaga.com/api/covers/becoming-a-god-by-myself?mv=39",
+    "updatedAt": "2026-03-02T17:02:47.000000Z",
+    "languages": [
+     {
+      "language": "en",
+      "readableUnits": 38
+     },
+     {
+      "language": "pt-BR",
+      "readableUnits": 10
+     }
+    ],
+    "latest": {
+     "releaseId": "100087782",
+     "chapterId": "60435",
+     "language": "pt-BR",
+     "at": "2026-03-02T17:02:47.000000Z",
+     "label": "38"
+    }
+   },
+   {
+    "id": "1270",
+    "slug": "emperor-of-solo-play",
+    "title": "Emperor of Solo Play",
+    "titleLanguage": "en",
+    "medium": "comic",
+    "origin": "manhwa",
+    "form": "serial",
+    "layout": "vertical_strip",
+    "publicationStatus": "releasing",
+    "demographic": "shounen",
+    "originalLanguage": "ko",
+    "startDate": "2025-04-19",
+    "startPrecision": "day",
+    "synopsis": "Betrayed by his guild and defeated by a top player, Hyrkan loses everything. Before he can get revenge, a fatal accident ends his life—only for him to wake up years in the past, back at the start of W…",
+    "coverColor": null,
+    "metadataVersion": 279,
+    "publishedAt": "2026-11-04T14:37:56.560479Z",
+    "nativeTitle": {
+     "title": "솔플의 제왕",
+     "language": "ko"
+    },
+    "contentRating": "safe",
+    "coverUrl": "https://media.onisaga.com/api/covers/emperor-of-solo-play?mv=279",
+    "updatedAt": "2026-11-10T03:52:21.527140Z",
+    "languages": [
+     {
+      "language": "en",
+      "readableUnits": 92
+     },
+     {
+      "language": "pt-BR",
+      "readableUnits": 1
+     }
+    ],
+    "latest": {
+     "releaseId": "104116393",
+     "chapterId": "2864354",
+     "language": "en",
+     "at": "2026-11-10T03:52:21.527140Z",
+     "label": "Chapter 92"
+    }
+   },
+   {
+    "id": "38810",
+    "slug": "solo-leveling",
+    "title": "Solo Leveling",
+    "titleLanguage": "en",
+    "medium": "comic",
+    "origin": "manhwa",
+    "form": "serial",
+    "layout": "vertical_strip",
+    "publicationStatus": "completed",
+    "demographic": "shounen",
+    "originalLanguage": "ko",
+    "startDate": "2018-03-04",
+    "startPrecision": "day",
+    "synopsis": "In a world where awakened beings called “Hunters” must battle deadly monsters to protect humanity, Seong Jin-U, nicknamed “the weakest hunter of all mankind,” finds himself in a constant struggle for …",
+    "coverColor": null,
+    "metadataVersion": 490,
+    "publishedAt": "2026-11-04T17:12:54.684395Z",
+    "nativeTitle": {
+     "title": "나 혼자만 레벨업",
+     "language": "ko"
+    },
+    "contentRating": "safe",
+    "coverUrl": "https://media.onisaga.com/api/covers/solo-leveling?mv=490",
+    "updatedAt": "2026-04-01T11:35:12.000000Z",
+    "languages": [
+     {
+      "language": "en",
+      "readableUnits": 268
+     },
+     {
+      "language": "pt-BR",
+      "readableUnits": 201
+     },
+     {
+      "language": "ja",
+      "readableUnits": 145
+     },
+     {
+      "language": "fr",
+      "readableUnits": 37
+     },
+     {
+      "language": "es-419",
+      "readableUnits": 2
+     }
+    ],
+    "latest": {
+     "releaseId": "102703307",
+     "chapterId": "1793819",
+     "language": "en",
+     "at": "2026-04-01T11:35:12.000000Z",
+     "label": "201"
+    }
+   },
+   {
+    "id": "19178",
+    "slug": "sekai-ni-hitotsu-dake-no-r",
+    "title": "Sekai ni Hitotsu dake no R",
+    "titleLanguage": "ja-Latn",
+    "medium": "comic",
+    "origin": "manga",
+    "form": "serial",
+    "layout": null,
+    "publicationStatus": "completed",
+    "demographic": "shounen",
+    "originalLanguage": "ja",
+    "startDate": "2019-06-15",
+    "startPrecision": "day",
+    "synopsis": "In a world ruled by chaos and darkness lives a warrior whose family was killed by demons, his name is Urus. Driven by madness and revenge, one day he hears of \"Kelg's pub\", a place where heroes who we…",
+    "coverColor": null,
+    "metadataVersion": 152,
+    "publishedAt": "2026-11-04T16:46:27.250604Z",
+    "nativeTitle": {
+     "title": "世界に一つだけのR",
+     "language": "ja"
+    },
+    "contentRating": "suggestive",
+    "coverUrl": "https://media.onisaga.com/api/covers/sekai-ni-hitotsu-dake-no-r?mv=152",
+    "updatedAt": "2025-09-10T15:09:57.000000Z",
+    "languages": [
+     {
+      "language": "en",
+      "readableUnits": 30
+     },
+     {
+      "language": "pt-BR",
+      "readableUnits": 13
+     },
+     {
+      "language": "fr",
+      "readableUnits": 1
+     }
+    ],
+    "latest": {
+     "releaseId": "101542943",
+     "chapterId": "996815",
+     "language": "en",
+     "at": "2025-09-10T15:09:57.000000Z",
+     "label": "20.2"
+    }
+   }
+  ],
+  "total": 505,
+  "sort": "relevance",
+  "nextCursor": "eyJ2IjoiMyIsImlkIjoiMzkwNDkifQ.G13rz2gw2E7Hyl6HtQltqwu2ASY16JjQ",
+  "facets": null
+ }
+}

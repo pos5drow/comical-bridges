@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<!-- Synthetic: the shape of OniSaga's age gate for an adult-rated title, after the reference's
+     selectors (main[data-ui=content-gate], data-gate, h1). No real title. -->
+<html lang="en"><head><meta charSet="utf-8"/><title>Sample Title · OniSaga</title></head>
+<body>
+<header class="site-header"><a href="/">OniSaga</a></header>
+<main id="main" data-ui="content-gate" data-gate="self-confirmation">
+<h1>Sample Title</h1>
+<p>This title is rated for adults. Confirm you are 18 or older to continue.</p>
+<form method="post" action="/api/age-confirmation"><input type="hidden" name="action" value="confirm"/><input type="hidden" name="next" value="/title/sample-title"/><button type="submit">I am 18 or older</button></form>
+</main>
+</body></html>

@@ -1,0 +1,335 @@
+{
+ "content": [
+  {
+   "series_id": "01a0b926-1355-7b60-811a-95e616eea045",
+   "source_id": "01a07348-fdbd-76e3-903e-86a76d587c17",
+   "title": "Garden in the Closet",
+   "slug": "garden-in-the-closet",
+   "alternate_titles": [
+    "ガーデン・イン・ザ・クローゼット"
+   ],
+   "cover_image_id": "01a0b93f-0689-7bfc-be72-e035f85bb352",
+   "age_rating": "Safe",
+   "is_disturbing": false,
+   "is_pornographic": false,
+   "start_year": 2026,
+   "end_year": null,
+   "publication_status": "Ongoing",
+   "upload_status": "Ongoing",
+   "format": "Manga",
+   "current_books": 8,
+   "current_volumes": null,
+   "genres": [
+    "019beb9a-a36a-718c-b551-d917a0818cc7",
+    "019c1b6f-3d3b-7528-a3e2-a791cfdcc4f7",
+    "019c1b6f-9c7b-77a0-8b54-e62925422b91"
+   ],
+   "tags": [],
+   "staff": [
+    "01a0b926-12f0-7bed-9ddb-731d9a34b73e",
+    "01a0b926-12f0-7bed-9ddb-731d9a34b73e"
+   ],
+   "groups": [
+    "01a07350-c392-736f-8af6-ea1ce7d8f820"
+   ],
+   "original_language": "ja",
+   "translated_language": "en",
+   "edition_info": null,
+   "latest_chapters": [
+    {
+     "book_id": "01a1e134-e898-7ad0-87e5-98eb9fefde0b",
+     "title": "Chapter 5 (☆octomarss☆)",
+     "chapter_no": "5",
+     "volume_no": null,
+     "created_at": "2026-11-15T21:55:03.447373+00:00",
+     "available_at": "2026-11-15T21:55:03.447373+00:00"
+    }
+   ],
+   "rating": 100,
+   "matched": null,
+   "genre_list": [
+    {
+     "id": "019beb9a-a36a-718c-b551-d917a0818cc7",
+     "name": "Romance"
+    },
+    {
+     "id": "019c1b6f-3d3b-7528-a3e2-a791cfdcc4f7",
+     "name": "Drama"
+    },
+    {
+     "id": "019c1b6f-9c7b-77a0-8b54-e62925422b91",
+     "name": "Supernatural"
+    }
+   ],
+   "tag_list": [],
+   "staff_list": [
+    {
+     "id": "01a0b926-12f0-7bed-9ddb-731d9a34b73e",
+     "name": "Kei Itono",
+     "role": "Story"
+    },
+    {
+     "id": "01a0b926-12f0-7bed-9ddb-731d9a34b73e",
+     "name": "Kei Itono",
+     "role": "Art"
+    }
+   ],
+   "group_list": [
+    {
+     "id": "01a07350-c392-736f-8af6-ea1ce7d8f820",
+     "name": "NocturneLab"
+    }
+   ],
+   "viewer": null,
+   "hidden_by_filter": false
+  },
+  {
+   "series_id": "01a0d221-8134-762c-a7b4-f12b3eef9fbd",
+   "source_id": "01a07348-fdbd-76e3-903e-86a76d587c17",
+   "title": "Hole Up Gamers",
+   "slug": "hole-up-gamers",
+   "alternate_titles": [
+    "Hole up Gamers",
+    "HOLE UP GAMERS"
+   ],
+   "cover_image_id": "01a0d249-e87e-7fea-bcf8-8b61b4a8b96d",
+   "age_rating": "Safe",
+   "is_disturbing": false,
+   "is_pornographic": false,
+   "start_year": 2026,
+   "end_year": null,
+   "publication_status": "Ongoing",
+   "upload_status": "Ongoing",
+   "format": "Manga",
+   "current_books": 8,
+   "current_volumes": 2,
+   "genres": [
+    "019c1b6f-3d3b-7528-a3e2-a791cfdcc4f7",
+    "019c1b6f-51ed-7991-a796-a8ca26e86666",
+    "019c1b6f-7991-7edb-8c7f-df6876f09a94"
+   ],
+   "tags": [],
+   "staff": [
+    "01a0cd35-fdc7-7c27-a68d-339341bc05b8",
+    "01a0cd35-fdc7-7c27-a68d-339341bc05b8"
+   ],
+   "groups": [
+    "01a07350-c392-736f-8af6-ea1ce7d8f820"
+   ],
+   "original_language": "ja",
+   "translated_language": "en",
+   "edition_info": null,
+   "latest_chapters": [
+    {
+     "book_id": "01a1e103-5fea-77cb-a358-9f2d9ae38d32",
+     "title": "Chapter 8 (LHTranslation)",
+     "chapter_no": "8",
+     "volume_no": "2",
+     "created_at": "2026-11-15T21:00:57.192970+00:00",
+     "available_at": "2026-11-15T21:00:57.192970+00:00"
+    }
+   ],
+   "rating": null,
+   "matched": null,
+   "genre_list": [
+    {
+     "id": "019c1b6f-3d3b-7528-a3e2-a791cfdcc4f7",
+     "name": "Drama"
+    },
+    {
+     "id": "019c1b6f-51ed-7991-a796-a8ca26e86666",
+     "name": "Fantasy"
+    },
+    {
+     "id": "019c1b6f-7991-7edb-8c7f-df6876f09a94",
+     "name": "Mystery"
+    }
+   ],
+   "tag_list": [],
+   "staff_list": [
+    {
+     "id": "01a0cd35-fdc7-7c27-a68d-339341bc05b8",
+     "name": "Kazuhiko Morita",
+     "role": "Story"
+    },
+    {
+     "id": "01a0cd35-fdc7-7c27-a68d-339341bc05b8",
+     "name": "Kazuhiko Morita",
+     "role": "Art"
+    }
+   ],
+   "group_list": [
+    {
+     "id": "01a07350-c392-736f-8af6-ea1ce7d8f820",
+     "name": "NocturneLab"
+    }
+   ],
+   "viewer": null,
+   "hidden_by_filter": false
+  },
+  {
+   "series_id": "01a0ba51-6b21-7e95-a9d8-a8407efaca7d",
+   "source_id": "01a0b55b-b86b-7bf0-af4e-8843c7e456f7",
+   "title": "Kidnapping a Dragon",
+   "slug": "kidnapping-a-dragon",
+   "alternate_titles": [],
+   "cover_image_id": "01a0ba51-6d59-79de-bac3-1dc893a7df91",
+   "age_rating": "Safe",
+   "is_disturbing": false,
+   "is_pornographic": false,
+   "start_year": null,
+   "end_year": null,
+   "publication_status": "Ongoing",
+   "upload_status": "Ongoing",
+   "format": "Manga",
+   "current_books": 66,
+   "current_volumes": null,
+   "genres": [
+    "019c1b6f-3d3b-7528-a3e2-a791cfdcc4f7",
+    "019c1b6f-51ed-7991-a796-a8ca26e86666",
+    "019c1fe4-fabf-7242-a0a8-7866f98f705e"
+   ],
+   "tags": [],
+   "staff": [],
+   "groups": [
+    "01a052d5-d778-7523-a3fb-0d1f044f969a"
+   ],
+   "original_language": "ja",
+   "translated_language": "en",
+   "edition_info": null,
+   "latest_chapters": [
+    {
+     "book_id": "01a1e0f2-993b-7908-82b4-aedf457dbe35",
+     "title": "Ch. 68",
+     "chapter_no": "68",
+     "volume_no": null,
+     "created_at": "2026-11-15T20:42:37.754214+00:00",
+     "available_at": "2026-11-15T20:42:37.754214+00:00"
+    }
+   ],
+   "rating": null,
+   "matched": null,
+   "genre_list": [
+    {
+     "id": "019c1b6f-3d3b-7528-a3e2-a791cfdcc4f7",
+     "name": "Drama"
+    },
+    {
+     "id": "019c1b6f-51ed-7991-a796-a8ca26e86666",
+     "name": "Fantasy"
+    },
+    {
+     "id": "019c1fe4-fabf-7242-a0a8-7866f98f705e",
+     "name": "Action"
+    }
+   ],
+   "tag_list": [],
+   "staff_list": [],
+   "group_list": [
+    {
+     "id": "01a052d5-d778-7523-a3fb-0d1f044f969a",
+     "name": "Literary Curator"
+    }
+   ],
+   "viewer": null,
+   "hidden_by_filter": false
+  },
+  {
+   "series_id": "01a0b74d-123e-76ec-b48f-91891f0fef97",
+   "source_id": "01a07348-fdbd-76e3-903e-86a76d587c17",
+   "title": "The Witch's Ending Note",
+   "slug": "the-witch-s-ending-note",
+   "alternate_titles": [
+    "Majo no Ending Note",
+    "魔女の終活帳",
+    "Catatan Akhir sang Penyihir"
+   ],
+   "cover_image_id": "01a0b762-206e-729f-9c56-e1db3e1703b3",
+   "age_rating": "Safe",
+   "is_disturbing": false,
+   "is_pornographic": false,
+   "start_year": 2026,
+   "end_year": null,
+   "publication_status": "Ongoing",
+   "upload_status": "Ongoing",
+   "format": "Manga",
+   "current_books": 11,
+   "current_volumes": 1,
+   "genres": [
+    "019c1b6f-3d3b-7528-a3e2-a791cfdcc4f7",
+    "019c1b6f-51ed-7991-a796-a8ca26e86666",
+    "019c1b6f-b682-7fee-9a9b-86e648b77e9e"
+   ],
+   "tags": [],
+   "staff": [
+    "01a0b748-2169-75a6-b7d1-bd115a5af59c",
+    "01a0b748-2239-79f7-859f-cd1d9cef0155"
+   ],
+   "groups": [
+    "01a07350-c392-736f-8af6-ea1ce7d8f820"
+   ],
+   "original_language": "ja",
+   "translated_language": "en",
+   "edition_info": null,
+   "latest_chapters": [
+    {
+     "book_id": "01a1e109-c572-781b-916c-86b193ec3223",
+     "title": "Kadan and Iero (Cunny Moment)",
+     "chapter_no": "11",
+     "volume_no": null,
+     "created_at": "2026-11-15T21:07:56.401507+00:00",
+     "available_at": "2026-11-15T21:07:56.401507+00:00"
+    }
+   ],
+   "rating": null,
+   "matched": null,
+   "genre_list": [
+    {
+     "id": "019c1b6f-3d3b-7528-a3e2-a791cfdcc4f7",
+     "name": "Drama"
+    },
+    {
+     "id": "019c1b6f-51ed-7991-a796-a8ca26e86666",
+     "name": "Fantasy"
+    },
+    {
+     "id": "019c1b6f-b682-7fee-9a9b-86e648b77e9e",
+     "name": "Adventure"
+    }
+   ],
+   "tag_list": [],
+   "staff_list": [
+    {
+     "id": "01a0b748-2169-75a6-b7d1-bd115a5af59c",
+     "name": "Sora Ishihara",
+     "role": "Story"
+    },
+    {
+     "id": "01a0b748-2239-79f7-859f-cd1d9cef0155",
+     "name": "Shoubu (菖蒲)",
+     "role": "Story"
+    }
+   ],
+   "group_list": [
+    {
+     "id": "01a07350-c392-736f-8af6-ea1ce7d8f820",
+     "name": "NocturneLab"
+    }
+   ],
+   "viewer": null,
+   "hidden_by_filter": false
+  }
+ ],
+ "total_elements": 1000,
+ "total_pages": 29,
+ "size": 35,
+ "page": 0,
+ "number_of_elements": 4,
+ "first": true,
+ "last": false,
+ "total": {
+  "value": 178566,
+  "relation": "Eq"
+ },
+ "next_cursor": "eyJhIjpbMTc5NDc3NTM1NzY5NiwiMDFhMGJhZDEtYTgyYi03MmQwLWE1M2YtNzAyMzA4MWUwNzUxIl0sImsiOiJsYXN0X2Jvb2tfYWRkZWRfYXQsZGVzYyJ9"
+}

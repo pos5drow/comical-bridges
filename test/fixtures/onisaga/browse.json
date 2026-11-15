@@ -1,0 +1,210 @@
+{
+ "json": {
+  "items": [
+   {
+    "id": "3306",
+    "slug": "light-of-the-dawn-remake",
+    "title": "Yeomyeongui Deungbul",
+    "titleLanguage": "ko-Latn",
+    "medium": "comic",
+    "origin": "manhwa",
+    "form": "serial",
+    "layout": "vertical_strip",
+    "publicationStatus": "releasing",
+    "demographic": "shounen",
+    "originalLanguage": "ko",
+    "startDate": "2024-03-05",
+    "startPrecision": "day",
+    "synopsis": "Sergeant ‘Bucky’, a war hero belonging to the ‘Empire of the Sun’. He serves as an example to the imperial soldiers through his loyal loyalty to the emperor and his excellent martial arts, but in fact…",
+    "coverColor": null,
+    "metadataVersion": 147,
+    "publishedAt": "2026-11-04T14:48:57.948491Z",
+    "nativeTitle": {
+     "title": "여명의 등불",
+     "language": "ko"
+    },
+    "contentRating": "safe",
+    "coverUrl": "https://media.onisaga.com/api/covers/light-of-the-dawn-remake?mv=147",
+    "updatedAt": "2026-11-15T21:46:40.177331Z",
+    "languages": [
+     {
+      "language": "en",
+      "readableUnits": 104
+     }
+    ],
+    "latest": {
+     "releaseId": "104258944",
+     "chapterId": "2872644",
+     "language": "en",
+     "at": "2026-11-15T21:46:40.177331Z",
+     "label": "Chapter 102"
+    }
+   },
+   {
+    "id": "42580",
+    "slug": "trapped-at-home-with-the-male-leads",
+    "title": "Trapped at Home With the Male Leads",
+    "titleLanguage": "en",
+    "medium": "comic",
+    "origin": "manhwa",
+    "form": "serial",
+    "layout": "vertical_strip",
+    "publicationStatus": "releasing",
+    "demographic": "josei",
+    "originalLanguage": "ko",
+    "startDate": "2024-12-20",
+    "startPrecision": "day",
+    "synopsis": "After being reincarnated into the body of a novel's wealthy heiress, Cherry Sinclair quickly realizes that the world is coming to an end, but she’s determined to survive the apocalypse, no matter what…",
+    "coverColor": null,
+    "metadataVersion": 230,
+    "publishedAt": "2026-11-04T17:18:28.562744Z",
+    "nativeTitle": {
+     "title": "우리 집에 갇혀버린 남주들",
+     "language": "ko"
+    },
+    "contentRating": "safe",
+    "coverUrl": "https://media.onisaga.com/api/covers/trapped-at-home-with-the-male-leads?mv=230",
+    "updatedAt": "2026-11-15T21:42:24.774679Z",
+    "languages": [
+     {
+      "language": "en",
+      "readableUnits": 91
+     },
+     {
+      "language": "fr",
+      "readableUnits": 74
+     }
+    ],
+    "latest": {
+     "releaseId": "104267790",
+     "chapterId": "2872716",
+     "language": "en",
+     "at": "2026-11-15T21:42:24.774679Z",
+     "label": "Chapter 71"
+    }
+   },
+   {
+    "id": "74596",
+    "slug": "sovereign-of-a-hundred-blades-heir-to-the-strongest-style",
+    "title": "Hyakuha no Hasha ~Saikyou no Ryuuha o Tsugu Mono~",
+    "titleLanguage": "ja-Latn",
+    "medium": "comic",
+    "origin": "manga",
+    "form": "oneshot",
+    "layout": null,
+    "publicationStatus": "completed",
+    "demographic": "shounen",
+    "originalLanguage": "ja",
+    "startDate": "2026-05-02",
+    "startPrecision": "day",
+    "synopsis": "Long ago, in a remote arena on the frontier, there was a legendary swordsman who achieved a thousand victories without a single defeat. After that, he vanished from the public eye and became known onl…",
+    "coverColor": null,
+    "metadataVersion": 73,
+    "publishedAt": "2026-11-06T21:19:00.138553Z",
+    "nativeTitle": {
+     "title": "百刃の覇者〜最強の流派を継ぐ者〜",
+     "language": "ja"
+    },
+    "contentRating": "safe",
+    "coverUrl": "https://media.onisaga.com/api/covers/sovereign-of-a-hundred-blades-heir-to-the-strongest-style?mv=73",
+    "updatedAt": "2026-11-15T21:18:19.221679Z",
+    "languages": [
+     {
+      "language": "en",
+      "readableUnits": 8
+     }
+    ],
+    "latest": {
+     "releaseId": "104273314",
+     "chapterId": "2872782",
+     "language": "en",
+     "at": "2026-11-15T21:18:19.221679Z",
+     "label": "Chapter 9"
+    }
+   },
+   {
+    "id": "49395",
+    "slug": "ordeal",
+    "title": "Ordeal",
+    "titleLanguage": null,
+    "medium": "comic",
+    "origin": "oel",
+    "form": "serial",
+    "layout": null,
+    "publicationStatus": "releasing",
+    "demographic": null,
+    "originalLanguage": "ko",
+    "startDate": "2021-01-01",
+    "startPrecision": "year",
+    "synopsis": "Humanos são legais… Mas os kimyos são bem melhores. Kimyo: Um humano nascido com uma habilidade extraordinária que ultrapassa a evolução natural. Após o assassinato de seu mestre, Che misteriosamente …",
+    "coverColor": null,
+    "metadataVersion": 23,
+    "publishedAt": "2026-11-06T21:16:56.423941Z",
+    "nativeTitle": null,
+    "contentRating": "safe",
+    "coverUrl": "https://media.onisaga.com/api/covers/ordeal?mv=23",
+    "updatedAt": "2026-11-15T21:11:55.438166Z",
+    "languages": [
+     {
+      "language": "en",
+      "readableUnits": 158
+     },
+     {
+      "language": "pt-BR",
+      "readableUnits": 18
+     }
+    ],
+    "latest": {
+     "releaseId": "104251626",
+     "chapterId": "2872587",
+     "language": "en",
+     "at": "2026-11-15T21:11:55.438166Z",
+     "label": "Chapter 158"
+    }
+   },
+   {
+    "id": "67978",
+    "slug": "momfluencer",
+    "title": "Momfluencer",
+    "titleLanguage": "en",
+    "medium": "comic",
+    "origin": "manhwa",
+    "form": "serial",
+    "layout": "vertical_strip",
+    "publicationStatus": "completed",
+    "demographic": "shoujo",
+    "originalLanguage": "ko",
+    "startDate": "2021-07-16",
+    "startPrecision": "day",
+    "synopsis": "How far would you go for fame and wealth? Fledgling mommy influencer Ju-Yeon Park is desperate to join the ranks of popular internet celebrities. Thanks to a video of her daughter going viral and her …",
+    "coverColor": null,
+    "metadataVersion": 190,
+    "publishedAt": "2026-11-04T17:42:03.627934Z",
+    "nativeTitle": {
+     "title": "팔이피플",
+     "language": "ko"
+    },
+    "contentRating": "safe",
+    "coverUrl": "https://media.onisaga.com/api/covers/momfluencer?mv=190",
+    "updatedAt": "2026-11-15T21:06:55.774264Z",
+    "languages": [
+     {
+      "language": "en",
+      "readableUnits": 96
+     }
+    ],
+    "latest": {
+     "releaseId": "104245937",
+     "chapterId": "2872341",
+     "language": "en",
+     "at": "2026-11-15T21:06:55.774264Z",
+     "label": "Chapter 96"
+    }
+   }
+  ],
+  "total": 53723,
+  "sort": "updated",
+  "nextCursor": "eyJ2IjoiMjAyNi0xMS0xNVQxMDo0OTowNS40NzQzMDhaIiwiaWQiOiI0NzAzMSJ9.CvQckbmtDDvU68zbAUohtPsEyhL8ZUmP",
+  "facets": null
+ }
+}

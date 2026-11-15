@@ -38,6 +38,11 @@ export const AUDIT: Record<string, BridgeAuditConfig> = {
   zonatmo: { searchQuery: "solo leveling" },
   // DLE Guard sends anything without its trust cookie (earned in a browser) to a check page.
   batcave: { searchQuery: "batman", flaky: "DLE Guard wants a browser check first" },
+  // Cloudflare's check guards every page; it passes in a browser (the app's web check), not in CI.
+  kagane: { searchQuery: "solo", flaky: "Cloudflare check needs a browser" },
+  onisaga: { searchQuery: "solo", flaky: "Cloudflare check needs a browser" },
+  mangadot: { searchQuery: "solo", flaky: "Cloudflare check needs a browser" },
+  lectorxd: { searchQuery: "solo", flaky: "Cloudflare check on series and reader pages needs a browser" },
   mangaplus: { searchQuery: "one piece" },
   // Cloudflare challenges the Node/Bun TLS fingerprint on the API, so the runner can't reach it.
   toonkotsu: { searchQuery: "solo leveling", flaky: "Cloudflare challenges the Bun/Node TLS fingerprint" },

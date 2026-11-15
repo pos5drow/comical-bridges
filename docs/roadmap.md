@@ -58,7 +58,7 @@ isn't merged yet, and no bridge uses it yet.
 | Mangakakalot | kakamanga.com (mangakakalot.gg redirects there), mangakakalove.com | **mangabox** | kei `en/mangakakalot`, aidoku `en.mangakakalot` | #40 | CF-CLEARANCE (search only) | shipped `0.1.2` (read path ✓; search challenged by Cloudflare at times) |
 | Manganato | manganato.gg (default), natomanga.com (now redirects to manganami.com), nelomanga.net | **mangabox** | kei `en/manganelo`, aidoku `en.manganato` | #43 | CF-CLEARANCE (search only) | shipped `0.1.2` (read path ✓; search challenged by Cloudflare at times) |
 | Mangabat | mangabats.com | **mangabox** | kei `en/mangabat`, aidoku `en.mangabat` | — | CF-CLEARANCE (search, intermittent) | shipped `0.1.2` |
-| Kagane | kagane.moe/.cx/.net (kagane.to is gone) | bespoke | kei `all/kagane`, aidoku `multi.kagane` | 69 & 52 👍 | **CF-CLEARANCE on every endpoint** (API included, even from a home IP); pages are JPEG XL, which Android cannot decode by default | blocked |
+| Kagane | kagane.moe/.cx/.net (kagane.to is gone) | bespoke | kei `all/kagane`, aidoku `multi.kagane` | 69 & 52 👍 | **CF-CLEARANCE on every endpoint** (API included, even from a home IP); pages are JPEG XL, which Android cannot decode by default | **built** (Cloudflare via the web check; live-verified on desktop 2026-11-15) |
 
 ## Tier 2
 
@@ -72,9 +72,9 @@ isn't merged yet, and no bridge uses it yet.
 | MangaTaro | mangataro.org | **mangataro** | kei `en/mangataro` | 27 👍 request | many top licensed titles are taken down on the site (shown as such); English chapters only | shipped `0.1.0` |
 | Rolia Scan | roliascan.com | **mangataro** | kei `en/roliascan` | #19 — *added: nearly free once the MangaTaro engine exists* | — | shipped `0.1.0` |
 | Toonkotsu | toonkotsu.com | bespoke (JSON API) | kei `en/toonkotsu`, aidoku `en.toonkotsu` | EverythingMoe "new" | IMG-BYTES (AES-CTR per page): done with processed page images. **TLS-FINGERPRINT** and a Turnstile reading check (see blocked table) | **shipped 0.1.0**; verified through host-server against a local mock, not yet against the live site |
-| OniSaga | onisaga.com | bespoke (RPC + Next.js) | kei `all/onisaga` | 16 👍 request | **CF-CLEARANCE site-wide** | blocked |
+| OniSaga | onisaga.com | bespoke (RPC + Next.js) | kei `all/onisaga` | 16 👍 request | **CF-CLEARANCE site-wide** | **built** (Cloudflare via the web check; live-verified on desktop 2026-11-15) |
 | Manga Ball | mangaball.com | bespoke (API, multilingual) | kei `all/mangaball`, aidoku `multi.mangaball` | 15 👍 request | — | shipped `0.1.0` (one bridge; Language setting) |
-| MangaDot | mangadot.net | bespoke | kei `all/mangadotnet`, aidoku `multi.mangadotnet` | EverythingMoe hub | CF-CLEARANCE (Cloudflare even for curl; kei's WebView is only login) | blocked |
+| MangaDot | mangadot.net | bespoke | kei `all/mangadotnet`, aidoku `multi.mangadotnet` | EverythingMoe hub | CF-CLEARANCE (Cloudflare even for curl; kei's WebView is only login) | **built** (Cloudflare via the web check; live-verified on desktop 2026-11-15) |
 | Webtoons | webtoons.com | bespoke (official) | kei `all/webtoons`, aidoku `multi.webtoon` | #26 | motion comics not supported | shipped `0.1.0` (one bridge; Language setting) |
 | MANGA Plus | mangaplus.shueisha.co.jp | bespoke (official, protobuf API) | kei `all/mangaplus`, aidoku `multi.mangaplus` | in every app | IMG-BYTES (XOR key per page, known at page-list time): done with processed page images; view token via `interceptImageRequest` | **shipped 0.1.0** |
 | Cubari | cubari.moe | bespoke (proxy for imgur/GitHub galleries) | kei `all/cubari`, aidoku `multi.cubari` | in every app | no catalogue (Keiyoushi lists a WebView history); MangaDex-backed links can fail upstream | shipped `0.1.0` (search = paste a link) |
@@ -88,7 +88,7 @@ isn't merged yet, and no bridge uses it yet.
 |---|---|---|---|---|---|---|
 | Olympus Scanlation | olympusxyz.com (found via the olympus.pages.dev redirector) | bespoke (API) | kei `es/olympusscanlation`, aidoku `es.olympusscanlation` | #4 | — | shipped `0.1.1` |
 | ManhwaWeb | manhwaweb.com (API at api.manhwaweb.com) | bespoke (API) | kei `es/manhwaweb`, aidoku `es.manhwaweb` | #5 | — | shipped `0.1.1` (adult series rated `adult`) |
-| LectorXD | lectorxd.com | bespoke (HTML + Astro props) | kei `es/lectorxd` | #23 (+32 places in a month) | **CF-CLEARANCE on series and reader pages** (the catalogue is open) | blocked |
+| LectorXD | lectorxd.com | bespoke (HTML + Astro props) | kei `es/lectorxd` | #23 (+32 places in a month) | **CF-CLEARANCE on series and reader pages** (the catalogue is open) | **built** (Cloudflare via the web check; live-verified on desktop 2026-11-15) |
 | ZonaTMO | zonatmo.org | bespoke (TMO clone) | kei `es/zonatmoorgunoriginal`, `es/zonatmoto` | #37; fills the TuMangaOnline gap | series id is the numeric library id (the site redirects any type/slug); latest maps uploads to series by cover id; zonatmo.to is a separate clone, not covered | **shipped 0.1.0** |
 
 ## Skipped, and why
@@ -102,10 +102,6 @@ web check in the app (**CF-CLEARANCE**), not a workaround in the bridge.
 | Source | Why it was skipped (checked 2026-11-15) | What would change that |
 |---|---|---|
 | Comix | Built to keep automated clients out: refuses non-browser clients on its title and reader routes, blocks chapter-list paging that is too fast or too regular, answers `captcha_required`, and re-obfuscates its front end every build to break scrapers. Keiyoushi gets in only by driving a hidden WebView with randomized timing and a captcha solver. | A user-driven web reader in the app, or an official API. Not worth chasing otherwise. |
-| MangaDot | Cloudflare challenges every page, even for curl. | CF-CLEARANCE. Reading itself is plain once through. |
-| Kagane | Cloudflare challenges every endpoint, API included; pages are JPEG XL, which Android can't decode. | CF-CLEARANCE, plus a JPEG XL decoder on Android. |
-| OniSaga | Cloudflare challenges every page and the RPC API. | CF-CLEARANCE. |
-| LectorXD | Cloudflare challenges every series and reader page (the catalogue is open). | CF-CLEARANCE. |
 | ReadComicOnline | Unreachable: connections to readcomiconline.li time out and the .to domain is gone; Keiyoushi dropped it too. | It answering again, from here or a phone. |
 
 Shipped, but with part skipped for the same rule: **MangaFire**'s picture captcha is shown as an
@@ -122,15 +118,11 @@ repo), **comical** (contract/core/host), or **app** (comical-app).
 
 | Source | State | What's missing | What would unblock it |
 |---|---|---|---|
-| Kagane | blocked | 1. Every endpoint, API included, answers a Cloudflare managed challenge, even from a home IP. 2. Pages are JPEG XL (`.jxl`), which Android's image stack (Glide) can't decode; iOS 17+ can. | 1. **CF-CLEARANCE** (below). 2. **app:** a JPEG XL decoder on Android, or test whether the `datasaver` page variant is served as WebP. Then the bridge needs integrity + per-book page tokens, both plain API calls. |
-| OniSaga | blocked | Every page and the RPC API answer a Cloudflare managed challenge (checked 2026-11-15 from a home IP). | **CF-CLEARANCE** (below). After that: a cursor-paged catalog RPC, server-rendered title pages (ld+json, chapter pages paginated), Next.js reader data, and an age gate for adult titles (a form POST setting `__Host-onisaga.age_confirmed`, then `account/titleView` / `readerView` RPCs). |
-| LectorXD | blocked | The catalogue is open, but every series page (and so every chapter list and reader) answers a Cloudflare managed challenge, consistently (checked 2026-11-15, home IP). | **CF-CLEARANCE** (below). After that, the work is simple: catalogue HTML with filters (`/catalogo?adult&orderBy&types&status&tags&search&page`), the series page's Astro `ChapterList` props, and the reader's `img.page-image`. |
 | Mangakakalot, Manganato, Mangabat | shipped, search partly blocked | Search (`/search/story/…`) is challenged by Cloudflare bot scoring at random; browse, details and reading work. | **CF-CLEARANCE** (below). Nothing else. |
 | Asura Scans | shipped, premium not readable | Premium and early-access chapters need a paid account; without one the API returns no pages, so they are hidden. | **bridge:** sign-in (`web-login` setting capturing the `access_token` cookie), then the premium endpoint with `Authorization` + `X-Page-Token`; its pages arrive tiled and are already handled by processed page images. Needs a subscriber account to build and verify. |
 | MangaTaro | shipped, partly empty | Some titles only have non-English (pt-br) chapters, and many popular licensed titles are taken down ("Chapter not available"). | Takedowns: nothing to do. Languages: **bridge** could declare the other languages and tag chapters with `languageCode`. |
 | Comix | blocked by design | The site actively fights automated clients: the title and reader routes refuse non-browser clients, chapter-list paging that is too fast or too evenly spaced is blocked, the API answers `403 captcha_required`, and the front end is re-obfuscated every build to break scrapers (Keiyoushi's own script notes the cat-and-mouse). Keiyoushi drives the real site in a background WebView with randomized timing and a captcha solver. (Checked 2026-11-15: home and title pages answer Node/Bun.) | Not pursued: it would mean defeating deliberate anti-bot measures. Revisit only if Comical gains a user-driven web reader (the user browses the site in a web view; nothing automated), or the site offers an API. |
 | MangaFire | shipped, captcha partly blocks | The firewall sometimes answers `403 captcha_required` (a picture captcha that sets `waf_pass`); the bridge shows a plain error then. The request signer is ported (user go-ahead, 2026-11-15) and checked against a signature the live API accepted. | **CF-CLEARANCE**-style web check where the user solves the captcha and the `waf_pass` cookie is reused. Automatic solving: not pursued. |
-| MangaDot | blocked | MangaDot: Cloudflare challenges every page, even for curl (Keiyoushi's WebView is only for logging in to bookmarks; reading is plain). | **CF-CLEARANCE** (below), then a person once to study it. |
 | Toonkotsu | shipped, live site unverified | 1. Cloudflare challenges the API for Node and Bun's TLS fingerprint, whatever the headers (curl passes, even with an OkHttp User-Agent; checked 2026-11-15, home IP). So the desktop/server hosts (Bun/Node `fetch`) and the CI audit can't reach it; phones (OkHttp, NSURLSession) should, as Keiyoushi and Aidoku do, but that hasn't been checked. 2. After some chapters the reader API answers 429 `manga-limit`/`verify` until a Turnstile check passes (Keiyoushi solves it in a WebView and POSTs the token to `/api/manga/unlock`); the bridge says so in plain words. | 1. **TLS-FINGERPRINT** (below): first check from the app on a phone. 2. **CF-CLEARANCE**-style web check: the same web-view flow, finishing with a token POST rather than a cookie. Everything but reachability is verified: the built bundle ran through `createHost()`'s router against a local mock serving the captured responses and a real encrypted page (lists, details, chapters, pages, and the image route returning the decrypted JPEG). |
 | Mangago | shipped, live site unverified | 1. Same **TLS-FINGERPRINT** challenge as Toonkotsu on every page (checked 2026-11-15; curl passes). 2. Page hosts like `iweb_2.mangapicgallery.com` have underscores; they load over HTTPS from curl, but Keiyoushi switches them to `http`, which suggests Android's hostname check rejects them. 3. List cards carry no genres, so browse results are unrated (search results and details are rated); the catalogue is adult-heavy. 4. No scrambled (`cspiclink`) page was found in a sample of 8 popular series, so the tile path is tested on synthetic pages only. | 1. **TLS-FINGERPRINT** (below). 2. Check on Android; if images fail, rewrite underscore hosts to `http` (and allow cleartext for that host on iOS). 3. Accept, or rate the series on first details fetch. 4. Watch for a real scrambled chapter. |
 | ReadComicOnline | blocked | Unreachable from here: readcomiconline.li resolves but every connection times out (HTTPS and HTTP), and readcomiconline.to no longer resolves (checked 2026-11-15). Keiyoushi dropped the source; its image URLs were obfuscated. | Check reachability from another network or a phone; if it answers, investigate the image-URL obfuscation. |
@@ -161,12 +153,12 @@ Everything on the list is shipped, blocked or skipped. What's left, biggest firs
 1. **An in-app web check (CF-CLEARANCE)**: built (comical, comical-app, the bridges' guard
    adapter, page-storage values); HDoujin and Schale Network now use it. Next is a device test.
    See `docs/web-check.md`.
-2. **The Cloudflare-walled bridges** (checked 2026-11-15 by running the app's hidden web check in
-   a real Chromium window on a home IP, nothing solved or clicked): Kagane, OniSaga, MangaDot,
-   LectorXD and, in the NSFW repo, MyReadingManga all stay on Cloudflare's interstitial; OniSaga's
-   shows the "Verify you are human" checkbox, so these need a person once before they can be
-   studied (a visible window the user clicks; the user will do this later). Keiyoushi's code for
-   each is the reference. BatCave is built (below).
+2. **Native platform User-Agent** (comical host-ios/host-android): the phones report a non-browser
+   User-Agent, so bridges there fall back to a fixed desktop Chrome one and the web view's check can
+   loop (an overridden web view User-Agent contradicts what the engine reports). Report the web
+   view's own User-Agent from `getDefaultUserAgent` (WKWebView's and Android's
+   `WebSettings.getDefaultUserAgent`), and have the phone's web check leave the web view's
+   User-Agent alone when it matches; desktop already does (comical-app 186195d0). Needs a device.
 3. **Phone checks** (cheap, and the real test for these):
    - Toonkotsu, Mangago, IMHentai, Hentai2Read: Node/Bun are fingerprint-blocked, so they're only
      verified against captured responses. Open each in the app on Android and iOS. (Desktop now
@@ -188,6 +180,14 @@ Everything on the list is shipped, blocked or skipped. What's left, biggest firs
 
 ## Notes from building
 
+- **Kagane, OniSaga, MangaDot, LectorXD (2026-11-15):** studied through sessions the user cleared
+  once in visible Electron windows (the hidden check had looped only because the window's User-Agent
+  had been overridden), built from those captures with Keiyoushi's code as the reference, and
+  live-verified end to end on desktop: the bridge raised Cloudflare's challenge with the platform
+  User-Agent, the hidden web check passed by itself, and lists, search, details, chapters, pages
+  and images all came back. Kagane reads its data-saver pages (WebP) by default; its originals are
+  JPEG XL. OniSaga and MangaDot page images need the session, so they go through the image route.
+  MangaDot always excludes its minor-related genres from searches.
 - **BatCave (2026-11-15):** DataLife Engine behind DLE Guard, which redirects a request without
   its trust cookie (`__guard_trust`, bound to the IP, a day long) to `/_c?t=…`. The bridge turns
   that into a web check of the page it wanted; the hidden check passes it by itself. Search looked
@@ -267,7 +267,7 @@ Everything on the list is shipped, blocked or skipped. What's left, biggest firs
 3. **Unblocked bespoke:** Flame, Manga Ball, OniSaga, Cubari, Dynasty, Webtoons, LectorXD, ZonaTMO.
 4. **After the contract gaps close:** Asura (IMG-TILES) → MANGA Plus, Toonkotsu (IMG-BYTES) → Mangago
    → Comix (IMG-RESP + solver).
-5. **After the JS-SOLVER investigations:** MangaFire, MangaDot, then ReadComicOnline (BatCave is built).
+5. **After the JS-SOLVER investigations:** MangaFire, then ReadComicOnline (BatCave and MangaDot are built).
 
 Asura is Tier 1 but waits on IMG-TILES, so the contract work is on the critical path. Start it in
 parallel with step 1.

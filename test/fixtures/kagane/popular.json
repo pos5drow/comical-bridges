@@ -1,0 +1,493 @@
+{
+ "content": [
+  {
+   "series_id": "019c2084-fa67-791d-8ba5-494744577445",
+   "source_id": "019beab7-4e6b-7e4c-bfeb-3a14d305761b",
+   "title": "The Beginning After the End",
+   "slug": "the-beginning-after-the-end",
+   "alternate_titles": [
+    "The Beginning After the End",
+    "TBATE",
+    "El comienzo después del fin"
+   ],
+   "cover_image_id": "019c2084-fa56-7fa4-b2bb-db1cada869f9",
+   "age_rating": "Safe",
+   "is_disturbing": false,
+   "is_pornographic": false,
+   "start_year": null,
+   "end_year": null,
+   "publication_status": "Ongoing",
+   "upload_status": "Ongoing",
+   "format": "Other",
+   "current_books": 302,
+   "current_volumes": null,
+   "genres": [
+    "019beb9a-a36a-718c-b551-d917a0818cc7",
+    "019c1b6f-3d3b-7528-a3e2-a791cfdcc4f7",
+    "019c1b6f-51ed-7991-a796-a8ca26e86666"
+   ],
+   "tags": [],
+   "staff": [],
+   "groups": [
+    "01a15021-28c0-7274-99b4-b6d465b3a1dd",
+    "019c1b4e-9310-71b5-8717-94d900f45f92"
+   ],
+   "original_language": "en",
+   "translated_language": "en",
+   "edition_info": null,
+   "latest_chapters": [
+    {
+     "book_id": "01a188aa-a260-77bd-9c88-9a309da306d0",
+     "title": "259. Grief and Blame",
+     "chapter_no": "302",
+     "volume_no": null,
+     "created_at": "2026-10-29T17:17:26.494886+00:00",
+     "available_at": "2026-10-29T17:17:26.494886+00:00"
+    }
+   ],
+   "rating": 95,
+   "matched": null,
+   "genre_list": [
+    {
+     "id": "019beb9a-a36a-718c-b551-d917a0818cc7",
+     "name": "Romance"
+    },
+    {
+     "id": "019c1b6f-3d3b-7528-a3e2-a791cfdcc4f7",
+     "name": "Drama"
+    },
+    {
+     "id": "019c1b6f-51ed-7991-a796-a8ca26e86666",
+     "name": "Fantasy"
+    }
+   ],
+   "tag_list": [],
+   "staff_list": [],
+   "group_list": [
+    {
+     "id": "01a15021-28c0-7274-99b4-b6d465b3a1dd",
+     "name": "Kuromi"
+    },
+    {
+     "id": "019c1b4e-9310-71b5-8717-94d900f45f92",
+     "name": "The Hours Between"
+    }
+   ],
+   "viewer": null,
+   "hidden_by_filter": false
+  },
+  {
+   "series_id": "00000000-0000-7000-8000-000000000018",
+   "source_id": "019beab7-4e6b-7e4c-bfeb-3a14d305761b",
+   "title": "Adult Placeholder",
+   "slug": "adult-placeholder",
+   "alternate_titles": [],
+   "cover_image_id": "019c2084-fa56-7fa4-b2bb-db1cada869f9",
+   "age_rating": "EighteenPlus",
+   "is_disturbing": false,
+   "is_pornographic": true,
+   "start_year": null,
+   "end_year": null,
+   "publication_status": "Ongoing",
+   "upload_status": "Ongoing",
+   "format": "Other",
+   "current_books": 302,
+   "current_volumes": null,
+   "genres": [
+    "019beb9a-a36a-718c-b551-d917a0818cc7",
+    "019c1b6f-3d3b-7528-a3e2-a791cfdcc4f7",
+    "019c1b6f-51ed-7991-a796-a8ca26e86666"
+   ],
+   "tags": [],
+   "staff": [],
+   "groups": [
+    "01a15021-28c0-7274-99b4-b6d465b3a1dd",
+    "019c1b4e-9310-71b5-8717-94d900f45f92"
+   ],
+   "original_language": "en",
+   "translated_language": "en",
+   "edition_info": null,
+   "latest_chapters": [
+    {
+     "book_id": "01a188aa-a260-77bd-9c88-9a309da306d0",
+     "title": "259. Grief and Blame",
+     "chapter_no": "302",
+     "volume_no": null,
+     "created_at": "2026-10-29T17:17:26.494886+00:00",
+     "available_at": "2026-10-29T17:17:26.494886+00:00"
+    }
+   ],
+   "rating": 95,
+   "matched": null,
+   "genre_list": [
+    {
+     "id": "019beb9a-a36a-718c-b551-d917a0818cc7",
+     "name": "Romance"
+    },
+    {
+     "id": "019c1b6f-3d3b-7528-a3e2-a791cfdcc4f7",
+     "name": "Drama"
+    },
+    {
+     "id": "019c1b6f-51ed-7991-a796-a8ca26e86666",
+     "name": "Fantasy"
+    }
+   ],
+   "tag_list": [],
+   "staff_list": [],
+   "group_list": [
+    {
+     "id": "01a15021-28c0-7274-99b4-b6d465b3a1dd",
+     "name": "Kuromi"
+    },
+    {
+     "id": "019c1b4e-9310-71b5-8717-94d900f45f92",
+     "name": "The Hours Between"
+    }
+   ],
+   "viewer": null,
+   "hidden_by_filter": false
+  },
+  {
+   "series_id": "019c2b2c-ffeb-7601-bd3d-2491c2202600",
+   "source_id": "019c00d0-5024-7205-a84f-fca567470b7e",
+   "title": "The Greatest Estate Developer",
+   "slug": "the-greatest-estate-developer",
+   "alternate_titles": [
+    "The Greatest Estate Developer",
+    "The World's Best Engineer",
+    "The Greatest Estate Designer"
+   ],
+   "cover_image_id": "019c2b2c-ffe1-7655-991e-9dc350352ca0",
+   "age_rating": "Safe",
+   "is_disturbing": false,
+   "is_pornographic": false,
+   "start_year": 2021,
+   "end_year": 2026,
+   "publication_status": "Completed",
+   "upload_status": "Completed",
+   "format": "Other",
+   "current_books": 225,
+   "current_volumes": null,
+   "genres": [
+    "019c1b6f-3d3b-7528-a3e2-a791cfdcc4f7",
+    "019c1b6f-51ed-7991-a796-a8ca26e86666",
+    "019c1b6f-b682-7fee-9a9b-86e648b77e9e"
+   ],
+   "tags": [],
+   "staff": [],
+   "groups": [
+    "019c1b4e-9310-71b5-8717-94d900f45f92"
+   ],
+   "original_language": "en",
+   "translated_language": "en",
+   "edition_info": null,
+   "latest_chapters": [
+    {
+     "book_id": "019d72a9-d9d3-7ada-a088-d406333eeb49",
+     "title": "Afterword",
+     "chapter_no": "225",
+     "volume_no": null,
+     "created_at": "2026-04-09T14:33:47.219153+00:00",
+     "available_at": "2026-04-09T14:33:47.219153+00:00"
+    }
+   ],
+   "rating": 92,
+   "matched": null,
+   "genre_list": [
+    {
+     "id": "019c1b6f-3d3b-7528-a3e2-a791cfdcc4f7",
+     "name": "Drama"
+    },
+    {
+     "id": "019c1b6f-51ed-7991-a796-a8ca26e86666",
+     "name": "Fantasy"
+    },
+    {
+     "id": "019c1b6f-b682-7fee-9a9b-86e648b77e9e",
+     "name": "Adventure"
+    }
+   ],
+   "tag_list": [],
+   "staff_list": [],
+   "group_list": [
+    {
+     "id": "019c1b4e-9310-71b5-8717-94d900f45f92",
+     "name": "The Hours Between"
+    }
+   ],
+   "viewer": null,
+   "hidden_by_filter": false
+  },
+  {
+   "series_id": "019c2097-58cc-7e14-a0fd-f13310397cb8",
+   "source_id": "019beab7-4e6b-7e4c-bfeb-3a14d305761b",
+   "title": "Tomb Raider King",
+   "slug": "tomb-raider-king",
+   "alternate_titles": [
+    "도굴왕",
+    "Der König der Grabräuber",
+    "Dogul Wang"
+   ],
+   "cover_image_id": "019c2097-58b7-7707-98e1-7848e2717091",
+   "age_rating": "Safe",
+   "is_disturbing": false,
+   "is_pornographic": false,
+   "start_year": 2019,
+   "end_year": 2023,
+   "publication_status": "Completed",
+   "upload_status": "Completed",
+   "format": "Manhwa",
+   "current_books": 412,
+   "current_volumes": null,
+   "genres": [
+    "019beb9a-a36a-718c-b551-d917a0818cc7",
+    "019c1b6f-3d3b-7528-a3e2-a791cfdcc4f7",
+    "019c1b6f-51ed-7991-a796-a8ca26e86666"
+   ],
+   "tags": [],
+   "staff": [
+    "019dd77f-688a-7e66-9a50-ca1065cc6149",
+    "019f09e6-3c67-7ae0-a6c8-3607e6306b56",
+    "019f09e6-58a2-7c56-bf5e-cc02c408c2eb"
+   ],
+   "groups": [
+    "019c1b4e-9310-71b5-8717-94d900f45f92",
+    "019e9f06-cd63-78de-a847-1adf9384146a"
+   ],
+   "original_language": "ko",
+   "translated_language": "en",
+   "edition_info": null,
+   "latest_chapters": [
+    {
+     "book_id": "019c25d6-3849-7639-ac08-4b5d798b20d4",
+     "title": "SE14. Finale",
+     "chapter_no": "412",
+     "volume_no": null,
+     "created_at": "2026-02-03T23:28:42.057088+00:00",
+     "available_at": "2026-02-03T23:28:42.057088+00:00"
+    }
+   ],
+   "rating": 93,
+   "matched": null,
+   "genre_list": [
+    {
+     "id": "019beb9a-a36a-718c-b551-d917a0818cc7",
+     "name": "Romance"
+    },
+    {
+     "id": "019c1b6f-3d3b-7528-a3e2-a791cfdcc4f7",
+     "name": "Drama"
+    },
+    {
+     "id": "019c1b6f-51ed-7991-a796-a8ca26e86666",
+     "name": "Fantasy"
+    }
+   ],
+   "tag_list": [],
+   "staff_list": [
+    {
+     "id": "019f09e6-58a2-7c56-bf5e-cc02c408c2eb",
+     "name": "Yoonz",
+     "role": "Author"
+    },
+    {
+     "id": "019dd77f-688a-7e66-9a50-ca1065cc6149",
+     "name": "3B2S",
+     "role": "Artist"
+    },
+    {
+     "id": "019f09e6-3c67-7ae0-a6c8-3607e6306b56",
+     "name": "Sanjijiksong",
+     "role": "Original Creator"
+    }
+   ],
+   "group_list": [
+    {
+     "id": "019c1b4e-9310-71b5-8717-94d900f45f92",
+     "name": "The Hours Between"
+    },
+    {
+     "id": "019e9f06-cd63-78de-a847-1adf9384146a",
+     "name": "bron99"
+    }
+   ],
+   "viewer": null,
+   "hidden_by_filter": false
+  },
+  {
+   "series_id": "019c6b70-4fc7-7f45-a79f-6e5358562f67",
+   "source_id": "019c1b20-21c2-74d3-9365-8f01b227a4ad",
+   "title": "The Legend of the Northern Blade",
+   "slug": "the-legend-of-the-northern-blade",
+   "alternate_titles": [
+    "북검전기",
+    "Chronicles of the Northern Sword",
+    "Bukgeom Jeongi"
+   ],
+   "cover_image_id": "01a04f09-db90-7277-af15-8e8e565eb63b",
+   "age_rating": "Safe",
+   "is_disturbing": false,
+   "is_pornographic": false,
+   "start_year": 2019,
+   "end_year": 2024,
+   "publication_status": "Completed",
+   "upload_status": "Completed",
+   "format": "Manhwa",
+   "current_books": 202,
+   "current_volumes": null,
+   "genres": [
+    "019beb9a-a36a-718c-b551-d917a0818cc7",
+    "019c1b6f-51ed-7991-a796-a8ca26e86666",
+    "019c1b6f-b682-7fee-9a9b-86e648b77e9e"
+   ],
+   "tags": [],
+   "staff": [
+    "01a04f28-3796-72a3-bd30-c43736388179",
+    "01a04f28-3796-72a3-bd30-c43736388179",
+    "01a04f28-b454-7ea7-9501-952e2222557c"
+   ],
+   "groups": [
+    "019c67b5-c8aa-77f1-9bf3-f5ab0fafdc4e"
+   ],
+   "original_language": "ko",
+   "translated_language": "en",
+   "edition_info": null,
+   "latest_chapters": [
+    {
+     "book_id": "019c6b91-f7f3-7b8c-84c9-cde3b7b12e1f",
+     "title": "Finale",
+     "chapter_no": "202",
+     "volume_no": null,
+     "created_at": "2026-02-17T12:27:34.258862+00:00",
+     "available_at": "2026-02-17T12:27:34.258862+00:00"
+    }
+   ],
+   "rating": 96,
+   "matched": null,
+   "genre_list": [
+    {
+     "id": "019beb9a-a36a-718c-b551-d917a0818cc7",
+     "name": "Romance"
+    },
+    {
+     "id": "019c1b6f-51ed-7991-a796-a8ca26e86666",
+     "name": "Fantasy"
+    },
+    {
+     "id": "019c1b6f-b682-7fee-9a9b-86e648b77e9e",
+     "name": "Adventure"
+    }
+   ],
+   "tag_list": [],
+   "staff_list": [
+    {
+     "id": "01a04f28-3796-72a3-bd30-c43736388179",
+     "name": "HAE MIN",
+     "role": "Author"
+    },
+    {
+     "id": "01a04f28-b454-7ea7-9501-952e2222557c",
+     "name": "Woogack",
+     "role": "Original Creator"
+    },
+    {
+     "id": "01a04f28-3796-72a3-bd30-c43736388179",
+     "name": "HAE MIN",
+     "role": "Artist"
+    }
+   ],
+   "group_list": [
+    {
+     "id": "019c67b5-c8aa-77f1-9bf3-f5ab0fafdc4e",
+     "name": "p8o9xqa8"
+    }
+   ],
+   "viewer": null,
+   "hidden_by_filter": false
+  },
+  {
+   "series_id": "019c2543-92e4-70c7-bd95-b38c6ea8d1c7",
+   "source_id": "019c252b-15c9-7380-bd48-e48e60b773e5",
+   "title": "Lost in the Cloud",
+   "slug": "lost-in-the-cloud",
+   "alternate_titles": [
+    "Cloud",
+    "클라우드",
+    "云端之恋"
+   ],
+   "cover_image_id": "019c2543-92d6-74d1-b4a3-11e0dd3308ca",
+   "age_rating": "FifteenPlus",
+   "is_disturbing": false,
+   "is_pornographic": false,
+   "start_year": null,
+   "end_year": null,
+   "publication_status": "Completed",
+   "upload_status": "Completed",
+   "format": "Manhwa",
+   "current_books": 138,
+   "current_volumes": null,
+   "genres": [
+    "019beb9a-a36a-718c-b551-d917a0818cc7",
+    "019c1b6f-3d3b-7528-a3e2-a791cfdcc4f7",
+    "019c1ee5-38f9-7324-9f7d-07a01dbf88a6"
+   ],
+   "tags": [],
+   "staff": [],
+   "groups": [
+    "019c1b4e-9310-71b5-8717-94d900f45f92"
+   ],
+   "original_language": "unk",
+   "translated_language": "en",
+   "edition_info": null,
+   "latest_chapters": [
+    {
+     "book_id": "019cc7eb-93fc-7fbe-a64c-70f413ac6fef",
+     "title": "Creator's Note",
+     "chapter_no": "131.5",
+     "volume_no": null,
+     "created_at": "2026-03-07T10:50:30.780470+00:00",
+     "available_at": "2026-03-07T10:50:30.780470+00:00"
+    }
+   ],
+   "rating": 90,
+   "matched": null,
+   "genre_list": [
+    {
+     "id": "019beb9a-a36a-718c-b551-d917a0818cc7",
+     "name": "Romance"
+    },
+    {
+     "id": "019c1b6f-3d3b-7528-a3e2-a791cfdcc4f7",
+     "name": "Drama"
+    },
+    {
+     "id": "019c1ee5-38f9-7324-9f7d-07a01dbf88a6",
+     "name": "Yaoi"
+    }
+   ],
+   "tag_list": [],
+   "staff_list": [],
+   "group_list": [
+    {
+     "id": "019c1b4e-9310-71b5-8717-94d900f45f92",
+     "name": "The Hours Between"
+    }
+   ],
+   "viewer": null,
+   "hidden_by_filter": false
+  }
+ ],
+ "total_elements": 1000,
+ "total_pages": 29,
+ "size": 35,
+ "page": 0,
+ "number_of_elements": 6,
+ "first": true,
+ "last": false,
+ "total": {
+  "value": 178566,
+  "relation": "Eq"
+ },
+ "next_cursor": "eyJhIjpbMzMwNTQ0LCIwMTljMjA5Ny01OGNjLTdlMTQtYTBmZC1mMTMzMTAzOTdjYjgiXSwiayI6InRvdGFsX3ZpZXdzLGRlc2MifQ"
+}

@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T08:06:23.729Z",
+  "updated": "2026-11-15T08:09:32.122Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -122,6 +122,64 @@
         "kingofshojo.com"
       ],
       "signature": "zVvxvDtOcdHs3nfDvSAwAOsGSMnCQWQARRkdklO4wTaj4KzJJVu_UzPm1mpx1ikuc_qvebp2dwSXczLdRnfXCA"
+    },
+    {
+      "id": "pos5drow.mangaball",
+      "name": "Manga Ball",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en",
+        "es",
+        "pt-BR",
+        "fr",
+        "id",
+        "vi",
+        "it",
+        "de",
+        "ru",
+        "pl",
+        "tr",
+        "ar",
+        "th",
+        "ja",
+        "ko",
+        "zh"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort",
+        "settings",
+        "content-rating"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangaball/0.1.0/bridge.js",
+      "sha256": "07346941dae66cb8bee1b95e1b62b1c63fdd9b93a731ec89c0ae048fe2462051",
+      "iconUrl": "https://mangaball.com/favicon.ico",
+      "ratings": true,
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "images": {
+        "hosts": [
+          "red-and-blue.net",
+          "poke-black-and-white.net",
+          "gold-and-silver.net",
+          "ruby-and-sapphire.net",
+          "mangaball.com"
+        ],
+        "headers": {
+          "Referer": "https://mangaball.com/"
+        }
+      },
+      "linkHosts": [
+        "mangaball.com",
+        "mangaball.net"
+      ],
+      "signature": "j_cWe2tHbnD3zGOCiSFuVGJKFLUHNrHJwJkGyFrPw6XT0ikNcHii90WL2G1VwxEtKhx3ObDsrhzJDk8xTdhlDg"
     },
     {
       "id": "pos5drow.mangabat",

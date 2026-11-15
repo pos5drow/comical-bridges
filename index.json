@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T08:29:59.462Z",
+  "updated": "2026-11-15T08:37:34.083Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -457,6 +457,52 @@
         "manganami.com"
       ],
       "signature": "lzIOEq6J-g5QaPCZkw29loNMdMmLPazKv-DXKKdAmXaBdSPNMX1z-XA4fhMK10gepf7zd3DmMrp32dsJd7W1CQ"
+    },
+    {
+      "id": "pos5drow.mangaplus",
+      "name": "MANGA Plus",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en",
+        "es",
+        "fr",
+        "id",
+        "pt-BR",
+        "ru",
+        "th",
+        "de",
+        "vi"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "settings"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangaplus/0.1.0/bridge.js",
+      "sha256": "39d654e079d94546486268366f51128af3cf1390ba30a7c9d715aed038869041",
+      "iconUrl": "https://mangaplus.shueisha.co.jp/favicon.ico",
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "images": {
+        "hosts": [
+          "tokyo-cdn.com"
+        ],
+        "intercept": [
+          "jumpg-assets3.tokyo-cdn.com"
+        ],
+        "process": {
+          "bytes": true
+        }
+      },
+      "linkHosts": [
+        "mangaplus.shueisha.co.jp"
+      ],
+      "signature": "yM9x-SYcnAfvam4bJ1LcS7BxhMj_dhO_FrCBu8HlStBS2EBq77pp9Fs3rHR3KWVtPqTsU57hV99uDB8_ghFNBQ"
     },
     {
       "id": "pos5drow.mangataro",

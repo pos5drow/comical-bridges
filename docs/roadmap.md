@@ -80,7 +80,7 @@ isn't merged yet, and no bridge uses it yet.
 | Cubari | cubari.moe | bespoke (proxy for imgur/GitHub galleries) | kei `all/cubari`, aidoku `multi.cubari` | in every app | no catalogue (Keiyoushi lists a WebView history); MangaDex-backed links can fail upstream | shipped `0.1.0` (search = paste a link) |
 | Dynasty Scans | dynasty-scans.com | bespoke (JSON views) | kei `en/dynasty`, aidoku `en.dynastyscans` | yuri hub | list/search cards have no covers (the listing APIs carry none; Keiyoushi bundles a cover map) | shipped `0.1.0` |
 | BatCave | batcave.biz | bespoke (western comics) | kei `en/batcave`, aidoku `en.batcave` | #38 | CF-CLEARANCE (DLE Guard anti-bot page; kei passes it in a WebView) | blocked |
-| ReadComicOnline | readcomiconline.li | bespoke (western comics) | none current (dropped by Keiyoushi) | users keep asking; breaks often | obfuscated image URLs — investigate; do last | todo |
+| ReadComicOnline | readcomiconline.li | bespoke (western comics) | none current (dropped by Keiyoushi) | users keep asking; breaks often | obfuscated image URLs — investigate; do last | blocked (unreachable) |
 
 ## Spanish
 
@@ -107,6 +107,7 @@ web check in the app (**CF-CLEARANCE**), not a workaround in the bridge.
 | Kagane | Cloudflare challenges every endpoint, API included; pages are JPEG XL, which Android can't decode. | CF-CLEARANCE, plus a JPEG XL decoder on Android. |
 | OniSaga | Cloudflare challenges every page and the RPC API. | CF-CLEARANCE. |
 | LectorXD | Cloudflare challenges every series and reader page (the catalogue is open). | CF-CLEARANCE. |
+| ReadComicOnline | Unreachable: connections to readcomiconline.li time out and the .to domain is gone; Keiyoushi dropped it too. | It answering again, from here or a phone. |
 
 Shipped, but with part skipped for the same rule: **MangaFire**'s picture captcha is shown as an
 error, not solved; **Toonkotsu**'s Turnstile reading check likewise. Two steps were refused by the
@@ -133,7 +134,7 @@ repo), **comical** (contract/core/host), or **app** (comical-app).
 | MangaDot, BatCave | blocked | MangaDot: Cloudflare challenges every page, even for curl (Keiyoushi's WebView is only for logging in to bookmarks; reading is plain). BatCave: "DLE Guard" anti-bot protection, which Keiyoushi passes in a WebView; Node/Bun get a Cloudflare challenge. | **CF-CLEARANCE** (below) for both. |
 | Toonkotsu | shipped, live site unverified | 1. Cloudflare challenges the API for Node and Bun's TLS fingerprint, whatever the headers (curl passes, even with an OkHttp User-Agent; checked 2026-11-15, home IP). So the desktop/server hosts (Bun/Node `fetch`) and the CI audit can't reach it; phones (OkHttp, NSURLSession) should, as Keiyoushi and Aidoku do, but that hasn't been checked. 2. After some chapters the reader API answers 429 `manga-limit`/`verify` until a Turnstile check passes (Keiyoushi solves it in a WebView and POSTs the token to `/api/manga/unlock`); the bridge says so in plain words. | 1. **TLS-FINGERPRINT** (below): first check from the app on a phone. 2. **CF-CLEARANCE**-style web check: the same web-view flow, finishing with a token POST rather than a cookie. Everything but reachability is verified: the built bundle ran through `createHost()`'s router against a local mock serving the captured responses and a real encrypted page (lists, details, chapters, pages, and the image route returning the decrypted JPEG). |
 | Mangago | shipped, live site unverified | 1. Same **TLS-FINGERPRINT** challenge as Toonkotsu on every page (checked 2026-11-15; curl passes). 2. Page hosts like `iweb_2.mangapicgallery.com` have underscores; they load over HTTPS from curl, but Keiyoushi switches them to `http`, which suggests Android's hostname check rejects them. 3. List cards carry no genres, so browse results are unrated (search results and details are rated); the catalogue is adult-heavy. 4. No scrambled (`cspiclink`) page was found in a sample of 8 popular series, so the tile path is tested on synthetic pages only. | 1. **TLS-FINGERPRINT** (below). 2. Check on Android; if images fail, rewrite underscore hosts to `http` (and allow cleartext for that host on iOS). 3. Accept, or rate the series on first details fetch. 4. Watch for a real scrambled chapter. |
-| ReadComicOnline | not started | Obfuscated image URLs; Keiyoushi dropped the source. | Investigate once everything else is done. |
+| ReadComicOnline | blocked | Unreachable from here: readcomiconline.li resolves but every connection times out (HTTPS and HTTP), and readcomiconline.to no longer resolves (checked 2026-11-15). Keiyoushi dropped the source; its image URLs were obfuscated. | Check reachability from another network or a phone; if it answers, investigate the image-URL obfuscation. |
 
 **Cross-cutting: CF-CLEARANCE.** Comical has no way to pass a Cloudflare challenge. Keiyoushi opens
 the site in a WebView, lets the challenge run, and reuses the `cf_clearance` cookie, which is bound

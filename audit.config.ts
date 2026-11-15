@@ -16,4 +16,9 @@ export const AUDIT: Record<string, BridgeAuditConfig> = {
   // Commonly blocks / rate-limits datacenter runner IPs, so its LIVE failures are tolerated (⚠, not
   // ✗). Adjust as the nightly reveals what actually holds up in CI.
   mangadex: { searchQuery: "spy", flaky: "Cloudflare challenges datacenter (runner) IPs" },
+  // MangaBox sites: browsing is open, search is behind Cloudflare bot scoring (challenged at random,
+  // worse from datacenter IPs).
+  mangakakalot: { searchQuery: "solo leveling", flaky: "search is challenged by Cloudflare bot scoring" },
+  manganato: { searchQuery: "solo leveling", flaky: "search is challenged by Cloudflare bot scoring" },
+  mangabat: { searchQuery: "solo leveling", flaky: "search is challenged by Cloudflare bot scoring" },
 };

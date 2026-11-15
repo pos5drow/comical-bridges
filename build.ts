@@ -21,6 +21,10 @@ const bridges: Array<{ id: string; src: string }> = [
   { id: "atsumaru", src: "bridge.ts" },
   { id: "mangadex", src: "mangadex.ts" },
   { id: "weebcentral", src: "weebcentral.ts" },
+  // MangaBox engine (src/engines/mangabox.ts) — a change there changes all three bundles.
+  { id: "mangakakalot", src: "mangakakalot.ts" },
+  { id: "manganato", src: "manganato.ts" },
+  { id: "mangabat", src: "mangabat.ts" },
 ];
 
 for (const { id, src } of bridges) {

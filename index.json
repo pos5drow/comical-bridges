@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T08:15:51.196Z",
+  "updated": "2026-11-15T08:19:06.406Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -642,6 +642,48 @@
         "toontop.io"
       ],
       "signature": "j1A1_xOo5iOuU8myG-jXMRkmsq3KW2iCS9bXy6OWdpCTIr5eK8HHNp9Nq-U317wPXSQd8u-oYw1YVzaWAVJACw"
+    },
+    {
+      "id": "pos5drow.webtoons",
+      "name": "WEBTOON",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en",
+        "es",
+        "fr",
+        "de",
+        "id",
+        "th",
+        "zh-Hant"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "settings",
+        "content-rating"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.webtoons/0.1.0/bridge.js",
+      "sha256": "27be9c32b610f5d083aa577fcf8b4a8e2b11e48713501b0a08b0a07c5c9f196c",
+      "iconUrl": "https://www.webtoons.com/favicon.ico",
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "images": {
+        "hosts": [
+          "pstatic.net"
+        ],
+        "headers": {
+          "Referer": "https://www.webtoons.com/"
+        }
+      },
+      "linkHosts": [
+        "webtoons.com"
+      ],
+      "signature": "GeUJVRCLDCDs2JVu52m3dAmJf3L1evNvixpiNQaSL2yN39SSbep1qv0Qk4A3NpSPTYIBpuNzYzvULCsqVL9dCA"
     },
     {
       "id": "pos5drow.weebcentral",

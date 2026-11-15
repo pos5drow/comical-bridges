@@ -7,11 +7,12 @@ and it would also cover MangaFire's picture captcha and Toonkotsu's reading chec
 
 When a site answers with a bot check, the app opens the site in a web view and **the user passes
 the check themselves**, as they would in a browser. The app then hands what the check left behind
-to the host, and the host applies it to that bridge's requests to that site until it runs out:
+to the host, which uses it for that bridge's requests to that site until it runs out:
 
-- **Cookies and the web view's User-Agent** (Cloudflare's `cf_clearance`, MangaFire's `waf_pass`,
-  DDoS-Guard's): Cloudflare ties `cf_clearance` to the User-Agent and IP that earned it, so later
-  requests must send the **same User-Agent** from the same device.
+- **Cookies** (Cloudflare's `cf_clearance`, MangaFire's `waf_pass`, DDoS-Guard's): Cloudflare ties
+  `cf_clearance` to the User-Agent and IP that earned it, so **the web view runs with the same
+  User-Agent the bridge's requests send**, on the same device, and the cookies go into the jar
+  those requests already use.
 - **Named values from the page's localStorage** (HDoujin's and Schale Network's `clearance` token,
   which the bridge sends as a `crt` query parameter): handed to the bridge, not to the network.
 
@@ -36,66 +37,106 @@ holds: no captcha solving, no human-timing mimicry, no automated browsing.
 - **`getDefaultUserAgent()`**, an optional host capability, reports the platform's User-Agent. On
   iOS it's an app string, not the web view's, so it can't stand in for the captured one.
 
-## What it would take
+## How other apps do it (read from their source, 2026-11-15)
 
-### comical (contract and core, all site-agnostic)
+| | Mihon (Android) | Kotatsu (Android) | Aidoku (iOS) | Paperback (iOS) |
+|---|---|---|---|---|
+| Detects | `cf-mitigated: challenge` + `Server: cloudflare` (Cloudflare's documented signal) | status, headers and page markers, in an interceptor | 403/503 + `Server: cloudflare` + challenge elements | the source throws `CloudflareError(request)` |
+| Web view's User-Agent | **the request's** | **the source's request User-Agent** | **the request's** (`customUserAgent`) | the request's |
+| How cookies reach requests | **one store**: OkHttp reads the WebView's `CookieManager` | **one store**, shared the same way | copies the web view's cookies into `URLSession`'s store | hands them to the source (`saveCloudflareBypassCookies`) |
+| Done when | `cf_clearance` changes | `cf_clearance` changes | `cf_clearance` changes | the user closes it |
+| Hidden attempt first | yes, a 30 s invisible WebView; stops as soon as the check turns interactive | yes, a headless WebView with a timeout | yes, a 0×0 web view; if a "verify" control appears, the same view moves into a sheet | no |
+| When the user is needed | error, then "Open in WebView" | "captcha required" flag on the source and a notification, then a browser screen | the sheet opens by itself | a button in the source |
+| Concurrency | one check per host; other requests wait | one at a time | one per host; others wait | — |
+| Images | same HTTP client, so they hit the same path | image-load failures feed the same handler | same | — |
 
-1. **A challenge marker:** `challengeMessage(url, reason)` / `parseChallenge(message)` →
-   `[challenge:<url>]`, beside the rate-limited and login-required markers. `url` is the page to
-   open (the one that was challenged, or the site's root).
-2. **What to collect** (optional, on `BridgeInfo`): `webCheck: { cookies?: string[]; storage?:
-   string[] }`. `cookies` names the cookies that mean "passed" (e.g. `cf_clearance`), so the sheet
-   can close by itself. `storage` names localStorage keys to hand to the bridge. With neither, the
-   user taps Done.
-3. **A clearance store in core**, per bridge and per site (host plus subdomains), kept in the
-   bridge's host storage under a reserved key with the time it was captured:
-   - the gated network adds the stored cookies to matching requests (merged with the bridge's own
-     `Cookie`) and **replaces the User-Agent** with the captured one;
-   - a fresh challenge from that site drops the entry, so the next error asks again;
-   - collected localStorage values are readable by the bridge (a small `webCheck` capability, or
-     the reserved storage key).
-4. **Images too:** the image route (`resolveImageRequest`) and the download page fetcher must add
-   the same cookies and User-Agent when the image host is behind the same check.
+What they agree on, and what my first draft got wrong:
 
-### host-server (and so host-rn, which reuses the router)
+- **The web view takes the request's User-Agent.** None of them capture the web view's User-Agent
+  and impose it on requests. They do the reverse: the check runs with the User-Agent the requests
+  already send. That removes the User-Agent override from the design.
+- **Cookies go into the one store requests already use.** None keep a separate "clearance store".
+- **Detection sits in the HTTP layer**, not in each source. Paperback is the exception, and the
+  only one that needs per-source code.
+- **"Done" means `cf_clearance` changed** from its value before the check.
+- Aidoku and Mihon also fetch the platform web view's real User-Agent and use it as the default.
+  A desktop-Chrome User-Agent sent over iOS's network stack is the kind of mismatch bot checks
+  look for.
 
-5. Map a challenge error to **403 `{ error, challenge: { url } }`**.
-6. `POST /bridges/:id/clearance` `{ url, cookies, userAgent, values }` stores an entry;
-   `DELETE /bridges/:id/clearance?site=` clears it.
+## Derived design for Comical
+
+Each part follows the apps above and fits Comical's split. Comical and the app stay site-agnostic.
+
+### comical
+
+1. **Detect in core's gated network**, like Mihon's interceptor: a response with
+   `cf-mitigated: challenge` (Cloudflare's documented header), or one of a short list of other
+   vendors' challenge markers, throws `challengeMessage({ url, userAgent })`. That's a new marker
+   beside rate-limited and login-required, carrying the request's URL (the site root for non-GET,
+   as Mihon does) and the User-Agent it sent. Every bridge gets this without changes. The kit's
+   guards stay as a fallback for pages without the header, and the adapter maps their `challenge`
+   verdict to the same marker.
+2. **Make core's per-bridge cookie jar the one store**: persist it through host storage, honour
+   expiry, and let the host import cookies into it. That's the equivalent of Mihon's and Kotatsu's
+   shared jar and Aidoku's copy into `URLSession`, and it helps any site with session cookies.
+3. **One check per site at a time:** while one is pending, other requests to that host fail fast
+   with the same challenge, so the app shows one sheet, not ten.
+4. **Images use the same jar**: the image route and the download page fetcher attach the bridge's
+   cookies for the image's host, and a challenge there raises the same marker. Kotatsu feeds image
+   failures into the same handler.
+5. **`getDefaultUserAgent()` returns the platform web view's real User-Agent**, read once from a
+   web view, as Aidoku and Mihon do. On iOS today it's an app string. Bridges should send it by
+   default rather than a hard-coded desktop Chrome string.
+
+### host-server (and host-rn, which reuses the router)
+
+6. Map the marker to **403 `{ error, challenge: { url, userAgent } }`** (the 401 login-required
+   mapping is the model).
+7. `POST /bridges/:id/cookies` `{ url, cookies }` imports into the jar;
+   `DELETE /bridges/:id/cookies?site=` forgets a site's.
 
 ### comical-app
 
-7. **A `WebCheckSheet`**, a sibling of `WebLoginSheet`. Differences:
-   - it doesn't clear cookies first;
-   - it reads `navigator.userAgent` and the named localStorage keys through injected JavaScript;
-   - it finishes when the named cookies appear, or on Done.
-8. **Where it's offered:** any screen whose request failed with `challenge` (list, search, series,
-   reader) shows "Verify in browser"; after it succeeds the query retries. Background work
-   (downloads, update checks) can't prompt, so it marks the source "needs verification" and the
-   next foreground visit offers it.
-9. **Per platform:**
-   - **iOS:** WKWebView and the native network stack share CFNetwork, so the clearance should hold.
-   - **Android:** the WebView (Chromium) and OkHttp have different TLS fingerprints. Keiyoushi lives
-     with this and it works for most sites, but strict Bot Management configurations can reject the
-     reused cookie.
-   - **Desktop:** the window and its cookies exist already, but host-server's network is Node
-     `fetch`, whose fingerprint Cloudflare flags (that is the TLS-FINGERPRINT problem). Routing the
-     desktop host's network through Electron's `net.fetch` (Chromium's stack) would fix both at once.
-   - **Web:** a page can't read another site's cookies, so the check can't work. Say so and point to
-     the phone or desktop app.
+8. **`WebCheckSheet`**, a sibling of `WebLoginSheet`:
+   - it opens `url` with **`userAgent` as the web view's User-Agent**;
+   - it doesn't clear cookies first; it notes `cf_clearance` (and the other vendors' cookie names)
+     before loading;
+   - it finishes when one changes (or on Done), reads the site's cookies with the existing
+     `web-cookies` module, imports them, closes, and retries the query that failed.
+9. **Surfaces:** a "Verify" action on any screen whose request failed with `challenge`. Background
+   work can't prompt, so the source is flagged "needs verification", Kotatsu-style, and the flag
+   clears when a check succeeds.
+10. **Hidden attempt first?** All four apps try an invisible web view before involving the user,
+    and Aidoku moves that same view into a sheet the moment the check turns interactive. It's a
+    real browser engine letting the site's own non-interactive check run, not captcha solving, but
+    it is automatic. **v1: the visible sheet only.** The hidden attempt, Aidoku-style, can be added
+    later if the user wants it.
+11. **Desktop:** the Electron sign-in window gains the same mode, and imports into host-server's
+    jar. Node `fetch`'s TLS fingerprint can still fail a reused `cf_clearance` (Cloudflare flags it;
+    the TLS-FINGERPRINT problem), so the desktop host's network should move to Electron's
+    `net.fetch`, which uses the same Chromium stack as the window.
+12. **Web:** can't read another site's cookies; say so and point to the phone or desktop app.
 
 ### Bridge repos
 
-10. `src/core/guarded.ts`: map a `challenge` verdict to `challengeMessage(res.url)` (keep
-    rate-limited for `blocked` and 429s). That's one place for all 24 guarded bridges.
-11. Declare `webCheck` on the bridges that need named cookies or storage values; HDoujin and
-    Schale read their `crt` token from it.
-12. **Build the blocked bridges.** This is most of the work. Every one of them is challenged
-    even for curl from here, so the site can't be studied from this machine without a cleared
-    session. Options: the user exports pages or a HAR from a browser, or, once desktop has the
-    web check and `net.fetch`, probing runs through a session the user cleared. That probing
-    may need the user's go-ahead again; the permission check has flagged similar work. Keiyoushi's
-    code covers what each site expects.
+13. The adapter maps the kit's `challenge` verdict to the new marker. Bridges switch from their
+    hard-coded Chrome User-Agent to the host's default where they can.
+14. **Values from the page instead of cookies** (HDoujin's and Schale's localStorage `clearance`
+    token): Paperback's approach fits here. The bridge declares the keys
+    (`info.webCheck.storage`), the sheet reads them after the check, and they're handed to the
+    bridge (its storage, under a reserved key). This is the only part that needs bridge
+    declarations.
+15. **Then build the blocked bridges.** They can't be studied from this machine without a
+    cleared session: either pages or a HAR exported from a browser, or probing through a session
+    the user cleared once desktop has the check (may need the user's go-ahead).
+
+### What changed from the first draft
+
+- No captured User-Agent and no User-Agent override: the web view uses the request's User-Agent.
+- No separate clearance store: core's cookie jar, persisted, is the one store.
+- Detection in core, not per bridge: every bridge is covered at once.
+- Named cookies don't need declaring: success is `cf_clearance` (or the other vendors' cookies)
+  changing, plus Done. Only page-storage values need a declaration.
 
 ## Which sources it would unblock
 
@@ -118,14 +159,14 @@ Rough, for one person:
 
 | Piece | Estimate |
 |---|---|
-| Contract and core (marker, store, network and image hooks, tests) | 1–2 days |
+| Contract and core (marker, detection, persistent jar, images, real default UA, tests) | 1–2 days |
 | Router endpoints | 0.5 day |
 | App sheet, error surfaces and the "needs verification" state | 2–3 days |
 | Desktop `net.fetch` network | ~1 day |
 | Adapter change in the bridge repos | under an hour |
 | Each blocked bridge, once it can be studied | 0.5–1 day |
 
-Order: contract/core → router → app (iOS first, the most likely to hold) → one bridge end to end
+Order: contract/core → router → app (iOS first: WKWebView and URLSession share one network stack) → one bridge end to end
 (LectorXD: its catalogue is open, so only part of it needs clearance) → the rest → desktop.
 
 ## Open questions

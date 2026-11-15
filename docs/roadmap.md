@@ -155,6 +155,31 @@ at all. Seen on Toonkotsu and Mangago. What it would take, smallest first:
 - **audit:** run such bridges' live audit from a device, or mark them flaky (done for Toonkotsu).
 The MangaBox search challenges may be this too; untested.
 
+## Open follow-ups (both repos)
+
+Everything on the list is shipped, blocked or skipped. What's left, biggest first:
+
+1. **An in-app web check (CF-CLEARANCE)** — unblocks Kagane, OniSaga, LectorXD, MangaDot, BatCave,
+   and in the NSFW repo MyReadingManga, HDoujin and Schale Network; also covers MangaFire's captcha
+   and Toonkotsu's reading check. Being investigated: see `docs/web-check.md`.
+2. **Phone checks** (cheap, and the real test for these):
+   - Toonkotsu, Mangago, IMHentai, Hentai2Read: Node/Bun are fingerprint-blocked, so they're only
+     verified against captured responses. Open each in the app on Android and iOS.
+   - Mangago: images on underscore hosts (`iweb_2…`) on Android.
+   - Kemono and Pawchive: memory while the ~12–16 MB creator list loads.
+3. **Desktop and CI for TLS-FINGERPRINT sites:** a browser-like network path for the Node host
+   (e.g. Electron's `net`), only if desktop matters for those sources.
+4. **Testkit:** the audit's cover sampler can't fetch covers routed through the host's relative
+   image route, so bridges declaring image headers report false cover failures (comical).
+5. **Optional:** HentaiRox, HentaiZap, HentaiEnvy, AsmHentai, HentaiEra on the galleryadults engine
+   (all answer Node/Bun; most need their own card selectors). ReadComicOnline: recheck now and then.
+6. **Decisions for the user:**
+   - Pawchive's User-Agent asks "preferably" for a contact; none is included yet.
+   - MangaTaro signs its chapter-list requests with an MD5 token, the same kind of front-end request
+     signing the session's permission check flagged on MangaFire (which went ahead on the user's
+     say-so). Keep as is, or revisit.
+   - The automation pipeline (`docs/maintenance.md`) stays on hold until asked for.
+
 ## Notes from building
 
 - **MangaBox (2026-11-14):** the three sites are one catalogue on one CDN (`*.2xstorage.com`) with

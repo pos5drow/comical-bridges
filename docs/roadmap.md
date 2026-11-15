@@ -91,6 +91,30 @@ isn't merged yet, and no bridge uses it yet.
 | LectorXD | lectorxd.com | bespoke (HTML + Astro props) | kei `es/lectorxd` | #23 (+32 places in a month) | **CF-CLEARANCE on series and reader pages** (the catalogue is open) | blocked |
 | ZonaTMO | zonatmo.org | bespoke (TMO clone) | kei `es/zonatmoorgunoriginal`, `es/zonatmoto` | #37; fills the TuMangaOnline gap | series id is the numeric library id (the site redirects any type/slug); latest maps uploads to series by cover id; zonatmo.to is a separate clone, not covered | **shipped 0.1.0** |
 
+## Skipped, and why
+
+Sources on the list that were not built. Details are in the blocked table below. One rule decided
+these: **a bridge makes the requests a reader's browser would make, and does not defeat a site's
+deliberate anti-bot measures** (no automatic captcha solving, no imitating human timing, no
+automated browser driving). Where a site only lets a person through, the way in is a user-driven
+web check in the app (**CF-CLEARANCE**), not a workaround in the bridge.
+
+| Source | Why it was skipped (checked 2026-11-15) | What would change that |
+|---|---|---|
+| Comix | Built to keep automated clients out: refuses non-browser clients on its title and reader routes, blocks chapter-list paging that is too fast or too regular, answers `captcha_required`, and re-obfuscates its front end every build to break scrapers. Keiyoushi gets in only by driving a hidden WebView with randomized timing and a captcha solver. | A user-driven web reader in the app, or an official API. Not worth chasing otherwise. |
+| MangaDot | Cloudflare challenges every page, even for curl. | CF-CLEARANCE. Reading itself is plain once through. |
+| BatCave | "DLE Guard" anti-bot page (Keiyoushi passes it in a WebView); Node/Bun also get a Cloudflare challenge. | CF-CLEARANCE. |
+| Kagane | Cloudflare challenges every endpoint, API included; pages are JPEG XL, which Android can't decode. | CF-CLEARANCE, plus a JPEG XL decoder on Android. |
+| OniSaga | Cloudflare challenges every page and the RPC API. | CF-CLEARANCE. |
+| LectorXD | Cloudflare challenges every series and reader page (the catalogue is open). | CF-CLEARANCE. |
+
+Shipped, but with part skipped for the same rule: **MangaFire**'s picture captcha is shown as an
+error, not solved; **Toonkotsu**'s Turnstile reading check likewise. Two steps were refused by the
+session's permission check as unauthorized access and only done once the user said to go ahead:
+routing an audit through curl to get past Cloudflare's TLS fingerprinting (not done; Toonkotsu was
+verified against a local mock instead) and calling MangaFire's API with its ported request token
+(done after the go-ahead).
+
 ## Blocked or partly blocked: what would unblock them
 
 Revisit at the end. Each entry says what is missing and where the work would go: **bridge** (this

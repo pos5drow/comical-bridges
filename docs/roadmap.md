@@ -88,8 +88,8 @@ isn't merged yet, and no bridge uses it yet.
 |---|---|---|---|---|---|---|
 | Olympus Scanlation | olympusxyz.com (found via the olympus.pages.dev redirector) | bespoke (API) | kei `es/olympusscanlation`, aidoku `es.olympusscanlation` | #4 | — | shipped `0.1.1` |
 | ManhwaWeb | manhwaweb.com (API at api.manhwaweb.com) | bespoke (API) | kei `es/manhwaweb`, aidoku `es.manhwaweb` | #5 | — | shipped `0.1.1` (adult series rated `adult`) |
-| LectorXD | lectorxd.com | bespoke | kei `es/lectorxd` | #23 (+32 places in a month) | — | todo |
-| ZonaTMO | zonatmo.org (+ zonatmo.to) | bespoke (TMO clone) | kei `es/zonatmoorgunoriginal`, `es/zonatmoto` | #37; fills the TuMangaOnline gap | domain churn, so plan for mirrors | todo |
+| LectorXD | lectorxd.com | bespoke (HTML + Astro props) | kei `es/lectorxd` | #23 (+32 places in a month) | **CF-CLEARANCE on series and reader pages** (the catalogue is open) | blocked |
+| ZonaTMO | zonatmo.org | bespoke (TMO clone) | kei `es/zonatmoorgunoriginal`, `es/zonatmoto` | #37; fills the TuMangaOnline gap | series id is the numeric library id (the site redirects any type/slug); latest maps uploads to series by cover id; zonatmo.to is a separate clone, not covered | **shipped 0.1.0** |
 
 ## Blocked or partly blocked: what would unblock them
 
@@ -100,6 +100,7 @@ repo), **comical** (contract/core/host), or **app** (comical-app).
 |---|---|---|---|
 | Kagane | blocked | 1. Every endpoint, API included, answers a Cloudflare managed challenge, even from a home IP. 2. Pages are JPEG XL (`.jxl`), which Android's image stack (Glide) can't decode; iOS 17+ can. | 1. **CF-CLEARANCE** (below). 2. **app:** a JPEG XL decoder on Android, or test whether the `datasaver` page variant is served as WebP. Then the bridge needs integrity + per-book page tokens, both plain API calls. |
 | OniSaga | blocked | Every page and the RPC API answer a Cloudflare managed challenge (checked 2026-11-15 from a home IP). | **CF-CLEARANCE** (below). After that: a cursor-paged catalog RPC, server-rendered title pages (ld+json, chapter pages paginated), Next.js reader data, and an age gate for adult titles (a form POST setting `__Host-onisaga.age_confirmed`, then `account/titleView` / `readerView` RPCs). |
+| LectorXD | blocked | The catalogue is open, but every series page (and so every chapter list and reader) answers a Cloudflare managed challenge, consistently (checked 2026-11-15, home IP). | **CF-CLEARANCE** (below). After that, the work is simple: catalogue HTML with filters (`/catalogo?adult&orderBy&types&status&tags&search&page`), the series page's Astro `ChapterList` props, and the reader's `img.page-image`. |
 | Mangakakalot, Manganato, Mangabat | shipped, search partly blocked | Search (`/search/story/…`) is challenged by Cloudflare bot scoring at random; browse, details and reading work. | **CF-CLEARANCE** (below). Nothing else. |
 | Asura Scans | shipped, premium not readable | Premium and early-access chapters need a paid account; without one the API returns no pages, so they are hidden. | **bridge:** sign-in (`web-login` setting capturing the `access_token` cookie), then the premium endpoint with `Authorization` + `X-Page-Token`; its pages arrive tiled and are already handled by processed page images. Needs a subscriber account to build and verify. |
 | MangaTaro | shipped, partly empty | Some titles only have non-English (pt-br) chapters, and many popular licensed titles are taken down ("Chapter not available"). | Takedowns: nothing to do. Languages: **bridge** could declare the other languages and tag chapters with `languageCode`. |
@@ -121,9 +122,11 @@ to the browser's User-Agent and IP. What it would take:
 
 - **MangaBox (2026-11-14):** the three sites are one catalogue on one CDN (`*.2xstorage.com`) with
   identical markup and API, so the site files are pure config. Images and covers need a Referer
-  from a site domain (declared in `BridgeInfo.images`). The testkit's cover sampler fetches without
-  that Referer, so the audit reports covers as failed even though the app loads them: a testkit
-  follow-up in `porksphere/comical`.
+  from a site domain (declared in `BridgeInfo.images`). The loader rewrites a cover on a declared
+  image host to the host's relative image route (`/bridges/{id}/image?url=…`), which the testkit's
+  cover sampler can't fetch (`fetch()` gets no origin), so the audit reports such covers as failed
+  even though the app loads them: a testkit follow-up in `porksphere/comical`. Declare `images`
+  only for hosts that need the headers.
 
 - **Asura Scans (2026-11-15):** the whole site is a JSON API, with no scraping. Tiles appear only on
   premium chapters (paid), and a premium chapter without an account comes back with no pages, so
@@ -142,6 +145,12 @@ to the browser's User-Agent and IP. What it would take:
 - **Kit updates no longer re-version bridges (2026-11-15):** Bun's `//# debugId=` hashes every
   source it read, including tree-shaken ones, so build.ts drops it. Builds are now byte-identical
   across kit pins for bridges that don't use the changed code.
+
+- **ZonaTMO (2026-11-15):** server-rendered, no challenge. The library's ajax view answers
+  `{html}` cards; latest uploads link chapters, not series, so the series id is read from the cover
+  (`/tc/{id}-…`). Any `/library/{type}/{id}/{slug}` redirects to the canonical page, so the id is the
+  number alone. Every chapter (the folded ones too) is on the series page. Nothing needs a Referer,
+  so `images` isn't declared and covers load directly.
 
 ## Suggested build order
 

@@ -35,5 +35,6 @@ export const AUDIT: Record<string, BridgeAuditConfig> = {
   // (MangaDex-backed links are throttled upstream by MangaDex; a gist is Cubari's own path.)
   dynasty: { searchQuery: "citrus" },
   webtoons: { searchQuery: "tower" },
+  zonatmo: { searchQuery: "solo leveling" },
   cubari: { searchQuery: "https://raw.githubusercontent.com/catgirl-v/cubari/d/catgirl-v/main/series/Fawnduu/My%20Dragon%20Girlfriend/cubari.json" },
 };

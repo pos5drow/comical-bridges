@@ -75,7 +75,7 @@ isn't merged yet, and no bridge uses it yet.
 | OniSaga | onisaga.com | bespoke (RPC + Next.js) | kei `all/onisaga` | 16 👍 request | **CF-CLEARANCE site-wide** | blocked |
 | Manga Ball | mangaball.com | bespoke (API, multilingual) | kei `all/mangaball`, aidoku `multi.mangaball` | 15 👍 request | — | shipped `0.1.0` (one bridge; Language setting) |
 | MangaDot | mangadot.net | bespoke | kei `all/mangadotnet`, aidoku `multi.mangadotnet` | EverythingMoe hub | JS-SOLVER? (kei uses a WebView — investigate) | todo |
-| Webtoons | webtoons.com | bespoke (official) | kei `all/webtoons`, aidoku `multi.webtoon` | #26 | — (kei's bitmap code is optional page merging) | todo |
+| Webtoons | webtoons.com | bespoke (official) | kei `all/webtoons`, aidoku `multi.webtoon` | #26 | motion comics not supported | shipped `0.1.0` (one bridge; Language setting) |
 | MANGA Plus | mangaplus.shueisha.co.jp | bespoke (official, protobuf API) | kei `all/mangaplus`, aidoku `multi.mangaplus` | in every app | IMG-BYTES (XOR key per page, known at page-list time) | todo |
 | Cubari | cubari.moe | bespoke (proxy for imgur/GitHub galleries) | kei `all/cubari`, aidoku `multi.cubari` | in every app | no catalogue (Keiyoushi lists a WebView history); MangaDex-backed links can fail upstream | shipped `0.1.0` (search = paste a link) |
 | Dynasty Scans | dynasty-scans.com | bespoke (JSON views) | kei `en/dynasty`, aidoku `en.dynastyscans` | yuri hub | list/search cards have no covers (the listing APIs carry none; Keiyoushi bundles a cover map) | shipped `0.1.0` |

@@ -153,29 +153,29 @@ Everything on the list is shipped, blocked or skipped. What's left, biggest firs
 1. **An in-app web check (CF-CLEARANCE)**: built (comical, comical-app, the bridges' guard
    adapter, page-storage values); HDoujin and Schale Network now use it. Next is a device test.
    See `docs/web-check.md`.
-2. **Native platform User-Agent** (comical host-ios/host-android): the phones report a non-browser
-   User-Agent, so bridges there fall back to a fixed desktop Chrome one and the web view's check can
-   loop (an overridden web view User-Agent contradicts what the engine reports). Report the web
-   view's own User-Agent from `getDefaultUserAgent` (WKWebView's and Android's
-   `WebSettings.getDefaultUserAgent`), and have the phone's web check leave the web view's
-   User-Agent alone when it matches; desktop already does (comical-app 186195d0). Needs a device.
+2. **Native platform User-Agent:** built (comical 5ad0edf, comical-app e5cfc92e). The phones now
+   report their web view's own User-Agent, and the phone's web check leaves it alone when a bridge
+   sends it. Needs a fresh dev-client build and a device to confirm.
 3. **Phone checks** (cheap, and the real test for these):
    - Toonkotsu, Mangago, IMHentai, Hentai2Read: Node/Bun are fingerprint-blocked, so they're only
      verified against captured responses. Open each in the app on Android and iOS. (Desktop now
      sends the host's requests through Chromium's network, which those sites let through.)
    - Mangago: images on underscore hosts (`iweb_2…`) on Android.
    - Kemono and Pawchive: memory while the ~12–16 MB creator list loads.
-4. **CI for TLS-FINGERPRINT sites:** the nightly audit still runs on Bun's fetch, so those
+4. **Done 2026-11-15:** both repos typecheck clean with tests and CI runs it; the audit samples
+   routed covers at their real URL (comical bbf7b3e); the desktop check shows itself on
+   Cloudflare's `interactiveBegin`. Rechecked: ReadComicOnline still unreachable. The extra
+   galleryadults sites (HentaiRox and the rest) are skipped: not in the demand findings.
+5. **CI for TLS-FINGERPRINT sites:** the nightly audit still runs on Bun's fetch, so those
    bridges stay marked flaky there.
-5. **Testkit:** the audit's cover sampler can't fetch covers routed through the host's relative
+6. **Testkit (fixed, see 4):** the audit's cover sampler can't fetch covers routed through the host's relative
    image route, so bridges declaring image headers report false cover failures (comical).
-6. **Optional:** HentaiRox, HentaiZap, HentaiEnvy, AsmHentai, HentaiEra on the galleryadults engine
+7. **Optional:** HentaiRox, HentaiZap, HentaiEnvy, AsmHentai, HentaiEra on the galleryadults engine
    (all answer Node/Bun; most need their own card selectors). ReadComicOnline: recheck now and then.
-7. **Decisions for the user:**
-   - Pawchive's User-Agent asks "preferably" for a contact; none is included yet.
-   - MangaTaro signs its chapter-list requests with an MD5 token, the same kind of front-end request
-     signing the session's permission check flagged on MangaFire (which went ahead on the user's
-     say-so). Keep as is, or revisit.
+8. **Decisions:**
+   - MangaTaro signs its chapter-list requests with an MD5 token like the site's front end; the user
+     approved keeping it (2026-11-15), as with MangaFire.
+   - Pawchive's contact in the User-Agent: left out on purpose (the site only asks "preferably").
    - The automation pipeline (`docs/maintenance.md`) stays on hold until asked for.
 
 ## Notes from building

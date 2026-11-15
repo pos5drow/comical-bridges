@@ -53,7 +53,7 @@ isn't merged yet, and no bridge uses it yet.
 | Source | Site | Engine | Upstream refs | Signals | Blockers | Status |
 |---|---|---|---|---|---|---|
 | Comix | comix.to (+ comix.ws) | bespoke | kei `en/comix` (2.2k LOC), aidoku `en.comix` | #2; top of EverythingMoe; most-👍 Keiyoushi issue of 2026 (163) | IMG-RESP (XOR + 5×5 grid), JS-SOLVER (request signer) | todo |
-| Asura Scans | asurascans.com | bespoke | kei `en/asurascans`, aidoku `en.asurascans` | #3; in every app | IMG-TILES (params known at page-list time) | todo |
+| Asura Scans | asurascans.com (JSON API at api.asurascans.com) | bespoke | kei `en/asurascans`, aidoku `en.asurascans` | #3; in every app | only premium pages are tiled, and premium needs a paid account (login not built) | shipped `0.1.0`: free chapters; tiled pages processed if served |
 | MangaFire | mangafire.to | bespoke | kei `all/mangafire`, aidoku `multi.mangafire` | #9; 65 & 53 👍 breakage issues | JS-SOLVER (VRF token) | todo |
 | Mangakakalot | kakamanga.com (mangakakalot.gg redirects there), mangakakalove.com | **mangabox** | kei `en/mangakakalot`, aidoku `en.mangakakalot` | #40 | CF-CLEARANCE (search only) | wip: `0.1.0` built, unit-tested, live-audited (read path ✓; search challenged from home IP); not published |
 | Manganato | manganato.gg (default), natomanga.com (now redirects to manganami.com), nelomanga.net | **mangabox** | kei `en/manganelo`, aidoku `en.manganato` | #43 | CF-CLEARANCE (search only) | wip: `0.1.0` built, unit-tested, live-audited (read path ✓; search challenged from home IP); not published |
@@ -98,6 +98,11 @@ isn't merged yet, and no bridge uses it yet.
   from a site domain (declared in `BridgeInfo.images`). The testkit's cover sampler fetches without
   that Referer, so the audit reports covers as failed even though the app loads them: a testkit
   follow-up in `porksphere/comical`.
+
+- **Asura Scans (2026-11-15):** the whole site is a JSON API, with no scraping. Tiles appear only on
+  premium chapters (paid), and a premium chapter without an account comes back with no pages, so
+  free reading needs no processing. The bridge marks tiled pages anyway. Asura is **not** a test of
+  processed images: that needs a source whose public pages are scrambled.
 
 ## Suggested build order
 

@@ -30,4 +30,5 @@ export const AUDIT: Record<string, BridgeAuditConfig> = {
   roliascan: { searchQuery: "love" },
   kingofshojo: { searchQuery: "love" },
   flamecomics: { searchQuery: "academy" },
+  mangaball: { searchQuery: "solo leveling" },
 };

@@ -37,6 +37,7 @@ const bridges: Array<{ id: string; src: string }> = [
   // MangaThemesia engine (src/engines/mangathemesia.ts) — the long-tail WordPress theme.
   { id: "kingofshojo", src: "kingofshojo.ts" },
   { id: "flamecomics", src: "flamecomics.ts" },
+  { id: "mangaball", src: "mangaball.ts" },
 ];
 
 for (const { id, src } of bridges) {

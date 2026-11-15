@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T08:43:54.945Z",
+  "updated": "2026-11-15T09:16:13.487Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -304,6 +304,43 @@
         "mangadex.org"
       ],
       "signature": "WWbDRm3a1mKKi9-vW8l9zm0fnpXkBsDLY61YstkjTzwv08jvhpkYAm_c9ukLMhn_eLfmbSRoDplXNcw_EsWdDA"
+    },
+    {
+      "id": "pos5drow.mangago",
+      "name": "Mangago",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort",
+        "settings",
+        "content-rating"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangago/0.1.0/bridge.js",
+      "sha256": "3935bfcaedc7bc2f6e105eb6a737bb7de7048af664e469b925629855d4ed8fec",
+      "iconUrl": "https://www.mangago.me/favicon.ico",
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "images": {
+        "hosts": [
+          "mangapicgallery.com"
+        ],
+        "process": {
+          "layout": true
+        }
+      },
+      "linkHosts": [
+        "mangago.me"
+      ],
+      "signature": "jWk5aHKaeKdJEdV5XH6czh6PkE8bNoDR4NofLrOzA3sGeiihK7OEtz8do5cvIMBZG6vSji6_fMmxsBwbHkbBBA"
     },
     {
       "id": "pos5drow.mangak",

@@ -19,7 +19,7 @@ function host(seen: HttpRequest[]): HostCapabilities {
         return { url: req.url, status: 200, statusText: "OK", headers: {}, body: JSON.stringify({ result: "ok", data: [], total: 0 }) };
       },
     },
-    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] },
+    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [], secure: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] } },
     log: { debug() {}, info() {}, warn() {}, error() {} },
     settings: {},
   };
@@ -55,7 +55,7 @@ describe("mangadex images", () => {
 
   test("API calls send the same name", async () => {
     const seen: HttpRequest[] = [];
-    await factory(host(seen)).getSearchResults({ text: "spy" }).catch(() => undefined);
+    await factory(host(seen)).getSearchResults!({ text: "spy" }).catch(() => undefined);
     expect(seen.length).toBeGreaterThan(0);
     for (const req of seen) expect(req.headers?.["User-Agent"]).toBe(info.images?.headers?.["User-Agent"]);
   });

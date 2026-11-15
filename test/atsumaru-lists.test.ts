@@ -15,7 +15,7 @@ type Answer = { status?: number; body: unknown };
 
 function captureHost(
   route: (url: string) => Answer,
-  settings: Record<string, unknown> = {},
+  settings: Record<string, string | number | boolean | string[]> = {},
 ): { host: HostCapabilities; urls: string[] } {
   const urls: string[] = [];
   const host: HostCapabilities = {
@@ -32,7 +32,7 @@ function captureHost(
         };
       },
     },
-    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] },
+    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [], secure: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] } },
     log: { debug() {}, info() {}, warn() {}, error() {} },
     settings,
   };
@@ -46,7 +46,7 @@ describe("Atsumaru lists after the /api/infinite retirement", () => {
     const { host, urls } = captureHost(() => ({
       body: { ...TYPESENSE_EMPTY, found: 2, hits: [{ document: doc("a") }, { document: doc("b") }] },
     }));
-    const { items, nextCursor } = await factory(host).getListItems("trending");
+    const { items, nextCursor } = await factory(host).getListItems!("trending");
 
     expect(urls).toHaveLength(1);
     const u = new URL(urls[0]!);
@@ -65,11 +65,11 @@ describe("Atsumaru lists after the /api/infinite retirement", () => {
     const { host, urls } = captureHost(() => ({ body: { items: items40 } }));
     const bridge = factory(host);
 
-    const first = await bridge.getListItems("recentlyUpdated");
+    const first = await bridge.getListItems!("recentlyUpdated");
     expect(first.items).toHaveLength(40);
     expect(first.nextCursor).toBeDefined(); // a full page means there may be more
 
-    await bridge.getListItems("recentlyUpdated", { cursor: first.nextCursor });
+    await bridge.getListItems!("recentlyUpdated", { cursor: first.nextCursor });
 
     expect(urls).toHaveLength(2);
     const [p1, p2] = urls.map((u) => new URL(u));
@@ -84,7 +84,7 @@ describe("Atsumaru lists after the /api/infinite retirement", () => {
 
   test("home2 lists carry the adult toggle and persistent tag exclusions", async () => {
     const { host, urls } = captureHost(() => ({ body: { items: [] } }), { adult: true });
-    await factory(host).getListItems("recentlyUpdated", { excludedTags: ["t1", " t2 ", ""] });
+    await factory(host).getListItems!("recentlyUpdated", { excludedTags: ["t1", " t2 ", ""] });
 
     const u = new URL(urls[0]!);
     expect(u.searchParams.get("adult")).toBe("1");
@@ -93,17 +93,17 @@ describe("Atsumaru lists after the /api/infinite retirement", () => {
 
   test("a retired route fails with the status + URL, not a JSON parse error", async () => {
     const { host } = captureHost(() => ({ status: 404, body: "404 Not Found" }));
-    await expect(factory(host).getListItems("recentlyUpdated")).rejects.toThrow(/HTTP 404 .*\/api\/home2\/recentlyUpdated/);
+    await expect(factory(host).getListItems!("recentlyUpdated")).rejects.toThrow(/HTTP 404 .*\/api\/home2\/recentlyUpdated/);
   });
 
   test("a 200 with a non-JSON body names the URL too", async () => {
     const { host } = captureHost(() => ({ body: "<html>challenge</html>" }));
-    await expect(factory(host).getListItems("recentlyUpdated")).rejects.toThrow(/non-JSON .*\/api\/home2\/recentlyUpdated/);
+    await expect(factory(host).getListItems!("recentlyUpdated")).rejects.toThrow(/non-JSON .*\/api\/home2\/recentlyUpdated/);
   });
 
   test("getLists exposes only the public SeriesList fields", async () => {
     const { host } = captureHost(() => ({ body: {} }));
-    const lists = await factory(host).getLists();
+    const lists = await factory(host).getLists!();
     expect(lists.map((l) => l.id)).toEqual(["trending", "recentlyUpdated"]);
     for (const l of lists) {
       expect(l).not.toHaveProperty("source");

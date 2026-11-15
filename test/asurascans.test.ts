@@ -20,7 +20,7 @@ function host(respond: (req: HttpRequest) => string) {
         return { url: req.url, status: 200, statusText: "OK", headers: {}, body: respond(req) };
       },
     },
-    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] },
+    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [], secure: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] } },
     log: { debug() {}, info() {}, warn() {}, error() {} },
     settings: {},
   };

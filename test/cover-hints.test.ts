@@ -25,7 +25,7 @@ function host(respond: (url: string) => string): HostCapabilities {
         body: respond(req.url),
       }),
     },
-    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] },
+    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [], secure: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] } },
     log: { debug() {}, info() {}, warn() {}, error() {} },
     settings: {},
   };
@@ -69,8 +69,8 @@ describe("Weeb Central", () => {
 
   test("a listing card's Type line gives its entry's hints", async () => {
     const bridge = weebcentral(host(() => card("01A", "Manga") + card("01B", "Manhwa")));
-    const lists = await bridge.getLists();
-    const page = await bridge.getListItems(lists[0]!.id);
+    const lists = await bridge.getLists!();
+    const page = await bridge.getListItems!(lists[0]!.id);
     const byId = Object.fromEntries(page.items.map((e) => [e.id, e]));
     expect(byId["01A"]).toMatchObject({ coverForm: "volume", readingDirection: "rtl" });
     expect(byId["01B"]).toMatchObject({ coverForm: "scroll", readingDirection: "vertical" });

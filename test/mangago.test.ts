@@ -39,7 +39,7 @@ function host(readers: Record<string, string> = {}) {
         return { url: req.url, status: 200, statusText: "OK", headers: {}, body };
       },
     },
-    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] },
+    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [], secure: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] } },
     log: { debug() {}, info() {}, warn() {}, error() {} },
     settings: {},
   };

@@ -83,7 +83,7 @@ class ZonaTmoBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.zonatmo",
     name: "ZonaTMO",
-    version: "0.1.2",
+    version: "0.1.3",
     contractVersion: "2.1.0",
     languages: ["es"],
     nsfw: false,
@@ -100,7 +100,7 @@ class ZonaTmoBridge extends BridgeBase {
     return guardResponse(await super.request(req), this.guards, req);
   }
 
-  private async fetchText(url: string, ajax = false): Promise<HttpResponse> {
+  private async fetchResponse(url: string, ajax = false): Promise<HttpResponse> {
     const headers: Record<string, string> = { "User-Agent": UA, Accept: ajax ? "application/json" : "text/html", Referer: `${SITE}/biblioteca` };
     if (ajax) headers["X-Requested-With"] = "XMLHttpRequest";
     const res = await this.request({ url, headers });
@@ -110,7 +110,7 @@ class ZonaTmoBridge extends BridgeBase {
   }
 
   private async page(url: string): Promise<CheerioRoot> {
-    return this.parse((await this.fetchText(url)).body);
+    return this.parse((await this.fetchResponse(url)).body);
   }
 
   // ── Lists & search ──────────────────────────────────────────────────────────
@@ -170,7 +170,7 @@ class ZonaTmoBridge extends BridgeBase {
       else q.set(k, v);
     }
     q.set("page", String(page));
-    const res = await this.fetchText(`${SITE}/biblioteca?${q}`, true);
+    const res = await this.fetchResponse(`${SITE}/biblioteca?${q}`, true);
     let html: string;
     try {
       html = (JSON.parse(res.body) as { html?: string }).html ?? "";

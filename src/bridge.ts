@@ -219,7 +219,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "pos5drow.atsumaru",
     name: "Atsumaru",
-    version: "0.4.5",
+    version: "0.4.6",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
@@ -549,7 +549,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
         text: "",
         cursor: req.cursor,
         sort: { key: list.sort, ascending: false },
-        excludedTags: req.excludedTags,
+        ...(req.excludedTags ? { excludedTags: req.excludedTags } : {}),
       });
     }
 
@@ -739,7 +739,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     return info;
   }
 
-  async getChapters(seriesId: string): Promise<Chapter[]> {
+  override async getChapters(seriesId: string): Promise<Chapter[]> {
     const url = `${this.base()}/api/manga/allChapters?mangaId=${encodeURIComponent(seriesId)}`;
     const raw = (await this.getJson<AllChaptersDto>(url)).chapters ?? [];
     // An unknown id gets an empty list here too, so an empty answer asks the series page whether the
@@ -797,7 +797,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     return manga ? { seriesId: manga[1]! } : null;
   }
 
-  async getChapterPages(seriesId: string, chapterId: string): Promise<Page[]> {
+  override async getChapterPages(seriesId: string, chapterId: string): Promise<Page[]> {
     const url =
       `${this.base()}/api/read/chapter?mangaId=${encodeURIComponent(seriesId)}` +
       `&chapterId=${encodeURIComponent(chapterId)}`;

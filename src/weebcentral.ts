@@ -293,7 +293,7 @@ class WeebCentralBridge extends BridgeBase {
 
   // ── Chapters ────────────────────────────────────────────────────────────────
 
-  async getChapters(seriesId: string): Promise<Chapter[]> {
+  override async getChapters(seriesId: string): Promise<Chapter[]> {
     const $ = this.parse(
       await this.fetchText(`${BASE}/series/${encodeURIComponent(seriesId)}/full-chapter-list`, this.headers()),
     );
@@ -349,7 +349,7 @@ class WeebCentralBridge extends BridgeBase {
     return seriesId ? { seriesId, chapterId: m[2]! } : null;
   }
 
-  async getChapterPages(_seriesId: string, chapterId: string): Promise<Page[]> {
+  override async getChapterPages(_seriesId: string, chapterId: string): Promise<Page[]> {
     const url = `${BASE}/chapters/${encodeURIComponent(chapterId)}/images?is_prev=False&reading_style=long_strip`;
     const $ = this.parse(await this.fetchText(url, this.headers()));
     const pages: Page[] = [];

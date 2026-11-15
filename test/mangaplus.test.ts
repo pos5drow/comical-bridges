@@ -32,7 +32,7 @@ function host(settings: Record<string, string | boolean> = {}) {
         return { url: req.url, status: 200, statusText: "OK", headers: {}, body: fixture(name).toString("base64") };
       },
     },
-    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] },
+    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [], secure: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] } },
     log: { debug() {}, info() {}, warn() {}, error() {} },
     settings,
   };
@@ -117,7 +117,7 @@ describe("details, chapters, pages", () => {
     const transforms = await bridge.decodePageImage!({ url: pages[0]!.imageUrl, headers: {}, context: pages[0]!.process!.context! });
     expect(transforms).toHaveLength(1);
     const key = Buffer.from((transforms![0] as { key: string }).key, "base64").toString("hex");
-    expect(key).toBe(pages[0]!.process!.context!.xor);
+    expect(key).toBe(pages[0]!.process!.context!["xor"] as string);
     expect(await bridge.decodePageImage!({ url: "x", headers: {}, context: {} })).toBeNull();
   });
 

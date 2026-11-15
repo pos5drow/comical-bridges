@@ -94,7 +94,7 @@ export function apiUrl(path: string, params: [string, string][] = []): string {
       return `${key}=${v}`;
     })
     .join("&");
-  const q = new URLSearchParams(sorted.map(([k, v]) => [k, v]));
+  const q = new URLSearchParams(sorted.map(([k, v]): [string, string] => [k!, v!]));
   q.append("vrf", vrf(path + (sorted.length ? `?${signed}` : "")));
   return `${SITE}/api${path}?${q}`;
 }
@@ -356,7 +356,7 @@ class MangaFireBridge extends BridgeBase {
     this.checkId(seriesId);
     const t = (await this.api<{ data: TitleDto }>(`/titles/${seriesId}`)).data;
     const info: SeriesInfo = { ...this.entry(t), id: seriesId, shareUrl: `${SITE}/title/${t.hid}${t.slug ? `-${t.slug}` : ""}` };
-    delete info.subtitle;
+    delete (info as { subtitle?: string }).subtitle;
     if (t.synopsisHtml?.trim()) info.description = plain(t.synopsisHtml);
     const alts = (t.altTitles ?? []).map((a) => a.trim()).filter((a) => a && a !== info.title);
     if (alts.length) info.altTitles = [...new Set(alts)];

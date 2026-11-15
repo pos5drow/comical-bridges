@@ -31,6 +31,7 @@ function host(opts: { settings?: Record<string, string>; route?: (u: URL) => Rep
       set: async (k, v) => void store.set(k, v),
       delete: async (k) => void store.delete(k),
       keys: async () => [...store.keys()],
+      secure: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] },
     },
     log: { debug() {}, info() {}, warn() {}, error() {} },
     settings: opts.settings ?? {},

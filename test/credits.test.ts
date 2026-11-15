@@ -22,7 +22,7 @@ function jsonHost(route: (path: string) => unknown): HostCapabilities {
         body: JSON.stringify(route(new URL(req.url).pathname)),
       }),
     },
-    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] },
+    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [], secure: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] } },
     log: { debug() {}, info() {}, warn() {}, error() {} },
     settings: {},
   };

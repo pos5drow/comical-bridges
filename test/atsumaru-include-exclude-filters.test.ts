@@ -23,7 +23,7 @@ function captureHost(): { host: HostCapabilities; urls: string[] } {
         };
       },
     },
-    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] },
+    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [], secure: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] } },
     log: { debug() {}, info() {}, warn() {}, error() {} },
     settings: {},
   };
@@ -37,7 +37,7 @@ function filterBy(url: string): string {
 describe("atsumaru genre filter include/exclude", () => {
   test("include produces genreIds:= clauses joined with &&", async () => {
     const { host, urls } = captureHost();
-    await factory(host).getSearchResults({
+    await factory(host).getSearchResults!({
       text: "",
       filters: [{ key: "genre", value: { include: ["g1", "g2"], exclude: [] } }],
     });
@@ -49,7 +49,7 @@ describe("atsumaru genre filter include/exclude", () => {
 
   test("exclude produces genreIds:!= clauses", async () => {
     const { host, urls } = captureHost();
-    await factory(host).getSearchResults({
+    await factory(host).getSearchResults!({
       text: "",
       filters: [{ key: "genre", value: { include: [], exclude: ["g1"] } }],
     });
@@ -60,7 +60,7 @@ describe("atsumaru genre filter include/exclude", () => {
 
   test("mixed include and exclude produce both clause types", async () => {
     const { host, urls } = captureHost();
-    await factory(host).getSearchResults({
+    await factory(host).getSearchResults!({
       text: "",
       filters: [{ key: "genre", value: { include: ["action"], exclude: ["horror"] } }],
     });
@@ -71,7 +71,7 @@ describe("atsumaru genre filter include/exclude", () => {
 
   test("empty include+exclude → no genreIds clause", async () => {
     const { host, urls } = captureHost();
-    await factory(host).getSearchResults({
+    await factory(host).getSearchResults!({
       text: "",
       filters: [{ key: "genre", value: { include: [], exclude: [] } }],
     });
@@ -80,7 +80,7 @@ describe("atsumaru genre filter include/exclude", () => {
 
   test("legacy string[] value is treated as all-include", async () => {
     const { host, urls } = captureHost();
-    await factory(host).getSearchResults({
+    await factory(host).getSearchResults!({
       text: "",
       filters: [{ key: "genre", value: ["action"] }],
     });
@@ -93,7 +93,7 @@ describe("atsumaru genre filter include/exclude", () => {
 describe("atsumaru tag filter include/exclude", () => {
   test("include produces tagIds:= clauses", async () => {
     const { host, urls } = captureHost();
-    await factory(host).getSearchResults({
+    await factory(host).getSearchResults!({
       text: "",
       filters: [{ key: "tag", value: { include: ["t1", "t2"], exclude: [] } }],
     });
@@ -105,7 +105,7 @@ describe("atsumaru tag filter include/exclude", () => {
 
   test("exclude produces tagIds:!= clauses", async () => {
     const { host, urls } = captureHost();
-    await factory(host).getSearchResults({
+    await factory(host).getSearchResults!({
       text: "",
       filters: [{ key: "tag", value: { include: [], exclude: ["t1"] } }],
     });
@@ -116,7 +116,7 @@ describe("atsumaru tag filter include/exclude", () => {
 
   test("mixed include and exclude produce both clause types", async () => {
     const { host, urls } = captureHost();
-    await factory(host).getSearchResults({
+    await factory(host).getSearchResults!({
       text: "",
       filters: [{ key: "tag", value: { include: ["want"], exclude: ["avoid"] } }],
     });
@@ -127,7 +127,7 @@ describe("atsumaru tag filter include/exclude", () => {
 
   test("blank/whitespace ids are skipped", async () => {
     const { host, urls } = captureHost();
-    await factory(host).getSearchResults({
+    await factory(host).getSearchResults!({
       text: "",
       filters: [{ key: "tag", value: { include: ["  "], exclude: ["  "] } }],
     });
@@ -138,7 +138,7 @@ describe("atsumaru tag filter include/exclude", () => {
 
   test("per-filter exclude coexists with persistent excludedTags", async () => {
     const { host, urls } = captureHost();
-    await factory(host).getSearchResults({
+    await factory(host).getSearchResults!({
       text: "",
       filters: [{ key: "tag", value: { include: ["want"], exclude: ["filter-avoid"] } }],
       excludedTags: ["persist-avoid"],

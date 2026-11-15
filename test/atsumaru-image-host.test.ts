@@ -18,7 +18,7 @@ function host(route: (url: string) => unknown): HostCapabilities {
         body: JSON.stringify(route(req.url) ?? {}),
       }),
     },
-    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] },
+    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [], secure: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] } },
     log: { debug() {}, info() {}, warn() {}, error() {} },
     settings: {},
   };
@@ -33,7 +33,7 @@ describe("Atsumaru image host", () => {
       { image: "https://cdn.atsu.moe/static/pages/v8Kbg/ch1/3.webp" }, // already on the CDN
     ];
     const bridge = factory(host((url) => (url.includes("/api/read/chapter") ? { readChapter: { pages } } : {})));
-    const result = await bridge.getChapterPages("v8Kbg", "ch1");
+    const result = await bridge.getChapterPages!("v8Kbg", "ch1");
     expect(result.map((p) => p.imageUrl)).toEqual([
       "https://cdn.atsu.moe/static/pages/scan1/ch1/aaa.avif",
       "https://cdn.atsu.moe/static/pages/v8Kbg/ch1/1.webp",

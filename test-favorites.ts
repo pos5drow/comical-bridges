@@ -39,7 +39,7 @@ if (!existsSync(bundle)) {
   process.exit(2);
 }
 
-const bridge = loadBridge({
+const bridge = await loadBridge({
   code: readFileSync(bundle, "utf8"),
   capabilities: createBunHost({ bridgeId: "atsumaru", settings: { username, password } }),
   expectedId: "atsumaru",
@@ -51,12 +51,12 @@ let added: string | undefined; // track for cleanup messaging on failure
 try {
   // 1. Baseline (this also forces the lazy login + exercises the core cookie jar).
   console.log(`logging in as "${username}" and reading favorites…`);
-  const baseline = await bridge.getFavorites!(1);
+  const baseline = await bridge.getFavorites!({});
   const baseIds = ids(baseline);
   console.log(`✓ login + getFavorites → ${baseline.items.length} existing favorite(s)`);
 
   // 2. Pick a trending series not already bookmarked.
-  const trending = await bridge.getListItems!("trending", 1);
+  const trending = await bridge.getListItems!("trending", {});
   const candidate = trending.items.find((s) => !baseIds.has(s.id));
   if (!candidate) {
     console.log("• every trending series is already in your favorites — skipping the mutation test.");
@@ -67,7 +67,7 @@ try {
   // 3. Add → verify present.
   await bridge.addFavorite!(candidate.id);
   added = candidate.id;
-  const afterAdd = await bridge.getFavorites!(1);
+  const afterAdd = await bridge.getFavorites!({});
   if (!ids(afterAdd).has(candidate.id)) {
     throw new Error("addFavorite did not show up in getFavorites");
   }
@@ -76,7 +76,7 @@ try {
   // 4. Remove → verify gone + list restored to baseline.
   await bridge.removeFavorite!(candidate.id);
   added = undefined;
-  const afterRemove = await bridge.getFavorites!(1);
+  const afterRemove = await bridge.getFavorites!({});
   const restoredIds = ids(afterRemove);
   if (restoredIds.has(candidate.id)) throw new Error("removeFavorite left the series in the list");
   const sameAsBaseline =

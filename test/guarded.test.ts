@@ -9,7 +9,7 @@ const page = (body: string, extra: Record<string, string> = {}) => ({ url: "http
 test("a challenge page is a web check: the page for a GET, the root for anything else, with the request's User-Agent", () => {
   const guards = standardGuards(["site.test"]);
   const get = { url: "https://www.site.test/list?p=2", headers: { "User-Agent": "UA/1" } };
-  const post = { url: "https://www.site.test/api", method: "POST", headers: { "user-agent": "UA/2" } };
+  const post = { url: "https://www.site.test/api", method: "POST" as const, headers: { "user-agent": "UA/2" } };
   const err = (fn: () => unknown) => {
     try {
       fn();

@@ -27,7 +27,7 @@ function host(route?: (req: HttpRequest, u: URL) => Reply | undefined) {
         return { url: req.url, status: 200, statusText: "OK", headers: {}, ...r };
       },
     },
-    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] },
+    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [], secure: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] } },
     log: { debug() {}, info() {}, warn() {}, error() {} },
     settings: {},
   };

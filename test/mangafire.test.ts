@@ -28,7 +28,7 @@ function host(settings: Record<string, string> = {}, over?: (url: string) => Htt
         return { url: req.url, status: 200, statusText: "OK", headers: {}, body };
       },
     },
-    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] },
+    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [], secure: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] } },
     log: { debug() {}, info() {}, warn() {}, error() {} },
     settings,
   };
@@ -100,7 +100,7 @@ describe("details, chapters, pages", () => {
     expect(info.description).toStartWith("From Yen Press:\nYoungwoo Shin");
     expect(info.description).not.toContain("<");
     expect(info.tagGroups?.map((g) => g.kind)).toEqual(["genre", "theme", "demographic"]);
-    expect(info.subtitle).toBeUndefined();
+    expect((info as { subtitle?: string }).subtitle).toBeUndefined();
   });
 
   test("chapters: every page of the list, duplicates dropped", async () => {

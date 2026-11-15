@@ -92,10 +92,10 @@ interface ChapterDto extends AltDto {
 interface Upload {
   id: number;
   n: number | null;
-  vol?: string | null;
+  vol?: string | null | undefined;
   label: string;
-  at?: number | null;
-  group?: GroupDto | null;
+  at?: number | null | undefined;
+  group?: GroupDto | null | undefined;
   partial: boolean;
   /** The upload this one is an alternative of (the site's pick), when it is one. */
   parent?: number;

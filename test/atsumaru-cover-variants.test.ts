@@ -48,7 +48,7 @@ function host(route: (url: string) => unknown): HostCapabilities {
         body: JSON.stringify(route(req.url) ?? {}),
       }),
     },
-    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] },
+    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [], secure: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] } },
     log: { debug() {}, info() {}, warn() {}, error() {} },
     settings: {},
   };
@@ -63,14 +63,14 @@ describe("Atsumaru cover variants", () => {
           : {},
       ),
     );
-    const { items } = await bridge.getSearchResults({ text: "q" });
-    expect(items[0].thumbnailUrl).toBe(`https://cdn.atsu.moe/static/${POSTER}-medium.webp`);
+    const { items } = await bridge.getSearchResults!({ text: "q" });
+    expect(items[0]!.thumbnailUrl).toBe(`https://cdn.atsu.moe/static/${POSTER}-medium.webp`);
   });
 
   test("browse cards use mediumImage, not the full-size image", async () => {
     const bridge = factory(host((url) => (url.includes("/api/home2/") ? { items: [LIST_ITEM] } : {})));
-    const { items } = await bridge.getListItems("recentlyUpdated");
-    expect(items[0].thumbnailUrl).toBe(`https://cdn.atsu.moe/static/${POSTER}-medium.webp`);
+    const { items } = await bridge.getListItems!("recentlyUpdated");
+    expect(items[0]!.thumbnailUrl).toBe(`https://cdn.atsu.moe/static/${POSTER}-medium.webp`);
   });
 
   test("the detail hero keeps largeImage from the nested poster object", async () => {
@@ -99,7 +99,7 @@ describe("Atsumaru cover variants", () => {
           : {},
       ),
     );
-    const { items } = await bridge.getSearchResults({ text: "q" });
-    expect(items[0].thumbnailUrl).toBe(`https://cdn.atsu.moe/static/${POSTER}.png`);
+    const { items } = await bridge.getSearchResults!({ text: "q" });
+    expect(items[0]!.thumbnailUrl).toBe(`https://cdn.atsu.moe/static/${POSTER}.png`);
   });
 });

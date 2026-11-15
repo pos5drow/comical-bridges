@@ -257,7 +257,7 @@ class MangagoBridge extends BridgeBase {
   }
 
   private async browse(
-    o: { sort: string; include?: string[]; exclude?: string[]; status?: string },
+    o: { sort: string; include?: string[]; exclude?: string[]; status?: string | undefined },
     cursor: string | undefined,
   ): Promise<PagedResults<SeriesEntry>> {
     const page = pageFromCursor(cursor);

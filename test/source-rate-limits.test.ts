@@ -24,7 +24,7 @@ function host(respond: (req: HttpRequest) => Partial<HttpResponse>): HostCapabil
         ...respond(req),
       }),
     },
-    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] },
+    storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [], secure: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] } },
     log: { debug() {}, info() {}, warn() {}, error() {} },
     settings: {},
   };
@@ -45,8 +45,8 @@ describe("mangadex at-home assignments", () => {
   test("a chapter re-resolved within five minutes reuses its assignment", async () => {
     asked = 0;
     const bridge = mangadexFactory(atHome());
-    const first = await bridge.getChapterPages("s", "c1");
-    const again = await bridge.getChapterPages("s", "c1");
+    const first = await bridge.getChapterPages!("s", "c1");
+    const again = await bridge.getChapterPages!("s", "c1");
     expect(asked).toBe(1);
     expect(again).toEqual(first);
     expect(first[1]?.imageUrl).toBe("https://node1.example/data/h/2.png");
@@ -56,11 +56,11 @@ describe("mangadex at-home assignments", () => {
     asked = 0;
     const bridge = mangadexFactory(atHome());
     setSystemTime(new Date("2026-01-01T00:00:00Z"));
-    await bridge.getChapterPages("s", "c1");
-    await bridge.getChapterPages("s", "c2");
+    await bridge.getChapterPages!("s", "c1");
+    await bridge.getChapterPages!("s", "c2");
     expect(asked).toBe(2);
     setSystemTime(new Date("2026-01-01T00:05:01Z"));
-    const fresh = await bridge.getChapterPages("s", "c1");
+    const fresh = await bridge.getChapterPages!("s", "c1");
     expect(asked).toBe(3);
     expect(fresh[0]?.imageUrl).toBe("https://node3.example/data/h/1.png");
   });

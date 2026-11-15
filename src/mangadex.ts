@@ -143,7 +143,7 @@ function coverUrl(mangaId: string, rels: Relationship[], size: 256 | 512 = 256):
 function creditList(rels: Relationship[], type: "author" | "artist"): Credit[] {
   return rels
     .filter((r) => r.type === type)
-    .map((r) => {
+    .map((r): Credit | undefined => {
       const name = r.attributes?.["name"];
       return typeof name === "string" && name ? { name, id: r.id } : undefined;
     })
@@ -409,7 +409,7 @@ class MangaDexBridge extends BridgeBase {
     return info;
   }
 
-  async getChapters(seriesId: string): Promise<Chapter[]> {
+  override async getChapters(seriesId: string): Promise<Chapter[]> {
     // MangaDex paginates chapters at 500 max. Fetch all pages.
     const all: ChapterData[] = [];
     let offset = 0;
@@ -468,7 +468,7 @@ class MangaDexBridge extends BridgeBase {
     return manga ? { seriesId: manga.id, chapterId: id } : null;
   }
 
-  async getChapterPages(seriesId: string, chapterId: string): Promise<Page[]> {
+  override async getChapterPages(seriesId: string, chapterId: string): Promise<Page[]> {
     void seriesId;
     const now = Date.now();
     const hit = this.atHome.get(chapterId);

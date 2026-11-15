@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Comical bridges \u2014 built locally against the sibling ../comical and published as a registry Comical can source.",
+  "description": "Comical bridges — built locally against the sibling ../comical and published as a registry Comical can source.",
   "scripts": {
     "build": "bun run build.ts",
     "evaluate": "bun run evaluate.ts",
     "audit": "bun run audit.ts",
-    "publish:registry": "bun run publish.ts"
+    "publish:registry": "bun run publish.ts",
+    "typecheck": "../comical/node_modules/.bin/tsc --noEmit -p ."
   },
   "dependencies": {
     "comical-bridge-kit": "github:pos5drow/comical-bridge-kit#8942182056498438887efbe2b16281e3733c1251"

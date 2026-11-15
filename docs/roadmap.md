@@ -76,7 +76,7 @@ isn't merged yet, and no bridge uses it yet.
 | Manga Ball | mangaball.com | bespoke (API, multilingual) | kei `all/mangaball`, aidoku `multi.mangaball` | 15 👍 request | — | shipped `0.1.0` (one bridge; Language setting) |
 | MangaDot | mangadot.net | bespoke | kei `all/mangadotnet`, aidoku `multi.mangadotnet` | EverythingMoe hub | JS-SOLVER? (kei uses a WebView — investigate) | todo |
 | Webtoons | webtoons.com | bespoke (official) | kei `all/webtoons`, aidoku `multi.webtoon` | #26 | motion comics not supported | shipped `0.1.0` (one bridge; Language setting) |
-| MANGA Plus | mangaplus.shueisha.co.jp | bespoke (official, protobuf API) | kei `all/mangaplus`, aidoku `multi.mangaplus` | in every app | IMG-BYTES (XOR key per page, known at page-list time) | todo |
+| MANGA Plus | mangaplus.shueisha.co.jp | bespoke (official, protobuf API) | kei `all/mangaplus`, aidoku `multi.mangaplus` | in every app | IMG-BYTES (XOR key per page, known at page-list time): done with processed page images; view token via `interceptImageRequest` | **shipped 0.1.0** |
 | Cubari | cubari.moe | bespoke (proxy for imgur/GitHub galleries) | kei `all/cubari`, aidoku `multi.cubari` | in every app | no catalogue (Keiyoushi lists a WebView history); MangaDex-backed links can fail upstream | shipped `0.1.0` (search = paste a link) |
 | Dynasty Scans | dynasty-scans.com | bespoke (JSON views) | kei `en/dynasty`, aidoku `en.dynastyscans` | yuri hub | list/search cards have no covers (the listing APIs carry none; Keiyoushi bundles a cover map) | shipped `0.1.0` |
 | BatCave | batcave.biz | bespoke (western comics) | kei `en/batcave`, aidoku `en.batcave` | #38 | JS-SOLVER? (kei uses a WebView — investigate) | todo |
@@ -151,6 +151,15 @@ to the browser's User-Agent and IP. What it would take:
   (`/tc/{id}-…`). Any `/library/{type}/{id}/{slug}` redirects to the canonical page, so the id is the
   number alone. Every chapter (the folded ones too) is on the series page. Nothing needs a Referer,
   so `images` isn't declared and covers load directly.
+
+- **MANGA Plus (2026-11-15):** the API answers protobuf only (no JSON variant), so the bridge
+  reads it with a small schema-less wire reader (`src/core/protobuf.ts`) over `responseType:
+  "base64"`. The first bridge whose public pages need processing: each page is XOR'd with its own
+  key (in `Page.process.context`, turned into an `xor` transform by `decodePageImage`) and needs the
+  chapter's view token as a header, which rides the URL fragment to `interceptImageRequest`. Only
+  the page host (`jumpg-assets3`) is intercepted so covers load directly; a page on any other host
+  makes `getChapterPages` throw, so a CDN move shows up in the nightly audit. Verified end to end
+  through the loader, `resolveImageRequest` and `processPageImage` on the built bundle.
 
 ## Suggested build order
 

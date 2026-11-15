@@ -36,5 +36,6 @@ export const AUDIT: Record<string, BridgeAuditConfig> = {
   dynasty: { searchQuery: "citrus" },
   webtoons: { searchQuery: "tower" },
   zonatmo: { searchQuery: "solo leveling" },
+  mangaplus: { searchQuery: "one piece" },
   cubari: { searchQuery: "https://raw.githubusercontent.com/catgirl-v/cubari/d/catgirl-v/main/series/Fawnduu/My%20Dragon%20Girlfriend/cubari.json" },
 };

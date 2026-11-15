@@ -42,6 +42,7 @@ const bridges: Array<{ id: string; src: string }> = [
   { id: "dynasty", src: "dynasty.ts" },
   { id: "webtoons", src: "webtoons.ts" },
   { id: "zonatmo", src: "zonatmo.ts" },
+  { id: "mangaplus", src: "mangaplus.ts" },
 ];
 
 for (const { id, src } of bridges) {

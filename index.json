@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T07:46:23.224Z",
+  "updated": "2026-11-15T07:50:53.133Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -298,6 +298,33 @@
       "signature": "lzIOEq6J-g5QaPCZkw29loNMdMmLPazKv-DXKKdAmXaBdSPNMX1z-XA4fhMK10gepf7zd3DmMrp32dsJd7W1CQ"
     },
     {
+      "id": "pos5drow.mangataro",
+      "name": "MangaTaro",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangataro/0.1.0/bridge.js",
+      "sha256": "6601b8b746a65254b87db0091c07c3578d37978836af3e83075409d0fdb09a85",
+      "iconUrl": "https://mangataro.org/favicon.ico",
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "linkHosts": [
+        "mangataro.org"
+      ],
+      "signature": "2veDK5qhniDjS7sOTPPKbFm0onGvkeCFQO4bhXQaHbRQmsoMHOxm1AW5AUHuFfoGvBID30_lFb-vYstu8JcuBg"
+    },
+    {
       "id": "pos5drow.manhwaweb",
       "name": "ManhwaWeb",
       "version": "0.1.1",
@@ -362,6 +389,33 @@
         "olympusbiblioteca.com"
       ],
       "signature": "BJzgeCVvfDFAeroHCdXoA0L51udIohtRaiFXes-XdL1k-06uTDKuQ_aDZKT40hz8d-qx9Um2IXCllGdnjFO0Bw"
+    },
+    {
+      "id": "pos5drow.roliascan",
+      "name": "Rolia Scan",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.roliascan/0.1.0/bridge.js",
+      "sha256": "9332dbf3a8cbcc8ccf8610c3eaf307f64b12d01442e1bea71d09382de0b107c2",
+      "iconUrl": "https://roliascan.com/favicon.ico",
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "linkHosts": [
+        "roliascan.com"
+      ],
+      "signature": "VUMqC6-vPrYNx-5YDC-3htnBo_tcmihYWq4ZeVgk7D1YRJLadcewd91EyvPpx-oojE7H5Vyz96Yj0AwHes08AQ"
     },
     {
       "id": "pos5drow.toonilyme",

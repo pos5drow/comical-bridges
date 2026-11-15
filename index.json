@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T07:50:53.133Z",
+  "updated": "2026-11-15T07:55:18.420Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -69,6 +69,33 @@
         "atsu.moe"
       ],
       "signature": "UuhAMAQJKu-Smd4YqVbbvraVIyPkJA9bsV183VRaKehZht5V6hTRzDEebxkxLX2SND76pViDwnXWvbcWrGtiBA"
+    },
+    {
+      "id": "pos5drow.kingofshojo",
+      "name": "King of Shojo",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.kingofshojo/0.1.0/bridge.js",
+      "sha256": "bb0bbd7768a5ed8df7ffc2171ca5a6344c100e2057c1a97b46c0556d88f9679e",
+      "iconUrl": "https://kingofshojo.com/favicon.ico",
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "linkHosts": [
+        "kingofshojo.com"
+      ],
+      "signature": "zVvxvDtOcdHs3nfDvSAwAOsGSMnCQWQARRkdklO4wTaj4KzJJVu_UzPm1mpx1ikuc_qvebp2dwSXczLdRnfXCA"
     },
     {
       "id": "pos5drow.mangabat",

@@ -28,6 +28,9 @@ const bridges: Array<{ id: string; src: string }> = [
   { id: "asurascans", src: "asurascans.ts" },
   { id: "olympus", src: "olympus.ts" },
   { id: "manhwaweb", src: "manhwaweb.ts" },
+  // MadTheme engine (src/engines/madtheme.ts) — a change there changes both bundles.
+  { id: "mangak", src: "mangak.ts" },
+  { id: "toonilyme", src: "toonilyme.ts" },
 ];
 
 for (const { id, src } of bridges) {

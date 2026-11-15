@@ -24,4 +24,6 @@ export const AUDIT: Record<string, BridgeAuditConfig> = {
   asurascans: { searchQuery: "solo" },
   olympus: { searchQuery: "sabueso" },
   manhwaweb: { searchQuery: "solo" },
+  mangak: { searchQuery: "solo leveling" },
+  toonilyme: { searchQuery: "class" },
 };

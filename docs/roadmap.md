@@ -67,8 +67,8 @@ isn't merged yet, and no bridge uses it yet.
 | Mangago | mangago.me | bespoke | kei `en/mangago`, aidoku `en.mangago` | #12 | IMG-TILES + encrypted image list | todo |
 | King of Shojo | kingofshojo.com | **mangathemesia** | kei `en/kingofshojo`, aidoku `en.kingofshojo` | #21 | — | todo |
 | Flame Comics | flamecomics.xyz | bespoke (small) | kei `en/flamecomics`, aidoku `en.flamecomics` | in every app | — | todo |
-| MangaK (ex-MangaBuddy) | mangak.io | **mangak** (MadTheme) | kei `en/mangabuddy`, aidoku `en.mangak` | #44 | — | todo |
-| Toonily.me | toontop.io | **mangak** (MadTheme) | kei `en/toonilyme`, aidoku `en.toonilyme` | — | — | todo |
+| MangaK (ex-MangaBuddy) | mangak.io (API at api.mangak.io) | **madtheme** | kei `en/mangabuddy`, aidoku `en.mangak` | #44 | — | shipped `0.1.0` |
+| Toonily.me | toontop.io (API at api.toontop.io) | **madtheme** | kei `en/toonilyme`, aidoku `en.toonilyme` | — | — | shipped `0.1.0` |
 | MangaTaro | mangataro.org | **mangataro** | kei `en/mangataro` | 27 👍 request | — | todo |
 | Rolia Scan | roliascan.com | **mangataro** | kei `en/roliascan` | #19 — *added: nearly free once the MangaTaro engine exists* | — | todo |
 | Toonkotsu | toonkotsu.com | bespoke | kei `en/toonkotsu`, aidoku `en.toonkotsu` | EverythingMoe "new" | IMG-BYTES (AES-CTR, key in the URL) | todo |
@@ -103,6 +103,11 @@ isn't merged yet, and no bridge uses it yet.
   premium chapters (paid), and a premium chapter without an account comes back with no pages, so
   free reading needs no processing. The bridge marks tiled pages anyway. Asura is **not** a test of
   processed images: that needs a source whose public pages are scrambled.
+
+- **MadTheme (2026-11-15):** now a full JSON API at `api.<host>` (search, details, chapters, pages
+  by short id), so no scraping. Images sit on rotating `rx.qvzr?.org` hosts that need the site's
+  Referer, all 26 declared. Chapter `number` from the API is a list position, so the number is
+  parsed from the name. Adult titles are rated via `is_adult` / `content_rating`.
 
 ## Suggested build order
 

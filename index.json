@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T08:13:15.060Z",
+  "updated": "2026-11-15T08:15:51.196Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -93,6 +93,32 @@
         "githubusercontent.com"
       ],
       "signature": "zamzaRWq9HNC4qQGRct2GWuFVTsRaAAbj1hCzgIhs6FV60NXFqSJzzZESe0CnWU2rELn0sau8rMcpjBnbyxYBg"
+    },
+    {
+      "id": "pos5drow.dynasty",
+      "name": "Dynasty Scans",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.dynasty/0.1.0/bridge.js",
+      "sha256": "96bba09ec3546ba6078b6a43ed2058a480ab3ca6b95abae175e9a1cac30ae362",
+      "iconUrl": "https://dynasty-scans.com/favicon.ico",
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "linkHosts": [
+        "dynasty-scans.com"
+      ],
+      "signature": "HNs5fc6A-ZgDwiLeCPlVxDXZkh8dENjJ3LPDCdpZj68-f2keg1LEOYbk0uuEXKeq_IpunD64g5UbO79eqWFMDw"
     },
     {
       "id": "pos5drow.flamecomics",

@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T08:09:32.122Z",
+  "updated": "2026-11-15T08:13:15.060Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -69,6 +69,30 @@
         "atsu.moe"
       ],
       "signature": "UuhAMAQJKu-Smd4YqVbbvraVIyPkJA9bsV183VRaKehZht5V6hTRzDEebxkxLX2SND76pViDwnXWvbcWrGtiBA"
+    },
+    {
+      "id": "pos5drow.cubari",
+      "name": "Cubari",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "search"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.cubari/0.1.0/bridge.js",
+      "sha256": "6fdcc04711f9a2f4e7b6e8a1dec212ce20cae1a73fcdd389397fe95e0c910436",
+      "iconUrl": "https://cubari.moe/favicon.ico",
+      "linkHosts": [
+        "cubari.moe",
+        "imgur.com",
+        "imgchest.com",
+        "catbox.moe",
+        "githubusercontent.com"
+      ],
+      "signature": "zamzaRWq9HNC4qQGRct2GWuFVTsRaAAbj1hCzgIhs6FV60NXFqSJzzZESe0CnWU2rELn0sau8rMcpjBnbyxYBg"
     },
     {
       "id": "pos5drow.flamecomics",

@@ -91,6 +91,31 @@ isn't merged yet, and no bridge uses it yet.
 | LectorXD | lectorxd.com | bespoke | kei `es/lectorxd` | #23 (+32 places in a month) | — | todo |
 | ZonaTMO | zonatmo.org (+ zonatmo.to) | bespoke (TMO clone) | kei `es/zonatmoorgunoriginal`, `es/zonatmoto` | #37; fills the TuMangaOnline gap | domain churn, so plan for mirrors | todo |
 
+## Blocked or partly blocked: what would unblock them
+
+Revisit at the end. Each entry says what is missing and where the work would go: **bridge** (this
+repo), **comical** (contract/core/host), or **app** (comical-app).
+
+| Source | State | What's missing | What would unblock it |
+|---|---|---|---|
+| Kagane | blocked | 1. Every endpoint, API included, answers a Cloudflare managed challenge, even from a home IP. 2. Pages are JPEG XL (`.jxl`), which Android's image stack (Glide) can't decode; iOS 17+ can. | 1. **CF-CLEARANCE** (below). 2. **app:** a JPEG XL decoder on Android, or test whether the `datasaver` page variant is served as WebP. Then the bridge needs integrity + per-book page tokens, both plain API calls. |
+| Mangakakalot, Manganato, Mangabat | shipped, search partly blocked | Search (`/search/story/…`) is challenged by Cloudflare bot scoring at random; browse, details and reading work. | **CF-CLEARANCE** (below). Nothing else. |
+| Asura Scans | shipped, premium not readable | Premium and early-access chapters need a paid account; without one the API returns no pages, so they are hidden. | **bridge:** sign-in (`web-login` setting capturing the `access_token` cookie), then the premium endpoint with `Authorization` + `X-Page-Token`; its pages arrive tiled and are already handled by processed page images. Needs a subscriber account to build and verify. |
+| MangaTaro | shipped, partly empty | Some titles only have non-English (pt-br) chapters, and many popular licensed titles are taken down ("Chapter not available"). | Takedowns: nothing to do. Languages: **bridge** could declare the other languages and tag chapters with `languageCode`. |
+| Comix | not started | 1. Requests are signed by the site's own obfuscated JS (Keiyoushi runs it in a WebView). 2. Images are XOR'd and grid-scrambled, with the parameters in the response headers. | 1. **JS-SOLVER** investigation: port the signer to TypeScript if feasible. 2. Already covered by processed page images (`decodePageImage` reads the headers, `layoutPageImage` the grid). |
+| MangaFire | not started | A VRF token computed by the site's JS (Keiyoushi uses a WebView solver page). | **JS-SOLVER**: port the VRF algorithm to TypeScript. |
+| MangaDot, BatCave | not started | Keiyoushi uses a WebView for something; not yet investigated. | **JS-SOLVER** investigation; may turn out to be only a Cloudflare cookie. |
+| ReadComicOnline | not started | Obfuscated image URLs; Keiyoushi dropped the source. | Investigate once everything else is done. |
+
+**Cross-cutting: CF-CLEARANCE.** Comical has no way to pass a Cloudflare challenge. Keiyoushi opens
+the site in a WebView, lets the challenge run, and reuses the `cf_clearance` cookie, which is bound
+to the browser's User-Agent and IP. What it would take:
+- **comical:** a way for a bridge to say "this site needs clearance". This could be a setting kind
+  like `web-login` (open the site, wait for `cf_clearance`, store the cookie), or a host-level
+  handler that reacts to the challenge error the guard already raises.
+- **host:** send that cookie, and the same User-Agent the browser used, on the bridge's requests.
+- **app:** the web-view sheet, reusing what `web-login` already does.
+
 ## Notes from building
 
 - **MangaBox (2026-11-14):** the three sites are one catalogue on one CDN (`*.2xstorage.com`) with

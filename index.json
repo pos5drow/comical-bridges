@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T22:45:35.776Z",
+  "updated": "2026-11-15T22:52:41.566Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -42,7 +42,7 @@
     {
       "id": "pos5drow.atsumaru",
       "name": "Atsumaru",
-      "version": "0.4.5",
+      "version": "0.4.6",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -57,8 +57,8 @@
         "favorites",
         "exclude-tags"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.atsumaru/0.4.5/bridge.js",
-      "sha256": "a47ffe2031ec4ebf9138b33045cc866ac29e3c42cd5df61e1e8f8efecba3dcfc",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.atsumaru/0.4.6/bridge.js",
+      "sha256": "c947c8d2914e092d82a5630c84eaedcc0e2e042a7da0540cd9c51eceeee3f2f4",
       "iconUrl": "https://atsu.moe/favicon/android-chrome-512x512.png",
       "ratings": true,
       "assetRateLimit": {
@@ -68,7 +68,7 @@
       "linkHosts": [
         "atsu.moe"
       ],
-      "signature": "UuhAMAQJKu-Smd4YqVbbvraVIyPkJA9bsV183VRaKehZht5V6hTRzDEebxkxLX2SND76pViDwnXWvbcWrGtiBA"
+      "signature": "czp4SC4DvAocFfibtYbTf0LylKwWZjxbuvydKQLBEg6q9gjM7M8Q93JCnLhwb07XMN2UUSnk4KKInTE9AS-EAQ"
     },
     {
       "id": "pos5drow.batcave",
@@ -1078,7 +1078,7 @@
     {
       "id": "pos5drow.zonatmo",
       "name": "ZonaTMO",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "contractVersion": "2.1.0",
       "languages": [
         "es"
@@ -1091,8 +1091,8 @@
         "sort",
         "content-rating"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.zonatmo/0.1.2/bridge.js",
-      "sha256": "860ecb9c4b9bfe7e70d64244315f23093be054b9cc17529c8e92c345aa674068",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.zonatmo/0.1.3/bridge.js",
+      "sha256": "39350efa15671c81af6e4a0e58cb8d07eca9438e288e097ab88de07054497631",
       "iconUrl": "https://zonatmo.org/favicon.ico",
       "assetRateLimit": {
         "maxConcurrent": 4,
@@ -1101,7 +1101,7 @@
       "linkHosts": [
         "zonatmo.org"
       ],
-      "signature": "E_1VzcMfFJqpqLOBhzLBrYYPzR8Q1Z0VySRNGq2sRaYMB-JTFPD0o_6ULZ_Z_JXdQCN77LDioSrvzmLzeleiAg"
+      "signature": "KbF3vksyFr-9uYGMXs3f2STw0rXdKmpT0mxGOQy244GdbBYIzvDBexlCjUwnbNBUe5WswIEmCytNdo_vKxyLBQ"
     }
   ],
   "publicKey": "_w_wfsGg94fRKmD6kq4mIHQYReFo7qPcZ9IMwhy0L24",

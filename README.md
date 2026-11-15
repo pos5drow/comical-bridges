@@ -31,8 +31,30 @@ inconclusive sort/filter probe — never counted against a bridge). Per-check re
 | `atsumaru` | ⚠ (5✓ 6⚠ 0✗) | 6/7 | — | — |
 | `weebcentral` | ⚠ (4✓ 5⚠ 0✗) | 4/4 | — | — |
 | `mangadex` | ⚠ (10✓ 1⚠ 0✗) | 3/3 | — | Cloudflare challenges datacenter (runner) IPs |
+| `mangakakalot` | ⚠ (8✓ 4⚠ 0✗) | 5/5 | — | search is challenged by Cloudflare bot scoring |
+| `manganato` | ⚠ (8✓ 4⚠ 0✗) | 5/5 | — | search is challenged by Cloudflare bot scoring |
+| `mangabat` | ✓ (13✓ 0⚠ 0✗ 2⊘) | 5/5 | — | search is challenged by Cloudflare bot scoring |
+| `asurascans` | ✓ (14✓ 0⚠ 0✗) | 4/5 | 233 KB (1003×1431) | — |
+| `olympus` | ⚠ (4✓ 5⚠ 0✗) | 5/5 | — | — |
+| `manhwaweb` | ⚠ (14✓ 1⚠ 0✗) | 4/5 | — | — |
+| `mangak` | ✓ (13✓ 0⚠ 0✗ 1⊘) | 4/5 | — | — |
+| `toonilyme` | ✓ (13✓ 0⚠ 0✗ 1⊘) | 4/5 | — | — |
+| `mangataro` | ⚠ (10✓ 2⚠ 0✗ 2⊘) | 4/4 | 545 KB (1149×1474) | — |
+| `roliascan` | ✓ (14✓ 0⚠ 0✗) | 4/4 | 1017 KB (978×1385) | — |
+| `kingofshojo` | ⚠ (13✓ 1⚠ 0✗ 1⊘) | 4/4 | 120 KB (600×1000) | — |
+| `flamecomics` | ⚠ (2✓ 4⚠ 0✗) | 3/3 | — | — |
+| `mangaball` | ⚠ (5✓ 5⚠ 0✗) | 5/6 | — | — |
+| `dynasty` | ⚠ (12✓ 3⚠ 0✗) | 3/3 | — | — |
+| `webtoons` | ✓ (13✓ 0⚠ 0✗) | 4/5 | — | — |
+| `zonatmo` | ⚠ (4✓ 5⚠ 0✗) | 4/5 | — | — |
+| `batcave` | ⚠ (4✓ 5⚠ 0✗) | 4/4 | — | DLE Guard wants a browser check first |
+| `mangaplus` | ✓ (13✓ 0⚠ 0✗) | 4/4 | 46 KB (352×528) | — |
+| `toonkotsu` | ⚠ (4✓ 5⚠ 0✗) | 4/5 | — | Cloudflare challenges the Bun/Node TLS fingerprint |
+| `mangago` | ⚠ (5✓ 5⚠ 0✗) | 5/6 | — | Cloudflare challenges the Bun/Node TLS fingerprint |
+| `mangafire` | ⚠ (5✓ 5⚠ 0✗) | 5/6 | — | — |
+| `cubari` | ⚠ (6✓ 1⚠ 0✗) | 1/1 | 30 KB (400×600) | — |
 
-_Updated 2026-11-05 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-11-15 by the nightly live audit ([`audit.ts`](audit.ts))._
 <!-- BRIDGE-STATUS:END -->
 
 ## Develop

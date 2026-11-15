@@ -148,7 +148,7 @@ class AsuraScansBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.asurascans",
     name: "Asura Scans",
-    version: "0.1.1",
+    version: "0.1.2",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
@@ -168,7 +168,7 @@ class AsuraScansBridge extends BridgeBase {
   private genres: GenreDto[] | undefined;
 
   protected override async request(req: Parameters<BridgeBase["request"]>[0]): Promise<HttpResponse> {
-    return guardResponse(await super.request(req), this.guards);
+    return guardResponse(await super.request(req), this.guards, req);
   }
 
   private async api<T>(path: string): Promise<T> {

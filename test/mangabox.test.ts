@@ -7,7 +7,7 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { HostCapabilities, HttpRequest, HttpResponse } from "@comical/contract";
-import { parseRateLimited } from "@comical/sdk";
+import { parseChallenge } from "@comical/sdk";
 import mangabat from "../src/mangabat.ts";
 import mangakakalot from "../src/mangakakalot.ts";
 import manganato from "../src/manganato.ts";
@@ -162,10 +162,12 @@ describe("domains and guards", () => {
     expect(b.requests[0]!.url).toBe("https://www.newnato.io/manga-list/latest-manga?page=1");
   });
 
-  test("a Cloudflare challenge is a back-off, not an empty result", async () => {
+  test("a Cloudflare challenge is a web check to pass, with the request's User-Agent, not an empty result", async () => {
     const { caps } = host(() => ({ status: 403, headers: { "cf-mitigated": "challenge" }, body: "<title>Just a moment...</title>" }));
     const err = await mangabat(caps).getSearchResults!({ text: "spy" }).catch((e: Error) => e);
-    expect(parseRateLimited((err as Error).message)?.retryAfterMs).toBe(300000);
+    const challenge = parseChallenge((err as Error).message);
+    expect(challenge?.url).toStartWith("https://www.mangabats.com/");
+    expect(challenge?.userAgent).toMatch(/^Mozilla\/5\.0/);
   });
 
   test("a redirect off the site's domains says it moved", async () => {

@@ -92,7 +92,7 @@ class FlameComicsBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.flamecomics",
     name: "Flame Comics",
-    version: "0.1.0",
+    version: "0.1.1",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
@@ -110,7 +110,7 @@ class FlameComicsBridge extends BridgeBase {
   private buildId: string | undefined;
 
   protected override async request(req: Parameters<BridgeBase["request"]>[0]): Promise<HttpResponse> {
-    return guardResponse(await super.request(req), this.guards);
+    return guardResponse(await super.request(req), this.guards, req);
   }
 
   private async readBuildId(): Promise<string> {

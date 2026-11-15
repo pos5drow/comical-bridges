@@ -211,7 +211,7 @@ class MangaFireBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.mangafire",
     name: "MangaFire",
-    version: "0.1.0",
+    version: "0.1.1",
     contractVersion: "2.1.0",
     languages: ["en", "es", "es-419", "fr", "ja", "pt", "pt-BR"],
     nsfw: false,
@@ -243,7 +243,7 @@ class MangaFireBridge extends BridgeBase {
   }
 
   protected override async request(req: Parameters<BridgeBase["request"]>[0]): Promise<HttpResponse> {
-    return guardResponse(await super.request(req), this.guards);
+    return guardResponse(await super.request(req), this.guards, req);
   }
 
   private async api<T>(path: string, params: [string, string][] = []): Promise<T> {

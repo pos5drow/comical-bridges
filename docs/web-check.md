@@ -3,6 +3,28 @@
 Investigated 2026-11-15. Eight sources are blocked on it (see `roadmap.md`, "Skipped, and why"),
 and it would also cover MangaFire's picture captcha and Toonkotsu's reading check.
 
+## Status (2026-11-15)
+
+Built and pushed, following the derived design below:
+
+- **comical** 0356090: the challenge marker; detection in core's network layer
+  (`cf-mitigated: challenge`, the host held while a check waits); core's cookie jar as the one
+  store (RFC 6265 domains, paths and expiry, kept in the bridge's secure storage, imports added to
+  a bridge's own `Cookie`); 403 `{ challenge }`; `POST`/`DELETE /bridges/:id/cookies`; routed
+  images carry the session. e7d3da4: hosts can pass their own `fetch`.
+- **comical-app** 9bacb849: `data/web-check.ts`; the transport runs a check and retries once; the
+  phone's `WebCheckHost` (hidden web view first, the same view full screen when the check wants a
+  person, done when a clearance cookie changes); Verify in the retry block; the desktop shell's
+  hidden window; Chromium's network for the desktop host behind `COMICAL_CHROMIUM_NETWORK=1`.
+- **Bridge repos:** the guard adapter turns the kit's `challenge` verdict into the same marker,
+  with the request's User-Agent; every bridge using it got a patch bump.
+
+Still to do: an on-device run against a real challenged site (iOS first, then Android, where the
+WebView and OkHttp have different TLS fingerprints); turning the desktop's Chromium network on
+by default once a build shows Set-Cookie and User-Agent come through it; page-storage values for
+HDoujin and Schale (not built: point 14); and building the blocked bridges, which needs pages or
+a HAR from a browser, or probing through a session the user has cleared.
+
 ## The idea
 
 When a site answers with a bot check, the app opens the site in a web view and **the user passes

@@ -105,7 +105,7 @@ export class MangaThemesiaBridge extends BridgeBase {
   }
 
   protected override async request(req: Parameters<BridgeBase["request"]>[0]): Promise<HttpResponse> {
-    return guardResponse(await super.request(req), standardGuards([this.siteHostName, ...(this.site.refererImageHosts ?? [])]));
+    return guardResponse(await super.request(req), standardGuards([this.siteHostName, ...(this.site.refererImageHosts ?? [])]), req);
   }
 
   private async page(url: string): Promise<{ $: CheerioRoot; res: HttpResponse }> {

@@ -93,7 +93,7 @@ class OlympusBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.olympus",
     name: "Olympus Scanlation",
-    version: "0.1.1",
+    version: "0.1.2",
     contractVersion: "2.1.0",
     languages: ["es"],
     nsfw: false,
@@ -162,7 +162,7 @@ class OlympusBridge extends BridgeBase {
   protected override async request(req: Parameters<BridgeBase["request"]>[0]): Promise<HttpResponse> {
     const res = await super.request(req);
     const hosts = ["olympusxyz.com", "olympusbiblioteca.com", "imagesolymp.xyz", siteHost(await this.base()) ?? ""];
-    return guardResponse(res, standardGuards(hosts.filter(Boolean)));
+    return guardResponse(res, standardGuards(hosts.filter(Boolean)), req);
   }
 
   private async api<T>(path: string): Promise<T> {

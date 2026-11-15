@@ -4,7 +4,7 @@ import { mangaTaro } from "./engines/mangataro";
 export default mangaTaro({
   id: "pos5drow.roliascan",
   name: "Rolia Scan",
-  version: "0.1.0",
+  version: "0.1.1",
   base: "https://roliascan.com",
   imageHosts: ["roliascan.org"],
   apiPagesPerPage: 5,

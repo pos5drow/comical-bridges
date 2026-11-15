@@ -118,7 +118,7 @@ class MangaBallBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.mangaball",
     name: "Manga Ball",
-    version: "0.1.0",
+    version: "0.1.1",
     contractVersion: "2.1.0",
     languages: LANGUAGES.map(([code]) => code),
     nsfw: false,
@@ -152,7 +152,7 @@ class MangaBallBridge extends BridgeBase {
   }
 
   protected override async request(req: Parameters<BridgeBase["request"]>[0]): Promise<HttpResponse> {
-    return guardResponse(await super.request(req), this.guards);
+    return guardResponse(await super.request(req), this.guards, req);
   }
 
   private async api<T>(path: string, body?: unknown): Promise<T> {

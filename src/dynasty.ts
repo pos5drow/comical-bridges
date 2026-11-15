@@ -96,7 +96,7 @@ class DynastyBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.dynasty",
     name: "Dynasty Scans",
-    version: "0.1.0",
+    version: "0.1.1",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
@@ -110,7 +110,7 @@ class DynastyBridge extends BridgeBase {
   private readonly guards = standardGuards(["dynasty-scans.com"]);
 
   protected override async request(req: Parameters<BridgeBase["request"]>[0]): Promise<HttpResponse> {
-    return guardResponse(await super.request(req), this.guards);
+    return guardResponse(await super.request(req), this.guards, req);
   }
 
   private async json<T>(path: string): Promise<T> {

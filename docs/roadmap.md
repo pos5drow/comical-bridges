@@ -161,7 +161,8 @@ Everything on the list is shipped, blocked or skipped. What's left, biggest firs
 
 1. **An in-app web check (CF-CLEARANCE)** — unblocks Kagane, OniSaga, LectorXD, MangaDot, BatCave,
    and in the NSFW repo MyReadingManga, HDoujin and Schale Network; also covers MangaFire's captcha
-   and Toonkotsu's reading check. Being investigated: see `docs/web-check.md`.
+   and Toonkotsu's reading check. **Infrastructure built** (comical, comical-app, the bridges' guard
+   adapter); next is a device test and the blocked bridges themselves. See `docs/web-check.md`.
 2. **Phone checks** (cheap, and the real test for these):
    - Toonkotsu, Mangago, IMHentai, Hentai2Read: Node/Bun are fingerprint-blocked, so they're only
      verified against captured responses. Open each in the app on Android and iOS.

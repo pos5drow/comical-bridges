@@ -80,7 +80,7 @@ class WebtoonsBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.webtoons",
     name: "WEBTOON",
-    version: "0.1.0",
+    version: "0.1.1",
     contractVersion: "2.1.0",
     languages: ["en", "es", "fr", "de", "id", "th", "zh-Hant"],
     nsfw: false,
@@ -106,7 +106,7 @@ class WebtoonsBridge extends BridgeBase {
   }
 
   protected override async request(req: Parameters<BridgeBase["request"]>[0]): Promise<HttpResponse> {
-    return guardResponse(await super.request(req), this.guards);
+    return guardResponse(await super.request(req), this.guards, req);
   }
 
   /** The age gate and GDPR prompt are cookies the site sets on a click; send them up front. */

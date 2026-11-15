@@ -127,7 +127,7 @@ class MangaPlusBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.mangaplus",
     name: "MANGA Plus",
-    version: "0.1.0",
+    version: "0.1.1",
     contractVersion: "2.1.0",
     languages: ["en", "es", "fr", "id", "pt-BR", "ru", "th", "de", "vi"],
     nsfw: false,
@@ -178,7 +178,7 @@ class MangaPlusBridge extends BridgeBase {
   }
 
   protected override async request(req: Parameters<BridgeBase["request"]>[0]): Promise<HttpResponse> {
-    return guardResponse(await super.request(req), this.guards);
+    return guardResponse(await super.request(req), this.guards, req);
   }
 
   /** One API call: the response's `success` message, or the site's own error text. */

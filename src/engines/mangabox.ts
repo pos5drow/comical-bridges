@@ -350,7 +350,7 @@ export class MangaBoxBridge extends BridgeBase {
   }
 
   protected override async request(req: Parameters<BridgeBase["request"]>[0]): Promise<HttpResponse> {
-    return guardResponse(await super.request(req), this.guards());
+    return guardResponse(await super.request(req), this.guards(), req);
   }
 
   private headers(extra: Record<string, string> = {}): Record<string, string> {

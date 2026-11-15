@@ -69,8 +69,8 @@ isn't merged yet, and no bridge uses it yet.
 | Flame Comics | flamecomics.xyz | bespoke (small) | kei `en/flamecomics`, aidoku `en.flamecomics` | in every app | — | todo |
 | MangaK (ex-MangaBuddy) | mangak.io (API at api.mangak.io) | **madtheme** | kei `en/mangabuddy`, aidoku `en.mangak` | #44 | — | shipped `0.1.1` |
 | Toonily.me | toontop.io (API at api.toontop.io) | **madtheme** | kei `en/toonilyme`, aidoku `en.toonilyme` | — | — | shipped `0.1.1` |
-| MangaTaro | mangataro.org | **mangataro** | kei `en/mangataro` | 27 👍 request | — | todo |
-| Rolia Scan | roliascan.com | **mangataro** | kei `en/roliascan` | #19 — *added: nearly free once the MangaTaro engine exists* | — | todo |
+| MangaTaro | mangataro.org | **mangataro** | kei `en/mangataro` | 27 👍 request | many top licensed titles are taken down on the site (shown as such); English chapters only | shipped `0.1.0` |
+| Rolia Scan | roliascan.com | **mangataro** | kei `en/roliascan` | #19 — *added: nearly free once the MangaTaro engine exists* | — | shipped `0.1.0` |
 | Toonkotsu | toonkotsu.com | bespoke | kei `en/toonkotsu`, aidoku `en.toonkotsu` | EverythingMoe "new" | IMG-BYTES (AES-CTR, key in the URL) | todo |
 | OniSaga | onisaga.com | bespoke | kei `all/onisaga` | 16 👍 request | — | todo |
 | Manga Ball | mangaball.com | bespoke | kei `all/mangaball`, aidoku `multi.mangaball` | 15 👍 request | — | todo |
@@ -108,6 +108,14 @@ isn't merged yet, and no bridge uses it yet.
   by short id), so no scraping. Images sit on rotating `rx.qvzr?.org` hosts that need the site's
   Referer, all 26 declared. Chapter `number` from the API is a list position, so the number is
   parsed from the name. Adult titles are rated via `is_adult` / `content_rating`.
+
+- **MangaTaro (2026-11-15):** WordPress plus custom endpoints. The chapter list needs an MD5 token
+  tied to the server clock (kit gained `md5`; a 403 is retried once against the Date header). Many
+  of MangaTaro's most popular titles have chapters taken down ("Chapter not available"), so its
+  lists open on Latest. It's multilingual: some titles have only Portuguese chapters and show none.
+- **Kit updates no longer re-version bridges (2026-11-15):** Bun's `//# debugId=` hashes every
+  source it read, including tree-shaken ones, so build.ts drops it. Builds are now byte-identical
+  across kit pins for bridges that don't use the changed code.
 
 ## Suggested build order
 

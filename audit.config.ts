@@ -26,4 +26,6 @@ export const AUDIT: Record<string, BridgeAuditConfig> = {
   manhwaweb: { searchQuery: "solo" },
   mangak: { searchQuery: "solo leveling" },
   toonilyme: { searchQuery: "class" },
+  mangataro: { searchQuery: "gachiakuta" },
+  roliascan: { searchQuery: "love" },
 };

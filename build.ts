@@ -31,6 +31,9 @@ const bridges: Array<{ id: string; src: string }> = [
   // MadTheme engine (src/engines/madtheme.ts) — a change there changes both bundles.
   { id: "mangak", src: "mangak.ts" },
   { id: "toonilyme", src: "toonilyme.ts" },
+  // MangaTaro engine (src/engines/mangataro.ts) — a change there changes both bundles.
+  { id: "mangataro", src: "mangataro.ts" },
+  { id: "roliascan", src: "roliascan.ts" },
 ];
 
 for (const { id, src } of bridges) {

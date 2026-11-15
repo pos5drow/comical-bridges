@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T22:14:47.733Z",
+  "updated": "2026-11-15T22:45:35.776Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -73,7 +73,7 @@
     {
       "id": "pos5drow.batcave",
       "name": "BatCave",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -85,8 +85,8 @@
         "filters",
         "sort"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.batcave/0.1.0/bridge.js",
-      "sha256": "76c3ef604f7f2c609a39fd9068968256ee6ddcb2795ad802070e10a523508bf8",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.batcave/0.1.1/bridge.js",
+      "sha256": "a0629bfea2e1708ea6cde393a4e897818a3decf6ba3216e5cfa801bdff91702e",
       "iconUrl": "https://batcave.biz/favicon.ico",
       "assetRateLimit": {
         "maxConcurrent": 4,
@@ -103,7 +103,7 @@
       "linkHosts": [
         "batcave.biz"
       ],
-      "signature": "fg47XyRmiPWZBcntCnSDdHy4dVuln1IpaDphtePqGCF6Gz3ptewqYYK3a8xL4oNP5TLjtwbEpxEwp2oi9LLuDw"
+      "signature": "RZm31Un3KsBg58KQZnd7Bz_X0mkx-HVHKrXkDsTKYnelMnhOJAN-PcTuu3jM1_68-sNNL7l7uUX0fVZ0euGcCw"
     },
     {
       "id": "pos5drow.cubari",

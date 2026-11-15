@@ -78,7 +78,7 @@ isn't merged yet, and no bridge uses it yet.
 | Webtoons | webtoons.com | bespoke (official) | kei `all/webtoons`, aidoku `multi.webtoon` | #26 | — (kei's bitmap code is optional page merging) | todo |
 | MANGA Plus | mangaplus.shueisha.co.jp | bespoke (official, protobuf API) | kei `all/mangaplus`, aidoku `multi.mangaplus` | in every app | IMG-BYTES (XOR key per page, known at page-list time) | todo |
 | Cubari | cubari.moe | bespoke (proxy for imgur/GitHub galleries) | kei `all/cubari`, aidoku `multi.cubari` | in every app | no catalogue (Keiyoushi lists a WebView history); MangaDex-backed links can fail upstream | shipped `0.1.0` (search = paste a link) |
-| Dynasty Scans | dynasty-scans.com | bespoke (JSON) | kei `en/dynasty`, aidoku `en.dynastyscans` | yuri hub | — | todo |
+| Dynasty Scans | dynasty-scans.com | bespoke (JSON views) | kei `en/dynasty`, aidoku `en.dynastyscans` | yuri hub | list/search cards have no covers (the listing APIs carry none; Keiyoushi bundles a cover map) | shipped `0.1.0` |
 | BatCave | batcave.biz | bespoke (western comics) | kei `en/batcave`, aidoku `en.batcave` | #38 | JS-SOLVER? (kei uses a WebView — investigate) | todo |
 | ReadComicOnline | readcomiconline.li | bespoke (western comics) | none current (dropped by Keiyoushi) | users keep asking; breaks often | obfuscated image URLs — investigate; do last | todo |
 

@@ -36,6 +36,8 @@ export const AUDIT: Record<string, BridgeAuditConfig> = {
   dynasty: { searchQuery: "citrus" },
   webtoons: { searchQuery: "tower" },
   zonatmo: { searchQuery: "solo leveling" },
+  // DLE Guard sends anything without its trust cookie (earned in a browser) to a check page.
+  batcave: { searchQuery: "batman", flaky: "DLE Guard wants a browser check first" },
   mangaplus: { searchQuery: "one piece" },
   // Cloudflare challenges the Node/Bun TLS fingerprint on the API, so the runner can't reach it.
   toonkotsu: { searchQuery: "solo leveling", flaky: "Cloudflare challenges the Bun/Node TLS fingerprint" },

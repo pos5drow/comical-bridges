@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T13:32:43.488Z",
+  "updated": "2026-11-15T22:14:47.733Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -182,6 +182,50 @@
       "signature": "-EGw2g4B59rupiyGXf9S41a1uZKwcMcrkLc8gMfkoQXvsuJw5RPMD_MX4kn4qJY_-hFW4wT0D7UmAXaly81KAA"
     },
     {
+      "id": "pos5drow.kagane",
+      "name": "Kagane",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort",
+        "settings",
+        "content-rating"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.kagane/0.1.0/bridge.js",
+      "sha256": "b1d19539b20ccef06816f059e534085a01c01e6230c55c59345df40b09a8bf72",
+      "iconUrl": "https://kagane.moe/favicon.ico",
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "images": {
+        "hosts": [
+          "kstatic.to",
+          "kagane.moe"
+        ],
+        "headers": {
+          "Origin": "https://kagane.moe",
+          "Referer": "https://kagane.moe/"
+        },
+        "intercept": [
+          "kstatic.to"
+        ]
+      },
+      "linkHosts": [
+        "kagane.moe",
+        "kagane.cx",
+        "kagane.net"
+      ],
+      "signature": "BYvEPNqfg4Z1eZYFiCVYuxcCJuYc6kFtXQBdhl6BO7xrd2RvMB4sdoFbdHc-NpH0ZAigfOXFpdOXhchNBaL0CA"
+    },
+    {
       "id": "pos5drow.kingofshojo",
       "name": "King of Shojo",
       "version": "0.1.2",
@@ -207,6 +251,33 @@
         "kingofshojo.com"
       ],
       "signature": "FnXgW2DylMhdQ5PJIf1ncPahgb1pLh4wt3HSBfxuwTxsTYK9rCQOeKx-nDnaLEu4QbfatGQvYD4qBcSq3ki2BQ"
+    },
+    {
+      "id": "pos5drow.lectorxd",
+      "name": "LectorXD",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "es"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.lectorxd/0.1.0/bridge.js",
+      "sha256": "f8b3e9bf66d772a833e95256c69fd9a948f8e5232a943e88fddd00c3a97df34d",
+      "iconUrl": "https://lectorxd.com/favicon.ico",
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "linkHosts": [
+        "lectorxd.com"
+      ],
+      "signature": "2I-F2s6WqMf-yyhw7Zz0QtxjaxwrqLqokBKH5WffoUsk22J7p00HRHnoGnaIU3g8N-svsY013MIXXpKHvVYACA"
     },
     {
       "id": "pos5drow.mangaball",
@@ -339,6 +410,61 @@
         "mangadex.org"
       ],
       "signature": "WWbDRm3a1mKKi9-vW8l9zm0fnpXkBsDLY61YstkjTzwv08jvhpkYAm_c9ukLMhn_eLfmbSRoDplXNcw_EsWdDA"
+    },
+    {
+      "id": "pos5drow.mangadot",
+      "name": "MangaDot",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en",
+        "es",
+        "es-419",
+        "pt-BR",
+        "fr",
+        "id",
+        "it",
+        "de",
+        "ru",
+        "pl",
+        "tr",
+        "vi",
+        "th",
+        "ko",
+        "ja",
+        "zh",
+        "zh-Hant"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort",
+        "settings",
+        "content-rating"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangadot/0.1.0/bridge.js",
+      "sha256": "54b00bea605904dbc5d16f476e3144dc660de83df8325555bd9915c45b1dbeff",
+      "iconUrl": "https://mangadot.net/favicon.ico",
+      "cardSubtitles": true,
+      "ratings": true,
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "images": {
+        "hosts": [
+          "mangadot.net"
+        ],
+        "headers": {
+          "Referer": "https://mangadot.net/"
+        }
+      },
+      "linkHosts": [
+        "mangadot.net"
+      ],
+      "signature": "VL1XJgaRtcAKUs3Y2MSLmhTC0K2wpFY0qIpLqvLGiEL7my5-Ty3Qf9nsH714FKHL-06sc8NF1zqVpgwK7exLBw"
     },
     {
       "id": "pos5drow.mangafire",
@@ -711,6 +837,46 @@
         "olympusbiblioteca.com"
       ],
       "signature": "59gdTugihf6FtEkHHKEufveUn4dCjfFzciEWQA5XHcC5I_r7LDJBD_oYccYPYpTRQZ0MHeF5CNs3SiRMx5VUAQ"
+    },
+    {
+      "id": "pos5drow.onisaga",
+      "name": "OniSaga",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en",
+        "es-419",
+        "fr",
+        "pt-BR"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort",
+        "settings",
+        "content-rating"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.onisaga/0.1.0/bridge.js",
+      "sha256": "4f5bc55782eab1b84d9c06288992841a07b61f7f6107901817508b3a8c58e005",
+      "iconUrl": "https://onisaga.com/apple-icon",
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "images": {
+        "hosts": [
+          "media.onisaga.com"
+        ],
+        "headers": {
+          "Referer": "https://onisaga.com/"
+        }
+      },
+      "linkHosts": [
+        "onisaga.com"
+      ],
+      "signature": "XikXTIUzEpuCmQZenFd3BcXPjbZtru6lXcuLWhfYsfP8DSu4pfnSE9G-Bei1wNu70XuOSbEWm6rn3S6-ih32BQ"
     },
     {
       "id": "pos5drow.roliascan",

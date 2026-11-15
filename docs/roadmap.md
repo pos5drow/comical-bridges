@@ -123,7 +123,7 @@ to the browser's User-Agent and IP. What it would take:
 **Cross-cutting: TLS-FINGERPRINT.** Some Cloudflare setups challenge by TLS/HTTP fingerprint, not
 headers: Node's and Bun's `fetch` are challenged while curl and the phones' native stacks pass. A
 host whose network is Node/Bun `fetch` (host-server, desktop, the CI audit) can't reach such a site
-at all. What it would take, smallest first:
+at all. Seen on Toonkotsu and Mangago. What it would take, smallest first:
 - **check** which hosts are affected: the app on Android/iOS (native stacks) likely isn't.
 - **comical/host:** if desktop matters, give the Node host a network path with a browser-like
   fingerprint (e.g. Electron's `net` module, which uses Chromium's stack) instead of Node `fetch`.

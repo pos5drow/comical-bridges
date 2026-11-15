@@ -96,10 +96,16 @@ function dmy(s: string | undefined): number | undefined {
 }
 
 class BatCaveBridge extends BridgeBase {
+  /** The platform User-Agent when the host gives a browser one (the web check's web view sends it too), else a fixed desktop Chrome one. */
+  private get ua(): string {
+    const host = this.userAgent;
+    return host && host.startsWith("Mozilla/5.0") ? host : UA;
+  }
+
   readonly info: BridgeInfo = {
     id: "pos5drow.batcave",
     name: "BatCave",
-    version: "0.1.0",
+    version: "0.1.1",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
@@ -124,13 +130,13 @@ class BatCaveBridge extends BridgeBase {
     }
     if (path === "/_c" || path.startsWith("/_c/")) {
       const page = (req.method ?? "GET").toUpperCase() === "GET" ? req.url : `${SITE}/`;
-      throw new Error(challengeMessage({ url: page, userAgent: UA, reason: "BatCave wants to check this is a browser" }));
+      throw new Error(challengeMessage({ url: page, userAgent: this.ua, reason: "BatCave wants to check this is a browser" }));
     }
     return guardResponse(res, this.guards, req);
   }
 
   private headers(extra: Record<string, string> = {}): Record<string, string> {
-    return { "User-Agent": UA, Accept: "text/html,application/xhtml+xml", Referer: `${SITE}/`, ...extra };
+    return { "User-Agent": this.ua, Accept: "text/html,application/xhtml+xml", Referer: `${SITE}/`, ...extra };
   }
 
   private async html(url: string, form?: Record<string, string>) {

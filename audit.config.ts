@@ -29,4 +29,5 @@ export const AUDIT: Record<string, BridgeAuditConfig> = {
   mangataro: { searchQuery: "gachiakuta" },
   roliascan: { searchQuery: "love" },
   kingofshojo: { searchQuery: "love" },
+  flamecomics: { searchQuery: "academy" },
 };

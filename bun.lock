@@ -5,11 +5,11 @@
     "": {
       "name": "comical-bridges",
       "dependencies": {
-        "comical-bridge-kit": "github:pos5drow/comical-bridge-kit#0927d980a60f747d0ad0a56eb8da78df89421683",
+        "comical-bridge-kit": "github:pos5drow/comical-bridge-kit#b0f6f45828dc69b1a723f845758a8d76eb25acfe",
       },
     },
   },
   "packages": {
-    "comical-bridge-kit": ["comical-bridge-kit@github:pos5drow/comical-bridge-kit#0927d98", {}, "pos5drow-comical-bridge-kit-0927d98", "sha512-KMC9U011yv2f2KGQYA6VbPV1vmY2BuayZTQIZTof7Jr4IQvoYdJhsNdjugojVjnk9Q8DZMBuplbN53COtqEC5Q=="],
+    "comical-bridge-kit": ["comical-bridge-kit@github:pos5drow/comical-bridge-kit#b0f6f45", {}, "pos5drow-comical-bridge-kit-b0f6f45", "sha512-fPqMwCDzXNS1JPVZ3h6GZTLuI6/sJo0WyEg9YfDnlLOPsNMXsXlOtDNwwYOfpE7bh26M2JgT62xHWPF4rxPVvA=="],
   }
 }

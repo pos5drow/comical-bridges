@@ -11,6 +11,6 @@
     "publish:registry": "bun run publish.ts"
   },
   "dependencies": {
-    "comical-bridge-kit": "github:pos5drow/comical-bridge-kit#0927d980a60f747d0ad0a56eb8da78df89421683"
+    "comical-bridge-kit": "github:pos5drow/comical-bridge-kit#b0f6f45828dc69b1a723f845758a8d76eb25acfe"
   }
 }

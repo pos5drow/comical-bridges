@@ -49,5 +49,11 @@ for (const { id, src } of bridges) {
     for (const log of result.logs) console.error(log);
     throw new AggregateError(result.logs, `${id} bridge build failed`);
   }
+  // Bun ends the bundle with a `//# debugId=` hashed from EVERY source the bundler read, tree-shaken
+  // ones included — so a kit or SDK change a bridge doesn't even use still changed its bytes, and a
+  // published version's bytes may never change. The source maps aren't published; drop the line.
+  const out = join(ROOT, ".build", id, "dist", "bridge.js");
+  const code = await Bun.file(out).text();
+  await Bun.write(out, code.replace(/\n\/\/# debugId=[0-9A-F]+\s*$/, "\n"));
   console.log(`✓ built → .build/${id}/dist/bridge.js`);
 }

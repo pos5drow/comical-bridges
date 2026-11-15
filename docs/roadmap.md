@@ -53,11 +53,11 @@ isn't merged yet, and no bridge uses it yet.
 | Source | Site | Engine | Upstream refs | Signals | Blockers | Status |
 |---|---|---|---|---|---|---|
 | Comix | comix.to (+ comix.ws) | bespoke | kei `en/comix` (2.2k LOC), aidoku `en.comix` | #2; top of EverythingMoe; most-👍 Keiyoushi issue of 2026 (163) | IMG-RESP (XOR + 5×5 grid), JS-SOLVER (request signer) | todo |
-| Asura Scans | asurascans.com (JSON API at api.asurascans.com) | bespoke | kei `en/asurascans`, aidoku `en.asurascans` | #3; in every app | only premium pages are tiled, and premium needs a paid account (login not built) | shipped `0.1.0`: free chapters; tiled pages processed if served |
+| Asura Scans | asurascans.com (JSON API at api.asurascans.com) | bespoke | kei `en/asurascans`, aidoku `en.asurascans` | #3; in every app | only premium pages are tiled, and premium needs a paid account (login not built) | shipped `0.1.1`: free chapters; tiled pages processed if served |
 | MangaFire | mangafire.to | bespoke | kei `all/mangafire`, aidoku `multi.mangafire` | #9; 65 & 53 👍 breakage issues | JS-SOLVER (VRF token) | todo |
-| Mangakakalot | kakamanga.com (mangakakalot.gg redirects there), mangakakalove.com | **mangabox** | kei `en/mangakakalot`, aidoku `en.mangakakalot` | #40 | CF-CLEARANCE (search only) | shipped `0.1.1` (read path ✓; search challenged by Cloudflare at times) |
-| Manganato | manganato.gg (default), natomanga.com (now redirects to manganami.com), nelomanga.net | **mangabox** | kei `en/manganelo`, aidoku `en.manganato` | #43 | CF-CLEARANCE (search only) | shipped `0.1.1` (read path ✓; search challenged by Cloudflare at times) |
-| Mangabat | mangabats.com | **mangabox** | kei `en/mangabat`, aidoku `en.mangabat` | — | CF-CLEARANCE (search, intermittent) | shipped `0.1.1` |
+| Mangakakalot | kakamanga.com (mangakakalot.gg redirects there), mangakakalove.com | **mangabox** | kei `en/mangakakalot`, aidoku `en.mangakakalot` | #40 | CF-CLEARANCE (search only) | shipped `0.1.2` (read path ✓; search challenged by Cloudflare at times) |
+| Manganato | manganato.gg (default), natomanga.com (now redirects to manganami.com), nelomanga.net | **mangabox** | kei `en/manganelo`, aidoku `en.manganato` | #43 | CF-CLEARANCE (search only) | shipped `0.1.2` (read path ✓; search challenged by Cloudflare at times) |
+| Mangabat | mangabats.com | **mangabox** | kei `en/mangabat`, aidoku `en.mangabat` | — | CF-CLEARANCE (search, intermittent) | shipped `0.1.2` |
 | Kagane | kagane.moe/.cx/.net (kagane.to is gone) | bespoke | kei `all/kagane`, aidoku `multi.kagane` | 69 & 52 👍 | **CF-CLEARANCE on every endpoint** (API included, even from a home IP); pages are JPEG XL, which Android cannot decode by default | blocked |
 
 ## Tier 2
@@ -67,8 +67,8 @@ isn't merged yet, and no bridge uses it yet.
 | Mangago | mangago.me | bespoke | kei `en/mangago`, aidoku `en.mangago` | #12 | IMG-TILES + encrypted image list | todo |
 | King of Shojo | kingofshojo.com | **mangathemesia** | kei `en/kingofshojo`, aidoku `en.kingofshojo` | #21 | — | todo |
 | Flame Comics | flamecomics.xyz | bespoke (small) | kei `en/flamecomics`, aidoku `en.flamecomics` | in every app | — | todo |
-| MangaK (ex-MangaBuddy) | mangak.io (API at api.mangak.io) | **madtheme** | kei `en/mangabuddy`, aidoku `en.mangak` | #44 | — | shipped `0.1.0` |
-| Toonily.me | toontop.io (API at api.toontop.io) | **madtheme** | kei `en/toonilyme`, aidoku `en.toonilyme` | — | — | shipped `0.1.0` |
+| MangaK (ex-MangaBuddy) | mangak.io (API at api.mangak.io) | **madtheme** | kei `en/mangabuddy`, aidoku `en.mangak` | #44 | — | shipped `0.1.1` |
+| Toonily.me | toontop.io (API at api.toontop.io) | **madtheme** | kei `en/toonilyme`, aidoku `en.toonilyme` | — | — | shipped `0.1.1` |
 | MangaTaro | mangataro.org | **mangataro** | kei `en/mangataro` | 27 👍 request | — | todo |
 | Rolia Scan | roliascan.com | **mangataro** | kei `en/roliascan` | #19 — *added: nearly free once the MangaTaro engine exists* | — | todo |
 | Toonkotsu | toonkotsu.com | bespoke | kei `en/toonkotsu`, aidoku `en.toonkotsu` | EverythingMoe "new" | IMG-BYTES (AES-CTR, key in the URL) | todo |
@@ -86,8 +86,8 @@ isn't merged yet, and no bridge uses it yet.
 
 | Source | Site | Engine | Upstream refs | Signals | Blockers | Status |
 |---|---|---|---|---|---|---|
-| Olympus Scanlation | olympusxyz.com (found via the olympus.pages.dev redirector) | bespoke (API) | kei `es/olympusscanlation`, aidoku `es.olympusscanlation` | #4 | — | shipped `0.1.0` |
-| ManhwaWeb | manhwaweb.com (API at api.manhwaweb.com) | bespoke (API) | kei `es/manhwaweb`, aidoku `es.manhwaweb` | #5 | — | shipped `0.1.0` (adult series rated `adult`) |
+| Olympus Scanlation | olympusxyz.com (found via the olympus.pages.dev redirector) | bespoke (API) | kei `es/olympusscanlation`, aidoku `es.olympusscanlation` | #4 | — | shipped `0.1.1` |
+| ManhwaWeb | manhwaweb.com (API at api.manhwaweb.com) | bespoke (API) | kei `es/manhwaweb`, aidoku `es.manhwaweb` | #5 | — | shipped `0.1.1` (adult series rated `adult`) |
 | LectorXD | lectorxd.com | bespoke | kei `es/lectorxd` | #23 (+32 places in a month) | — | todo |
 | ZonaTMO | zonatmo.org (+ zonatmo.to) | bespoke (TMO clone) | kei `es/zonatmoorgunoriginal`, `es/zonatmoto` | #37; fills the TuMangaOnline gap | domain churn, so plan for mirrors | todo |
 

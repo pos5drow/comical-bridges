@@ -4,7 +4,7 @@ import { mangaBox } from "./engines/mangabox";
 export default mangaBox({
   id: "pos5drow.mangabat",
   name: "Mangabat",
-  version: "0.1.1",
+  version: "0.1.2",
   mirrors: ["https://www.mangabats.com"],
   iconUrl: "https://www.mangabats.com/favicon.ico",
 });

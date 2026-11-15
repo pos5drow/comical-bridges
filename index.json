@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T08:19:06.406Z",
+  "updated": "2026-11-15T08:29:59.462Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -711,6 +711,34 @@
         "weebcentral.com"
       ],
       "signature": "EZmizB3R5wFcKdVO3nUYwZFwhTw4MRFKTKnuuqKa7M46aWQrXbbD-8p0BJWErdTXRDq5Qai_WiJTtt0hEKQgDQ"
+    },
+    {
+      "id": "pos5drow.zonatmo",
+      "name": "ZonaTMO",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "es"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort",
+        "content-rating"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.zonatmo/0.1.0/bridge.js",
+      "sha256": "c19902464d9afb4871e7de958ce01a314731ee8c3840647937f0fca42b3398a4",
+      "iconUrl": "https://zonatmo.org/favicon.ico",
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "linkHosts": [
+        "zonatmo.org"
+      ],
+      "signature": "muid5869Xtj2JNvJ1Wi57KPUar0u38iNaN6PAnpKZBgYY7wNZX20Syau2QiF4gUBvvJS-wEcedAwm_OYAb1FDA"
     }
   ],
   "publicKey": "_w_wfsGg94fRKmD6kq4mIHQYReFo7qPcZ9IMwhy0L24",

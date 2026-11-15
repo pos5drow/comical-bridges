@@ -58,7 +58,7 @@ isn't merged yet, and no bridge uses it yet.
 | Mangakakalot | kakamanga.com (mangakakalot.gg redirects there), mangakakalove.com | **mangabox** | kei `en/mangakakalot`, aidoku `en.mangakakalot` | #40 | CF-CLEARANCE (search only) | shipped `0.1.1` (read path ✓; search challenged by Cloudflare at times) |
 | Manganato | manganato.gg (default), natomanga.com (now redirects to manganami.com), nelomanga.net | **mangabox** | kei `en/manganelo`, aidoku `en.manganato` | #43 | CF-CLEARANCE (search only) | shipped `0.1.1` (read path ✓; search challenged by Cloudflare at times) |
 | Mangabat | mangabats.com | **mangabox** | kei `en/mangabat`, aidoku `en.mangabat` | — | CF-CLEARANCE (search, intermittent) | shipped `0.1.1` |
-| Kagane | kagane.to | bespoke | kei `all/kagane`, aidoku `multi.kagane` | 69 & 52 👍 | none known: integrity token + per-book page token, both plain API calls | todo |
+| Kagane | kagane.moe/.cx/.net (kagane.to is gone) | bespoke | kei `all/kagane`, aidoku `multi.kagane` | 69 & 52 👍 | **CF-CLEARANCE on every endpoint** (API included, even from a home IP); pages are JPEG XL, which Android cannot decode by default | blocked |
 
 ## Tier 2
 
@@ -86,7 +86,7 @@ isn't merged yet, and no bridge uses it yet.
 
 | Source | Site | Engine | Upstream refs | Signals | Blockers | Status |
 |---|---|---|---|---|---|---|
-| Olympus Scanlation | olympusxyz.com | bespoke (API) | kei `es/olympusscanlation`, aidoku `es.olympusscanlation` | #4 | — | todo |
+| Olympus Scanlation | olympusxyz.com (found via the olympus.pages.dev redirector) | bespoke (API) | kei `es/olympusscanlation`, aidoku `es.olympusscanlation` | #4 | — | shipped `0.1.0` |
 | ManhwaWeb | manhwaweb.com | bespoke (API) | kei `es/manhwaweb`, aidoku `es.manhwaweb` | #5 | — | todo |
 | LectorXD | lectorxd.com | bespoke | kei `es/lectorxd` | #23 (+32 places in a month) | — | todo |
 | ZonaTMO | zonatmo.org (+ zonatmo.to) | bespoke (TMO clone) | kei `es/zonatmoorgunoriginal`, `es/zonatmoto` | #37; fills the TuMangaOnline gap | domain churn, so plan for mirrors | todo |

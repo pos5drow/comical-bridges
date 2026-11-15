@@ -22,4 +22,5 @@ export const AUDIT: Record<string, BridgeAuditConfig> = {
   manganato: { searchQuery: "solo leveling", flaky: "search is challenged by Cloudflare bot scoring" },
   mangabat: { searchQuery: "solo leveling", flaky: "search is challenged by Cloudflare bot scoring" },
   asurascans: { searchQuery: "solo" },
+  olympus: { searchQuery: "sabueso" },
 };

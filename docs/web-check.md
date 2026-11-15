@@ -26,9 +26,11 @@ Built and pushed, following the derived design below:
 - **Bridge repos:** the guard adapter turns the kit's `challenge` verdict into the same marker,
   with the request's User-Agent; every bridge using it got a patch bump.
 
+Desktop's host now sends its requests through Chromium's network by default (comical-app
+8e2511fa: `net.request`, since `session.fetch` refuses `Referer` and `Origin`).
+
 Still to do: an on-device run against a real challenged site (iOS first, then Android, where the
-WebView and OkHttp have different TLS fingerprints); turning the desktop's Chromium network on
-by default once a build shows Set-Cookie and User-Agent come through it; and building the blocked bridges, which needs pages or
+WebView and OkHttp have different TLS fingerprints); and building the blocked bridges, which needs pages or
 a HAR from a browser, or probing through a session the user has cleared.
 
 ## The idea

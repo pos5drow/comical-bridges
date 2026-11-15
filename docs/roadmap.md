@@ -159,22 +159,30 @@ The MangaBox search challenges may be this too; untested.
 
 Everything on the list is shipped, blocked or skipped. What's left, biggest first:
 
-1. **An in-app web check (CF-CLEARANCE)** — unblocks Kagane, OniSaga, LectorXD, MangaDot, BatCave,
-   and in the NSFW repo MyReadingManga, HDoujin and Schale Network; also covers MangaFire's captcha
-   and Toonkotsu's reading check. **Infrastructure built** (comical, comical-app, the bridges' guard
-   adapter); next is a device test and the blocked bridges themselves. See `docs/web-check.md`.
-2. **Phone checks** (cheap, and the real test for these):
+1. **An in-app web check (CF-CLEARANCE)**: built (comical, comical-app, the bridges' guard
+   adapter, page-storage values); HDoujin and Schale Network now use it. Next is a device test.
+   See `docs/web-check.md`.
+2. **The Cloudflare-walled bridges** (checked 2026-11-15 by running the app's hidden web check in
+   a real Chromium window on a home IP, nothing solved or clicked): Kagane, OniSaga, MangaDot,
+   LectorXD and, in the NSFW repo, MyReadingManga all stay on Cloudflare's interstitial; OniSaga's
+   shows the "Verify you are human" checkbox, so these need a person once before they can be
+   studied (a visible window the user clicks). BatCave's DLE Guard passed on its own
+   (`__guard_trust`, bound to the IP): its home page and library listing then load through
+   Chromium's network, but search is guarded again on every request. Probing that further was
+   paused for the user. Keiyoushi's code for all six is the reference.
+3. **Phone checks** (cheap, and the real test for these):
    - Toonkotsu, Mangago, IMHentai, Hentai2Read: Node/Bun are fingerprint-blocked, so they're only
-     verified against captured responses. Open each in the app on Android and iOS.
+     verified against captured responses. Open each in the app on Android and iOS. (Desktop now
+     sends the host's requests through Chromium's network, which those sites let through.)
    - Mangago: images on underscore hosts (`iweb_2…`) on Android.
    - Kemono and Pawchive: memory while the ~12–16 MB creator list loads.
-3. **Desktop and CI for TLS-FINGERPRINT sites:** a browser-like network path for the Node host
-   (e.g. Electron's `net`), only if desktop matters for those sources.
-4. **Testkit:** the audit's cover sampler can't fetch covers routed through the host's relative
+4. **CI for TLS-FINGERPRINT sites:** the nightly audit still runs on Bun's fetch, so those
+   bridges stay marked flaky there.
+5. **Testkit:** the audit's cover sampler can't fetch covers routed through the host's relative
    image route, so bridges declaring image headers report false cover failures (comical).
-5. **Optional:** HentaiRox, HentaiZap, HentaiEnvy, AsmHentai, HentaiEra on the galleryadults engine
+6. **Optional:** HentaiRox, HentaiZap, HentaiEnvy, AsmHentai, HentaiEra on the galleryadults engine
    (all answer Node/Bun; most need their own card selectors). ReadComicOnline: recheck now and then.
-6. **Decisions for the user:**
+7. **Decisions for the user:**
    - Pawchive's User-Agent asks "preferably" for a contact; none is included yet.
    - MangaTaro signs its chapter-list requests with an MD5 token, the same kind of front-end request
      signing the session's permission check flagged on MangaFire (which went ahead on the user's

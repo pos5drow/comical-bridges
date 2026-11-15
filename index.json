@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T07:37:10.494Z",
+  "updated": "2026-11-15T07:41:35.598Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -143,6 +143,71 @@
         "mangadex.org"
       ],
       "signature": "tJbNi7U_-Gcz7IaZTjnMPxMHXNccHSdpw-Sln23QbcBYaOpAX6DtcMIC1lUyV1k36HZh2XLFKxizIzkKiKttCA"
+    },
+    {
+      "id": "pos5drow.mangak",
+      "name": "MangaK",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort",
+        "content-rating"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangak/0.1.0/bridge.js",
+      "sha256": "122e4b5d6681bb21466d0aa428b5506a36b9ee322a2df0c5c45ca611472cc32b",
+      "iconUrl": "https://mangak.io/favicon.ico",
+      "ratings": true,
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "images": {
+        "hosts": [
+          "mangak.io",
+          "qvzra.org",
+          "qvzrb.org",
+          "qvzrc.org",
+          "qvzrd.org",
+          "qvzre.org",
+          "qvzrf.org",
+          "qvzrg.org",
+          "qvzrh.org",
+          "qvzri.org",
+          "qvzrj.org",
+          "qvzrk.org",
+          "qvzrl.org",
+          "qvzrm.org",
+          "qvzrn.org",
+          "qvzro.org",
+          "qvzrp.org",
+          "qvzrq.org",
+          "qvzrr.org",
+          "qvzrs.org",
+          "qvzrt.org",
+          "qvzru.org",
+          "qvzrv.org",
+          "qvzrw.org",
+          "qvzrx.org",
+          "qvzry.org",
+          "qvzrz.org",
+          "rzyn.net",
+          "resmk.org"
+        ],
+        "headers": {
+          "Referer": "https://mangak.io/"
+        }
+      },
+      "linkHosts": [
+        "mangak.io"
+      ],
+      "signature": "0ux2KUgl1WAhKzqA3hF0jIyfSwBlcW6gF0ZpgtmvxnkE1J-JVlmOjxAyExRbjP3Zf5NvtW_w9DvKrX6fOBJBCA"
     },
     {
       "id": "pos5drow.mangakakalot",
@@ -297,6 +362,71 @@
         "olympusbiblioteca.com"
       ],
       "signature": "69HyojIBF9MjWb4NTe55FQKVo7cSDJ0b-Fu611p8f7DkTASUWxtUvegpTDjStiC7G1754bVo4_3n3uxqyrRWCw"
+    },
+    {
+      "id": "pos5drow.toonilyme",
+      "name": "Toonily.me",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort",
+        "content-rating"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.toonilyme/0.1.0/bridge.js",
+      "sha256": "8ea8c8fcf025b28729b738de5371d248ee08aedf7baa1a862a15c944d86002cc",
+      "iconUrl": "https://toontop.io/favicon.ico",
+      "ratings": true,
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "images": {
+        "hosts": [
+          "toontop.io",
+          "qvzra.org",
+          "qvzrb.org",
+          "qvzrc.org",
+          "qvzrd.org",
+          "qvzre.org",
+          "qvzrf.org",
+          "qvzrg.org",
+          "qvzrh.org",
+          "qvzri.org",
+          "qvzrj.org",
+          "qvzrk.org",
+          "qvzrl.org",
+          "qvzrm.org",
+          "qvzrn.org",
+          "qvzro.org",
+          "qvzrp.org",
+          "qvzrq.org",
+          "qvzrr.org",
+          "qvzrs.org",
+          "qvzrt.org",
+          "qvzru.org",
+          "qvzrv.org",
+          "qvzrw.org",
+          "qvzrx.org",
+          "qvzry.org",
+          "qvzrz.org",
+          "rzyn.net",
+          "resmk.org"
+        ],
+        "headers": {
+          "Referer": "https://toontop.io/"
+        }
+      },
+      "linkHosts": [
+        "toontop.io"
+      ],
+      "signature": "xN9k14x57SiSIrK6XthLbAAIi8phaCi4sW9HltpekpS0j6YSZaIrFHLUrJB24GNpGBCaNHNtNwCoJpXjGf6uDw"
     },
     {
       "id": "pos5drow.weebcentral",

@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T07:55:18.420Z",
+  "updated": "2026-11-15T08:06:23.729Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -69,6 +69,32 @@
         "atsu.moe"
       ],
       "signature": "UuhAMAQJKu-Smd4YqVbbvraVIyPkJA9bsV183VRaKehZht5V6hTRzDEebxkxLX2SND76pViDwnXWvbcWrGtiBA"
+    },
+    {
+      "id": "pos5drow.flamecomics",
+      "name": "Flame Comics",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.flamecomics/0.1.0/bridge.js",
+      "sha256": "ba66ec2627936639feea571286003543df73e57e324c03cf0c1296f9b4f22c2c",
+      "iconUrl": "https://flamecomics.xyz/favicon.ico",
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "linkHosts": [
+        "flamecomics.xyz"
+      ],
+      "signature": "KNmI8V7qcSWP9ng1h3vkt68K9PWtBvhCpNnA1LGDklDUKccoWPUlFFEsUWgzcIVPcQ9_1X1SYINqcI2lWqsRDw"
     },
     {
       "id": "pos5drow.kingofshojo",

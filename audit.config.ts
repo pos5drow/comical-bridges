@@ -31,4 +31,7 @@ export const AUDIT: Record<string, BridgeAuditConfig> = {
   kingofshojo: { searchQuery: "love" },
   flamecomics: { searchQuery: "academy" },
   mangaball: { searchQuery: "solo leveling" },
+  // No catalogue: a search is a pasted link.
+  // (MangaDex-backed links are throttled upstream by MangaDex; a gist is Cubari's own path.)
+  cubari: { searchQuery: "https://raw.githubusercontent.com/catgirl-v/cubari/d/catgirl-v/main/series/Fawnduu/My%20Dragon%20Girlfriend/cubari.json" },
 };

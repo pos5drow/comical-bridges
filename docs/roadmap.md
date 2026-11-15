@@ -55,9 +55,9 @@ isn't merged yet, and no bridge uses it yet.
 | Comix | comix.to (+ comix.ws) | bespoke | kei `en/comix` (2.2k LOC), aidoku `en.comix` | #2; top of EverythingMoe; most-👍 Keiyoushi issue of 2026 (163) | IMG-RESP (XOR + 5×5 grid), JS-SOLVER (request signer) | todo |
 | Asura Scans | asurascans.com (JSON API at api.asurascans.com) | bespoke | kei `en/asurascans`, aidoku `en.asurascans` | #3; in every app | only premium pages are tiled, and premium needs a paid account (login not built) | shipped `0.1.0`: free chapters; tiled pages processed if served |
 | MangaFire | mangafire.to | bespoke | kei `all/mangafire`, aidoku `multi.mangafire` | #9; 65 & 53 👍 breakage issues | JS-SOLVER (VRF token) | todo |
-| Mangakakalot | kakamanga.com (mangakakalot.gg redirects there), mangakakalove.com | **mangabox** | kei `en/mangakakalot`, aidoku `en.mangakakalot` | #40 | CF-CLEARANCE (search only) | wip: `0.1.0` built, unit-tested, live-audited (read path ✓; search challenged from home IP); not published |
-| Manganato | manganato.gg (default), natomanga.com (now redirects to manganami.com), nelomanga.net | **mangabox** | kei `en/manganelo`, aidoku `en.manganato` | #43 | CF-CLEARANCE (search only) | wip: `0.1.0` built, unit-tested, live-audited (read path ✓; search challenged from home IP); not published |
-| Mangabat | mangabats.com | **mangabox** | kei `en/mangabat`, aidoku `en.mangabat` | — | CF-CLEARANCE (search, intermittent) | wip: `0.1.0` built, unit-tested, live-audited (all ✓); not published |
+| Mangakakalot | kakamanga.com (mangakakalot.gg redirects there), mangakakalove.com | **mangabox** | kei `en/mangakakalot`, aidoku `en.mangakakalot` | #40 | CF-CLEARANCE (search only) | shipped `0.1.1` (read path ✓; search challenged by Cloudflare at times) |
+| Manganato | manganato.gg (default), natomanga.com (now redirects to manganami.com), nelomanga.net | **mangabox** | kei `en/manganelo`, aidoku `en.manganato` | #43 | CF-CLEARANCE (search only) | shipped `0.1.1` (read path ✓; search challenged by Cloudflare at times) |
+| Mangabat | mangabats.com | **mangabox** | kei `en/mangabat`, aidoku `en.mangabat` | — | CF-CLEARANCE (search, intermittent) | shipped `0.1.1` |
 | Kagane | kagane.to | bespoke | kei `all/kagane`, aidoku `multi.kagane` | 69 & 52 👍 | none known: integrity token + per-book page token, both plain API calls | todo |
 
 ## Tier 2

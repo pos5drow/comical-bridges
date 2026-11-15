@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T09:16:13.487Z",
+  "updated": "2026-11-15T09:30:47.505Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -304,6 +304,49 @@
         "mangadex.org"
       ],
       "signature": "WWbDRm3a1mKKi9-vW8l9zm0fnpXkBsDLY61YstkjTzwv08jvhpkYAm_c9ukLMhn_eLfmbSRoDplXNcw_EsWdDA"
+    },
+    {
+      "id": "pos5drow.mangafire",
+      "name": "MangaFire",
+      "version": "0.1.0",
+      "contractVersion": "2.1.0",
+      "languages": [
+        "en",
+        "es",
+        "es-419",
+        "fr",
+        "ja",
+        "pt",
+        "pt-BR"
+      ],
+      "nsfw": false,
+      "capabilities": [
+        "lists",
+        "search",
+        "filters",
+        "sort",
+        "settings",
+        "content-rating"
+      ],
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangafire/0.1.0/bridge.js",
+      "sha256": "271b44e7343e1cf702474f99f8dba4b083d88d3a93c1cf794061c95f6471ee6b",
+      "iconUrl": "https://mangafire.to/favicon.ico",
+      "assetRateLimit": {
+        "maxConcurrent": 4,
+        "minIntervalMs": 100
+      },
+      "images": {
+        "hosts": [
+          "mfcdn2.xyz"
+        ],
+        "headers": {
+          "Referer": "https://mangafire.to/"
+        }
+      },
+      "linkHosts": [
+        "mangafire.to"
+      ],
+      "signature": "f9r3kr8DhUBfB7bVZKXTCd0mXfIzQExZ6Dg6T-ZqsPZLZ3AP_JuNAsMV3Vxk-cZ6ZOylyVuHmTGG5YN6ouvzBQ"
     },
     {
       "id": "pos5drow.mangago",

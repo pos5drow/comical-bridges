@@ -23,4 +23,5 @@ export const AUDIT: Record<string, BridgeAuditConfig> = {
   mangabat: { searchQuery: "solo leveling", flaky: "search is challenged by Cloudflare bot scoring" },
   asurascans: { searchQuery: "solo" },
   olympus: { searchQuery: "sabueso" },
+  manhwaweb: { searchQuery: "solo" },
 };

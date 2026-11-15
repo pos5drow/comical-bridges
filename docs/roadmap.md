@@ -87,7 +87,7 @@ isn't merged yet, and no bridge uses it yet.
 | Source | Site | Engine | Upstream refs | Signals | Blockers | Status |
 |---|---|---|---|---|---|---|
 | Olympus Scanlation | olympusxyz.com (found via the olympus.pages.dev redirector) | bespoke (API) | kei `es/olympusscanlation`, aidoku `es.olympusscanlation` | #4 | — | shipped `0.1.0` |
-| ManhwaWeb | manhwaweb.com | bespoke (API) | kei `es/manhwaweb`, aidoku `es.manhwaweb` | #5 | — | todo |
+| ManhwaWeb | manhwaweb.com (API at api.manhwaweb.com) | bespoke (API) | kei `es/manhwaweb`, aidoku `es.manhwaweb` | #5 | — | shipped `0.1.0` (adult series rated `adult`) |
 | LectorXD | lectorxd.com | bespoke | kei `es/lectorxd` | #23 (+32 places in a month) | — | todo |
 | ZonaTMO | zonatmo.org (+ zonatmo.to) | bespoke (TMO clone) | kei `es/zonatmoorgunoriginal`, `es/zonatmoto` | #37; fills the TuMangaOnline gap | domain churn, so plan for mirrors | todo |
 

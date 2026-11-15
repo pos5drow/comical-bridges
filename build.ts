@@ -34,6 +34,8 @@ const bridges: Array<{ id: string; src: string }> = [
   // MangaTaro engine (src/engines/mangataro.ts) — a change there changes both bundles.
   { id: "mangataro", src: "mangataro.ts" },
   { id: "roliascan", src: "roliascan.ts" },
+  // MangaThemesia engine (src/engines/mangathemesia.ts) — the long-tail WordPress theme.
+  { id: "kingofshojo", src: "kingofshojo.ts" },
 ];
 
 for (const { id, src } of bridges) {

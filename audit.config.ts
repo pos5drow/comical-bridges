@@ -28,4 +28,5 @@ export const AUDIT: Record<string, BridgeAuditConfig> = {
   toonilyme: { searchQuery: "class" },
   mangataro: { searchQuery: "gachiakuta" },
   roliascan: { searchQuery: "love" },
+  kingofshojo: { searchQuery: "love" },
 };

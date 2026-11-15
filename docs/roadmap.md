@@ -65,7 +65,7 @@ isn't merged yet, and no bridge uses it yet.
 | Source | Site | Engine | Upstream refs | Signals | Blockers | Status |
 |---|---|---|---|---|---|---|
 | Mangago | mangago.me | bespoke | kei `en/mangago`, aidoku `en.mangago` | #12 | IMG-TILES + encrypted image list | todo |
-| King of Shojo | kingofshojo.com | **mangathemesia** | kei `en/kingofshojo`, aidoku `en.kingofshojo` | #21 | — | todo |
+| King of Shojo | kingofshojo.com | **mangathemesia** | kei `en/kingofshojo`, aidoku `en.kingofshojo` | #21 | — | shipped `0.1.0` (first site on the long-tail engine) |
 | Flame Comics | flamecomics.xyz | bespoke (small) | kei `en/flamecomics`, aidoku `en.flamecomics` | in every app | — | todo |
 | MangaK (ex-MangaBuddy) | mangak.io (API at api.mangak.io) | **madtheme** | kei `en/mangabuddy`, aidoku `en.mangak` | #44 | — | shipped `0.1.1` |
 | Toonily.me | toontop.io (API at api.toontop.io) | **madtheme** | kei `en/toonilyme`, aidoku `en.toonilyme` | — | — | shipped `0.1.1` |

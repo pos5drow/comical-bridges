@@ -205,7 +205,7 @@ data by the bridge. No platform API is needed, so no host changes.
 ### Final design: processed page images (2026-11-15)
 
 A′ was superseded by the shape Aidoku and Kotatsu use: **logic in the bridge, pixels in the
-client**. It's in comical `dd49ca4` (pushed). The app side is on the local `page-scramble` branch in
+client**. It's in comical `d79f8fc` (pushed). The app side is on the local `page-scramble` branch in
 the `comical-app-scramble` worktree, not pushed.
 
 - A bridge marks a page `Page.process` (optional `context`) and declares

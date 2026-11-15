@@ -33,7 +33,7 @@ Dead, don't build: Bato.to (shut down Jan 2026), TuMangaOnline (taken down Apr 2
 ## Blockers referenced below
 
 Capabilities the Comical contract didn't have. IMG-TILES, IMG-BYTES and IMG-RESP are now covered by
-processed page images (comical `dd49ca4`, see `shared-engines.md` § Final design). The app half
+processed page images (comical `d79f8fc`, see `shared-engines.md` § Final design). The app half
 isn't merged yet, and no bridge uses it yet.
 
 - **IMG-TILES** — page images arrive as a shuffled tile grid; the reader must reassemble them.

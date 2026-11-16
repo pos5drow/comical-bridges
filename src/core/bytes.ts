@@ -36,3 +36,15 @@ export function base64UrlToBytes(text: string): Uint8Array | undefined {
   }
   return Uint8Array.from(out);
 }
+
+const utf8 = new TextDecoder();
+
+/**
+ * `bytes` as UTF-8 text, decoded from an exact copy. On a phone, bridges run in their own JS context
+ * and the engine's `TextDecoder` stand-in comes from another, where `bytes instanceof Uint8Array` is
+ * false; it then decodes `bytes.buffer` whole, ignoring a view's offset and length. A copy owns its
+ * whole buffer, so either way the result is right.
+ */
+export function utf8Text(bytes: Uint8Array): string {
+  return utf8.decode(bytes.byteOffset === 0 && bytes.byteLength === bytes.buffer.byteLength ? bytes : bytes.slice());
+}

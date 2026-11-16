@@ -5,9 +5,10 @@
  * Fixed 32/64-bit fields are skipped (read as undefined), and groups (deprecated) are rejected.
  */
 
+import { utf8Text } from "./bytes";
+
 type Field = number | Uint8Array;
 
-const utf8 = new TextDecoder();
 
 export class ProtoMessage {
   private readonly fields = new Map<number, Field[]>();
@@ -60,7 +61,7 @@ export class ProtoMessage {
   /** The last string in field `n`, or undefined. */
   str(n: number): string | undefined {
     const v = this.fields.get(n)?.at(-1);
-    return v instanceof Uint8Array ? utf8.decode(v) : undefined;
+    return v instanceof Uint8Array ? utf8Text(v) : undefined;
   }
 
   /** The nested message in field `n`, or undefined. */

@@ -1,11 +1,11 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-16T04:12:32.771Z",
+  "updated": "2026-11-16T04:25:28.354Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
       "name": "Asura Scans",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -18,8 +18,8 @@
         "sort",
         "related-series"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.asurascans/0.1.4/bridge.js",
-      "sha256": "f90a89443dfb2e4e53a3f8030a42f6edd0b01f3170a6f6c4f87a5d0a7cdfbec8",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.asurascans/0.1.5/bridge.js",
+      "sha256": "3ecad28fcaee7be28a77292882ae03d5949b9b8f9eaaac4feff8ef6edb839fa4",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/asurascans.png",
       "ratings": true,
       "assetRateLimit": {
@@ -37,12 +37,12 @@
       "linkHosts": [
         "asurascans.com"
       ],
-      "signature": "6aCUYkBIGFnbZQgOSEM53gS484fUbF64v9QdTYwCwg7wNVm7iRpZZXD6PLfC0nES0sPLf3cUtOxgoz78rWdXCA"
+      "signature": "QSm3fyMi_0q5kRmbrJC_DaRYMDKnTK1I8WTsedWWNCiqwdbSPuvMfZGOJ-HKgaswvHRbFk4pKO_ctMy0RQSaAA"
     },
     {
       "id": "pos5drow.atsumaru",
       "name": "Atsumaru",
-      "version": "0.4.7",
+      "version": "0.4.8",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -57,8 +57,8 @@
         "favorites",
         "exclude-tags"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.atsumaru/0.4.7/bridge.js",
-      "sha256": "0a7716002b385c537430b5ae5765b943c8c51362aa0d73995e0793d68f280b06",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.atsumaru/0.4.8/bridge.js",
+      "sha256": "f4af8ab59f09a225a6728997841e9e9c9d33fed083a20d91e0efc7547cdd1e9e",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/atsumaru.png",
       "ratings": true,
       "assetRateLimit": {
@@ -68,7 +68,7 @@
       "linkHosts": [
         "atsu.moe"
       ],
-      "signature": "i6XhuLDf2HAvLGRh0l43smakQwIRDB6QUIJTIppW8lEXHW605QTKOI33yvQT-zpxUGuC6chBE2J4WNvyx7ziCA"
+      "signature": "rs0pVzHCnBnMOfag0WXNQsbvcJhThYmoVUxjwLfOHvCVGRNodKie-sgQ5xZwYMujAoTfB8CiGJjs1n3CiFsODA"
     },
     {
       "id": "pos5drow.batcave",
@@ -108,7 +108,7 @@
     {
       "id": "pos5drow.cubari",
       "name": "Cubari",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -117,8 +117,8 @@
       "capabilities": [
         "search"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.cubari/0.1.3/bridge.js",
-      "sha256": "a8e03f46527a72b540ddabe409ad0f0c628c6ded984da4c688dd477d29117ace",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.cubari/0.1.4/bridge.js",
+      "sha256": "80a28fe215ce551af26b97f394871a513114e9de4c3047c46ce2c7443df77761",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/cubari.png",
       "linkHosts": [
         "cubari.moe",
@@ -127,7 +127,7 @@
         "catbox.moe",
         "githubusercontent.com"
       ],
-      "signature": "WDWM13kOBYvNmXuyc0V_7CFFmFSsVy7F9dJ7ZQtLf6ERMxS8PJyLKgbmNuGCXOfu1OPOb-8kINYVStef5lm2Cw"
+      "signature": "PRJIF4E5ov07v_kULT5CsmR-SiJ_vjCOKS8sR4Hol4BTzCuhgYGbOXBqZpne8bM1WQxdfjihUscNwosRzh8jAg"
     },
     {
       "id": "pos5drow.dynasty",
@@ -158,7 +158,7 @@
     {
       "id": "pos5drow.flamecomics",
       "name": "Flame Comics",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -169,8 +169,8 @@
         "search",
         "filters"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.flamecomics/0.1.3/bridge.js",
-      "sha256": "c92f86ff23e81b13957b89d101e78c64d1091d33c8946bf5de9acc29fdef7fad",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.flamecomics/0.1.4/bridge.js",
+      "sha256": "480c7a020b477960eabf83aa65069ff49e159cd56ea6f5ccfe4470eb75cba0ac",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/flamecomics.png",
       "assetRateLimit": {
         "maxConcurrent": 4,
@@ -179,7 +179,7 @@
       "linkHosts": [
         "flamecomics.xyz"
       ],
-      "signature": "qeVrkWO4Zw52kPDQwtyoe0fPVuPrbE0937eoG7cBI4U8CBrpHyT7Qwt3UccEGR6CU5JmpjbJPFUiL6hE_-HPDA"
+      "signature": "_SdcdmbDNLdkHds35GBCZZNEB2JZCh4sNAx9ogQ_1tEUgSszOx9wXa1k3Eq6-1U_XdIrTK4vj2cGUhXPEm7ZAw"
     },
     {
       "id": "pos5drow.kagane",
@@ -228,7 +228,7 @@
     {
       "id": "pos5drow.kingofshojo",
       "name": "King of Shojo",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -240,8 +240,8 @@
         "filters",
         "sort"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.kingofshojo/0.1.3/bridge.js",
-      "sha256": "1df1aaaa6ffdcf72efc83c363935b0c14167cfb920d41b6ff32f3bddff4ba231",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.kingofshojo/0.1.4/bridge.js",
+      "sha256": "746dfddb813a2122b9e7673d472bd7b6d9cbbcf59922237f50fec1391687af77",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/kingofshojo.png",
       "assetRateLimit": {
         "maxConcurrent": 4,
@@ -250,7 +250,7 @@
       "linkHosts": [
         "kingofshojo.com"
       ],
-      "signature": "WXQGN3X79UcjVo2QVaZTAEMZk1wOlC3_C4Qnhska85iYkDm7E-v29fg0f6EUnHP1h2Vf5JW3koixHdM02pMIDA"
+      "signature": "f85eQkLOAgQGFDHJ9UUmist556NjCc5diqQI0CDSYsxbES86iiolK0BUQ4KWu4Lh0zqDmiAZpTYpeIEr1RP1DA"
     },
     {
       "id": "pos5drow.lectorxd",
@@ -282,7 +282,7 @@
     {
       "id": "pos5drow.mangaball",
       "name": "Manga Ball",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "contractVersion": "2.1.0",
       "languages": [
         "en",
@@ -311,8 +311,8 @@
         "settings",
         "content-rating"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangaball/0.1.3/bridge.js",
-      "sha256": "f677fae9f5283e6e47e983ab94dedd5dc3b4717d23360286a9cd07aae0d28053",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangaball/0.1.4/bridge.js",
+      "sha256": "674845b6a8bf22ea0812e0ff1b45bdc71ecdb5beadbe179ad2ef03cc86a76de5",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/mangaball.png",
       "ratings": true,
       "assetRateLimit": {
@@ -335,7 +335,7 @@
         "mangaball.com",
         "mangaball.net"
       ],
-      "signature": "RwI-IvxljHTEfDSQ7XugsqOqYQLIzHh2oSBSG8Nb9Z-2m4ipU7QrGGFSSTD1fLNmW7VpQZoaWOhm17PGV_6bAA"
+      "signature": "2QKKHbf4Jk7qqhG76UpjLEYvI2Zu1N0Py-KANiL5czGxb-znHeuFbXtnlIFL96SViCv54ursG_kU83dygRH-AQ"
     },
     {
       "id": "pos5drow.mangabat",
@@ -469,7 +469,7 @@
     {
       "id": "pos5drow.mangafire",
       "name": "MangaFire",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "contractVersion": "2.1.0",
       "languages": [
         "en",
@@ -489,8 +489,8 @@
         "settings",
         "content-rating"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangafire/0.1.4/bridge.js",
-      "sha256": "3809693be48d686c12279602521a6eb8d7254e2cd04481696734361d47eef992",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangafire/0.1.5/bridge.js",
+      "sha256": "c5fbe72257ca3a0846d9b296be281101365cdab88dace7a4f18e729072a4371e",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/mangafire.png",
       "assetRateLimit": {
         "maxConcurrent": 4,
@@ -507,12 +507,12 @@
       "linkHosts": [
         "mangafire.to"
       ],
-      "signature": "P52Bd1rxQmGbOJf7NJl4tTvdD_GEbpMm6qs5Wk1W9lvszqCWjbFq1xe-DsuEE7Q0HzWtYkAv6Ht5LU7bws3dBA"
+      "signature": "CuzP_GEa7PUNRoRZ8T7ITOW3twLMOjBKo7Ci_a_4BYiRLTVJ--iSU-UejF8NSETtqHWeFzQOtK2Qa5xNxsd4BQ"
     },
     {
       "id": "pos5drow.mangago",
       "name": "Mangago",
-      "version": "0.1.5",
+      "version": "0.1.6",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -526,8 +526,8 @@
         "settings",
         "content-rating"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangago/0.1.5/bridge.js",
-      "sha256": "8587baee59e876dc5f91e96ad9bd6d3122ad7a0a59759ab131129813fa49c0eb",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangago/0.1.6/bridge.js",
+      "sha256": "2c850d3fb2ae06e362fe34d36334c91ee9d96f692b48ca4078897947af2a6f6f",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/mangago.png",
       "assetRateLimit": {
         "maxConcurrent": 4,
@@ -544,12 +544,12 @@
       "linkHosts": [
         "mangago.me"
       ],
-      "signature": "TKwn0YwVF_OPxjiBzZZhjd1IUAEtnzSk83yme2YahgPbL1bA65kJCWHH-53-w_G9oE_Cc0ARa1EaGdGmNYmbBQ"
+      "signature": "1VfVHri3oUMWk_esPHehmCqmL8w2go9xoppBf-isC2mCmO1GYQJk78vHAgAg7ebVz9kKmc7rYu2LOhgLJyNcAw"
     },
     {
       "id": "pos5drow.mangak",
       "name": "MangaK",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -562,8 +562,8 @@
         "sort",
         "content-rating"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangak/0.1.4/bridge.js",
-      "sha256": "f00b997d14229e10e22e9a16170f2ad22300cb6efc217dc9068548ab31778436",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangak/0.1.5/bridge.js",
+      "sha256": "76487a9567354577525ec75697c562a18575420d11d04019fd3abf684718d4f5",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/mangak.png",
       "ratings": true,
       "assetRateLimit": {
@@ -609,7 +609,7 @@
       "linkHosts": [
         "mangak.io"
       ],
-      "signature": "jodPAq9XUmncababAE6qo5NKBJA859KK-b5-YYLeZncZ47aJPlwJtHal6D2hM_Qi5uSb5Rpo2wp4LHjTsVr2AQ"
+      "signature": "FCKd4-Be0Xsf9JfP1KL4sVGZYZNAIMeJxmGxvSWCTGbWc0AwIbLxdfMF6KZyU66kMk-nhihxfPc9CCGlVCyQAQ"
     },
     {
       "id": "pos5drow.mangakakalot",
@@ -748,7 +748,7 @@
     {
       "id": "pos5drow.mangataro",
       "name": "MangaTaro",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -760,8 +760,8 @@
         "filters",
         "sort"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangataro/0.1.3/bridge.js",
-      "sha256": "ab6b30ca876b2f6da68e043ce91469f0f8a2dbdd683781c9418f46a261d42b17",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangataro/0.1.4/bridge.js",
+      "sha256": "657fa4028d4ba57d355f4d5883c2eef3d8ec0f65f43ce25c43d43c95aff10594",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/mangataro.png",
       "assetRateLimit": {
         "maxConcurrent": 4,
@@ -770,12 +770,12 @@
       "linkHosts": [
         "mangataro.org"
       ],
-      "signature": "e7oxBY_BGYLw2p9EsTRYYLxxfFo3C9tnAfH7CLP4xarFToNWcSfMCNSWPm1bYkT0JNoDgcc44WB_0k1eU8FSCQ"
+      "signature": "8kWV_vwtbbHpLs3hu4i14ev4OtnLVSkc22FxQhF1hcl5GGuKd_k2gK7pPINL32eb3ZpBkJs4aQrXqi05ZejlBQ"
     },
     {
       "id": "pos5drow.manhwaweb",
       "name": "ManhwaWeb",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "contractVersion": "2.1.0",
       "languages": [
         "es"
@@ -788,8 +788,8 @@
         "sort",
         "content-rating"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.manhwaweb/0.1.4/bridge.js",
-      "sha256": "922d334b3c777e1e6db102424e8d8972e52b8785beda1b165bafe5c3708952d7",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.manhwaweb/0.1.5/bridge.js",
+      "sha256": "5d2d0f218ba846c24da7c40999e6af04e423d8b22a22c5ca1a0444c5df8d11ca",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/manhwaweb.png",
       "assetRateLimit": {
         "maxConcurrent": 4,
@@ -807,12 +807,12 @@
       "linkHosts": [
         "manhwaweb.com"
       ],
-      "signature": "u-YNeH_1-6Qh0AvkjZRG0LSDfSu4DDYladYHAJmaH-oZAaUT3uRgMinKr8MXk8BNx35osum8A_BbzBVVL518BQ"
+      "signature": "7KZBIKXzIqcxSBgGT4tYY4-7zZ87jn2ldLQEK-v-sgGyDckraYQ3mH1extfI4sX5bylXe0SkFmA6dyan8g_1Cg"
     },
     {
       "id": "pos5drow.olympus",
       "name": "Olympus Scanlation",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "contractVersion": "2.1.0",
       "languages": [
         "es"
@@ -825,8 +825,8 @@
         "sort",
         "settings"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.olympus/0.1.4/bridge.js",
-      "sha256": "b95ee81a9184f4d1aec85c503c6a7b366a5959d18874407693b92a23dcca99d7",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.olympus/0.1.5/bridge.js",
+      "sha256": "754fef0f187d8d1adff466cf770f971893565777ee03a2cb5f651b2a03898b59",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/olympus.png",
       "assetRateLimit": {
         "maxConcurrent": 4,
@@ -836,7 +836,7 @@
         "olympusxyz.com",
         "olympusbiblioteca.com"
       ],
-      "signature": "KvhPTGMygcF-IVG5TBtC1XxmRWJLTHnjIH-deUrnpxT8fapjdJ5Gs-SSALHNVkWScXi1sOWM0TW8I7jVaAGLBw"
+      "signature": "JJ1tSVxb_4SrP_pnDP5IfwDUrcSA0fy3VoEwkAjLf02FhC1E7n2x0V09jmqbwe_naZlYZmeJOe3BlcpxXXaDDw"
     },
     {
       "id": "pos5drow.onisaga",
@@ -881,7 +881,7 @@
     {
       "id": "pos5drow.roliascan",
       "name": "Rolia Scan",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -893,8 +893,8 @@
         "filters",
         "sort"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.roliascan/0.1.3/bridge.js",
-      "sha256": "a3ee448e1bc6a784fae95c83fa9125dd3bcfd06b38679c09a95893bd0650f796",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.roliascan/0.1.4/bridge.js",
+      "sha256": "659c33182d8449ebd96f1dae5a3f7a8d27edefe92990e438e580296bcdc54a94",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/roliascan.png",
       "assetRateLimit": {
         "maxConcurrent": 4,
@@ -903,12 +903,12 @@
       "linkHosts": [
         "roliascan.com"
       ],
-      "signature": "YVurogdRxZEBQDq_9P13n4qmLCDpgy-42Tp6eVkhQ9vXju0RMLfND7kILUyg-xXSgzeDqMY_A274m38AyA4HDA"
+      "signature": "7ICwBfyxI2BcDX5zHM1FgQhAje2GKkTbzp3uqQ549441PIZDlt8rGXlQ0FN40xRW-_Ao-M53kHHQCvWH-HHJBA"
     },
     {
       "id": "pos5drow.toonilyme",
       "name": "Toonily.me",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -921,8 +921,8 @@
         "sort",
         "content-rating"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.toonilyme/0.1.4/bridge.js",
-      "sha256": "0fd48ab9236b0c2249d50f31173fbd70d95da6a1b8c205af1ce2f18713a816c7",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.toonilyme/0.1.5/bridge.js",
+      "sha256": "90cb7f8f643964a61f263c90c3af0dc60320426e421a956a4e6a7c5c3bfee0f0",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/toonilyme.png",
       "ratings": true,
       "assetRateLimit": {
@@ -968,12 +968,12 @@
       "linkHosts": [
         "toontop.io"
       ],
-      "signature": "IWtf64_gtSYZBVxlCnTIEDI-q6bQYYm13pNScZtpHU5r5UrG5HxNxFOkWWvo9_KaKZYi6p45iRYaYiEIxbTwAw"
+      "signature": "XOvtCRWzwHY4PejD7iHMfc_o8dMkFEGp4G15jpGl_leePT0H2lL5S-i3eFw8nbaPRf94aBedAR8-musujwZPDQ"
     },
     {
       "id": "pos5drow.toonkotsu",
       "name": "Toonkotsu",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -986,8 +986,8 @@
         "sort",
         "content-rating"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.toonkotsu/0.1.4/bridge.js",
-      "sha256": "bc439ee4452c27c29f1ccd943ea86ccc6b10377baff9e687591868f8ca832e4c",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.toonkotsu/0.1.5/bridge.js",
+      "sha256": "3ef4ab679e75a6e1d51ea6db471f2931df032a0cdc7e6e22e8be2cfc9a11f7cf",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/toonkotsu.png",
       "assetRateLimit": {
         "maxConcurrent": 4,
@@ -1004,7 +1004,7 @@
       "linkHosts": [
         "toonkotsu.com"
       ],
-      "signature": "bszVAfU4Enjqj93hJEYt-c5xIV-7ESAChwfVWfmxnI8nqpYUU0uZoEQjT59ix-SovP-J3Pf5z-KXzwSXFGTCCA"
+      "signature": "UNtryWXWol2fNph4AlvGHrOmY66Kzlmnfvjrx5GSuGHzNg5mjggf20VLqfCHIVkUT2CV2-ptY41Z7Vv0d3RKDA"
     },
     {
       "id": "pos5drow.webtoons",
@@ -1051,7 +1051,7 @@
     {
       "id": "pos5drow.weebcentral",
       "name": "Weeb Central",
-      "version": "0.3.5",
+      "version": "0.3.6",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -1063,8 +1063,8 @@
         "filters",
         "sort"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.weebcentral/0.3.5/bridge.js",
-      "sha256": "1cf7438eca476db83eae55122044e2de891e5d1f394a77ef5c8b83b6a5a8f8ef",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.weebcentral/0.3.6/bridge.js",
+      "sha256": "64b380c764c68a3d02334db1593c176ed4fae69156ce19515284e48cf96c6b00",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/weebcentral.png",
       "assetRateLimit": {
         "maxConcurrent": 3,
@@ -1073,12 +1073,12 @@
       "linkHosts": [
         "weebcentral.com"
       ],
-      "signature": "28W7h9Jk5JJgEkMCPIkWHMaB5QVU0_nSVLo7K4ZBQX7DKU7xpGDMdgg57MF-70jGsPthoFpvXcb2ZczG0h01Cg"
+      "signature": "G5qV5in0IM4JiHd5IMzAuH3L6oMVL5mzqIqxX0ZsaLuhPEUGOejABzY0ZZttjPc-fU0e9VdkTXoH2v1feVy8AA"
     },
     {
       "id": "pos5drow.zonatmo",
       "name": "ZonaTMO",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "contractVersion": "2.1.0",
       "languages": [
         "es"
@@ -1091,8 +1091,8 @@
         "sort",
         "content-rating"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.zonatmo/0.1.4/bridge.js",
-      "sha256": "9088e6ea83549ea12ea35a7cdc73f1d822ce820888726a057cdc3ba562b9fce5",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.zonatmo/0.1.5/bridge.js",
+      "sha256": "cb472f75ffbed76bbcf32a754a9bb3c4fc04a57b6dd1ca47ef7e5448429b90c9",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/zonatmo.png",
       "assetRateLimit": {
         "maxConcurrent": 4,
@@ -1101,7 +1101,7 @@
       "linkHosts": [
         "zonatmo.org"
       ],
-      "signature": "eWHY4gyB9M0j81lzGoM6ZxLDMrVaqqtGtsSy2RLEU0vNBghlTTd2YO818U2xfXj3yVQaFC1tpU4yBuYF4uEeDg"
+      "signature": "L2H-XoDrv_Rl1y9boQbtbgRZfKN48Kk6eK2xWal9yPvzomxbEWefVQoYEE3KZiglFFxCAPaR8lF7-pBlzIroCQ"
     }
   ],
   "publicKey": "_w_wfsGg94fRKmD6kq4mIHQYReFo7qPcZ9IMwhy0L24",

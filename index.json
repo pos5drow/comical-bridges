@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-15T22:52:41.566Z",
+  "updated": "2026-11-16T01:20:51.893Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -73,7 +73,7 @@
     {
       "id": "pos5drow.batcave",
       "name": "BatCave",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -85,8 +85,8 @@
         "filters",
         "sort"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.batcave/0.1.1/bridge.js",
-      "sha256": "a0629bfea2e1708ea6cde393a4e897818a3decf6ba3216e5cfa801bdff91702e",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.batcave/0.1.2/bridge.js",
+      "sha256": "dc1ca4e90690dcc866413ff3f57a35e203b8ea996eaadb928f1186ab2720374c",
       "iconUrl": "https://batcave.biz/favicon.ico",
       "assetRateLimit": {
         "maxConcurrent": 4,
@@ -103,7 +103,7 @@
       "linkHosts": [
         "batcave.biz"
       ],
-      "signature": "RZm31Un3KsBg58KQZnd7Bz_X0mkx-HVHKrXkDsTKYnelMnhOJAN-PcTuu3jM1_68-sNNL7l7uUX0fVZ0euGcCw"
+      "signature": "7Svphh_3RaGjLGgVdV6h0XnkbiQiKVvA8vC0Efhu962FcqQfkNNsbol2ZVpTq8k7hrj3gwns7cW5gk93q0AvAA"
     },
     {
       "id": "pos5drow.cubari",
@@ -184,7 +184,7 @@
     {
       "id": "pos5drow.kagane",
       "name": "Kagane",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -198,8 +198,8 @@
         "settings",
         "content-rating"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.kagane/0.1.0/bridge.js",
-      "sha256": "b1d19539b20ccef06816f059e534085a01c01e6230c55c59345df40b09a8bf72",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.kagane/0.1.1/bridge.js",
+      "sha256": "5c627be4dd2c362d2afc1caff4ba5f0d71b06ad6af4768fc6e4ac61894647482",
       "iconUrl": "https://kagane.moe/favicon.ico",
       "assetRateLimit": {
         "maxConcurrent": 4,
@@ -223,7 +223,7 @@
         "kagane.cx",
         "kagane.net"
       ],
-      "signature": "BYvEPNqfg4Z1eZYFiCVYuxcCJuYc6kFtXQBdhl6BO7xrd2RvMB4sdoFbdHc-NpH0ZAigfOXFpdOXhchNBaL0CA"
+      "signature": "vSlIy5V0aG2XsBV84oSInLXapRg2q2Z12W1D7JZa9FQ04I1soiw86T7CVVAjybjSEMC8DN5MUcc4oJWeEEFqDA"
     },
     {
       "id": "pos5drow.kingofshojo",
@@ -255,7 +255,7 @@
     {
       "id": "pos5drow.lectorxd",
       "name": "LectorXD",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "contractVersion": "2.1.0",
       "languages": [
         "es"
@@ -267,8 +267,8 @@
         "filters",
         "sort"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.lectorxd/0.1.0/bridge.js",
-      "sha256": "f8b3e9bf66d772a833e95256c69fd9a948f8e5232a943e88fddd00c3a97df34d",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.lectorxd/0.1.1/bridge.js",
+      "sha256": "73af7ea9c069f62e44dd7cd879048107628361789938628cf8b0898315021a9c",
       "iconUrl": "https://lectorxd.com/favicon.ico",
       "assetRateLimit": {
         "maxConcurrent": 4,
@@ -277,7 +277,7 @@
       "linkHosts": [
         "lectorxd.com"
       ],
-      "signature": "2I-F2s6WqMf-yyhw7Zz0QtxjaxwrqLqokBKH5WffoUsk22J7p00HRHnoGnaIU3g8N-svsY013MIXXpKHvVYACA"
+      "signature": "O7JhQuMAfAxWEqVbhdEDaw9d3MIwb8kpZVtMIpgzVE0Z5clloSfgAs2JQ_2fp1kff-9qzt-UDIbJushT2lbpCQ"
     },
     {
       "id": "pos5drow.mangaball",
@@ -512,7 +512,7 @@
     {
       "id": "pos5drow.mangago",
       "name": "Mangago",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -526,8 +526,8 @@
         "settings",
         "content-rating"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangago/0.1.2/bridge.js",
-      "sha256": "5b6b35881595939d8f99e251dc9a0f1ceb8e6f6c0724cf0208fbc27f0299c269",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangago/0.1.3/bridge.js",
+      "sha256": "48c6b26b46a2a076b35b4215c94d2022a594116d7a6e65d220b07dc1453ec142",
       "iconUrl": "https://www.mangago.me/favicon.ico",
       "assetRateLimit": {
         "maxConcurrent": 4,
@@ -544,7 +544,7 @@
       "linkHosts": [
         "mangago.me"
       ],
-      "signature": "Wz7zZw88VTJYVwnP2fP3bM4jWEqNQpHfWcDj7uUu1viFQTcLEu8UdJjs9W-wAA_YOcqvhTd7pidewOcYunmGDA"
+      "signature": "ULCxHlSGAQ7wwAtk_qlwRp5XsKgedTVi5aFBcia3_SVbBbjvGpb_7hkhn2oVD3Jv_-Cfe8muPX4rD_ezLTNzAA"
     },
     {
       "id": "pos5drow.mangak",
@@ -841,7 +841,7 @@
     {
       "id": "pos5drow.onisaga",
       "name": "OniSaga",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "contractVersion": "2.1.0",
       "languages": [
         "en",
@@ -858,8 +858,8 @@
         "settings",
         "content-rating"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.onisaga/0.1.0/bridge.js",
-      "sha256": "4f5bc55782eab1b84d9c06288992841a07b61f7f6107901817508b3a8c58e005",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.onisaga/0.1.1/bridge.js",
+      "sha256": "29b83adef0eddbf23f75eeda29e1d889a84bccb886d4b10f2ebe94b03aa67d8e",
       "iconUrl": "https://onisaga.com/apple-icon",
       "assetRateLimit": {
         "maxConcurrent": 4,
@@ -876,7 +876,7 @@
       "linkHosts": [
         "onisaga.com"
       ],
-      "signature": "XikXTIUzEpuCmQZenFd3BcXPjbZtru6lXcuLWhfYsfP8DSu4pfnSE9G-Bei1wNu70XuOSbEWm6rn3S6-ih32BQ"
+      "signature": "FDxQx9ke8A4U5Iz6JYmECDWj6h0_L7TWttqUItV8UrF9Vy63TnsUlTkWiiBsIGcyN7Xqs5dToNQPNTyyPMFhDQ"
     },
     {
       "id": "pos5drow.roliascan",

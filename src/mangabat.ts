@@ -5,7 +5,7 @@ import { bridgeIcon } from "./core/icon";
 export default mangaBox({
   id: "pos5drow.mangabat",
   name: "Mangabat",
-  version: "0.1.4",
+  version: "0.1.5",
   mirrors: ["https://www.mangabats.com"],
   iconUrl: bridgeIcon("mangabat"),
 });

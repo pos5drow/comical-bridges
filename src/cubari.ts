@@ -91,7 +91,7 @@ class CubariBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.cubari",
     name: "Cubari",
-    version: "0.1.2",
+    version: "0.1.3",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,

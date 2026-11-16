@@ -231,7 +231,7 @@ class MangaDotBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.mangadot",
     name: "MangaDot",
-    version: "0.1.0",
+    version: "0.1.1",
     contractVersion: "2.1.0",
     languages: LANGUAGES.map(([code]) => code),
     nsfw: false,

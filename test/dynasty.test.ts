@@ -92,3 +92,28 @@ test("links: container links directly; a chapter link through its series tag", a
   expect(await bridge.resolveUrl!("https://dynasty-scans.com/chapters/citrus_ch01")).toEqual({ seriesId: "series/citrus", chapterId: "citrus_ch01" });
   expect(await bridge.resolveUrl!("https://dynasty-scans.com/tags/yuri")).toBeNull();
 });
+
+describe("chapter order", () => {
+  test("an unheaded group listed before the volumes still sorts newest first by number", async () => {
+    const series = {
+      name: "Some Prefer Nettles",
+      taggings: [
+        { title: "Chapter 3: C", permalink: "s_ch03_old" },
+        { title: "Chapter 4: D", permalink: "s_ch04_old" },
+        { header: "Volume 1" },
+        { title: "Chapter 3: C", permalink: "s_ch03" },
+        { title: "Chapter 4: D", permalink: "s_ch04" },
+        { header: "Volume 2" },
+        { title: "Chapter 5: E", permalink: "s_ch05" },
+      ],
+    };
+    const caps: HostCapabilities = {
+      network: { request: async (req: HttpRequest): Promise<HttpResponse> => ({ url: req.url, status: 200, statusText: "OK", headers: {}, body: JSON.stringify(series) }) },
+      storage: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [], secure: { get: async () => undefined, set: async () => {}, delete: async () => {}, keys: async () => [] } },
+      log: { debug() {}, info() {}, warn() {}, error() {} },
+      settings: {},
+    };
+    const chapters = await dynasty(caps).getChapters!("series/some_prefer_nettles");
+    expect(chapters.map((c) => c.id)).toEqual(["s_ch05", "s_ch04", "s_ch04_old", "s_ch03", "s_ch03_old"]);
+  });
+});

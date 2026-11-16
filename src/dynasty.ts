@@ -251,7 +251,12 @@ class DynastyBridge extends BridgeBase {
       if (t.permalink) chapters.push(this.chapter(t, volume));
     }
     // Taggings run oldest first; newest first reads better and is what the other bridges return.
-    return chapters.reverse();
+    // A series can list an unheaded group before its volumes (an earlier release of some chapters),
+    // so when every chapter has a number, order by it; the sort is stable, so a chapter's releases
+    // stay together in the site's order.
+    chapters.reverse();
+    if (chapters.every((c) => c.number !== undefined)) chapters.sort((a, b) => b.number! - a.number!);
+    return chapters;
   }
 
   private chapter(t: TaggingDto, volume: number | undefined): Chapter {

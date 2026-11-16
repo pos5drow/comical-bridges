@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-16T03:45:57.201Z",
+  "updated": "2026-11-16T04:12:32.771Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -340,7 +340,7 @@
     {
       "id": "pos5drow.mangabat",
       "name": "Mangabat",
-      "version": "0.1.5",
+      "version": "0.1.6",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -353,8 +353,8 @@
         "sort",
         "settings"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangabat/0.1.5/bridge.js",
-      "sha256": "2eadd1c4d3b93be176e4e0c34bbe93b97e4b2d029d6b4c8317e2ad62aed73721",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangabat/0.1.6/bridge.js",
+      "sha256": "d9313d182729a3ed1beae3edf3b466732689c5551b73fd474e0e1afaacea42b4",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/mangabat.png",
       "cardSubtitles": true,
       "ratings": true,
@@ -374,7 +374,7 @@
       "linkHosts": [
         "mangabats.com"
       ],
-      "signature": "kUiAcS_-7S2XoYYrpKQ0wmT2rnXas8tk8_I6w2FJIJ2cOKEi6-3Uszzvu2GQbSJtZN_zb74B9XCJOM0BWYVvCw"
+      "signature": "sHoDYkbhPhFAFwGsbe3ZbglHYY_3OKKI0WbJzb-SfQgF272DPjA0nd3fqe3KDUHGBO9q31qKuweddNWVplkYDw"
     },
     {
       "id": "pos5drow.mangadex",
@@ -614,7 +614,7 @@
     {
       "id": "pos5drow.mangakakalot",
       "name": "Mangakakalot",
-      "version": "0.1.5",
+      "version": "0.1.6",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -627,8 +627,8 @@
         "sort",
         "settings"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangakakalot/0.1.5/bridge.js",
-      "sha256": "bc3a2641592c36afe9fcfcc14e20478e91dbd10240050d9258f147c83663ba55",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.mangakakalot/0.1.6/bridge.js",
+      "sha256": "64c46e89d4dac37d0486f02a15e2c4c4ee0578b4820772f59bf8a4a785d77245",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/mangakakalot.png",
       "cardSubtitles": true,
       "ratings": true,
@@ -652,12 +652,12 @@
         "mangakakalove.com",
         "mangakakalot.gg"
       ],
-      "signature": "MPLUSNX9-iABPTnwC2tCQdXLO7ZeE-Jd7vfh2GtO5HN1neBi6Yjpb-sc8Bzlqn8HXkFHXIBXKwhRNw5m7q0xDA"
+      "signature": "qzpZFb3EVlfM4LQc2cyhBU7KDKs26U-dIX9YN5wnxi1EEGFybhKUVQqAPU57AOf1FzAbte7klGLqyqUXdRNdAQ"
     },
     {
       "id": "pos5drow.manganato",
       "name": "Manganato",
-      "version": "0.1.5",
+      "version": "0.1.6",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -670,8 +670,8 @@
         "sort",
         "settings"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.manganato/0.1.5/bridge.js",
-      "sha256": "07cf19417195b0e89c984e89d2d90021637f63857562ae529e032762a1e4f9a2",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.manganato/0.1.6/bridge.js",
+      "sha256": "71030bf05a8e591ea9ee59f3fbcfe8a322621b62cdec960b8dec193cd44b6d0e",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/manganato.png",
       "cardSubtitles": true,
       "ratings": true,
@@ -697,7 +697,7 @@
         "nelomanga.net",
         "manganami.com"
       ],
-      "signature": "tbYq6f_n1r14wru0nLh_J2NhAL24M_2EbIjxfKPP-B6nxh3zUAFypiTDoF7YqbSzBfTeFt44XcYx43euo4DqDg"
+      "signature": "RubsYNHZ-uXus-nUWhnCCC2NWK-yiZzt6rWdtXreS4kiAzuJRpe3ULpClBbpUbxwyvsynaxfOamE53W5JTO_Cw"
     },
     {
       "id": "pos5drow.mangaplus",

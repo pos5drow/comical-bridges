@@ -147,7 +147,7 @@ class ToonkotsuBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.toonkotsu",
     name: "Toonkotsu",
-    version: "0.1.4",
+    version: "0.1.5",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,

@@ -4,7 +4,7 @@ import { mangaTaro } from "./engines/mangataro";
 export default mangaTaro({
   id: "pos5drow.mangataro",
   name: "MangaTaro",
-  version: "0.1.3",
+  version: "0.1.4",
   base: "https://mangataro.org",
   imageHosts: ["mangataro.yachts"],
   tags: [

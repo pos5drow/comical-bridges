@@ -104,7 +104,7 @@ class OlympusBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.olympus",
     name: "Olympus Scanlation",
-    version: "0.1.4",
+    version: "0.1.5",
     contractVersion: "2.1.0",
     languages: ["es"],
     nsfw: false,

@@ -103,7 +103,7 @@ class FlameComicsBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.flamecomics",
     name: "Flame Comics",
-    version: "0.1.3",
+    version: "0.1.4",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,

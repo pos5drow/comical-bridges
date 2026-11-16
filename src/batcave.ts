@@ -40,6 +40,7 @@ import {
 } from "@comical/sdk";
 import { parseStatus, standardGuards } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
+import { absoluteUrl } from "./core/urls";
 
 const SITE = "https://batcave.biz";
 const UA =
@@ -252,7 +253,7 @@ class BatCaveBridge extends BridgeBase {
     if (!title) throw new Error("BatCave changed its series pages (no title found); this bridge needs an update");
     const info: SeriesInfo = { id: seriesId, title, shareUrl: `${SITE}/${seriesId}.html` };
     const poster = $("div.page__poster img").first().attr("src");
-    info.thumbnailUrl = poster ? new URL(poster, SITE).href : this.poster(seriesId);
+    info.thumbnailUrl = (poster && absoluteUrl(poster, SITE)) || this.poster(seriesId);
     info.thumbnailAspect = 2 / 3;
     const item = (label: string) => {
       const li = $(".page__list > li").filter((_, el) => $(el).children("div").first().text().trim().replace(/:$/, "") === label).first();

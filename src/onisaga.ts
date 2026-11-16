@@ -46,6 +46,7 @@ import {
 } from "@comical/sdk";
 import { standardGuards } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
+import { absoluteUrl, withQuery } from "./core/urls";
 
 const SITE = "https://onisaga.com";
 const MEDIA_HOST = "media.onisaga.com";
@@ -174,13 +175,8 @@ interface ReaderManifest {
 
 /** A cover URL at full size (the site's `w` asks for a smaller one). */
 function fullSizeCover(url: string): string {
-  try {
-    const u = new URL(url, SITE);
-    u.searchParams.delete("w");
-    return u.href;
-  } catch {
-    return url;
-  }
+  const abs = absoluteUrl(url, SITE);
+  return abs ? withQuery(abs, { w: null }) : url;
 }
 
 /** A slug-shaped path segment, or undefined. */
@@ -348,11 +344,7 @@ class OniSagaBridge extends BridgeBase {
   // ── Details, chapters, pages ────────────────────────────────────────────────
 
   private titleUrl(slug: string): string {
-    const u = new URL(`${SITE}/title/${slug}`);
-    u.searchParams.set("chapters", "all");
-    u.searchParams.set("order", "desc");
-    u.searchParams.set("lang", this.lang);
-    return u.href;
+    return withQuery(`${SITE}/title/${slug}`, { chapters: "all", order: "desc", lang: this.lang });
   }
 
   private async titlePage(seriesId: string) {
@@ -439,7 +431,7 @@ class OniSagaBridge extends BridgeBase {
       const hrefs = [links.filter("[rel~=next]").first(), links]
         .flatMap((l) => l.map((_, a) => $(a).attr("href") ?? "").get())
         .filter(Boolean)
-        .map((h) => new URL(h, SITE).href);
+        .map((h) => absoluteUrl(h, SITE) ?? h);
       const next = hrefs.find((h) => !seen.has(h));
       if (!next) break;
       seen.add(next);
@@ -461,7 +453,7 @@ class OniSagaBridge extends BridgeBase {
       .filter((p): p is { ord?: number; url: string } => typeof p.url === "string" && p.url.length > 0)
       .sort((a, b) => (a.ord ?? 0) - (b.ord ?? 0));
     if (pages.length === 0) throw new Error(seriesGoneMessage("chapter removed from the source"));
-    return pages.map((p, index) => ({ index, imageUrl: new URL(p.url.replace(/&amp;/g, "&"), SITE).href }));
+    return pages.map((p, index) => ({ index, imageUrl: absoluteUrl(p.url.replace(/&amp;/g, "&"), SITE) ?? p.url }));
   }
 
   // ── Links ───────────────────────────────────────────────────────────────────

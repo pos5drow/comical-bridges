@@ -53,6 +53,7 @@ import {
 } from "@comical/sdk";
 import { parseStatus, standardGuards } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
+import { withQuery } from "./core/urls";
 
 const SITE = "https://kagane.moe";
 const API = `${SITE}/api/v2`;
@@ -590,8 +591,8 @@ class KaganeBridge extends BridgeBase<Settings> {
     if (expires !== undefined && expires - Date.now() > TOKEN_MARGIN_MS) return { url };
     const { challenge } = await this.access(m[1]!);
     if (challenge.access_token === token) return { url };
-    u.searchParams.set("token", challenge.access_token);
-    return { url: u.href };
+    // Not u.searchParams.set + u.href: on a phone the URL stand-in doesn't update href.
+    return { url: withQuery(url, { token: challenge.access_token }) };
   }
 
   /** The book's access (token, image host, manifest), from cache while it lasts. */

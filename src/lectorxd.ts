@@ -45,6 +45,7 @@ import {
 import { parseStatus, standardGuards } from "comical-bridge-kit";
 import { hintsForType } from "./cover-hints";
 import { guardResponse } from "./core/guarded";
+import { absoluteUrl, hostOf, pathOf, queryParam } from "./core/urls";
 
 const SITE = "https://lectorxd.com";
 const FALLBACK_UA =
@@ -103,10 +104,10 @@ function parseLink(urlOrPath: string): { seriesId: string; chapterId?: string } 
   let path = urlOrPath.trim();
   let group: string | null = null;
   try {
-    const u = new URL(path, `${SITE}/`);
-    if (!/^(?:www\.)?lectorxd\.com$/i.test(u.hostname)) return undefined;
-    path = u.pathname;
-    group = u.searchParams.get("g");
+    const abs = absoluteUrl(path, `${SITE}/`);
+    if (!abs || !/^(?:www\.)?lectorxd\.com$/i.test(hostOf(abs) ?? "")) return undefined;
+    path = pathOf(abs) ?? "/";
+    group = queryParam(abs, "g");
   } catch {
     return undefined;
   }
@@ -306,7 +307,7 @@ class LectorXdBridge extends BridgeBase {
 
     const cover = imageOf($('img[src*="/covers/"], img[data-src*="/covers/"]').first()) ?? $('meta[property="og:image"]').attr("content");
     if (cover) {
-      info.thumbnailUrl = new URL(cover, SITE).href;
+      info.thumbnailUrl = absoluteUrl(cover, SITE) ?? cover;
       info.thumbnailAspect = 2 / 3;
     }
 
@@ -388,7 +389,7 @@ class LectorXdBridge extends BridgeBase {
 function imageOf(img: { attr(name: string): string | undefined }): string | undefined {
   for (const name of ["data-src", "data-original-src", "data-lazy-src", "src"]) {
     const v = img.attr(name)?.trim();
-    if (v && !v.startsWith("data:")) return new URL(v, SITE).href;
+    if (v && !v.startsWith("data:")) return absoluteUrl(v, SITE);
   }
   return undefined;
 }

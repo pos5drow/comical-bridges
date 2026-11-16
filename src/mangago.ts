@@ -44,6 +44,7 @@ import {
 } from "@comical/sdk";
 import { aesCbcDecrypt, parseAbsoluteDate, parseStatus, standardGuards, stripZeroPadding } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
+import { absoluteUrl } from "./core/urls";
 
 const SITE = "https://www.mangago.me";
 const UA =
@@ -377,7 +378,7 @@ class MangagoBridge extends BridgeBase {
     const enc = data && /imgsrcs\s*=\s*['"]([A-Za-z0-9+/=]+)['"]/.exec(data)?.[1];
     const src = $("script[src*='chapter.js']").attr("src");
     if (!enc || !src) throw new Error("Mangago: this chapter has no pages to show");
-    const script = await this.script(src.startsWith("//") ? `https:${src}` : new URL(src, SITE).href);
+    const script = await this.script(src.startsWith("//") ? `https:${src}` : (absoluteUrl(src, SITE) ?? src));
     const plain = new TextDecoder().decode(stripZeroPadding(aesCbcDecrypt(base64ToBytes(enc), script.key, script.iv)));
     // Blank slots are pages in other batches; a trailing non-URL item is a flag, not a page.
     const list = plain.split(",").map((u) => (/^https?:\/\//.test(u.trim()) ? u.trim() : ""));

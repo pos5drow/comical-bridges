@@ -107,11 +107,12 @@ class BatCaveBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.batcave",
     name: "BatCave",
-    version: "0.1.3",
+    version: "0.1.4",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort"],
+    cardSubtitles: true,
     iconUrl: bridgeIcon("batcave"),
     rateLimit: { maxConcurrent: 2, minIntervalMs: 500 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },

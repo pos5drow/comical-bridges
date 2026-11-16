@@ -94,11 +94,12 @@ class ZonaTmoBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.zonatmo",
     name: "ZonaTMO",
-    version: "0.1.5",
+    version: "0.1.6",
     contractVersion: "2.1.0",
     languages: ["es"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "content-rating"],
+    cardSubtitles: true,
     iconUrl: bridgeIcon("zonatmo"),
     rateLimit: { maxConcurrent: 2, minIntervalMs: 500 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },

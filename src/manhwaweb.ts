@@ -121,11 +121,12 @@ class ManhwaWebBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.manhwaweb",
     name: "ManhwaWeb",
-    version: "0.1.5",
+    version: "0.1.6",
     contractVersion: "2.1.0",
     languages: ["es"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "content-rating"],
+    cardSubtitles: true,
     iconUrl: bridgeIcon("manhwaweb"),
     rateLimit: { maxConcurrent: 2, minIntervalMs: 400 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },

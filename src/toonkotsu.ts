@@ -147,11 +147,12 @@ class ToonkotsuBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.toonkotsu",
     name: "Toonkotsu",
-    version: "0.1.5",
+    version: "0.1.6",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "content-rating"],
+    cardSubtitles: true,
     iconUrl: bridgeIcon("toonkotsu"),
     rateLimit: { maxConcurrent: 2, minIntervalMs: 500 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },

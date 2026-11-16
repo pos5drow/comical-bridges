@@ -279,11 +279,12 @@ class KaganeBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "pos5drow.kagane",
     name: "Kagane",
-    version: "0.1.2",
+    version: "0.1.3",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "settings", "content-rating"],
+    cardSubtitles: true,
     iconUrl: bridgeIcon("kagane"),
     rateLimit: { maxConcurrent: 2, minIntervalMs: 350 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },

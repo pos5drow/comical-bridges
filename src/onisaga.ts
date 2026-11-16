@@ -205,11 +205,12 @@ class OniSagaBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.onisaga",
     name: "OniSaga",
-    version: "0.1.2",
+    version: "0.1.3",
     contractVersion: "2.1.0",
     languages: LANGUAGES.map(([code]) => code),
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "settings", "content-rating"],
+    cardSubtitles: true,
     iconUrl: bridgeIcon("onisaga"),
     // The site's pages are slow to render; Keiyoushi keeps it to two a second.
     rateLimit: { maxConcurrent: 2, minIntervalMs: 500 },

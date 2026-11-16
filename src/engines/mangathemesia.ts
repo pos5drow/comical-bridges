@@ -105,6 +105,7 @@ export class MangaThemesiaBridge extends BridgeBase {
       languages: site.languages ?? ["en"],
       nsfw: site.nsfw ?? false,
       capabilities: ["lists", "search", "filters", "sort"],
+      cardSubtitles: true,
       iconUrl: bridgeIcon(site.id),
       rateLimit: { maxConcurrent: 2, minIntervalMs: 500 },
       assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },

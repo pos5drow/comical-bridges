@@ -155,11 +155,12 @@ class LectorXdBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.lectorxd",
     name: "LectorXD",
-    version: "0.1.2",
+    version: "0.1.3",
     contractVersion: "2.1.0",
     languages: ["es"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort"],
+    cardSubtitles: true,
     iconUrl: bridgeIcon("lectorxd"),
     // Its own extension keeps to one request every 2s on the site (the image hosts are free).
     rateLimit: { maxConcurrent: 1, minIntervalMs: 2000 },

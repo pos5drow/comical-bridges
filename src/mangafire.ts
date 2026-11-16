@@ -222,11 +222,12 @@ class MangaFireBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.mangafire",
     name: "MangaFire",
-    version: "0.1.5",
+    version: "0.1.6",
     contractVersion: "2.1.0",
     languages: ["en", "es", "es-419", "fr", "ja", "pt", "pt-BR"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "settings", "content-rating"],
+    cardSubtitles: true,
     iconUrl: bridgeIcon("mangafire"),
     rateLimit: { maxConcurrent: 2, minIntervalMs: 500 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },

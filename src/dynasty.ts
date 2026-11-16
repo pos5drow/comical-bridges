@@ -97,11 +97,12 @@ class DynastyBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.dynasty",
     name: "Dynasty Scans",
-    version: "0.1.4",
+    version: "0.1.5",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters"],
+    cardSubtitles: true,
     iconUrl: bridgeIcon("dynasty"),
     rateLimit: { maxConcurrent: 2, minIntervalMs: 500 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },

@@ -128,11 +128,12 @@ class MangaPlusBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.mangaplus",
     name: "MANGA Plus",
-    version: "0.1.4",
+    version: "0.1.5",
     contractVersion: "2.1.0",
     languages: ["en", "es", "fr", "id", "pt-BR", "ru", "th", "de", "vi"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "settings"],
+    cardSubtitles: true,
     iconUrl: bridgeIcon("mangaplus"),
     rateLimit: { maxConcurrent: 1, minIntervalMs: 1000 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },

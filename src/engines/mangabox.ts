@@ -303,6 +303,12 @@ function scriptArray(script: string, name: string): string[] {
 }
 
 export class MangaBoxBridge extends BridgeBase {
+  /** The platform User-Agent when the host gives a browser one (the web check's web view sends it too), else a fixed desktop Chrome one. */
+  private get ua(): string {
+    const host = this.userAgent;
+    return host && host.startsWith("Mozilla/5.0") ? host : UA;
+  }
+
   readonly info: BridgeInfo;
   private readonly knownHosts: string[];
 
@@ -355,7 +361,7 @@ export class MangaBoxBridge extends BridgeBase {
 
   private headers(extra: Record<string, string> = {}): Record<string, string> {
     return {
-      "User-Agent": UA,
+      "User-Agent": this.ua,
       Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
       Referer: `${this.base}/`,
       ...extra,

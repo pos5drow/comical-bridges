@@ -41,6 +41,7 @@ import {
 import { standardGuards } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
 import { ProtoMessage } from "./core/protobuf";
+import { bridgeIcon } from "./core/icon";
 
 const SITE = "https://mangaplus.shueisha.co.jp";
 const API = "https://jumpg-webapi.tokyo-cdn.com/api";
@@ -132,7 +133,7 @@ class MangaPlusBridge extends BridgeBase {
     languages: ["en", "es", "fr", "id", "pt-BR", "ru", "th", "de", "vi"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "settings"],
-    iconUrl: `${SITE}/favicon.ico`,
+    iconUrl: bridgeIcon("mangaplus"),
     rateLimit: { maxConcurrent: 1, minIntervalMs: 1000 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },
     // Covers (`jumpg-assets`) load directly; pages (`jumpg-assets3`) go through the interceptor for

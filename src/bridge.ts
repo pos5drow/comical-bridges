@@ -43,6 +43,7 @@ import {
   seriesGoneMessage,
 } from "@comical/sdk";
 import { hintsForType } from "./cover-hints";
+import { bridgeIcon } from "./core/icon";
 
 /**
  * Atsumaru is a single fixed public site, so its base URL is a constant — not a user setting
@@ -225,7 +226,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "settings", "favorites", "exclude-tags"],
     ratings: true,
-    iconUrl: `${BASE_URL}/favicon/android-chrome-512x512.png`, // 512×512 (favicon.ico is tiny)
+    iconUrl: bridgeIcon("atsumaru"),
     // atsu.moe tolerates ~2 req/s; serialize and space requests to stay polite. Every host
     // (server, web, native) inherits this — no per-host configuration needed.
     rateLimit: { maxConcurrent: 1, minIntervalMs: 550 },

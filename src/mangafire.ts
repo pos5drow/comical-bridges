@@ -39,6 +39,7 @@ import { parseStatus, standardGuards } from "comical-bridge-kit";
 import { bytesToBase64 } from "./core/bytes";
 import { guardResponse } from "./core/guarded";
 import { hintsForType } from "./cover-hints";
+import { bridgeIcon } from "./core/icon";
 
 const SITE = "https://mangafire.to";
 const UA =
@@ -216,7 +217,7 @@ class MangaFireBridge extends BridgeBase {
     languages: ["en", "es", "es-419", "fr", "ja", "pt", "pt-BR"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "settings", "content-rating"],
-    iconUrl: `${SITE}/favicon.ico`,
+    iconUrl: bridgeIcon("mangafire"),
     rateLimit: { maxConcurrent: 2, minIntervalMs: 500 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },
     images: { hosts: [PAGE_HOST], headers: { Referer: `${SITE}/` } },

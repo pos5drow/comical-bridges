@@ -37,6 +37,7 @@ import {
 import { parseAbsoluteDate, parseStatus, standardGuards } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
 import { hintsForType } from "./cover-hints";
+import { bridgeIcon } from "./core/icon";
 
 const SITE = "https://zonatmo.org";
 const UA =
@@ -88,7 +89,7 @@ class ZonaTmoBridge extends BridgeBase {
     languages: ["es"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "content-rating"],
-    iconUrl: `${SITE}/favicon.ico`,
+    iconUrl: bridgeIcon("zonatmo"),
     rateLimit: { maxConcurrent: 2, minIntervalMs: 500 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },
     linkHosts: ["zonatmo.org"],

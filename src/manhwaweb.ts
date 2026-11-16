@@ -33,6 +33,7 @@ import {
 import { parseStatus, standardGuards } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
 import { hintsForType } from "./cover-hints";
+import { bridgeIcon } from "./core/icon";
 
 const SITE = "https://manhwaweb.com";
 const API = "https://api.manhwaweb.com";
@@ -115,7 +116,7 @@ class ManhwaWebBridge extends BridgeBase {
     languages: ["es"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "content-rating"],
-    iconUrl: `${SITE}/favicon.ico`,
+    iconUrl: bridgeIcon("manhwaweb"),
     rateLimit: { maxConcurrent: 2, minIntervalMs: 400 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },
     images: { hosts: ["img1mw.xyz", "img2mw.xyz"], headers: { Referer: `${SITE}/` } },

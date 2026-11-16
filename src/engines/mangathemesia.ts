@@ -36,6 +36,7 @@ import {
 import { chapterNumber, parseDate, parseStatus, siteHost, standardGuards } from "comical-bridge-kit";
 import { hintsForType } from "../cover-hints";
 import { guardResponse } from "../core/guarded";
+import { bridgeIcon } from "../core/icon";
 
 /** What distinguishes one MangaThemesia site from another. */
 export interface MangaThemesiaSite {
@@ -94,7 +95,7 @@ export class MangaThemesiaBridge extends BridgeBase {
       languages: site.languages ?? ["en"],
       nsfw: site.nsfw ?? false,
       capabilities: ["lists", "search", "filters", "sort"],
-      iconUrl: `${site.base}/favicon.ico`,
+      iconUrl: bridgeIcon(site.id),
       rateLimit: { maxConcurrent: 2, minIntervalMs: 500 },
       assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },
       linkHosts: [this.siteHostName],

@@ -54,6 +54,7 @@ import {
 import { parseStatus, standardGuards } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
 import { withQuery } from "./core/urls";
+import { bridgeIcon } from "./core/icon";
 
 const SITE = "https://kagane.moe";
 const API = `${SITE}/api/v2`;
@@ -283,7 +284,7 @@ class KaganeBridge extends BridgeBase<Settings> {
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "settings", "content-rating"],
-    iconUrl: `${SITE}/favicon.ico`,
+    iconUrl: bridgeIcon("kagane"),
     rateLimit: { maxConcurrent: 2, minIntervalMs: 350 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },
     linkHosts: [...LINK_HOSTS],

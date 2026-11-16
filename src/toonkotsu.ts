@@ -45,6 +45,7 @@ import { parseStatus, standardGuards } from "comical-bridge-kit";
 import { base64UrlToBytes, bytesToBase64 } from "./core/bytes";
 import { guardResponse } from "./core/guarded";
 import { hintsForType } from "./cover-hints";
+import { bridgeIcon } from "./core/icon";
 
 const SITE = "https://toonkotsu.com";
 const UA =
@@ -141,7 +142,7 @@ class ToonkotsuBridge extends BridgeBase {
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "content-rating"],
-    iconUrl: `${SITE}/favicon.ico`,
+    iconUrl: bridgeIcon("toonkotsu"),
     rateLimit: { maxConcurrent: 2, minIntervalMs: 500 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },
     // No headers: covers load directly; encrypted pages are routed for decoding.

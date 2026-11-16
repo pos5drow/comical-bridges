@@ -45,6 +45,7 @@ import {
 } from "@comical/sdk";
 import { parseStatus, standardGuards } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
+import { bridgeIcon } from "./core/icon";
 
 const SITE = "https://mangadot.net";
 const FALLBACK_UA =
@@ -235,7 +236,7 @@ class MangaDotBridge extends BridgeBase {
     languages: LANGUAGES.map(([code]) => code),
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "settings", "content-rating"],
-    iconUrl: `${SITE}/favicon.ico`,
+    iconUrl: bridgeIcon("mangadot"),
     cardSubtitles: true,
     ratings: true,
     rateLimit: { maxConcurrent: 2, minIntervalMs: 400 },

@@ -37,6 +37,7 @@ import {
 } from "@comical/sdk";
 import { chapterNumber, fold, parseAbsoluteDate, parseStatus, pickMirror, siteHost, standardGuards } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
+import { bridgeIcon } from "./core/icon";
 
 const DEFAULT_BASE = "https://olympusxyz.com";
 const REDIRECTOR = "https://olympus.pages.dev";
@@ -98,7 +99,7 @@ class OlympusBridge extends BridgeBase {
     languages: ["es"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "settings"],
-    iconUrl: `${DEFAULT_BASE}/favicon.ico`,
+    iconUrl: bridgeIcon("olympus"),
     rateLimit: { maxConcurrent: 2, minIntervalMs: 400 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },
     linkHosts: ["olympusxyz.com", "olympusbiblioteca.com"],

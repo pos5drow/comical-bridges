@@ -33,6 +33,7 @@ import {
 } from "@comical/sdk";
 import { standardGuards } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
+import { bridgeIcon } from "./core/icon";
 
 const SITE = "https://www.webtoons.com";
 const MOBILE = "https://m.webtoons.com";
@@ -85,7 +86,7 @@ class WebtoonsBridge extends BridgeBase {
     languages: ["en", "es", "fr", "de", "id", "th", "zh-Hant"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "settings", "content-rating"],
-    iconUrl: `${SITE}/favicon.ico`,
+    iconUrl: bridgeIcon("webtoons"),
     rateLimit: { maxConcurrent: 2, minIntervalMs: 500 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },
     images: { hosts: ["pstatic.net"], headers: { Referer: `${SITE}/` } },

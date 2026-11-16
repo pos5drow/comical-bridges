@@ -1,10 +1,11 @@
 /** Mangabat — a MangaBox site (see `engines/mangabox.ts`). */
 import { mangaBox } from "./engines/mangabox";
+import { bridgeIcon } from "./core/icon";
 
 export default mangaBox({
   id: "pos5drow.mangabat",
   name: "Mangabat",
   version: "0.1.4",
   mirrors: ["https://www.mangabats.com"],
-  iconUrl: "https://www.mangabats.com/favicon.ico",
+  iconUrl: bridgeIcon("mangabat"),
 });

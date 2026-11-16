@@ -37,6 +37,7 @@ import {
 import { chapterNumber, md5, parseRelativeDate, parseStatus, standardGuards } from "comical-bridge-kit";
 import { hintsForType } from "../cover-hints";
 import { guardResponse } from "../core/guarded";
+import { bridgeIcon } from "../core/icon";
 
 /** What distinguishes one MangaTaro site from another. */
 export interface MangaTaroSite {
@@ -176,7 +177,7 @@ export class MangaTaroBridge extends BridgeBase {
       languages: ["en"],
       nsfw: false,
       capabilities: ["lists", "search", "filters", "sort"],
-      iconUrl: `${site.base}/favicon.ico`,
+      iconUrl: bridgeIcon(site.id),
       rateLimit: { maxConcurrent: 2, minIntervalMs: 400 },
       assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },
       linkHosts: [siteHost],

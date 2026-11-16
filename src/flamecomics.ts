@@ -30,6 +30,7 @@ import {
 import { fold, parseStatus, standardGuards } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
 import { hintsForType } from "./cover-hints";
+import { bridgeIcon } from "./core/icon";
 
 const SITE = "https://flamecomics.xyz";
 const CDN = "https://cdn.flamecomics.xyz/uploads/images/series";
@@ -97,7 +98,7 @@ class FlameComicsBridge extends BridgeBase {
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters"],
-    iconUrl: `${SITE}/favicon.ico`,
+    iconUrl: bridgeIcon("flamecomics"),
     // The site's own client asks about once a second.
     rateLimit: { maxConcurrent: 1, minIntervalMs: 1000 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },

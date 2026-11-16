@@ -47,6 +47,7 @@ import {
 import { standardGuards } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
 import { absoluteUrl, withQuery } from "./core/urls";
+import { bridgeIcon } from "./core/icon";
 
 const SITE = "https://onisaga.com";
 const MEDIA_HOST = "media.onisaga.com";
@@ -209,7 +210,7 @@ class OniSagaBridge extends BridgeBase {
     languages: LANGUAGES.map(([code]) => code),
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "settings", "content-rating"],
-    iconUrl: `${SITE}/apple-icon`,
+    iconUrl: bridgeIcon("onisaga"),
     // The site's pages are slow to render; Keiyoushi keeps it to two a second.
     rateLimit: { maxConcurrent: 2, minIntervalMs: 500 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },

@@ -37,6 +37,7 @@ import {
 import { chapterNumber, parseAbsoluteDate, parseStatus, standardGuards } from "comical-bridge-kit";
 import { hintsForType } from "../cover-hints";
 import { guardResponse } from "../core/guarded";
+import { bridgeIcon } from "../core/icon";
 
 /** What distinguishes one MadTheme site from another. */
 export interface MadThemeSite {
@@ -144,7 +145,7 @@ export class MadThemeBridge extends BridgeBase {
       languages: ["en"],
       nsfw: false,
       capabilities: ["lists", "search", "filters", "sort", "content-rating"],
-      iconUrl: `https://${site.host}/favicon.ico`,
+      iconUrl: bridgeIcon(site.id),
       ratings: true,
       rateLimit: { maxConcurrent: 2, minIntervalMs: 300 },
       assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },

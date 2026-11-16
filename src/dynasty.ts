@@ -31,6 +31,7 @@ import {
 } from "@comical/sdk";
 import { chapterNumber, parseAbsoluteDate, parseStatus, standardGuards } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
+import { bridgeIcon } from "./core/icon";
 
 const SITE = "https://dynasty-scans.com";
 const UA =
@@ -101,7 +102,7 @@ class DynastyBridge extends BridgeBase {
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters"],
-    iconUrl: `${SITE}/favicon.ico`,
+    iconUrl: bridgeIcon("dynasty"),
     rateLimit: { maxConcurrent: 2, minIntervalMs: 500 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },
     linkHosts: ["dynasty-scans.com"],

@@ -23,6 +23,7 @@ import {
 } from "@comical/sdk";
 import { parseStatus, standardGuards } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
+import { bridgeIcon } from "./core/icon";
 
 const SITE = "https://cubari.moe";
 const UA =
@@ -95,7 +96,7 @@ class CubariBridge extends BridgeBase {
     languages: ["en"],
     nsfw: false,
     capabilities: ["search"],
-    iconUrl: `${SITE}/favicon.ico`,
+    iconUrl: bridgeIcon("cubari"),
     rateLimit: { maxConcurrent: 2, minIntervalMs: 300 },
     linkHosts: ["cubari.moe", "imgur.com", "imgchest.com", "catbox.moe", "githubusercontent.com"],
   };

@@ -46,6 +46,7 @@ import { parseStatus, standardGuards } from "comical-bridge-kit";
 import { hintsForType } from "./cover-hints";
 import { guardResponse } from "./core/guarded";
 import { absoluteUrl, hostOf, pathOf, queryParam } from "./core/urls";
+import { bridgeIcon } from "./core/icon";
 
 const SITE = "https://lectorxd.com";
 const FALLBACK_UA =
@@ -159,7 +160,7 @@ class LectorXdBridge extends BridgeBase {
     languages: ["es"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort"],
-    iconUrl: `${SITE}/favicon.ico`,
+    iconUrl: bridgeIcon("lectorxd"),
     // Its own extension keeps to one request every 2s on the site (the image hosts are free).
     rateLimit: { maxConcurrent: 1, minIntervalMs: 2000 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },

@@ -41,6 +41,7 @@ import {
 import { parseStatus, standardGuards } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
 import { absoluteUrl } from "./core/urls";
+import { bridgeIcon } from "./core/icon";
 
 const SITE = "https://batcave.biz";
 const UA =
@@ -111,7 +112,7 @@ class BatCaveBridge extends BridgeBase {
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort"],
-    iconUrl: `${SITE}/favicon.ico`,
+    iconUrl: bridgeIcon("batcave"),
     rateLimit: { maxConcurrent: 2, minIntervalMs: 500 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },
     linkHosts: ["batcave.biz"],

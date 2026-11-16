@@ -38,6 +38,7 @@ import {
   seriesGoneMessage,
 } from "@comical/sdk";
 import { hintsForType } from "./cover-hints";
+import { bridgeIcon } from "./core/icon";
 
 const BASE = "https://weebcentral.com";
 const COVER_BASE = "https://temp.compsci88.com/cover";
@@ -106,7 +107,7 @@ class WeebCentralBridge extends BridgeBase {
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort"],
-    iconUrl: `${BASE}/favicon.ico`,
+    iconUrl: bridgeIcon("weebcentral"),
     // The site is strict — its own extension throttles to 1 request / 2s.
     rateLimit: { maxConcurrent: 1, minIntervalMs: 2000 },
     // Paces a chapter download's page fetches against the image host.

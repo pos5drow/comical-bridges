@@ -44,6 +44,7 @@ import {
 import { parseAbsoluteDate, parseStatus, standardGuards } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
 import { hintsForType } from "./cover-hints";
+import { bridgeIcon } from "./core/icon";
 
 const SITE = "https://asurascans.com";
 const API = "https://api.asurascans.com/api";
@@ -153,7 +154,7 @@ class AsuraScansBridge extends BridgeBase {
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "related-series"],
-    iconUrl: `${SITE}/favicon.ico`,
+    iconUrl: bridgeIcon("asurascans"),
     ratings: true,
     // The site's own client paces API calls to about one a second.
     rateLimit: { maxConcurrent: 1, minIntervalMs: 1000 },

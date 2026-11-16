@@ -45,6 +45,7 @@ import {
 import { aesCbcDecrypt, parseAbsoluteDate, parseStatus, standardGuards, stripZeroPadding } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
 import { absoluteUrl } from "./core/urls";
+import { bridgeIcon } from "./core/icon";
 
 const SITE = "https://www.mangago.me";
 const UA =
@@ -161,7 +162,7 @@ class MangagoBridge extends BridgeBase {
     languages: ["en"],
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "settings", "content-rating"],
-    iconUrl: `${SITE}/favicon.ico`,
+    iconUrl: bridgeIcon("mangago"),
     rateLimit: { maxConcurrent: 1, minIntervalMs: 1000 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },
     // No headers: covers and plain pages load directly; scrambled pages are routed for their layout.

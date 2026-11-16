@@ -3,11 +3,12 @@
  * manganami.com; manganato.gg is the domain that answers without a challenge.
  */
 import { mangaBox } from "./engines/mangabox";
+import { bridgeIcon } from "./core/icon";
 
 export default mangaBox({
   id: "pos5drow.manganato",
   name: "Manganato",
   version: "0.1.4",
   mirrors: ["https://www.manganato.gg", "https://www.natomanga.com", "https://www.nelomanga.net", "https://www.manganami.com"],
-  iconUrl: "https://www.manganato.gg/favicon.ico",
+  iconUrl: bridgeIcon("manganato"),
 });

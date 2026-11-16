@@ -34,6 +34,7 @@ import {
 } from "@comical/sdk";
 import { parseAbsoluteDate, parseStatus, standardGuards } from "comical-bridge-kit";
 import { guardResponse } from "./core/guarded";
+import { bridgeIcon } from "./core/icon";
 
 const SITE = "https://mangaball.com";
 const COVERS = "https://bulbasaur.poke-black-and-white.net/covers/";
@@ -123,7 +124,7 @@ class MangaBallBridge extends BridgeBase {
     languages: LANGUAGES.map(([code]) => code),
     nsfw: false,
     capabilities: ["lists", "search", "filters", "sort", "settings", "content-rating"],
-    iconUrl: `${SITE}/favicon.ico`,
+    iconUrl: bridgeIcon("mangaball"),
     ratings: true,
     rateLimit: { maxConcurrent: 2, minIntervalMs: 300 },
     assetRateLimit: { maxConcurrent: 4, minIntervalMs: 100 },

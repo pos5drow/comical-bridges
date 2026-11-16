@@ -212,7 +212,7 @@ class MangaFireBridge extends BridgeBase {
   readonly info: BridgeInfo = {
     id: "pos5drow.mangafire",
     name: "MangaFire",
-    version: "0.1.3",
+    version: "0.1.4",
     contractVersion: "2.1.0",
     languages: ["en", "es", "es-419", "fr", "ja", "pt", "pt-BR"],
     nsfw: false,

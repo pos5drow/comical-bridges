@@ -155,6 +155,16 @@ function orderFor(url: string, script: ReaderScript): string {
 }
 
 class MangagoBridge extends BridgeBase {
+  /**
+   * The platform User-Agent when the host gives a browser one (what its web check's web view sends),
+   * else a fixed desktop Chrome one. A challenge answered in a web view with a borrowed User-Agent
+   * never clears, so a bridge behind Cloudflare sends the platform's.
+   */
+  private get ua(): string {
+    const host = this.userAgent;
+    return host && host.startsWith("Mozilla/5.0") ? host : UA;
+  }
+
   readonly info: BridgeInfo = {
     id: "pos5drow.mangago",
     name: "Mangago",
@@ -183,7 +193,7 @@ class MangagoBridge extends BridgeBase {
   }
 
   private async page(url: string): Promise<{ $: CheerioRoot; url: string }> {
-    const res = await this.request({ url, headers: { "User-Agent": UA, Accept: "text/html", Referer: `${SITE}/`, Cookie: "_m_superu=1" } });
+    const res = await this.request({ url, headers: { "User-Agent": this.ua, Accept: "text/html", Referer: `${SITE}/`, Cookie: "_m_superu=1" } });
     if (res.status === 404) throw new Error(seriesGoneMessage());
     if (res.status >= 400) throw new Error(`Mangago answered HTTP ${res.status} for ${url}`);
     return { $: this.parse(res.body), url: res.url || url };
@@ -364,7 +374,7 @@ class MangagoBridge extends BridgeBase {
     let s = this.scripts.get(url);
     if (!s) {
       s = (async () => {
-        const res = await this.request({ url, headers: { "User-Agent": UA, Referer: `${SITE}/` } });
+        const res = await this.request({ url, headers: { "User-Agent": this.ua, Referer: `${SITE}/` } });
         if (res.status >= 400) throw new Error(`Mangago answered HTTP ${res.status} for its reader script`);
         return parseReaderScript(res.body);
       })();

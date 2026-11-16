@@ -99,6 +99,16 @@ const SORTS: ReadonlyArray<{ key: string; label: string }> = [
 // ── Bridge ────────────────────────────────────────────────────────────────────
 
 class WeebCentralBridge extends BridgeBase {
+  /**
+   * The platform User-Agent when the host gives a browser one (what its web check's web view sends),
+   * else a fixed desktop Chrome one. A challenge answered in a web view with a borrowed User-Agent
+   * never clears, so a bridge behind Cloudflare sends the platform's.
+   */
+  private get ua(): string {
+    const host = this.userAgent;
+    return host && host.startsWith("Mozilla/5.0") ? host : UA;
+  }
+
   readonly info: BridgeInfo = {
     id: "pos5drow.weebcentral",
     name: "Weeb Central",
@@ -127,7 +137,7 @@ class WeebCentralBridge extends BridgeBase {
 
   private headers(): Record<string, string> {
     return {
-      "User-Agent": UA,
+      "User-Agent": this.ua,
       Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
       Referer: `${BASE}/`,
     };

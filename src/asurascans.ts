@@ -146,6 +146,16 @@ function gridFrom(ctx: Record<string, string>): { cols: number; rows: number; ti
 }
 
 class AsuraScansBridge extends BridgeBase {
+  /**
+   * The platform User-Agent when the host gives a browser one (what its web check's web view sends),
+   * else a fixed desktop Chrome one. A challenge answered in a web view with a borrowed User-Agent
+   * never clears, so a bridge behind Cloudflare sends the platform's.
+   */
+  private get ua(): string {
+    const host = this.userAgent;
+    return host && host.startsWith("Mozilla/5.0") ? host : UA;
+  }
+
   readonly info: BridgeInfo = {
     id: "pos5drow.asurascans",
     name: "Asura Scans",
@@ -175,7 +185,7 @@ class AsuraScansBridge extends BridgeBase {
   private async api<T>(path: string): Promise<T> {
     const res = await this.request({
       url: `${API}${path}`,
-      headers: { "User-Agent": UA, Accept: "application/json", Referer: `${SITE}/`, Origin: SITE },
+      headers: { "User-Agent": this.ua, Accept: "application/json", Referer: `${SITE}/`, Origin: SITE },
     });
     if (res.status === 404) throw new Error(seriesGoneMessage());
     if (res.status >= 400) throw new Error(`Asura Scans answered HTTP ${res.status} for ${path}`);

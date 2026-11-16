@@ -90,6 +90,16 @@ function plainText(html: string): string {
 }
 
 class FlameComicsBridge extends BridgeBase {
+  /**
+   * The platform User-Agent when the host gives a browser one (what its web check's web view sends),
+   * else a fixed desktop Chrome one. A challenge answered in a web view with a borrowed User-Agent
+   * never clears, so a bridge behind Cloudflare sends the platform's.
+   */
+  private get ua(): string {
+    const host = this.userAgent;
+    return host && host.startsWith("Mozilla/5.0") ? host : UA;
+  }
+
   readonly info: BridgeInfo = {
     id: "pos5drow.flamecomics",
     name: "Flame Comics",
@@ -115,7 +125,7 @@ class FlameComicsBridge extends BridgeBase {
   }
 
   private async readBuildId(): Promise<string> {
-    const res = await this.request({ url: SITE, headers: { "User-Agent": UA, Accept: "text/html" } });
+    const res = await this.request({ url: SITE, headers: { "User-Agent": this.ua, Accept: "text/html" } });
     const next = /<script id="__NEXT_DATA__" type="application\/json">([\s\S]*?)<\/script>/.exec(res.body)?.[1];
     let id: string | undefined;
     try {
@@ -132,7 +142,7 @@ class FlameComicsBridge extends BridgeBase {
   private async data<T>(path: string): Promise<T> {
     for (let attempt = 0; attempt < 2; attempt++) {
       const id = attempt === 0 && this.buildId ? this.buildId : await this.readBuildId();
-      const res = await this.request({ url: `${SITE}/_next/data/${id}/${path}`, headers: { "User-Agent": UA, Accept: "application/json" } });
+      const res = await this.request({ url: `${SITE}/_next/data/${id}/${path}`, headers: { "User-Agent": this.ua, Accept: "application/json" } });
       if (res.status === 404 && attempt === 0) continue;
       if (res.status === 404) throw new Error(seriesGoneMessage());
       if (res.status >= 400) throw new Error(`Flame Comics answered HTTP ${res.status} for ${path}`);

@@ -217,6 +217,16 @@ function parseJson<T>(url: string, body: string): T {
 }
 
 class AtsumaruBridge extends BridgeBase<Settings> {
+  /**
+   * The platform User-Agent when the host gives a browser one (what its web check's web view sends),
+   * else a fixed desktop Chrome one. A challenge answered in a web view with a borrowed User-Agent
+   * never clears, so a bridge behind Cloudflare sends the platform's.
+   */
+  private get ua(): string {
+    const host = this.userAgent;
+    return host && host.startsWith("Mozilla/5.0") ? host : USER_AGENT;
+  }
+
   readonly info: BridgeInfo = {
     id: "pos5drow.atsumaru",
     name: "Atsumaru",
@@ -294,7 +304,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   /** Browser-like headers; mirrors the reference's apiHeaders (Accept, Referer) + a real UA. */
   private apiHeaders(): Record<string, string> {
     return {
-      "User-Agent": USER_AGENT,
+      "User-Agent": this.ua,
       Accept: "*/*",
       Referer: `${this.base()}/`,
     };

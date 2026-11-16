@@ -209,6 +209,16 @@ const plain = (html: string) =>
     .trim();
 
 class MangaFireBridge extends BridgeBase {
+  /**
+   * The platform User-Agent when the host gives a browser one (what its web check's web view sends),
+   * else a fixed desktop Chrome one. A challenge answered in a web view with a borrowed User-Agent
+   * never clears, so a bridge behind Cloudflare sends the platform's.
+   */
+  private get ua(): string {
+    const host = this.userAgent;
+    return host && host.startsWith("Mozilla/5.0") ? host : UA;
+  }
+
   readonly info: BridgeInfo = {
     id: "pos5drow.mangafire",
     name: "MangaFire",
@@ -248,7 +258,7 @@ class MangaFireBridge extends BridgeBase {
   }
 
   private async api<T>(path: string, params: [string, string][] = []): Promise<T> {
-    const res = await this.request({ url: apiUrl(path, params), headers: { "User-Agent": UA, Accept: "application/json", Referer: `${SITE}/` } });
+    const res = await this.request({ url: apiUrl(path, params), headers: { "User-Agent": this.ua, Accept: "application/json", Referer: `${SITE}/` } });
     if (res.status === 404) throw new Error(seriesGoneMessage());
     if (res.status === 403) {
       let body: { error?: string; message?: string } = {};

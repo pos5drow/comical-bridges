@@ -88,6 +88,16 @@ export function cubariRef(input: string): { source: string; slug: string } | und
 }
 
 class CubariBridge extends BridgeBase {
+  /**
+   * The platform User-Agent when the host gives a browser one (what its web check's web view sends),
+   * else a fixed desktop Chrome one. A challenge answered in a web view with a borrowed User-Agent
+   * never clears, so a bridge behind Cloudflare sends the platform's.
+   */
+  private get ua(): string {
+    const host = this.userAgent;
+    return host && host.startsWith("Mozilla/5.0") ? host : UA;
+  }
+
   readonly info: BridgeInfo = {
     id: "pos5drow.cubari",
     name: "Cubari",
@@ -108,7 +118,7 @@ class CubariBridge extends BridgeBase {
   }
 
   private async get<T>(path: string): Promise<T> {
-    const res = await this.request({ url: path.startsWith("http") ? path : `${SITE}${path}`, headers: { "User-Agent": UA, Accept: "application/json" } });
+    const res = await this.request({ url: path.startsWith("http") ? path : `${SITE}${path}`, headers: { "User-Agent": this.ua, Accept: "application/json" } });
     if (res.status === 404) throw new Error(seriesGoneMessage());
     if (res.status >= 400) throw new Error(`Cubari answered HTTP ${res.status} for ${path}`);
     try {

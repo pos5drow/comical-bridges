@@ -75,6 +75,16 @@ const clean = (s: string | undefined) => (s ?? "").replace(/\s+/g, " ").trim();
 const present = (s: string | undefined) => (EMPTY.has(clean(s).toLowerCase()) ? undefined : clean(s));
 
 export class MangaThemesiaBridge extends BridgeBase {
+  /**
+   * The platform User-Agent when the host gives a browser one (what its web check's web view sends),
+   * else a fixed desktop Chrome one. A challenge answered in a web view with a borrowed User-Agent
+   * never clears, so a bridge behind Cloudflare sends the platform's.
+   */
+  private get ua(): string {
+    const host = this.userAgent;
+    return host && host.startsWith("Mozilla/5.0") ? host : UA;
+  }
+
   readonly info: BridgeInfo;
   private readonly directory: string;
   private readonly siteHostName: string;
@@ -110,7 +120,7 @@ export class MangaThemesiaBridge extends BridgeBase {
   }
 
   private async page(url: string): Promise<{ $: CheerioRoot; res: HttpResponse }> {
-    const res = await this.request({ url, headers: { "User-Agent": UA, Accept: "text/html", Referer: `${this.site.base}/` } });
+    const res = await this.request({ url, headers: { "User-Agent": this.ua, Accept: "text/html", Referer: `${this.site.base}/` } });
     if (res.status === 404) throw new Error(seriesGoneMessage());
     if (res.status >= 400) throw new Error(`${this.site.name} answered HTTP ${res.status} for ${url}`);
     return { $: this.parse(res.body), res };

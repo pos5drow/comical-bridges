@@ -91,6 +91,16 @@ const STATUSES = [
 const STATUS_IDS: Record<number, SeriesInfo["status"]> = { 1: "ongoing", 3: "hiatus", 4: "completed", 5: "cancelled" };
 
 class OlympusBridge extends BridgeBase {
+  /**
+   * The platform User-Agent when the host gives a browser one (what its web check's web view sends),
+   * else a fixed desktop Chrome one. A challenge answered in a web view with a borrowed User-Agent
+   * never clears, so a bridge behind Cloudflare sends the platform's.
+   */
+  private get ua(): string {
+    const host = this.userAgent;
+    return host && host.startsWith("Mozilla/5.0") ? host : UA;
+  }
+
   readonly info: BridgeInfo = {
     id: "pos5drow.olympus",
     name: "Olympus Scanlation",
@@ -140,11 +150,11 @@ class OlympusBridge extends BridgeBase {
     }
     if (this.discovered && now - this.discovered.at < DOMAIN_TTL_MS) return this.discovered.origin;
     try {
-      const page = await super.request({ url: REDIRECTOR, headers: { "User-Agent": UA } });
+      const page = await super.request({ url: REDIRECTOR, headers: { "User-Agent": this.ua } });
       const og = /property="og:url"\s+content="([^"]+)"|content="([^"]+)"\s+property="og:url"/.exec(page.body);
       const target = og?.[1] ?? og?.[2];
       if (target) {
-        const landed = await super.request({ url: target, headers: { "User-Agent": UA } });
+        const landed = await super.request({ url: target, headers: { "User-Agent": this.ua } });
         const origin = /^https:\/\/[^/]+/.exec(landed.url)?.[0];
         if (origin && landed.status < 400) {
           this.discovered = { origin, at: now };
@@ -168,7 +178,7 @@ class OlympusBridge extends BridgeBase {
 
   private async api<T>(path: string): Promise<T> {
     const base = await this.base();
-    const res = await this.request({ url: `${base}/api${path}`, headers: { "User-Agent": UA, Accept: "application/json", Referer: `${base}/` } });
+    const res = await this.request({ url: `${base}/api${path}`, headers: { "User-Agent": this.ua, Accept: "application/json", Referer: `${base}/` } });
     if (res.status === 404) throw new Error(seriesGoneMessage());
     if (res.status >= 400) throw new Error(`Olympus answered HTTP ${res.status} for ${path}`);
     try {
@@ -298,7 +308,7 @@ class OlympusBridge extends BridgeBase {
     const base = await this.base();
     const res = await this.request({
       url: `${base}/capitulo/${encodeURIComponent(chapterId)}/comic-${encodeURIComponent(slug)}`,
-      headers: { "User-Agent": UA, Accept: "text/html", Referer: `${base}/` },
+      headers: { "User-Agent": this.ua, Accept: "text/html", Referer: `${base}/` },
     });
     if (res.status === 404) throw new Error(seriesGoneMessage("capítulo eliminado"));
     const $ = this.parse(res.body);

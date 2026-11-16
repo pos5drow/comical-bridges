@@ -134,6 +134,16 @@ const rating = (s: SeriesDto): { contentRating?: ContentRating } =>
 const coverUrl = (path: string | null | undefined) => (path ? `${SITE}${path.replace(/\/\d+\.webp$/, "/720.webp")}` : undefined);
 
 class ToonkotsuBridge extends BridgeBase {
+  /**
+   * The platform User-Agent when the host gives a browser one (what its web check's web view sends),
+   * else a fixed desktop Chrome one. A challenge answered in a web view with a borrowed User-Agent
+   * never clears, so a bridge behind Cloudflare sends the platform's.
+   */
+  private get ua(): string {
+    const host = this.userAgent;
+    return host && host.startsWith("Mozilla/5.0") ? host : UA;
+  }
+
   readonly info: BridgeInfo = {
     id: "pos5drow.toonkotsu",
     name: "Toonkotsu",
@@ -157,7 +167,7 @@ class ToonkotsuBridge extends BridgeBase {
   }
 
   private async api<T>(path: string): Promise<T> {
-    const res = await this.request({ url: `${SITE}${path}`, headers: { "User-Agent": UA, Accept: "application/json", Referer: `${SITE}/` } });
+    const res = await this.request({ url: `${SITE}${path}`, headers: { "User-Agent": this.ua, Accept: "application/json", Referer: `${SITE}/` } });
     if (res.status === 404) throw new Error(seriesGoneMessage());
     if (res.status === 429) {
       let limit: { error?: string; code?: string; reason?: string } = {};

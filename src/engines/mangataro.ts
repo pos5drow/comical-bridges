@@ -157,6 +157,16 @@ export function chapterToken(nowMs: number): { t: string; ts: string } {
 }
 
 export class MangaTaroBridge extends BridgeBase {
+  /**
+   * The platform User-Agent when the host gives a browser one (what its web check's web view sends),
+   * else a fixed desktop Chrome one. A challenge answered in a web view with a borrowed User-Agent
+   * never clears, so a bridge behind Cloudflare sends the platform's.
+   */
+  private get ua(): string {
+    const host = this.userAgent;
+    return host && host.startsWith("Mozilla/5.0") ? host : UA;
+  }
+
   readonly info: BridgeInfo;
   private readonly guards;
   /** Server clock minus ours, learned from a refused chapter request. */
@@ -186,7 +196,7 @@ export class MangaTaroBridge extends BridgeBase {
 
   private headers(json = false): Record<string, string> {
     return {
-      "User-Agent": UA,
+      "User-Agent": this.ua,
       Accept: "application/json",
       Origin: this.site.base,
       Referer: `${this.site.base}/`,
@@ -399,7 +409,7 @@ export class MangaTaroBridge extends BridgeBase {
     const host = new URL(this.site.base).host.replace(/^www\./, "").replace(/\./g, "\\.");
     const m = new RegExp(`^https?://(?:www\\.)?${host}/(manga|read)/([^/?#]+)(?:/([^/?#]+))?`).exec(url);
     if (!m) return null;
-    const page = await this.request({ url: `${this.site.base}/manga/${m[2]}`, headers: { "User-Agent": UA, Accept: "text/html" } });
+    const page = await this.request({ url: `${this.site.base}/manga/${m[2]}`, headers: { "User-Agent": this.ua, Accept: "text/html" } });
     const id = /data-manga-id="(\d+)"/.exec(page.body)?.[1];
     if (!id) return null;
     const chapter = m[1] === "read" && m[3] ? /-(\d+)$/.exec(m[3])?.[1] : undefined;

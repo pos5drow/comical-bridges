@@ -81,6 +81,16 @@ const libraryId = (href: string) => /\/library\/[^/]+\/(\d+)/.exec(href)?.[1];
 const coverId = (src: string) => /\/tc\/(\d+)-/.exec(src)?.[1];
 
 class ZonaTmoBridge extends BridgeBase {
+  /**
+   * The platform User-Agent when the host gives a browser one (what its web check's web view sends),
+   * else a fixed desktop Chrome one. A challenge answered in a web view with a borrowed User-Agent
+   * never clears, so a bridge behind Cloudflare sends the platform's.
+   */
+  private get ua(): string {
+    const host = this.userAgent;
+    return host && host.startsWith("Mozilla/5.0") ? host : UA;
+  }
+
   readonly info: BridgeInfo = {
     id: "pos5drow.zonatmo",
     name: "ZonaTMO",
@@ -102,7 +112,7 @@ class ZonaTmoBridge extends BridgeBase {
   }
 
   private async fetchResponse(url: string, ajax = false): Promise<HttpResponse> {
-    const headers: Record<string, string> = { "User-Agent": UA, Accept: ajax ? "application/json" : "text/html", Referer: `${SITE}/biblioteca` };
+    const headers: Record<string, string> = { "User-Agent": this.ua, Accept: ajax ? "application/json" : "text/html", Referer: `${SITE}/biblioteca` };
     if (ajax) headers["X-Requested-With"] = "XMLHttpRequest";
     const res = await this.request({ url, headers });
     if (res.status === 404) throw new Error(seriesGoneMessage());

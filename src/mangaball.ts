@@ -116,6 +116,16 @@ function coverOf(img: ImageDto | null | undefined): string | undefined {
 }
 
 class MangaBallBridge extends BridgeBase {
+  /**
+   * The platform User-Agent when the host gives a browser one (what its web check's web view sends),
+   * else a fixed desktop Chrome one. A challenge answered in a web view with a borrowed User-Agent
+   * never clears, so a bridge behind Cloudflare sends the platform's.
+   */
+  private get ua(): string {
+    const host = this.userAgent;
+    return host && host.startsWith("Mozilla/5.0") ? host : UA;
+  }
+
   readonly info: BridgeInfo = {
     id: "pos5drow.mangaball",
     name: "Manga Ball",
@@ -161,7 +171,7 @@ class MangaBallBridge extends BridgeBase {
       url: `${SITE}/api/v1${path}`,
       ...(body !== undefined ? { method: "POST" as const, body: JSON.stringify(body) } : {}),
       headers: {
-        "User-Agent": UA,
+        "User-Agent": this.ua,
         Accept: "application/json",
         Referer: `${SITE}/`,
         "X-Requested-With": "XMLHttpRequest",

@@ -124,6 +124,16 @@ function ratingOf(t: Pick<TitleDto, "is_adult" | "content_rating">): ContentRati
 }
 
 export class MadThemeBridge extends BridgeBase {
+  /**
+   * The platform User-Agent when the host gives a browser one (what its web check's web view sends),
+   * else a fixed desktop Chrome one. A challenge answered in a web view with a borrowed User-Agent
+   * never clears, so a bridge behind Cloudflare sends the platform's.
+   */
+  private get ua(): string {
+    const host = this.userAgent;
+    return host && host.startsWith("Mozilla/5.0") ? host : UA;
+  }
+
   readonly info: BridgeInfo;
   private readonly api: string;
   private readonly guards;
@@ -161,7 +171,7 @@ export class MadThemeBridge extends BridgeBase {
   private async get<T>(path: string): Promise<T> {
     const res = await this.request({
       url: `${this.api}${path}`,
-      headers: { "User-Agent": UA, Accept: "application/json", Origin: `https://${this.site.host}`, Referer: `https://${this.site.host}/` },
+      headers: { "User-Agent": this.ua, Accept: "application/json", Origin: `https://${this.site.host}`, Referer: `https://${this.site.host}/` },
     });
     if (res.status === 404) throw new Error(seriesGoneMessage());
     let body: { success?: boolean; data?: T; message?: string };
@@ -304,7 +314,7 @@ export class MadThemeBridge extends BridgeBase {
   async resolveUrl(url: string): Promise<LinkTarget | null> {
     const m = new RegExp(`^https?://(?:www\\.)?${this.site.host.replace(/\./g, "\\.")}/([^/?#]+)(?:/([^/?#]+))?`).exec(url);
     if (!m) return null;
-    const page = await this.request({ url: `https://${this.site.host}/${m[1]}`, headers: { "User-Agent": UA, Accept: "text/html" } });
+    const page = await this.request({ url: `https://${this.site.host}/${m[1]}`, headers: { "User-Agent": this.ua, Accept: "text/html" } });
     const next = /<script id="__NEXT_DATA__" type="application\/json">([\s\S]*?)<\/script>/.exec(page.body)?.[1];
     let id: string | undefined;
     try {

@@ -1,6 +1,6 @@
 {
   "registryVersion": "1",
-  "updated": "2026-11-16T05:37:43.757Z",
+  "updated": "2026-11-18T11:19:57.388Z",
   "bridges": [
     {
       "id": "pos5drow.asurascans",
@@ -42,7 +42,7 @@
     {
       "id": "pos5drow.atsumaru",
       "name": "Atsumaru",
-      "version": "0.4.8",
+      "version": "0.4.9",
       "contractVersion": "2.1.0",
       "languages": [
         "en"
@@ -57,8 +57,8 @@
         "favorites",
         "exclude-tags"
       ],
-      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.atsumaru/0.4.8/bridge.js",
-      "sha256": "f4af8ab59f09a225a6728997841e9e9c9d33fed083a20d91e0efc7547cdd1e9e",
+      "url": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/bridges/pos5drow.atsumaru/0.4.9/bridge.js",
+      "sha256": "eeef0ffa663062b6379f1f49d3c8b476851cacb3e9444e82b519bdf707ec38ba",
       "iconUrl": "https://raw.githubusercontent.com/pos5drow/comical-bridges/main/icons/atsumaru.png",
       "ratings": true,
       "assetRateLimit": {
@@ -68,7 +68,7 @@
       "linkHosts": [
         "atsu.moe"
       ],
-      "signature": "rs0pVzHCnBnMOfag0WXNQsbvcJhThYmoVUxjwLfOHvCVGRNodKie-sgQ5xZwYMujAoTfB8CiGJjs1n3CiFsODA"
+      "signature": "nJcpZEKmYRBfy5GFLGFkmcP_rzSktc-DTt218mVpV-1GHMejHH_cHZN1-iISPxjWcyrWojZxMuT1HyIQMgbpBg"
     },
     {
       "id": "pos5drow.batcave",

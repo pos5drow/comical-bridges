@@ -31,34 +31,34 @@ inconclusive sort/filter probe — never counted against a bridge). Per-check re
 | `atsumaru` | ⚠ (5✓ 6⚠ 0✗) | 6/7 | — | — |
 | `weebcentral` | ⚠ (4✓ 5⚠ 0✗) | 4/4 | — | — |
 | `mangadex` | ⚠ (10✓ 1⚠ 0✗) | 3/3 | 50 KB (256×376) | Cloudflare challenges datacenter (runner) IPs |
-| `mangakakalot` | ⚠ (8✓ 4⚠ 0✗) | 5/5 | 33 KB (289×415) | search is challenged by Cloudflare bot scoring |
+| `mangakakalot` | ⚠ (5✓ 4⚠ 1✗) | 5/5 | — | flaky (tolerated): search is challenged by Cloudflare bot scoring |
 | `manganato` | ⚠ (8✓ 4⚠ 0✗) | 5/5 | 33 KB (289×415) | search is challenged by Cloudflare bot scoring |
 | `mangabat` | ✓ (13✓ 0⚠ 0✗ 2⊘) | 5/5 | 33 KB (289×415) | search is challenged by Cloudflare bot scoring |
-| `asurascans` | ✓ (14✓ 0⚠ 0✗) | 4/5 | 187 KB (843×1203) | — |
+| `asurascans` | ✓ (14✓ 0⚠ 0✗) | 4/5 | 177 KB (833×1189) | — |
 | `olympus` | ⚠ (4✓ 5⚠ 0✗) | 5/5 | — | — |
-| `manhwaweb` | ✓ (14✓ 0⚠ 0✗) | 4/5 | 153 KB (1024×1452) | — |
+| `manhwaweb` | ⚠ (14✓ 1⚠ 0✗) | 4/5 | 172 KB (1020×1438) | — |
 | `mangak` | ✓ (13✓ 0⚠ 0✗ 1⊘) | 4/5 | 12 KB (202×278) | — |
 | `toonilyme` | ✓ (13✓ 0⚠ 0✗ 1⊘) | 4/5 | 14 KB (205×297) | — |
 | `mangataro` | ⚠ (10✓ 2⚠ 0✗ 2⊘) | 4/4 | 545 KB (1149×1474) | — |
-| `roliascan` | ⚠ (12✓ 2⚠ 0✗) | 4/4 | 763 KB (782×1104) | — |
+| `roliascan` | ✓ (14✓ 0⚠ 0✗) | 4/4 | 411 KB (743×963) | — |
 | `kingofshojo` | ⚠ (13✓ 1⚠ 0✗ 1⊘) | 4/4 | 124 KB (600×1000) | — |
 | `flamecomics` | ⚠ (2✓ 4⚠ 0✗) | 3/3 | — | — |
 | `mangaball` | ⚠ (5✓ 5⚠ 0✗) | 5/6 | — | — |
-| `dynasty` | ⚠ (12✓ 2⚠ 0✗) | 3/3 | — | — |
-| `webtoons` | ✓ (13✓ 0⚠ 0✗) | 4/5 | 86 KB (480×623) | — |
+| `dynasty` | ⚠ (12✓ 4⚠ 0✗) | 3/3 | — | — |
+| `webtoons` | ✓ (13✓ 0⚠ 0✗) | 4/5 | 89 KB (480×623) | — |
 | `zonatmo` | ⚠ (4✓ 5⚠ 0✗) | 4/5 | — | — |
 | `batcave` | ⚠ (4✓ 5⚠ 0✗) | 4/4 | — | DLE Guard wants a browser check first |
 | `kagane` | ⚠ (5✓ 5⚠ 0✗) | 5/6 | — | Cloudflare check needs a browser |
 | `onisaga` | ⚠ (5✓ 5⚠ 0✗) | 5/6 | — | Cloudflare check needs a browser |
-| `mangadot` | ✓ (15✓ 0⚠ 0✗) | 5/6 | 183 KB (815×1158) | Cloudflare check needs a browser |
+| `mangadot` | ✓ (15✓ 0⚠ 0✗) | 5/6 | 106 KB (1009×1499) | Cloudflare check needs a browser |
 | `lectorxd` | ⚠ (10✓ 1⚠ 0✗ 1⊘) | 4/4 | — | Cloudflare check on series and reader pages needs a browser |
-| `mangaplus` | ✓ (13✓ 0⚠ 0✗) | 4/4 | 41 KB (352×528) | — |
+| `mangaplus` | ✓ (13✓ 0⚠ 0✗) | 4/4 | 29 KB (352×528) | — |
 | `toonkotsu` | ⚠ (4✓ 5⚠ 0✗) | 4/5 | — | Cloudflare challenges the Bun/Node TLS fingerprint |
 | `mangago` | ⚠ (5✓ 5⚠ 0✗) | 5/6 | — | Cloudflare challenges the Bun/Node TLS fingerprint |
 | `mangafire` | ⚠ (5✓ 5⚠ 0✗) | 5/6 | — | — |
 | `cubari` | ⚠ (6✓ 1⚠ 0✗) | 1/1 | 30 KB (400×600) | — |
 
-_Updated 2026-11-17 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-11-18 by the nightly live audit ([`audit.ts`](audit.ts))._
 <!-- BRIDGE-STATUS:END -->
 
 ## Develop

@@ -230,7 +230,7 @@ class AtsumaruBridge extends BridgeBase<Settings> {
   readonly info: BridgeInfo = {
     id: "pos5drow.atsumaru",
     name: "Atsumaru",
-    version: "0.4.8",
+    version: "0.4.9",
     contractVersion: "2.1.0",
     languages: ["en"],
     nsfw: false,
@@ -612,7 +612,10 @@ class AtsumaruBridge extends BridgeBase<Settings> {
     const clauses = [
       "hidden:!=true",
       ...(this.setting("adult") === true ? [] : ["isAdult:=false"]),
-      "(mbContentRating:=[`Safe`,`Suggestive`,`Erotica`] || mbContentRating:!=*)",
+      // Drop pornographic ratings but keep unrated docs. A negation matches docs missing the field;
+      // Typesense no longer accepts the old `mbContentRating:!=*` "unset" test (400: "Filter value
+      // cannot be empty"), and this is the clause the site itself now sends.
+      "mbContentRating:!=[`Pornographic`]",
       // atsu.moe also indexes light novels now (`medium: "Novel"`); this is a comic reader, so drop
       // them the way the site's own "Comic" medium filter does (a negation, so docs that predate the
       // field still match).

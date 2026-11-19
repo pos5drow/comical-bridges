@@ -1,0 +1,38 @@
+{
+ "data": [
+  {
+   "content": "This chapter was wild",
+   "created_at": "2026-11-18T22:42:51.726048Z",
+   "downvotes": 4,
+   "gif_url": null,
+   "id": 14328441,
+   "is_edited": false,
+   "is_pinned": false,
+   "media_urls": null,
+   "pin_kind": "pinned",
+   "reply_count": 13,
+   "upvotes": 326,
+   "user": {
+    "alltime_rank": 0,
+    "avatar_decoration": "",
+    "comment_rank": 0,
+    "comment_tint": "",
+    "guild_badge_icon": "",
+    "guild_color": "",
+    "guild_tag": "",
+    "id": 1001,
+    "is_beta_user": false,
+    "is_premium": false,
+    "profile_picture_url": "https://cdn.asurascans.com/asura-images/profiles/1001.abc123.webp",
+    "role": "user",
+    "username": "reader1"
+   },
+   "user_vote": null
+  }
+ ],
+ "meta": {
+  "has_more": false,
+  "total": 1
+ },
+ "success": true
+}

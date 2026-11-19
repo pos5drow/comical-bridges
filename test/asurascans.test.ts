@@ -7,7 +7,7 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { HostCapabilities, HttpRequest, HttpResponse } from "@comical/contract";
-import asura from "../src/asurascans.ts";
+import asura, { asuraCommentBody } from "../src/asurascans.ts";
 
 const fixture = (name: string) => readFileSync(join(import.meta.dir, "fixtures", "asurascans", name), "utf8");
 
@@ -162,5 +162,132 @@ describe("links", () => {
     expect(await bridge.resolveUrl!("https://asurascans.com/comics/overgeared-f212c582/chapter/348")).toEqual({ seriesId: "overgeared", chapterId: "348" });
     expect(await bridge.resolveUrl!("https://asurascans.com/browse")).toBeNull();
     expect(requests).toEqual([]);
+  });
+});
+
+describe("comments", () => {
+  // The comment routes on top of the read path's fixtures; chapters carry their API ids here.
+  const commentsApi = (req: HttpRequest) => {
+    const u = new URL(req.url);
+    if (u.pathname === "/api/series/2165/comments") return fixture("comments-series.json");
+    if (u.pathname === "/api/chapters/262950/comments") return fixture("comments-chapter.json");
+    if (u.pathname === "/api/comments/785948/replies") return fixture("comments-replies.json");
+    if (u.pathname.endsWith("/chapters")) {
+      return JSON.stringify({ data: [{ id: 262950, number: 348, title: "The Enemy of My Enemy", published_at: "2026-11-14T03:57:55Z" }] });
+    }
+    return api(req);
+  };
+
+  test("declares series and chapter threads with the site's sorts", () => {
+    const { caps } = host(commentsApi);
+    const { info } = asura(caps);
+    expect(info.capabilities).toContain("comments");
+    expect(info.contractVersion).toBe("2.2.0");
+    expect(info.comments).toEqual({
+      scopes: ["series", "chapter"],
+      sorts: [
+        { id: "top", label: "Best" },
+        { id: "newest", label: "Newest" },
+        { id: "oldest", label: "Oldest" },
+      ],
+      votes: "up-down",
+      maxDepth: 2,
+    });
+  });
+
+  test("the series thread looks up the numeric id once, then pages by offset", async () => {
+    const { caps, requests } = host(commentsApi);
+    const bridge = asura(caps);
+    const first = await bridge.getComments!({ target: { seriesId: "overgeared" } });
+    await bridge.getComments!({ target: { seriesId: "overgeared" }, sort: "newest", cursor: first.nextCursor! });
+    expect(requests).toEqual([
+      "https://api.asurascans.com/api/series/overgeared",
+      "https://api.asurascans.com/api/series/2165/comments?sort=top&offset=0&limit=20",
+      "https://api.asurascans.com/api/series/2165/comments?sort=newest&offset=20&limit=20",
+    ]);
+    expect(first.total).toBe(795);
+    expect(first.webUrl).toBe("https://asurascans.com/comics/overgeared-f212c582");
+  });
+
+  test("details already fetched spare the id lookup", async () => {
+    const { caps, requests } = host(commentsApi);
+    const bridge = asura(caps);
+    await bridge.getSeriesDetails("overgeared");
+    await bridge.getComments!({ target: { seriesId: "overgeared" } });
+    expect(requests.filter((u) => u.endsWith("/series/overgeared"))).toHaveLength(1);
+  });
+
+  test("comments carry author, role, votes, flags, spoilers and GIFs", async () => {
+    const { caps } = host(commentsApi);
+    const { items } = await asura(caps).getComments!({ target: { seriesId: "overgeared" } });
+    expect(items[0]).toMatchObject({
+      id: "785948",
+      author: { name: "reader1", role: "staff", avatar: "https://cdn.asurascans.com/asura-images/profiles/1001.abc123.webp" },
+      votes: { up: 230, down: 29 },
+      pinned: true,
+      replyCount: 22,
+      createdAt: Date.UTC(2025, 4, 10, 12),
+    });
+    expect(items[0]!.body).toEqual([
+      { type: "text", text: "Long review of the first arc." },
+      { type: "break" },
+      { type: "break" },
+      { type: "text", text: "Second paragraph with " },
+      { type: "text", text: "a spoiler about the ending", spoiler: true },
+      { type: "text", text: " and more." },
+    ]);
+    expect(items[1]).toMatchObject({ edited: true, author: { badges: ["Premium"] } });
+    expect(items[2]!.author.avatar).toBeUndefined();
+    expect(items[2]!.body).toEqual([{ type: "image", url: "https://cdn.asurascans.com/asura-images/gifs/5ce6c2.webp", animated: true }]);
+  });
+
+  test("a chapter thread maps the chapter number to the API's chapter id", async () => {
+    const { caps, requests } = host(commentsApi);
+    const page = await asura(caps).getComments!({ target: { seriesId: "overgeared", chapterId: "348" }, sort: "oldest" });
+    expect(requests.slice(-2)).toEqual([
+      "https://api.asurascans.com/api/series/overgeared/chapters",
+      "https://api.asurascans.com/api/chapters/262950/comments?sort=oldest&offset=0&limit=20",
+    ]);
+    expect(page.items).toHaveLength(1);
+    expect(page.nextCursor).toBeUndefined();
+    expect(page.webUrl).toBe("https://asurascans.com/comics/overgeared-f212c582/chapter/348");
+  });
+
+  test("replies come back all at once, with the mention they open with", async () => {
+    const { caps } = host(commentsApi);
+    const page = await asura(caps).getComments!({ target: { seriesId: "overgeared" }, parentId: "785948" });
+    expect(page.nextCursor).toBeUndefined();
+    expect(page.items.map((c) => c.parentId)).toEqual(["785948", "785948"]);
+    expect(page.items[1]!.body).toEqual([
+      { type: "mention", name: "reader1" },
+      { type: "text", text: " " },
+      { type: "text", text: "It stays a game for a while", spoiler: true },
+      { type: "text", text: " but it gets better" },
+    ]);
+  });
+
+  test("a chapter the API doesn't list is an error, a missing thread an empty page", async () => {
+    const { caps } = host(commentsApi);
+    const bridge = asura(caps);
+    await expect(bridge.getComments!({ target: { seriesId: "overgeared", chapterId: "999" } })).rejects.toThrow("no chapter 999");
+    const missing = asura({
+      ...caps,
+      network: {
+        request: async (req) =>
+          new URL(req.url).pathname.endsWith("/comments")
+            ? { url: req.url, status: 404, statusText: "Not Found", headers: {}, body: "" }
+            : caps.network.request(req),
+      },
+    });
+    expect((await missing.getComments!({ target: { seriesId: "overgeared" } })).items).toEqual([]);
+  });
+
+  test("comment bodies: unpaired spoiler bars stay as typed", () => {
+    expect(asuraCommentBody("a || b")).toEqual([{ type: "text", text: "a || b" }]);
+    expect(asuraCommentBody("||x|| y ||z")).toEqual([
+      { type: "text", text: "x", spoiler: true },
+      { type: "text", text: " y ||z" },
+    ]);
+    expect(asuraCommentBody("")).toEqual([]);
   });
 });

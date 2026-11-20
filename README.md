@@ -36,29 +36,29 @@ inconclusive sort/filter probe — never counted against a bridge). Per-check re
 | `mangabat` | ✓ (13✓ 0⚠ 0✗ 2⊘) | 5/5 | 33 KB (289×415) | search is challenged by Cloudflare bot scoring |
 | `asurascans` | ✓ (14✓ 0⚠ 0✗) | 4/5 | 177 KB (833×1189) | — |
 | `olympus` | ⚠ (4✓ 5⚠ 0✗) | 5/5 | — | — |
-| `manhwaweb` | ✓ (14✓ 0⚠ 0✗) | 4/5 | 184 KB (1063×1499) | — |
-| `mangak` | ✓ (13✓ 0⚠ 0✗ 1⊘) | 4/5 | 12 KB (199×252) | — |
+| `manhwaweb` | ✓ (14✓ 0⚠ 0✗) | 4/5 | 132 KB (665×911) | — |
+| `mangak` | ✓ (13✓ 0⚠ 0✗ 1⊘) | 4/5 | 13 KB (202×257) | — |
 | `toonilyme` | ✓ (13✓ 0⚠ 0✗ 1⊘) | 4/5 | 14 KB (205×297) | — |
 | `mangataro` | ⚠ (10✓ 2⚠ 0✗ 2⊘) | 4/4 | 545 KB (1149×1474) | — |
-| `roliascan` | ⚠ (10✓ 2⚠ 0✗) | 4/4 | 397 KB (559×772) | — |
+| `roliascan` | ✓ (14✓ 0⚠ 0✗) | 4/4 | 877 KB (1195×1697) | — |
 | `kingofshojo` | ⚠ (13✓ 1⚠ 0✗ 1⊘) | 4/4 | 120 KB (600×1000) | — |
 | `flamecomics` | ⚠ (2✓ 4⚠ 0✗) | 3/3 | — | — |
 | `mangaball` | ⚠ (5✓ 5⚠ 0✗) | 5/6 | — | — |
-| `dynasty` | ⚠ (12✓ 5⚠ 0✗) | 3/3 | — | — |
-| `webtoons` | ✓ (13✓ 0⚠ 0✗) | 4/5 | 76 KB (480×623) | — |
+| `dynasty` | ⚠ (12✓ 2⚠ 0✗) | 3/3 | — | — |
+| `webtoons` | ✓ (13✓ 0⚠ 0✗) | 4/5 | 140 KB (480×623) | — |
 | `zonatmo` | ⚠ (4✓ 5⚠ 0✗) | 4/5 | — | — |
 | `batcave` | ⚠ (4✓ 5⚠ 0✗) | 4/4 | — | DLE Guard wants a browser check first |
 | `kagane` | ⚠ (5✓ 5⚠ 0✗) | 5/6 | — | Cloudflare check needs a browser |
 | `onisaga` | ⚠ (5✓ 5⚠ 0✗) | 5/6 | — | Cloudflare check needs a browser |
-| `mangadot` | ✓ (15✓ 0⚠ 0✗) | 5/6 | 175 KB (932×1360) | Cloudflare check needs a browser |
+| `mangadot` | ✓ (15✓ 0⚠ 0✗) | 5/6 | 332 KB (848×1227) | Cloudflare check needs a browser |
 | `lectorxd` | ⚠ (10✓ 1⚠ 0✗ 1⊘) | 4/4 | — | Cloudflare check on series and reader pages needs a browser |
-| `mangaplus` | ✓ (13✓ 0⚠ 0✗) | 4/4 | 29 KB (352×528) | — |
+| `mangaplus` | ✓ (13✓ 0⚠ 0✗) | 4/4 | 25 KB (352×528) | — |
 | `toonkotsu` | ⚠ (4✓ 5⚠ 0✗) | 4/5 | — | Cloudflare challenges the Bun/Node TLS fingerprint |
 | `mangago` | ⚠ (5✓ 5⚠ 0✗) | 5/6 | — | Cloudflare challenges the Bun/Node TLS fingerprint |
 | `mangafire` | ⚠ (5✓ 5⚠ 0✗) | 5/6 | — | — |
 | `cubari` | ⚠ (6✓ 1⚠ 0✗) | 1/1 | 30 KB (400×600) | — |
 
-_Updated 2026-11-19 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-11-20 by the nightly live audit ([`audit.ts`](audit.ts))._
 <!-- BRIDGE-STATUS:END -->
 
 ## Develop

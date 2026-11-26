@@ -160,13 +160,14 @@ shows ⚠ even for a hard failure.
 | ✓ | `sort.options` | sort | getSortOptions returned 1 option(s) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 1 descriptor(s) |
 
-## `manhwaweb` — ✗ (13✓ 0⚠ 1✗)
+## `manhwaweb` — ✗ (13✓ 1⚠ 1✗)
 
-**4/5 capabilities** · cover 209 KB (854×1196) · sampled 8 · failed 0 · bytes min 18 KB / avg 209 KB / median 211 KB / max 567 KB · dims avg 854×1196 (max 1443×2048) · aspect avg 0.71
+**4/5 capabilities** · cover 99 KB (658×925) · sampled 8 · failed 0 · bytes min 26 KB / avg 99 KB / median 65 KB / max 292 KB · dims avg 658×925 (max 1280×1820) · aspect avg 0.72
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
 | ✗ | `read.threw` | core | read path threw: getChapterPages threw: Error: [series-gone] removed from the source |
+| ⚠ | `read.details.author` | core | series details have no author |
 | ✓ | `info.capabilities` | core | declares 5 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 3 list(s) |
 | ✓ | `lists.items` | lists | list "new" returned 8 item(s) |
@@ -179,11 +180,11 @@ shows ⚠ even for a hard failure.
 | ✓ | `sort.options` | sort | getSortOptions returned 3 option(s) |
 | ✓ | `sort.effect` | sort | sort "creacion" reorders results (asc ≠ desc) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
-| ✓ | `read.chapters` | core | got 14 ordered, uniquely-identified chapter(s) |
+| ✓ | `read.chapters` | core | got 4 ordered, uniquely-identified chapter(s) |
 
 ## `mangak` — ✓ (13✓ 0⚠ 0✗ 1⊘)
 
-**4/5 capabilities** · cover 12 KB (213×267) · sampled 8 · failed 0 · bytes min 7 KB / avg 12 KB / median 13 KB / max 15 KB · dims avg 213×267 (max 225×348) · aspect avg 0.91
+**4/5 capabilities** · cover 12 KB (213×278) · sampled 8 · failed 0 · bytes min 9 KB / avg 12 KB / median 12 KB / max 15 KB · dims avg 213×278 (max 225×348) · aspect avg 0.79
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
@@ -199,8 +200,8 @@ shows ⚠ even for a hard failure.
 | ✓ | `filters.effect` | filters | filter "status" changed results (24→24) |
 | ✓ | `sort.options` | sort | getSortOptions returned 6 option(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
-| ✓ | `read.chapters` | core | got 269 ordered, uniquely-identified chapter(s) |
-| ✓ | `read.pages` | core | got 34 page(s) |
+| ✓ | `read.chapters` | core | got 144 ordered, uniquely-identified chapter(s) |
+| ✓ | `read.pages` | core | got 7 page(s) |
 
 ## `toonilyme` — ✓ (13✓ 0⚠ 0✗ 1⊘)
 
@@ -245,7 +246,7 @@ shows ⚠ even for a hard failure.
 
 ## `roliascan` — ✓ (14✓ 0⚠ 0✗)
 
-**4/4 capabilities** · cover 687 KB (886×1282) · sampled 8 · failed 0 · bytes min 266 KB / avg 687 KB / median 561 KB / max 1439 KB · dims avg 886×1282 (max 1515×2047) · aspect avg 0.69
+**4/4 capabilities** · cover 1549 KB (1050×1480) · sampled 8 · failed 0 · bytes min 26 KB / avg 1549 KB / median 731 KB / max 5115 KB · dims avg 1050×1480 (max 3024×4299) · aspect avg 0.71
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
@@ -253,7 +254,7 @@ shows ⚠ even for a hard failure.
 | ✓ | `lists.catalog` | lists | getLists returned 2 list(s) |
 | ✓ | `lists.items` | lists | list "latest" returned 120 item(s) |
 | ✓ | `lists.idStability` | lists | list item ids are stable across calls |
-| ✓ | `lists.cursor` | lists | nextCursor advanced to 110 further item(s) |
+| ✓ | `lists.cursor` | lists | nextCursor advanced to 112 further item(s) |
 | ✓ | `search.items` | search | search returned 25 item(s) |
 | ✓ | `search.cursor` | search | single page (no nextCursor) |
 | ✓ | `filters.descriptors` | filters | getFilters returned 3 filter(s) |
@@ -261,12 +262,12 @@ shows ⚠ even for a hard failure.
 | ✓ | `sort.options` | sort | getSortOptions returned 4 option(s) |
 | ✓ | `sort.effect` | sort | sort "popular" reorders results (asc ≠ desc) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
-| ✓ | `read.chapters` | core | got 639 ordered, uniquely-identified chapter(s) |
-| ✓ | `read.pages` | core | got 18 page(s) |
+| ✓ | `read.chapters` | core | got 18 ordered, uniquely-identified chapter(s) |
+| ✓ | `read.pages` | core | got 9 page(s) |
 
 ## `kingofshojo` — ⚠ (13✓ 1⚠ 0✗ 1⊘)
 
-**4/4 capabilities** · cover 124 KB (600×1000) · sampled 8 · failed 0 · bytes min 88 KB / avg 124 KB / median 126 KB / max 162 KB · dims avg 600×1000 (max 600×1000) · aspect avg 0.60
+**4/4 capabilities** · cover 120 KB (600×1000) · sampled 8 · failed 0 · bytes min 88 KB / avg 120 KB / median 121 KB / max 162 KB · dims avg 600×1000 (max 600×1000) · aspect avg 0.60
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
@@ -316,7 +317,7 @@ shows ⚠ even for a hard failure.
 | ✓ | `sort.options` | sort | getSortOptions returned 4 option(s) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 1 descriptor(s) |
 
-## `dynasty` — ⚠ (12✓ 3⚠ 0✗)
+## `dynasty` — ⚠ (12✓ 5⚠ 0✗)
 
 **3/3 capabilities** · cover — · sampled 0 · failed 0 · bytes min 0 KB / avg 0 KB / median 0 KB / max 0 KB
 
@@ -324,10 +325,12 @@ shows ⚠ even for a hard failure.
 |:--:|---|---|---|
 | ⚠ | `lists.item.thumbnail` | lists | lists items have no thumbnailUrl |
 | ⚠ | `search.item.thumbnail` | search | search items have no thumbnailUrl |
+| ⚠ | `read.details.author` | core | series details have no author |
 | ⚠ | `read.details.description` | core | series details have no description |
+| ⚠ | `read.details.genres` | core | series details have no genre tag group (kind: "genre") |
 | ✓ | `info.capabilities` | core | declares 3 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 1 list(s) |
-| ✓ | `lists.items` | lists | list "latest" returned 22 item(s) |
+| ✓ | `lists.items` | lists | list "latest" returned 18 item(s) |
 | ✓ | `lists.idStability` | lists | list item ids are stable across calls |
 | ✓ | `lists.cursor` | lists | nextCursor advanced to 19 further item(s) |
 | ✓ | `search.items` | search | search returned 5 item(s) |
@@ -335,18 +338,18 @@ shows ⚠ even for a hard failure.
 | ✓ | `filters.descriptors` | filters | getFilters returned 1 filter(s) |
 | ✓ | `filters.effect` | filters | filter "classes" changed results (5→4) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
-| ✓ | `read.chapters` | core | got 30 ordered, uniquely-identified chapter(s) |
-| ✓ | `read.pages` | core | got 26 page(s) |
+| ✓ | `read.chapters` | core | got 25 ordered, uniquely-identified chapter(s) |
+| ✓ | `read.pages` | core | got 31 page(s) |
 
 ## `webtoons` — ✓ (13✓ 0⚠ 0✗)
 
-**4/5 capabilities** · cover 89 KB (480×623) · sampled 8 · failed 0 · bytes min 66 KB / avg 89 KB / median 91 KB / max 113 KB · dims avg 480×623 (max 480×623) · aspect avg 0.77
+**4/5 capabilities** · cover 81 KB (480×623) · sampled 8 · failed 0 · bytes min 59 KB / avg 81 KB / median 81 KB / max 109 KB · dims avg 480×623 (max 480×623) · aspect avg 0.77
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
 | ✓ | `info.capabilities` | core | declares 5 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 5 list(s) |
-| ✓ | `lists.items` | lists | list "updated" returned 161 item(s) |
+| ✓ | `lists.items` | lists | list "updated" returned 144 item(s) |
 | ✓ | `lists.idStability` | lists | list item ids are stable across calls |
 | ✓ | `lists.cursor` | lists | single page (no nextCursor) |
 | ✓ | `search.items` | search | search returned 18 item(s) |
@@ -355,8 +358,8 @@ shows ⚠ even for a hard failure.
 | ✓ | `filters.effect` | filters | filter "kind" changed results (18→6) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 1 descriptor(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
-| ✓ | `read.chapters` | core | got 49 ordered, uniquely-identified chapter(s) |
-| ✓ | `read.pages` | core | got 115 page(s) |
+| ✓ | `read.chapters` | core | got 43 ordered, uniquely-identified chapter(s) |
+| ✓ | `read.pages` | core | got 42 page(s) |
 
 ## `zonatmo` — ⚠ (4✓ 5⚠ 0✗)
 
@@ -364,10 +367,10 @@ shows ⚠ even for a hard failure.
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
-| ⚠ | `lists.threw` | lists | lists browse threw: getListItems threw: Error: ZonaTMO answered HTTP 403 for https://zonatmo.org/biblioteca?title=&filter_by=title&order_item=likes_count&order_dir=desc&_pg=1&page=1 |
-| ⚠ | `search.threw` | search | getSearchResults threw: getSearchResults threw: Error: ZonaTMO answered HTTP 403 for https://zonatmo.org/biblioteca?title=solo+leveling&filter_by=title&order_item=likes_count&order_dir=desc&_pg=1&page=1 |
-| ⚠ | `filters.effect` | filters | applying a filter threw: getSearchResults threw: Error: ZonaTMO answered HTTP 403 for https://zonatmo.org/biblioteca?title=solo+leveling&filter_by=title&order_item=likes_count&order_dir=desc&_pg=1&page=1 |
-| ⚠ | `sort.effect` | sort | applying a sort threw: getSearchResults threw: Error: ZonaTMO answered HTTP 403 for https://zonatmo.org/biblioteca?title=solo+leveling&filter_by=title&order_item=likes_count&order_dir=asc&_pg=1&page=1 |
+| ⚠ | `lists.threw` | lists | lists browse threw: getListItems threw: [challenge:https%3A%2F%2Fzonatmo.org%2Fbiblioteca%3Ftitle%3D%26filter_by%3Dtitle%26order_item%3Dlikes_count%26order_dir%3Ddesc%26_pg%3D1%26page%3D1\|Mozilla%2F5.0%20(Windows%20NT%2010.0%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20(KHTML%2C%20like%20Gecko)%20Chrome%2F130.0%20Safari%2F537.36] the site wants to check this is a person |
+| ⚠ | `search.threw` | search | getSearchResults threw: getSearchResults threw: [challenge:https%3A%2F%2Fzonatmo.org%2Fbiblioteca%3Ftitle%3D%26filter_by%3Dtitle%26order_item%3Dlikes_count%26order_dir%3Ddesc%26_pg%3D1%26page%3D1\|Mozilla%2F5.0%20(Windows%20NT%2010.0%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20(KHTML%2C%20like%20Gecko)%20Chrome%2F130.0%20Safari%2F537.36] the site wants to check this is a person |
+| ⚠ | `filters.effect` | filters | applying a filter threw: getSearchResults threw: [challenge:https%3A%2F%2Fzonatmo.org%2Fbiblioteca%3Ftitle%3D%26filter_by%3Dtitle%26order_item%3Dlikes_count%26order_dir%3Ddesc%26_pg%3D1%26page%3D1\|Mozilla%2F5.0%20(Windows%20NT%2010.0%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20(KHTML%2C%20like%20Gecko)%20Chrome%2F130.0%20Safari%2F537.36] the site wants to check this is a person |
+| ⚠ | `sort.effect` | sort | applying a sort threw: getSearchResults threw: [challenge:https%3A%2F%2Fzonatmo.org%2Fbiblioteca%3Ftitle%3D%26filter_by%3Dtitle%26order_item%3Dlikes_count%26order_dir%3Ddesc%26_pg%3D1%26page%3D1\|Mozilla%2F5.0%20(Windows%20NT%2010.0%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20(KHTML%2C%20like%20Gecko)%20Chrome%2F130.0%20Safari%2F537.36] the site wants to check this is a person |
 | ⚠ | `read.noSample` | core | no item available to sample the read path (search/lists returned nothing) |
 | ✓ | `info.capabilities` | core | declares 5 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 3 list(s) |
@@ -432,7 +435,7 @@ shows ⚠ even for a hard failure.
 
 ## `mangadot` — ✓ (15✓ 0⚠ 0✗)
 
-**5/6 capabilities** · cover 71 KB (576×823) · sampled 8 · failed 0 · bytes min 11 KB / avg 71 KB / median 22 KB / max 311 KB · dims avg 576×823 (max 1806×2560) · aspect avg 0.70
+**5/6 capabilities** · cover 88 KB (697×1005) · sampled 8 · failed 0 · bytes min 25 KB / avg 88 KB / median 43 KB / max 262 KB · dims avg 697×1005 (max 1543×2384) · aspect avg 0.71
 
 > Cloudflare check needs a browser
 
@@ -440,9 +443,9 @@ shows ⚠ even for a hard failure.
 |:--:|---|---|---|
 | ✓ | `info.capabilities` | core | declares 6 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 3 list(s) |
-| ✓ | `lists.items` | lists | list "latest" returned 47 item(s) |
+| ✓ | `lists.items` | lists | list "latest" returned 45 item(s) |
 | ✓ | `lists.idStability` | lists | list item ids are stable across calls |
-| ✓ | `lists.cursor` | lists | nextCursor advanced to 55 further item(s) |
+| ✓ | `lists.cursor` | lists | nextCursor advanced to 45 further item(s) |
 | ✓ | `search.items` | search | search returned 53 item(s) |
 | ✓ | `search.cursor` | search | nextCursor advanced to 56 further item(s) |
 | ✓ | `filters.descriptors` | filters | getFilters returned 11 filter(s) |
@@ -451,8 +454,8 @@ shows ⚠ even for a hard failure.
 | ✓ | `sort.effect` | sort | sort "latest" reorders results (asc ≠ desc) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 1 descriptor(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
-| ✓ | `read.chapters` | core | got 329 ordered, uniquely-identified chapter(s) |
-| ✓ | `read.pages` | core | got 30 page(s) |
+| ✓ | `read.chapters` | core | got 1859 ordered, uniquely-identified chapter(s) |
+| ✓ | `read.pages` | core | got 8 page(s) |
 
 ## `lectorxd` — ⚠ (10✓ 1⚠ 0✗ 1⊘)
 
@@ -462,7 +465,7 @@ shows ⚠ even for a hard failure.
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
-| ⚠ | `read.threw` | core | read path threw: getSeriesDetails threw: [challenge:https%3A%2F%2Flectorxd.com%2Fmanga%2Fstrayboy-overkill\|Mozilla%2F5.0%20(Windows%20NT%2010.0%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20(KHTML%2C%20like%20Gecko)%20Chrome%2F130.0%20Safari%2F537.36] the site wants to check this is a person |
+| ⚠ | `read.threw` | core | read path threw: getSeriesDetails threw: [challenge:https%3A%2F%2Flectorxd.com%2Fmanga%2Fsoy-un-cansado-asalariado-y-comence-a-vivir-con-una-hermosa-estudiante-de-secundaria-luego-de-reencontrarnos-7-anos-despues\|Mozilla%2F5.0%20(Windows%20NT%2010.0%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20(KHTML%2C%20like%20Gecko)%20Chrome%2F130.0%20Safari%2F537.36] the site wants to check this is a person |
 | ⊘ | `sort.effect` | sort | asc/desc on "recent" produced identical order |
 | ✓ | `info.capabilities` | core | declares 4 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 3 list(s) |
@@ -477,13 +480,13 @@ shows ⚠ even for a hard failure.
 
 ## `mangaplus` — ✓ (13✓ 0⚠ 0✗)
 
-**4/4 capabilities** · cover 28 KB (352×528) · sampled 8 · failed 0 · bytes min 21 KB / avg 28 KB / median 24 KB / max 41 KB · dims avg 352×528 (max 352×528) · aspect avg 0.67
+**4/4 capabilities** · cover 26 KB (352×528) · sampled 8 · failed 0 · bytes min 19 KB / avg 26 KB / median 23 KB / max 37 KB · dims avg 352×528 (max 352×528) · aspect avg 0.67
 
 | Result | Check | Capability | Detail |
 |:--:|---|---|---|
 | ✓ | `info.capabilities` | core | declares 4 capability(ies) |
 | ✓ | `lists.catalog` | lists | getLists returned 4 list(s) |
-| ✓ | `lists.items` | lists | list "latest" returned 74 item(s) |
+| ✓ | `lists.items` | lists | list "latest" returned 70 item(s) |
 | ✓ | `lists.idStability` | lists | list item ids are stable across calls |
 | ✓ | `lists.cursor` | lists | single page (no nextCursor) |
 | ✓ | `search.items` | search | search returned 1 item(s) |
@@ -492,8 +495,8 @@ shows ⚠ even for a hard failure.
 | ✓ | `filters.effect` | filters | filter "type" changed results (1→0) |
 | ✓ | `settings.descriptors` | settings | getSettings returned 3 descriptor(s) |
 | ✓ | `read.detailsRoundTrip` | core | details round-trip the sampled id |
-| ✓ | `read.chapters` | core | got 9 ordered, uniquely-identified chapter(s) |
-| ✓ | `read.pages` | core | got 18 page(s) |
+| ✓ | `read.chapters` | core | got 12 ordered, uniquely-identified chapter(s) |
+| ✓ | `read.pages` | core | got 1 page(s) |
 
 ## `toonkotsu` — ⚠ (4✓ 5⚠ 0✗)
 
@@ -563,4 +566,4 @@ shows ⚠ even for a hard failure.
 | ✓ | `read.chapters` | core | got 674 ordered, uniquely-identified chapter(s) |
 | ✓ | `read.pages` | core | got 1 page(s) |
 
-_Updated 2026-11-25 by the nightly live audit ([`audit.ts`](audit.ts))._
+_Updated 2026-11-26 by the nightly live audit ([`audit.ts`](audit.ts))._
